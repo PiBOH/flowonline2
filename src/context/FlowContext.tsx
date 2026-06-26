@@ -33,6 +33,10 @@ interface FlowContextType {
   // Color Scheme (Flowchart Styles)
   colorScheme: ColorSchemeType;
   setColorScheme: (s: ColorSchemeType) => void;
+
+  // Global shared zoom state
+  zoom: number;
+  setZoom: (z: number | ((prev: number) => number)) => void;
   
   // Execution state
   variables: Record<string, VariableSymbol>;
@@ -157,6 +161,9 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Color Scheme (Flowchart Styles)
   const [colorScheme, setColorScheme] = useState<ColorSchemeType>('classic');
+
+  // Shared zoom state
+  const [zoom, setZoom] = useState<number>(1.0);
 
   // History for undo/redo
   const [undoStack, setUndoStack] = useState<Array<{ statements: Statement[]; title: string; author: string }>>([]);
@@ -921,6 +928,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setLayout,
         colorScheme,
         setColorScheme,
+        zoom,
+        setZoom,
         variables,
         currentBlockId,
         executionStatus,

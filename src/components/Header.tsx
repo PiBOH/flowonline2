@@ -14,6 +14,8 @@ export const Header: React.FC = () => {
     setLayout,
     colorScheme,
     setColorScheme,
+    zoom,
+    setZoom,
     executionStatus,
     speed,
     setSpeed,
@@ -42,6 +44,10 @@ export const Header: React.FC = () => {
   // About Modal state
   const [showAbout, setShowAbout] = useState(false);
   const [licenseText, setLicenseText] = useState('Loading license...');
+  const [licenseSource, setLicenseSource] = useState<'repo' | 'fallback'>('repo');
+
+  // Decorative Window controls warning modal state
+  const [showWarningModal, setShowWarningModal] = useState(false);
 
   // Hardcoded fallback license text
   const mitLicenseTextFallback = `MIT License
@@ -92,6 +98,14 @@ SOFTWARE.`;
     aboutLicense: string;
     colorSchemeLabel: string;
     decorativeWindowAlert: string;
+    languageLabel: string;
+    layoutLabel: string;
+    zoomInLabel: string;
+    zoomOutLabel: string;
+    zoomResetLabel: string;
+    licenseRepoLoaded: string;
+    licenseFallbackLoaded: string;
+    warningModalTitle: string;
   }> = {
     en: {
       file: "File",
@@ -117,7 +131,15 @@ SOFTWARE.`;
       aboutRepo: "Repository",
       aboutLicense: "Program License:",
       colorSchemeLabel: "Color Scheme:",
-      decorativeWindowAlert: "Flowonline2 is a web-based replica of Flowgorithm for Windows. These window control buttons (Minimize, Maximize, and Close) are purely decorative and have no functional purpose other than displaying this informational alert."
+      decorativeWindowAlert: "Flowonline2 is a web-based replica of Flowgorithm for Windows. These window control buttons (Minimize, Maximize, and Close) are purely decorative and have no functional purpose other than displaying this informational warning.",
+      languageLabel: "Language",
+      layoutLabel: "Disposal",
+      zoomInLabel: "Zoom In",
+      zoomOutLabel: "Zoom Out",
+      zoomResetLabel: "Reset Zoom",
+      licenseRepoLoaded: "License dynamically loaded from repository root",
+      licenseFallbackLoaded: "License loaded from hardcoded fallback compilation code",
+      warningModalTitle: "Windows System Information"
     },
     en_GB: {
       file: "File",
@@ -143,7 +165,15 @@ SOFTWARE.`;
       aboutRepo: "Repository",
       aboutLicense: "Program License:",
       colorSchemeLabel: "Color Scheme:",
-      decorativeWindowAlert: "Flowonline2 is a web-based replica of Flowgorithm for Windows. These window control buttons (Minimize, Maximize, and Close) are purely decorative and have no functional purpose other than displaying this informational alert."
+      decorativeWindowAlert: "Flowonline2 is a web-based replica of Flowgorithm for Windows. These window control buttons (Minimize, Maximize, and Close) are purely decorative and have no functional purpose other than displaying this informational warning.",
+      languageLabel: "Language",
+      layoutLabel: "Disposal",
+      zoomInLabel: "Zoom In",
+      zoomOutLabel: "Zoom Out",
+      zoomResetLabel: "Reset Zoom",
+      licenseRepoLoaded: "License dynamically loaded from repository root",
+      licenseFallbackLoaded: "License loaded from hardcoded fallback compilation code",
+      warningModalTitle: "Windows System Information"
     },
     it: {
       file: "File",
@@ -169,7 +199,15 @@ SOFTWARE.`;
       aboutRepo: "Repository",
       aboutLicense: "Licenza del Programma:",
       colorSchemeLabel: "Schema Colori:",
-      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna funzione pratica se non quella di aprire questo messaggio informativo di avviso."
+      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna funzione pratica se non quella di aprire questa finestra informativa di avviso.",
+      languageLabel: "Lingua",
+      layoutLabel: "Disposizione",
+      zoomInLabel: "Aumenta Zoom",
+      zoomOutLabel: "Riduci Zoom",
+      zoomResetLabel: "Ripristina Zoom",
+      licenseRepoLoaded: "Licenza caricata dinamicamente dalla root del repository",
+      licenseFallbackLoaded: "Licenza caricata dal codice compilato hardcoded (Fallback)",
+      warningModalTitle: "Informazione di Sistema Windows"
     },
     de: {
       file: "Datei",
@@ -195,7 +233,15 @@ SOFTWARE.`;
       aboutRepo: "Repository",
       aboutLicense: "Lizenz:",
       colorSchemeLabel: "Farbschema:",
-      decorativeWindowAlert: "Flowonline2 ist eine webbasierte Replik von Flowgorithm für Windows. Diese Fensterschaltflächen (Minimieren, Maximieren und Schließen) sind rein dekorativ und haben keine praktische Funktion, außer dieses Informationsfenster anzuzeigen."
+      decorativeWindowAlert: "Flowonline2 ist eine webbasierte Replik von Flowgorithm für Windows. Diese Fensterschaltflächen (Minimieren, Maximieren und Schließen) sind rein dekorativ und haben keine praktische Funktion, außer dieses Informationsfenster anzuzeigen.",
+      languageLabel: "Sprache",
+      layoutLabel: "Anordnung",
+      zoomInLabel: "Vergrößern",
+      zoomOutLabel: "Verkleinern",
+      zoomResetLabel: "Zoom zurücksetzen",
+      licenseRepoLoaded: "Lizenz dynamisch aus dem Repository-Stammverzeichnis geladen",
+      licenseFallbackLoaded: "Lizenz aus dem fest codierten Fallback-Kompilierungscode geladen",
+      warningModalTitle: "Windows-Systeminformationen"
     },
     fr: {
       file: "Fichier",
@@ -221,7 +267,15 @@ SOFTWARE.`;
       aboutRepo: "Dépôt",
       aboutLicense: "Licence:",
       colorSchemeLabel: "Palette de couleurs:",
-      decorativeWindowAlert: "Flowonline2 est une réplique Web de Flowgorithm pour Windows. Ces boutons de contrôle de fenêtre (Réduire, Agrandir et Fermer) sont purement décoratifs et n'ont aucune fonction pratique autre que celle d'afficher ce message d'avertissement."
+      decorativeWindowAlert: "Flowonline2 est une réplique Web de Flowgorithm pour Windows. Ces boutons de contrôle de fenêtre (Réduire, Agrandir et Fermer) sont purement décoratifs et n'ont aucune fonction pratique autre que celle d'afficher ce message d'avertissement.",
+      languageLabel: "Langue",
+      layoutLabel: "Disposition",
+      zoomInLabel: "Zoom avant",
+      zoomOutLabel: "Zoom arrière",
+      zoomResetLabel: "Réinitialiser",
+      licenseRepoLoaded: "Licence chargée dynamiquement à partir de la racine",
+      licenseFallbackLoaded: "Licence chargée à partir du code compilé de secours",
+      warningModalTitle: "Informations Système Windows"
     },
     es: {
       file: "Archivo",
@@ -247,7 +301,15 @@ SOFTWARE.`;
       aboutRepo: "Repositorio",
       aboutLicense: "Licencia:",
       colorSchemeLabel: "Esquema de colores:",
-      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente decorativos y no tienen ninguna función práctica más que mostrar este mensaje de advertencia."
+      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente decorativos y no tienen ninguna función práctica más que mostrar este mensaje de advertencia.",
+      languageLabel: "Idioma",
+      layoutLabel: "Disposición",
+      zoomInLabel: "Acercar",
+      zoomOutLabel: "Alejar",
+      zoomResetLabel: "Restablecer",
+      licenseRepoLoaded: "Licencia cargada dinámicamente desde la raíz",
+      licenseFallbackLoaded: "Licencia cargada desde el código compilado de reserva",
+      warningModalTitle: "Información del Sistema Windows"
     }
   };
 
@@ -257,6 +319,7 @@ SOFTWARE.`;
   useEffect(() => {
     if (showAbout) {
       setLicenseText('Loading license...');
+      setLicenseSource('repo');
       fetch('./LICENSE')
         .then((res) => {
           if (!res.ok) {
@@ -264,10 +327,14 @@ SOFTWARE.`;
           }
           return res.text();
         })
-        .then((text) => setLicenseText(text))
+        .then((text) => {
+          setLicenseText(text);
+          setLicenseSource('repo');
+        })
         .catch((err) => {
           console.warn('Unable to load LICENSE in real-time, using fallback:', err);
           setLicenseText(mitLicenseTextFallback);
+          setLicenseSource('fallback');
         });
     }
   }, [showAbout]);
@@ -387,10 +454,6 @@ SOFTWARE.`;
     { id: 'flow_code', label: '📝', tooltip: 'Flowchart & Source Code' }
   ];
 
-  const handleDecorativeButtonClick = () => {
-    alert(mt.decorativeWindowAlert);
-  };
-
   return (
     <div className="flex flex-col w-full z-30 select-none shadow-md shrink-0">
       
@@ -414,22 +477,22 @@ SOFTWARE.`;
           </span>
         </div>
 
-        {/* Windows Frame Minimize / Maximize / Close simulation with custom informational alert! */}
+        {/* Windows Frame Minimize / Maximize / Close simulation with custom Win32 warning dialog modal! */}
         <div className="flex h-full">
           <button 
-            onClick={handleDecorativeButtonClick}
+            onClick={() => setShowWarningModal(true)}
             className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition"
           >
             ─
           </button>
           <button 
-            onClick={handleDecorativeButtonClick}
+            onClick={() => setShowWarningModal(true)}
             className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition"
           >
             ▢
           </button>
           <button 
-            onClick={handleDecorativeButtonClick}
+            onClick={() => setShowWarningModal(true)}
             className="w-[44px] h-[28px] hover:bg-red-600 text-white font-sans text-[11px] transition"
           >
             ✕
@@ -479,7 +542,7 @@ SOFTWARE.`;
           )}
         </div>
 
-        {/* MODIFICA MENU (Includes Flowgorithm's official Color Schemes) */}
+        {/* MODIFICA MENU (Includes Zoom, Reset, and Color Schemes to ensure NO duplicates with complete parity!) */}
         <div className="relative ml-1">
           <button
             onClick={() => toggleDropdown('edit')}
@@ -501,6 +564,19 @@ SOFTWARE.`;
                 <span className="text-[10px] text-slate-400">Ctrl+Y</span>
               </button>
               
+              <div className="h-[1px] bg-slate-300 my-1"></div>
+              
+              {/* Zoom options inside menu */}
+              <button onClick={() => setZoom((prev) => Math.min(1.8, prev + 0.1))} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] text-slate-800 flex items-center gap-1.5">
+                <span>🔍 {mt.zoomInLabel}</span>
+              </button>
+              <button onClick={() => setZoom((prev) => Math.max(0.4, prev - 0.1))} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] text-slate-800 flex items-center gap-1.5">
+                <span>🔍 {mt.zoomOutLabel}</span>
+              </button>
+              <button onClick={() => setZoom(1.0)} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] text-slate-800 flex items-center gap-1.5">
+                <span>🔄 {mt.zoomResetLabel}</span>
+              </button>
+
               <div className="h-[1px] bg-slate-300 my-1"></div>
               <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">{mt.colorSchemeLabel}</div>
               
@@ -561,6 +637,33 @@ SOFTWARE.`;
           )}
         </div>
 
+        {/* DISPOSIZIONE / LAYOUT MENU (All toolbar layout options matched 100% in menu!) */}
+        <div className="relative ml-1">
+          <button
+            onClick={() => toggleDropdown('layout')}
+            onMouseEnter={() => handleMenuMouseEnter('layout')}
+            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+              activeDropdown === 'layout' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
+            }`}
+          >
+            {mt.layoutLabel}
+          </button>
+          {activeDropdown === 'layout' && (
+            <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
+              {layoutButtons.map((btn) => (
+                <button
+                  key={btn.id}
+                  onClick={() => { setLayout(btn.id); setActiveDropdown(null); }}
+                  className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800 text-xs"
+                >
+                  <span>{btn.label} {btn.tooltip}</span>
+                  {layout === btn.id && <span className="text-emerald-600 font-bold">✓</span>}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* HELP / ? MENU */}
         <div className="relative ml-1">
           <button
@@ -581,9 +684,9 @@ SOFTWARE.`;
           )}
         </div>
 
-        {/* GLOBE LANGUAGE SWITCHER */}
+        {/* GLOBE LANGUAGE SWITCHER (🌐 Icon added, "Lingua" translated dynamically!) */}
         <div className="relative ml-auto mr-2 flex items-center gap-1.5 text-slate-600 text-[11px] font-semibold">
-          <span>Lingua:</span>
+          <span>🌐 {mt.languageLabel}:</span>
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value as any)}
@@ -601,157 +704,189 @@ SOFTWARE.`;
 
       {/* ============ TOOLBAR (Faithful Windows Desktop Style) ============ */}
       <div 
-        className="h-[36px] border-b border-[#B0B0B0] flex items-center px-[4px] gap-[1px]"
+        className="h-[36px] border-b border-[#B0B0B0] flex items-center px-[4px] gap-[1px] justify-between"
         style={{
           background: 'linear-gradient(to bottom, #FAFAFA, #E4E4E4)'
         }}
       >
-        {/* NEW BUTTON */}
-        <button
-          onClick={handleNew}
-          className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
-          title="Nuovo (Ctrl+N)"
-        >
-          📄
-        </button>
-
-        {/* OPEN BUTTON (CRITICAL FIX: This now works perfectly because input type=file is always in DOM!) */}
-        <button
-          onClick={() => {
-            if (fileInputRef.current) {
-              fileInputRef.current.click();
-            }
-          }}
-          className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
-          title="Apri (Ctrl+O)"
-        >
-          📂
-        </button>
-
-        {/* SAVE BUTTON */}
-        <button
-          onClick={handleExportFprg}
-          className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
-          title="Salva (Ctrl+S)"
-        >
-          💾
-        </button>
-
-        <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
-
-        {/* RUN BUTTON */}
-        <button
-          onClick={startRun}
-          disabled={isRunning}
-          className="w-[32px] h-[32px] hover:bg-[#D5EAFA] hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-emerald-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
-          title={t.toolbar.run}
-        >
-          ▶
-        </button>
-
-        {/* STEP BUTTON */}
-        <button
-          onClick={stepRun}
-          className="w-[32px] h-[32px] hover:bg-[#D5EAFA] hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-blue-600 font-bold active:scale-95 transition-all"
-          title={t.toolbar.step}
-        >
-          ⏭
-        </button>
-
-        {/* PAUSE BUTTON */}
-        <button
-          onClick={pauseRun}
-          disabled={!isRunning}
-          className="w-[32px] h-[32px] hover:bg-[#FCD2E6] hover:border hover:border-[#B03F70] hover:shadow-sm rounded-[3px] flex items-center justify-center text-amber-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
-          title={t.toolbar.pause}
-        >
-          ⏸
-        </button>
-
-        {/* STOP BUTTON */}
-        <button
-          onClick={stopRun}
-          disabled={isStopped}
-          className="w-[32px] h-[32px] hover:bg-rose-100 hover:border hover:border-red-400 hover:shadow-sm rounded-[3px] flex items-center justify-center text-red-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
-          title={t.toolbar.stop}
-        >
-          ⏹
-        </button>
-
-        <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
-
-        {/* LAYOUT SELECTOR CONTROL WINDOWS (Classic Flowgorithm buttons!) */}
         <div className="flex items-center gap-[1px]">
-          {layoutButtons.map((btn) => (
-            <button
-              key={btn.id}
-              onClick={() => setLayout(btn.id)}
-              className={`w-[26px] h-[26px] flex items-center justify-center rounded-[3px] border text-xs transition-all ${
-                layout === btn.id
-                  ? 'bg-[#C9DEF5] border-[#5B8DC4] shadow-inner font-bold'
-                  : 'bg-transparent border-transparent hover:bg-slate-200/50 hover:border-slate-300'
-              }`}
-              title={btn.tooltip}
-            >
-              {btn.label}
-            </button>
-          ))}
-        </div>
+          {/* NEW BUTTON */}
+          <button
+            onClick={handleNew}
+            className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
+            title="Nuovo (Ctrl+N)"
+          >
+            📄
+          </button>
 
-        <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
+          {/* OPEN BUTTON (CRITICAL FIX: This now works perfectly because input type=file is always in DOM!) */}
+          <button
+            onClick={() => {
+              if (fileInputRef.current) {
+                fileInputRef.current.click();
+              }
+            }}
+            className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
+            title="Apri (Ctrl+O)"
+          >
+            📂
+          </button>
 
-        {/* SPEED CONTROL (FAITHFUL MULTILINGUAL LABEL - SPEED / VELOCITÀ) */}
-        <div className="flex items-center gap-2 pl-2 text-slate-500 text-[10px] font-bold font-sans">
-          <span>{t.toolbar.speed.toUpperCase()}:</span>
-          <input
-            type="range"
-            min="1"
-            max="100"
-            value={speed}
-            onChange={(e) => setSpeed(parseInt(e.target.value, 10))}
-            className="w-[80px] h-[4px] bg-slate-300 rounded appearance-none cursor-pointer accent-[#2F5A8C]"
-          />
-        </div>
+          {/* SAVE BUTTON */}
+          <button
+            onClick={handleExportFprg}
+            className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
+            title="Salva (Ctrl+S)"
+          >
+            💾
+          </button>
 
-        <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
+          <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
 
-        {/* META ATTRIBUTI (Editable directly on Toolbar) */}
-        <div className="hidden lg:flex items-center gap-3 pl-2">
-          <div className="flex flex-col text-[10px] font-sans">
-            <span className="text-slate-400 uppercase font-black tracking-tight text-[7px] leading-none mb-0.5">Algorithm Name</span>
+          {/* RUN BUTTON */}
+          <button
+            onClick={startRun}
+            disabled={isRunning}
+            className="w-[32px] h-[32px] hover:bg-[#D5EAFA] hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-emerald-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
+            title={t.toolbar.run}
+          >
+            ▶
+          </button>
+
+          {/* STEP BUTTON */}
+          <button
+            onClick={stepRun}
+            className="w-[32px] h-[32px] hover:bg-[#D5EAFA] hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-blue-600 font-bold active:scale-95 transition-all"
+            title={t.toolbar.step}
+          >
+            ⏭
+          </button>
+
+          {/* PAUSE BUTTON */}
+          <button
+            onClick={pauseRun}
+            disabled={!isRunning}
+            className="w-[32px] h-[32px] hover:bg-[#FCD2E6] hover:border hover:border-[#B03F70] hover:shadow-sm rounded-[3px] flex items-center justify-center text-amber-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
+            title={t.toolbar.pause}
+          >
+            ⏸
+          </button>
+
+          {/* STOP BUTTON */}
+          <button
+            onClick={stopRun}
+            disabled={isStopped}
+            className="w-[32px] h-[32px] hover:bg-rose-100 hover:border hover:border-red-400 hover:shadow-sm rounded-[3px] flex items-center justify-center text-red-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
+            title={t.toolbar.stop}
+          >
+            ⏹
+          </button>
+
+          <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
+
+          {/* LAYOUT SELECTOR CONTROL WINDOWS (Classic Flowgorithm buttons!) */}
+          <div className="flex items-center gap-[1px]">
+            {layoutButtons.map((btn) => (
+              <button
+                key={btn.id}
+                onClick={() => setLayout(btn.id)}
+                className={`w-[26px] h-[26px] flex items-center justify-center rounded-[3px] border text-xs transition-all ${
+                  layout === btn.id
+                    ? 'bg-[#C9DEF5] border-[#5B8DC4] shadow-inner font-bold'
+                    : 'bg-transparent border-transparent hover:bg-slate-200/50 hover:border-slate-300'
+                }`}
+                title={btn.tooltip}
+              >
+                {btn.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
+
+          {/* SPEED CONTROL (SPEED / VELOCITÀ) */}
+          <div className="flex items-center gap-2 pl-2 text-slate-500 text-[10px] font-bold font-sans">
+            <span>{t.toolbar.speed.toUpperCase()}:</span>
             <input
-              type="text"
-              value={programTitle}
-              onChange={(e) => setProgramTitle(e.target.value)}
-              className="bg-white hover:bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500 rounded border border-slate-300 text-[10px] font-bold text-slate-800 px-1 py-0.5 w-32 focus:outline-none"
-              placeholder="My Algorithm"
+              type="range"
+              min="1"
+              max="100"
+              value={speed}
+              onChange={(e) => setSpeed(parseInt(e.target.value, 10))}
+              className="w-[80px] h-[4px] bg-slate-300 rounded appearance-none cursor-pointer accent-[#2F5A8C]"
             />
           </div>
-          <div className="flex flex-col text-[10px] font-sans">
-            <span className="text-slate-400 uppercase font-black tracking-tight text-[7px] leading-none mb-0.5">Author</span>
-            <input
-              type="text"
-              value={programAuthor}
-              onChange={(e) => setProgramAuthor(e.target.value)}
-              className="bg-white hover:bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500 rounded border border-slate-300 text-[10px] text-slate-700 px-1 py-0.5 w-24 focus:outline-none"
-              placeholder="Author"
-            />
+
+          <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
+
+          {/* META ATTRIBUTI (Editable directly on Toolbar) */}
+          <div className="hidden lg:flex items-center gap-3 pl-2">
+            <div className="flex flex-col text-[10px] font-sans">
+              <span className="text-slate-400 uppercase font-black tracking-tight text-[7px] leading-none mb-0.5">Algorithm Name</span>
+              <input
+                type="text"
+                value={programTitle}
+                onChange={(e) => setProgramTitle(e.target.value)}
+                className="bg-white hover:bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500 rounded border border-slate-300 text-[10px] font-bold text-slate-800 px-1 py-0.5 w-32 focus:outline-none"
+                placeholder="My Algorithm"
+              />
+            </div>
+            <div className="flex flex-col text-[10px] font-sans">
+              <span className="text-slate-400 uppercase font-black tracking-tight text-[7px] leading-none mb-0.5">Author</span>
+              <input
+                type="text"
+                value={programAuthor}
+                onChange={(e) => setProgramAuthor(e.target.value)}
+                className="bg-white hover:bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500 rounded border border-slate-300 text-[10px] text-slate-700 px-1 py-0.5 w-24 focus:outline-none"
+                placeholder="Author"
+              />
+            </div>
           </div>
         </div>
+
+        {/* INTEGRATE ZOOM CONTROLS ON THE RIGHT SIDE OF THE TOOLBAR (ALPHA 2.0.8 Requirement!) */}
+        <div className="flex items-center gap-1.5 pr-2.5">
+          <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[4px] shadow-[1px_0_0_#FAFAFA]"></div>
+          <button
+            onClick={() => setZoom((prev) => Math.max(0.4, prev - 0.1))}
+            className="w-[24px] h-[24px] hover:bg-slate-200/50 rounded flex items-center justify-center text-slate-600 active:scale-95 transition"
+            title={mt.zoomOutLabel}
+          >
+            🔍-
+          </button>
+          <span className="text-[10px] font-bold text-slate-500 w-[42px] text-center font-mono select-none">
+            {Math.round(zoom * 100)}%
+          </span>
+          <button
+            onClick={() => setZoom((prev) => Math.min(1.8, prev + 0.1))}
+            className="w-[24px] h-[24px] hover:bg-slate-200/50 rounded flex items-center justify-center text-slate-600 active:scale-95 transition"
+            title={mt.zoomInLabel}
+          >
+            🔍+
+          </button>
+          <button
+            onClick={() => setZoom(1.0)}
+            className="w-[20px] h-[20px] hover:bg-slate-200/50 rounded flex items-center justify-center text-slate-400 hover:text-slate-600 active:scale-95 transition text-[11px]"
+            title={mt.zoomResetLabel}
+          >
+            🔄
+          </button>
+        </div>
+
       </div>
 
-      {/* ============ WIN32 ABOUT DIALOG MODAL (ENLARGED & PERFECT INLINE SIZING) ============ */}
+      {/* ============ WIN32 ABOUT DIALOG MODAL (ENLARGED TO 600px & DYNAMICALLY DETECTED LICENSE ORIGIN) ============ */}
       {showAbout && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
           <div 
             className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl overflow-hidden flex flex-col font-sans select-none"
-            style={{ width: '450px' }} // EXPLICIT INLINE SIZE ENLARGEMENT!
+            style={{ width: '600px' }} // EXPLICIT OVERRIDE SET TO EXACTLY 600 PIXELS!
           >
             {/* About Modal Title Bar */}
             <div 
               className="h-[24px] text-white flex items-center justify-between px-2 cursor-default"
               style={{
-                background: 'linear-gradient(to right, #3E6FA8 0%, #7AAFE0 100%)'
+                background: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)'
               }}
             >
               <span className="text-[11px] font-bold text-white font-sans tracking-wide">
@@ -796,7 +931,12 @@ SOFTWARE.`;
 
               {/* License automatically loaded text box */}
               <div className="flex flex-col space-y-1">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">{mt.aboutLicense}</span>
+                <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                  <span>{mt.aboutLicense}</span>
+                  <span className={`px-2 py-0.5 rounded-full font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
+                    {licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
+                  </span>
+                </div>
                 <textarea
                   readOnly
                   value={licenseText}
@@ -820,6 +960,54 @@ SOFTWARE.`;
         </div>
       )}
 
+      {/* ============ WIN32 SYSTEM DIALOG MODAL FOR WINDOW CONTROLS (DECORATIVE NOTIFICATION) ============ */}
+      {showWarningModal && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
+          <div className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl w-[380px] overflow-hidden flex flex-col font-sans select-none">
+            {/* Warning Modal Title Bar */}
+            <div 
+              className="h-[24px] text-white flex items-center justify-between px-2 cursor-default"
+              style={{
+                background: 'linear-gradient(to right, #3E6FA8 0%, #7AAFE0 100%)'
+              }}
+            >
+              <span className="text-[11px] font-bold text-white font-sans tracking-wide">
+                {mt.warningModalTitle}
+              </span>
+              <button 
+                onClick={() => setShowWarningModal(false)}
+                className="w-[14px] h-[14px] bg-[#E81123]/80 hover:bg-[#E81123] rounded-sm flex items-center justify-center text-[10px] text-white font-bold"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Warning Body */}
+            <div className="p-4 flex flex-col space-y-4 bg-[#F0F0F0] text-slate-800">
+              <div className="flex items-start gap-3.5">
+                {/* Yellow Win32 Warning Shield Icon */}
+                <div className="w-10 h-10 bg-amber-400 border border-amber-600 rounded-full flex items-center justify-center shrink-0 shadow-md">
+                  <span className="text-white font-bold text-xl select-none font-mono">!</span>
+                </div>
+                <p className="text-[11px] text-slate-700 font-semibold leading-relaxed">
+                  {mt.decorativeWindowAlert}
+                </p>
+              </div>
+
+              {/* OK button */}
+              <div className="flex items-center justify-end">
+                <button
+                  onClick={() => setShowWarningModal(false)}
+                  className="px-6 py-1 bg-white hover:bg-slate-100 border border-slate-400 hover:border-slate-500 text-slate-800 text-[11px] font-bold rounded shadow-sm focus:outline-none transition active:scale-95"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* CRITICAL FILE INPUT (Rendered outside conditional blocks so it's always in the DOM and available for toolbar click!) */}
       <input 
         type="file" 
@@ -832,3 +1020,4 @@ SOFTWARE.`;
     </div>
   );
 };
+export default Header;
