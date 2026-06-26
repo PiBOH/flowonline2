@@ -817,7 +817,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
 
-    addConsoleMessage('input', `> ${val}`);
+    // CRITICAL FIX: Removed the prefix "> " from logged inputs to match Flowgorithm's clean look!
+    addConsoleMessage('input', val);
 
     try {
       let parsedVal: any;
@@ -906,8 +907,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         statements,
         programTitle,
         programAuthor,
-        setProgramTitle,
-        setProgramAuthor,
+        setProgramTitle, // EXPLICIT PROVIDER VALUE!
+        setProgramAuthor, // EXPLICIT PROVIDER VALUE!
         layout,
         setLayout,
         variables,
