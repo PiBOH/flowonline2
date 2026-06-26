@@ -116,7 +116,14 @@ export class ExpressionParser {
         continue;
       }
 
-      // Single-character operators
+      // Single-character operator '=': Treat as '==' comparison for Flowgorithm compatibility
+      if (char === '=') {
+        this.tokens.push({ type: 'OPERATOR', value: '==' });
+        i++;
+        continue;
+      }
+
+      // Other single-character operators
       if ('+-*/%^<>&!'.includes(char)) {
         this.tokens.push({ type: 'OPERATOR', value: char });
         i++;
@@ -124,9 +131,10 @@ export class ExpressionParser {
       }
 
       // Identifiers & Keywords (AND, OR, NOT, TRUE, FALSE, functions, variables)
-      if (/[a-zA-Z_]/.test(char)) {
-        let ident = '';
-        while (i < len && /[a-zA-Z0-9_]/.test(expr[i])) {
+      if (/[a-zA-Z_]/.test(char) || char.charCodeAt(0) > 127) {
+        let ident = char;
+        i++;
+        while (i < len && (/[a-zA-Z0-9_]/.test(expr[i]) || expr[i].charCodeAt(0) > 127)) {
           ident += expr[i];
           i++;
         }

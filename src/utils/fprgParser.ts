@@ -125,8 +125,11 @@ export class FprgParser {
       }
       case 'if': {
         const cond = el.getAttribute('expression') || 'True';
-        const thenEl = el.getElementsByTagName('then')[0];
-        const elseEl = el.getElementsByTagName('else')[0];
+        
+        // ROBUST DIRECT CHILD EXTRACTION: Prevents getElementsByTagName recursion bug that polluted nested conditionals!
+        const thenEl = Array.from(el.children).find(child => child.tagName.toLowerCase() === 'then');
+        const elseEl = Array.from(el.children).find(child => child.tagName.toLowerCase() === 'else');
+
         return {
           id,
           type: 'if',
