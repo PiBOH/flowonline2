@@ -149,7 +149,7 @@ export const Header: React.FC = () => {
             <polygon points="18,18 28,18 26,26 20,26" fill="#4B9DDC" stroke="#333" strokeWidth="1.5" />
           </svg>
           <span className="text-[11px] font-semibold text-white font-sans tracking-wide">
-            Flowonline BETA 2.0.3 - {programTitle || 'Untitled'}.fprg
+            Flowonline2 BETA 2.0.4 - {programTitle || 'Untitled'}.fprg
           </span>
         </div>
 

@@ -446,6 +446,46 @@ export class ExpressionParser {
         const max = Math.floor(Number(args[0]));
         if (max <= 0) throw new Error('Random limit must be positive.');
         return Math.floor(Math.random() * max);
+      
+      // CHAR AND CONVERSION INTRINSICS OF FLOWGORITHM
+      case 'char':
+        if (args.length !== 2) throw new Error('Function Char(string, index) requires exactly 2 arguments.');
+        return String(args[0]).charAt(Math.floor(Number(args[1])));
+      case 'tocode':
+        if (args.length !== 1) throw new Error('Function ToCode(char) requires exactly 1 argument.');
+        const cStr = String(args[0]);
+        if (cStr.length === 0) return 0;
+        return cStr.charCodeAt(0);
+      case 'tochar':
+        if (args.length !== 1) throw new Error('Function ToChar(code) requires exactly 1 argument.');
+        return String.fromCharCode(Math.floor(Number(args[0])));
+      case 'tointeger':
+        if (args.length !== 1) throw new Error('Function ToInteger(value) requires exactly 1 argument.');
+        return parseInt(String(args[0]), 10);
+      case 'toreal':
+        if (args.length !== 1) throw new Error('Function ToReal(value) requires exactly 1 argument.');
+        return parseFloat(String(args[0]));
+      case 'tostring':
+        if (args.length !== 1) throw new Error('Function ToString(value) requires exactly 1 argument.');
+        return String(args[0]);
+      
+      // MATHEMATICAL ADDITIONS
+      case 'int':
+        if (args.length !== 1) throw new Error('Function Int(value) requires exactly 1 argument.');
+        return Math.trunc(Number(args[0]));
+      case 'sgn':
+        if (args.length !== 1) throw new Error('Function Sgn(value) requires exactly 1 argument.');
+        return Math.sign(Number(args[0]));
+      case 'arcsin':
+        if (args.length !== 1) throw new Error('Function Arcsin(value) requires exactly 1 argument.');
+        return Math.asin(Number(args[0]));
+      case 'arccos':
+        if (args.length !== 1) throw new Error('Function Arccos(value) requires exactly 1 argument.');
+        return Math.acos(Number(args[0]));
+      case 'arctan':
+        if (args.length !== 1) throw new Error('Function Arctan(value) requires exactly 1 argument.');
+        return Math.atan(Number(args[0]));
+
       default:
         throw new Error(`Unknown function: '${name}'`);
     }
