@@ -70,7 +70,8 @@ export const Console: React.FC = () => {
       </div>
 
       {/* Messages Output Area (Classic Light-Purple Lavender Background) */}
-      <div className="flex-1 overflow-auto p-4 space-y-2.5 flex flex-col bg-[#FAF8FF]">
+      {/* CRITICAL FIX: Set white-space to pre-wrap to support ToChar(13) carriage return newlines! */}
+      <div className="flex-1 overflow-auto p-4 space-y-2.5 flex flex-col bg-[#FAF8FF] whitespace-pre-wrap">
         {consoleMessages.length === 0 && (
           <div className="flex-1 flex items-center justify-center text-xs text-purple-400 font-mono italic">
             Console vuota. Premi "Esegui" per avviare l'algoritmo.
@@ -97,7 +98,7 @@ export const Console: React.FC = () => {
           if (msg.type === 'input') {
             // Flowgorithm user input bubble (Blue dialog chat balloon on the right!)
             return (
-              <div key={msg.id} className="self-end max-w-[80%] bg-[#D2E3FC] text-blue-900 border border-blue-400 rounded-2xl rounded-tr-none px-3.5 py-1.5 text-xs font-mono font-bold shadow-sm">
+              <div key={msg.id} className="self-end max-w-[80%] bg-[#D2E3FC] text-blue-900 border border-blue-400 rounded-2xl rounded-tr-none px-3.5 py-1.5 text-xs font-mono font-bold shadow-sm whitespace-pre-wrap">
                 {msg.text}
               </div>
             );
@@ -105,7 +106,7 @@ export const Console: React.FC = () => {
 
           // Flowgorithm output bubbles (Classic mint-green rounded dialog speech balloons on the left!)
           return (
-            <div key={msg.id} className="self-start max-w-[80%] bg-[#E2F0D9] border border-[#A9D18E] text-[#385723] rounded-2xl rounded-tl-none px-3.5 py-1.5 text-xs font-mono font-semibold shadow-sm leading-relaxed">
+            <div key={msg.id} className="self-start max-w-[80%] bg-[#E2F0D9] border border-[#A9D18E] text-[#385723] rounded-2xl rounded-tl-none px-3.5 py-1.5 text-xs font-mono font-semibold shadow-sm leading-relaxed whitespace-pre-wrap">
               {msg.text}
             </div>
           );
