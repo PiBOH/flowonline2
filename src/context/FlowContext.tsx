@@ -71,6 +71,13 @@ interface FlowContextType {
 
 const FlowContext = createContext<FlowContextType | undefined>(undefined);
 
+// CASE INSENSITIVE VARIABLE LOOKUP HELPER
+export const getVariableSymbol = (name: string, env: Record<string, VariableSymbol>): VariableSymbol | undefined => {
+  const lowerName = name.toLowerCase();
+  const matchedKey = Object.keys(env).find(k => k.toLowerCase() === lowerName);
+  return matchedKey ? env[matchedKey] : undefined;
+};
+
 // INITIAL DEFAULT SAMPLE PROGRAM
 const initialSample: Statement[] = [
   {
@@ -536,7 +543,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const indexParser = new ExpressionParser(variablesRef.current);
             const indexVal = Math.floor(Number(indexParser.parseAndEvaluate(indexExpr)));
 
-            const sym = variablesRef.current[arrName];
+            // CASE INSENSITIVE array symbol lookup
+            const sym = getVariableSymbol(arrName, variablesRef.current);
             if (!sym) {
               throw new Error(`Array '${arrName}' non definito.`);
             }
@@ -555,7 +563,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             sym.value[indexVal] = validatedVal;
           } else {
-            const sym = variablesRef.current[name];
+            // CASE INSENSITIVE variable symbol lookup
+            const sym = getVariableSymbol(name, variablesRef.current);
             if (!sym) {
               throw new Error(`Variabile '${name}' non dichiarata.`);
             }
@@ -583,7 +592,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             targetName = name.substring(0, startBracket).trim();
           }
 
-          const sym = variablesRef.current[targetName];
+          // CASE INSENSITIVE variable symbol check
+          const sym = getVariableSymbol(targetName, variablesRef.current);
           if (!sym) {
             throw new Error(`Variabile di input '${targetName}' non dichiarata.`);
           }
@@ -614,7 +624,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           
           if (conditionStr === 'FOR_COND_CHECK') {
             const b = inst.args.forBlock as ForBlock;
-            const sym = variablesRef.current[b.variableName];
+            // CASE INSENSITIVE loop variable lookup
+            const sym = getVariableSymbol(b.variableName, variablesRef.current);
             if (!sym) throw new Error(`Variabile ciclo '${b.variableName}' non trovata.`);
 
             const currentIdxVal = Number(sym.value);
@@ -641,7 +652,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const name = b.variableName;
           const startVal = parser.parseAndEvaluate(b.startValue);
 
-          const sym = variablesRef.current[name];
+          // CASE INSENSITIVE lookup
+          const sym = getVariableSymbol(name, variablesRef.current);
           if (!sym) {
             throw new Error(`Variabile ciclo '${name}' non dichiarata.`);
           }
@@ -656,7 +668,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const name = b.variableName;
           const stepVal = Number(parser.parseAndEvaluate(b.stepValue));
 
-          const sym = variablesRef.current[name];
+          // CASE INSENSITIVE lookup
+          const sym = getVariableSymbol(name, variablesRef.current);
           if (!sym) throw new Error(`Variabile ciclo '${name}' non dichiarata.`);
 
           const currentVal = Number(sym.value);
@@ -778,7 +791,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       arrayIdx = Math.floor(Number(indexParser.parseAndEvaluate(indexExpr)));
     }
 
-    const sym = variablesRef.current[targetName];
+    // CASE INSENSITIVE lookup
+    const sym = getVariableSymbol(targetName, variablesRef.current);
     if (!sym) {
       setExecutionStatus('error');
       addConsoleMessage('error', `Variabile '${targetName}' non definita.`);

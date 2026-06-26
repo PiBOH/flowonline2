@@ -368,13 +368,14 @@ export class ExpressionParser {
         return this.evaluateFunction(name, args);
       }
 
-      // Check for array lookup
+      // Check for array lookup (Case-Insensitive Variable Lookup!)
       if (this.peek().type === 'LBRACKET') {
         this.next(); // skip '['
         const indexVal = this.parseExpression();
         this.expect('RBRACKET');
 
-        const sym = this.variables[name];
+        // Case-Insensitive variable lookup
+        const sym = Object.values(this.variables).find(v => v.name.toLowerCase() === name.toLowerCase());
         if (!sym) {
           throw new Error(`Variable '${name}' is not defined.`);
         }
@@ -388,10 +389,9 @@ export class ExpressionParser {
         return sym.value[index];
       }
 
-      // Regular variable lookup
-      const sym = this.variables[name];
+      // Regular variable lookup (Case-Insensitive Variable Lookup!)
+      const sym = Object.values(this.variables).find(v => v.name.toLowerCase() === name.toLowerCase());
       if (sym === undefined) {
-        // check for math constants
         if (name.toLowerCase() === 'pi') {
           return Math.PI;
         }
