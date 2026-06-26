@@ -7,19 +7,21 @@ export function generateId(): string {
 
 export class FprgParser {
   /**
-   * Automatically normalizes ToChar(13) into "\n" when loading .fprg files
+   * Automatically normalizes ToChar(13) into unquoted \n when loading .fprg files
    */
   private static normalizeToChar(expr: string): string {
     if (!expr) return '';
-    return expr.replace(/tochar\(\s*13\s*\)/gi, '"\\n"');
+    // Replaces tochar(13) with unquoted \n for clean unquoted Flowonline2 newline constant!
+    return expr.replace(/tochar\(\s*13\s*\)/gi, '\\n');
   }
 
   /**
-   * Automatically converts "\n" back to ToChar(13) when saving .fprg files
+   * Automatically converts unquoted \n back to ToChar(13) when saving .fprg files
    */
   private static denormalizeToChar(expr: string): string {
     if (!expr) return '';
-    return expr.replace(/"\\n"/g, 'ToChar(13)').replace(/'\\n'/g, 'ToChar(13)');
+    // Replaces unquoted \n with ToChar(13)
+    return expr.replace(/\\n/g, 'ToChar(13)');
   }
 
   /**

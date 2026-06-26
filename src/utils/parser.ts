@@ -39,6 +39,14 @@ export class ExpressionParser {
         continue;
       }
 
+      // Match unquoted \n as a special newline string token for Flowonline2!
+      // This allows writing: text & \n & "more text" without putting \n inside quotes!
+      if (char === '\\' && expr[i + 1] === 'n') {
+        this.tokens.push({ type: 'STRING', value: '\n' });
+        i += 2;
+        continue;
+      }
+
       // Strings (double quotes with robust escape decoder!)
       if (char === '"') {
         let strVal = '';
@@ -507,3 +515,4 @@ export class ExpressionParser {
     }
   }
 }
+export default ExpressionParser;
