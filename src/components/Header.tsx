@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useFlow, AppLayout } from '../context/FlowContext';
 import { translations } from '../utils/translations';
 import { FprgParser } from '../utils/fprgParser';
+import { Language } from '../types/flow';
 
 export const Header: React.FC = () => {
   const {
@@ -37,7 +38,7 @@ export const Header: React.FC = () => {
 
   // About Modal state
   const [showAbout, setShowAbout] = useState(false);
-  const [licenseText, setLicenseText] = useState('Caricamento licenza...');
+  const [licenseText, setLicenseText] = useState('Loading license...');
 
   // Hardcoded fallback license text
   const mitLicenseTextFallback = `MIT License
@@ -61,6 +62,137 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.`;
+
+  // LOCAL MENU TRANSLATIONS (For 1000% multilingual fidelity!)
+  const menuTranslations: Record<Language, {
+    file: string;
+    edit: string;
+    program: string;
+    help: string;
+    new: string;
+    open: string;
+    save: string;
+    backup: string;
+    exportSvg: string;
+    undo: string;
+    redo: string;
+    run: string;
+    step: string;
+    pause: string;
+    stop: string;
+    about: string;
+  }> = {
+    en: {
+      file: "File",
+      edit: "Edit",
+      program: "Program",
+      help: "Help",
+      new: "New",
+      open: "Open...",
+      save: "Save (.fprg)",
+      backup: "Backup JSON",
+      exportSvg: "Export SVG Image",
+      undo: "Undo",
+      redo: "Redo",
+      run: "Run",
+      step: "Step",
+      pause: "Pause",
+      stop: "Stop",
+      about: "About Flowonline2..."
+    },
+    en_GB: {
+      file: "File",
+      edit: "Edit",
+      program: "Program",
+      help: "Help",
+      new: "New",
+      open: "Open...",
+      save: "Save (.fprg)",
+      backup: "Backup JSON",
+      exportSvg: "Export SVG Image",
+      undo: "Undo",
+      redo: "Redo",
+      run: "Run",
+      step: "Step",
+      pause: "Pause",
+      stop: "Stop",
+      about: "About Flowonline2..."
+    },
+    it: {
+      file: "File",
+      edit: "Modifica",
+      program: "Programma",
+      help: "?",
+      new: "Nuovo",
+      open: "Apri...",
+      save: "Salva (.fprg)",
+      backup: "Backup JSON",
+      exportSvg: "Esporta Immagine SVG",
+      undo: "Annulla (Undo)",
+      redo: "Ripristina (Redo)",
+      run: "Esegui (Run)",
+      step: "Passo-Passo (Step)",
+      pause: "Pausa",
+      stop: "Stop",
+      about: "Informazioni su Flowonline2..."
+    },
+    de: {
+      file: "Datei",
+      edit: "Bearbeiten",
+      program: "Programm",
+      help: "Hilfe",
+      new: "Neu",
+      open: "Öffnen...",
+      save: "Speichern (.fprg)",
+      backup: "Backup JSON",
+      exportSvg: "SVG-Bild exportieren",
+      undo: "Rückgängig",
+      redo: "Wiederholen",
+      run: "Ausführen",
+      step: "Schritt-für-Schritt",
+      pause: "Pause",
+      stop: "Stopp",
+      about: "Über Flowonline2..."
+    },
+    fr: {
+      file: "Fichier",
+      edit: "Édition",
+      program: "Programme",
+      help: "Aide",
+      new: "Nouveau",
+      open: "Ouvrir...",
+      save: "Enregistrer (.fprg)",
+      backup: "Sauvegarde JSON",
+      exportSvg: "Exporter l'image SVG",
+      undo: "Annuler",
+      redo: "Rétablir",
+      run: "Exécuter",
+      step: "Pas-à-pas",
+      pause: "Pause",
+      stop: "Arrêter",
+      about: "À propos de Flowonline2..."
+    },
+    es: {
+      file: "Archivo",
+      edit: "Editar",
+      program: "Programa",
+      help: "Ayuda",
+      new: "Nuevo",
+      open: "Abrir...",
+      save: "Guardar (.fprg)",
+      backup: "Copia JSON",
+      exportSvg: "Exportar Imagen SVG",
+      undo: "Deshacer",
+      redo: "Rehacer",
+      run: "Ejecutar",
+      step: "Paso a paso",
+      pause: "Pausa",
+      stop: "Detener",
+      about: "Acerca de Flowonline2..."
+    }
+  };
+
+  const mt = menuTranslations[language];
 
   // Dynamically load the LICENSE file from the repository root/build folder
   useEffect(() => {
@@ -195,7 +327,7 @@ SOFTWARE.`;
             <polygon points="18,18 28,18 26,26 20,26" fill="#4B9DDC" stroke="#333" strokeWidth="1.5" />
           </svg>
           <span className="text-[11px] font-semibold text-white font-sans tracking-wide">
-            Flowonline2 BETA 2.0.5 - {programTitle || 'Untitled'}.fprg
+            Flowonline2 ALPHA 2.0.7 - {programTitle || 'Untitled'}.fprg
           </span>
         </div>
 
@@ -218,29 +350,29 @@ SOFTWARE.`;
               activeDropdown === 'file' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
-            File
+            {mt.file}
           </button>
           {activeDropdown === 'file' && (
             <div className="absolute left-0 top-full mt-[1px] min-w-[200px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
               <button onClick={handleNew} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
-                <span>📄 Nuovo</span>
+                <span>📄 {mt.new}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+N</span>
               </button>
               <button onClick={() => { fileInputRef.current?.click(); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
-                <span>📂 Apri...</span>
+                <span>📂 {mt.open}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+O</span>
               </button>
               <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".fprg" className="hidden" />
               <div className="h-[1px] bg-slate-300 my-1"></div>
               <button onClick={handleExportFprg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
-                <span>💾 Salva (.fprg)</span>
+                <span>💾 {mt.save}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+S</span>
               </button>
               <button onClick={handleExportJson} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>📦 Backup JSON</span>
+                <span>📦 {mt.backup}</span>
               </button>
               <button onClick={handleExportSvg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>🖼️ Esporta Immagine SVG</span>
+                <span>🖼️ {mt.exportSvg}</span>
               </button>
             </div>
           )}
@@ -254,16 +386,16 @@ SOFTWARE.`;
               activeDropdown === 'edit' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
-            Modifica
+            {mt.edit}
           </button>
           {activeDropdown === 'edit' && (
             <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
               <button onClick={undo} disabled={!canUndo} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-40 text-slate-800">
-                <span>↩ Annulla (Undo)</span>
+                <span>↩ {mt.undo}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+Z</span>
               </button>
               <button onClick={redo} disabled={!canRedo} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-40 text-slate-800">
-                <span>↪ Ripristina (Redo)</span>
+                <span>↪ {mt.redo}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+Y</span>
               </button>
             </div>
@@ -278,21 +410,21 @@ SOFTWARE.`;
               activeDropdown === 'program' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
-            Programma
+            {mt.program}
           </button>
           {activeDropdown === 'program' && (
             <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
               <button onClick={() => { startRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>▶ Esegui (Run)</span>
+                <span>▶ {mt.run}</span>
               </button>
               <button onClick={() => { stepRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>⏭ Passo-Passo (Step)</span>
+                <span>⏭ {mt.step}</span>
               </button>
               <button onClick={() => { pauseRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>⏸ Pausa</span>
+                <span>⏸ {mt.pause}</span>
               </button>
               <button onClick={() => { stopRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>⏹ Stop</span>
+                <span>⏹ {mt.stop}</span>
               </button>
             </div>
           )}
@@ -306,12 +438,12 @@ SOFTWARE.`;
               activeDropdown === 'help' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
-            ?
+            {mt.help}
           </button>
           {activeDropdown === 'help' && (
             <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
               <button onClick={() => { setShowAbout(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 font-bold">
-                <span>ℹ️ Informazioni su Flowonline2...</span>
+                <span>ℹ️ {mt.about}</span>
               </button>
             </div>
           )}
@@ -484,7 +616,7 @@ SOFTWARE.`;
               }}
             >
               <span className="text-[11px] font-bold text-white font-sans tracking-wide">
-                Informazioni su Flowonline2
+                About Flowonline2
               </span>
               <button 
                 onClick={() => setShowAbout(false)}
@@ -510,7 +642,7 @@ SOFTWARE.`;
 
                 <div className="flex flex-col gap-0.5 leading-tight text-[12px] font-sans">
                   <h4 className="font-extrabold text-[14px] text-slate-900 tracking-wide">Flowonline2</h4>
-                  <p className="text-[11px] text-slate-500 font-semibold">Versione BETA 2.0.5</p>
+                  <p className="text-[11px] text-slate-500 font-semibold">Version ALPHA 2.0.7</p>
                   <p className="text-[11px] text-slate-600 mt-1">
                     Sviluppato da <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">PiBOH</a>
                   </p>
