@@ -91,7 +91,7 @@ const initialSample: Statement[] = [
   {
     id: 'block_out_greet',
     type: 'output',
-    expression: '"Benvenuto su Flowonline2! Inserisci il tuo nome:"',
+    expression: '"Welcome to Flowonline2! Please enter your name:"',
     newline: true
   },
   {
@@ -102,7 +102,7 @@ const initialSample: Statement[] = [
   {
     id: 'block_decl_age',
     type: 'declare',
-    variableName: 'eta',
+    variableName: 'age',
     variableType: 'Integer',
     isArray: false,
     arraySize: ''
@@ -110,23 +110,23 @@ const initialSample: Statement[] = [
   {
     id: 'block_out_prompt_age',
     type: 'output',
-    expression: '"Ciao " & username & "! Quanti anni hai?"',
+    expression: '"Hello " & username & "! How old are you?"',
     newline: true
   },
   {
     id: 'block_inp_age',
     type: 'input',
-    variableName: 'eta'
+    variableName: 'age'
   },
   {
     id: 'block_if_age',
     type: 'if',
-    condition: 'eta >= 18',
+    condition: 'age >= 18',
     thenBranch: [
       {
         id: 'block_out_adult',
         type: 'output',
-        expression: 'username & ", sei maggiorenne!"',
+        expression: 'username & ", you are an adult!"',
         newline: true
       }
     ],
@@ -134,7 +134,7 @@ const initialSample: Statement[] = [
       {
         id: 'block_out_minor',
         type: 'output',
-        expression: 'username & ", sei minorenne. Ti mancano " & (18 - eta) & " anni alla maggiore età!"',
+        expression: 'username & ", you are a minor. You have " & (18 - age) & " years left until adulthood!"',
         newline: true
       }
     ]
@@ -154,8 +154,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [undoStack, setUndoStack] = useState<Array<{ statements: Statement[]; title: string; author: string }>>([]);
   const [redoStack, setRedoStack] = useState<Array<{ statements: Statement[]; title: string; author: string }>>([]);
 
-  // Language translation selector
-  const [language, setLanguage] = useState<Language>('it');
+  // Language translation selector (DEFAULT: English US!)
+  const [language, setLanguage] = useState<Language>('en');
 
   // VM Execution state
   const [variables, setVariables] = useState<Record<string, VariableSymbol>>({});
@@ -258,7 +258,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         newBlock = { id: randomId, type: 'call', functionName: 'MyFunction', arguments: '' };
         break;
       case 'comment':
-        newBlock = { id: randomId, type: 'comment', text: 'Scrivi commento qui' };
+        newBlock = { id: randomId, type: 'comment', text: 'Write comment here' };
         break;
     }
 
@@ -486,7 +486,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (pc < 0 || pc >= insts.length) {
       setExecutionStatus('finished');
       setCurrentBlockId(null);
-      addConsoleMessage('system', '--- Programma Terminato con Successo ---');
+      addConsoleMessage('system', '--- Program Terminated Successfully ---');
       return false; // stop VM
     }
 
@@ -538,7 +538,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           if (name.includes('[') && name.endsWith(']')) {
             const startBracket = name.indexOf('[');
             const arrName = name.substring(0, startBracket).trim();
-            const indexExpr = name.substring(startBracket + 1, name.length - 1);
+            const indexExpr = name.substring(startBracket + 1, name.length - 1).trim();
             
             const indexParser = new ExpressionParser(variablesRef.current);
             const indexVal = Math.floor(Number(indexParser.parseAndEvaluate(indexExpr)));
@@ -546,13 +546,13 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             // CASE INSENSITIVE array symbol lookup
             const sym = getVariableSymbol(arrName, variablesRef.current);
             if (!sym) {
-              throw new Error(`Array '${arrName}' non definito.`);
+              throw new Error(`Array '${arrName}' not defined.`);
             }
             if (!sym.isArray) {
-              throw new Error(`La variabile '${arrName}' non è un vettore.`);
+              throw new Error(`Variable '${arrName}' is not an array/vector.`);
             }
             if (indexVal < 0 || indexVal >= (sym.arraySize ?? 0)) {
-              throw new Error(`Indice ${indexVal} fuori dai limiti per il vettore '${arrName}' (dimensione: ${sym.arraySize}).`);
+              throw new Error(`Index ${indexVal} out of bounds for array '${arrName}' (size: ${sym.arraySize}).`);
             }
 
             let validatedVal = rValue;
@@ -561,12 +561,18 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (sym.type === 'Boolean') validatedVal = Boolean(rValue);
             if (sym.type === 'String') validatedVal = String(rValue);
 
-            sym.value[indexVal] = validatedVal;
+            // IMMUTABLE VALUE ARRAY REPLACEMENT (React-safe state updates!)
+            const updatedArr = [...sym.value];
+            updatedArr[indexVal] = validatedVal;
+            variablesRef.current[sym.name] = {
+              ...sym,
+              value: updatedArr
+            };
           } else {
             // CASE INSENSITIVE variable symbol lookup
             const sym = getVariableSymbol(name, variablesRef.current);
             if (!sym) {
-              throw new Error(`Variabile '${name}' non dichiarata.`);
+              throw new Error(`Variable '${name}' is not declared.`);
             }
 
             let validatedVal = rValue;
@@ -575,7 +581,11 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (sym.type === 'Boolean') validatedVal = Boolean(rValue);
             if (sym.type === 'String') validatedVal = String(rValue);
 
-            sym.value = validatedVal;
+            // IMMUTABLE VALUE SYMBOL REPLACEMENT (React-safe state updates!)
+            variablesRef.current[sym.name] = {
+              ...sym,
+              value: validatedVal
+            };
           }
 
           setVariables({ ...variablesRef.current });
@@ -595,11 +605,11 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           // CASE INSENSITIVE variable symbol check
           const sym = getVariableSymbol(targetName, variablesRef.current);
           if (!sym) {
-            throw new Error(`Variabile di input '${targetName}' non dichiarata.`);
+            throw new Error(`Input variable '${targetName}' is not defined.`);
           }
 
           setExecutionStatus('input_pause');
-          addConsoleMessage('system', `Inserisci valore per ${name}:`);
+          addConsoleMessage('system', `Please enter a value for ${name}:`);
           
           if (intervalIdRef.current) {
             window.clearInterval(intervalIdRef.current);
@@ -626,7 +636,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const b = inst.args.forBlock as ForBlock;
             // CASE INSENSITIVE loop variable lookup
             const sym = getVariableSymbol(b.variableName, variablesRef.current);
-            if (!sym) throw new Error(`Variabile ciclo '${b.variableName}' non trovata.`);
+            if (!sym) throw new Error(`Loop variable '${b.variableName}' not found.`);
 
             const currentIdxVal = Number(sym.value);
             const endVal = Number(parser.parseAndEvaluate(b.endValue));
@@ -655,10 +665,14 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           // CASE INSENSITIVE lookup
           const sym = getVariableSymbol(name, variablesRef.current);
           if (!sym) {
-            throw new Error(`Variabile ciclo '${name}' non dichiarata.`);
+            throw new Error(`Loop variable '${name}' is not defined.`);
           }
           
-          sym.value = sym.type === 'Integer' ? Math.floor(Number(startVal)) : Number(startVal);
+          // IMMUTABLE VALUE SYMBOL REPLACEMENT
+          variablesRef.current[sym.name] = {
+            ...sym,
+            value: sym.type === 'Integer' ? Math.floor(Number(startVal)) : Number(startVal)
+          };
           setVariables({ ...variablesRef.current });
           break;
         }
@@ -670,25 +684,29 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
           // CASE INSENSITIVE lookup
           const sym = getVariableSymbol(name, variablesRef.current);
-          if (!sym) throw new Error(`Variabile ciclo '${name}' non dichiarata.`);
+          if (!sym) throw new Error(`Loop variable '${name}' is not defined.`);
 
           const currentVal = Number(sym.value);
           const increment = b.direction === 'inc' ? stepVal : -stepVal;
-          sym.value = sym.type === 'Integer' ? Math.floor(currentVal + increment) : currentVal + increment;
-
+          
+          // IMMUTABLE VALUE SYMBOL REPLACEMENT
+          variablesRef.current[sym.name] = {
+            ...sym,
+            value: sym.type === 'Integer' ? Math.floor(currentVal + increment) : currentVal + increment
+          };
           setVariables({ ...variablesRef.current });
           break;
         }
 
         case 'CALL_FUNC': {
           const b = inst.args as CallBlock;
-          addConsoleMessage('system', `Chiamata a funzione: ${b.functionName}(${b.arguments || ''})`);
+          addConsoleMessage('system', `Function call: ${b.functionName}(${b.arguments || ''})`);
           break;
         }
       }
     } catch (e: any) {
       setExecutionStatus('error');
-      addConsoleMessage('error', `Errore blocco: ${e.message}`);
+      addConsoleMessage('error', `Error block: ${e.message}`);
       setCurrentBlockId(inst.blockId);
       if (intervalIdRef.current) {
         window.clearInterval(intervalIdRef.current);
@@ -708,7 +726,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       variablesRef.current = {};
       setVariables({});
       setConsoleMessages([]);
-      addConsoleMessage('system', '--- Avvio Esecuzione Diagramma ---');
+      addConsoleMessage('system', '--- Starting Diagram Execution ---');
     }
 
     setExecutionStatus('running');
@@ -744,7 +762,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       variablesRef.current = {};
       setVariables({});
       setConsoleMessages([]);
-      addConsoleMessage('system', '--- Avvio Esecuzione Passo-Passo ---');
+      addConsoleMessage('system', '--- Starting Step-by-Step Execution ---');
       setExecutionStatus('paused');
     }
 
@@ -771,7 +789,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       window.clearInterval(intervalIdRef.current);
       intervalIdRef.current = null;
     }
-    addConsoleMessage('system', '--- Esecuzione Interrotta ---');
+    addConsoleMessage('system', '--- Execution Interrupted ---');
   };
 
   const submitInput = (val: string) => {
@@ -795,7 +813,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const sym = getVariableSymbol(targetName, variablesRef.current);
     if (!sym) {
       setExecutionStatus('error');
-      addConsoleMessage('error', `Variabile '${targetName}' non definita.`);
+      addConsoleMessage('error', `Variable '${targetName}' is not defined.`);
       return;
     }
 
@@ -805,10 +823,10 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       let parsedVal: any;
       if (sym.type === 'Integer') {
         parsedVal = parseInt(val, 10);
-        if (isNaN(parsedVal)) throw new Error('Inserire un numero intero valido.');
+        if (isNaN(parsedVal)) throw new Error('Please enter a valid integer.');
       } else if (sym.type === 'Real') {
         parsedVal = parseFloat(val);
-        if (isNaN(parsedVal)) throw new Error('Inserire un numero reale valido.');
+        if (isNaN(parsedVal)) throw new Error('Please enter a valid real number.');
       } else if (sym.type === 'Boolean') {
         const lVal = val.trim().toLowerCase();
         if (lVal === 'true' || lVal === '1' || lVal === 'si' || lVal === 'yes') {
@@ -816,7 +834,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else if (lVal === 'false' || lVal === '0' || lVal === 'no') {
           parsedVal = false;
         } else {
-          throw new Error("Inserire 'true' o 'false' per il tipo booleano.");
+          throw new Error("Please enter 'true' or 'false' for boolean type.");
         }
       } else {
         parsedVal = val;
@@ -824,11 +842,22 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (sym.isArray && arrayIdx !== null) {
         if (arrayIdx < 0 || arrayIdx >= (sym.arraySize ?? 0)) {
-          throw new Error('Indice dell\'array fuori dai limiti.');
+          throw new Error('Array index out of bounds.');
         }
-        sym.value[arrayIdx] = parsedVal;
+        
+        // IMMUTABLE STATE REPLACEMENT FOR ARRAYS IN INPUT
+        const updatedArr = [...sym.value];
+        updatedArr[arrayIdx] = parsedVal;
+        variablesRef.current[sym.name] = {
+          ...sym,
+          value: updatedArr
+        };
       } else {
-        sym.value = parsedVal;
+        // IMMUTABLE STATE REPLACEMENT FOR SCALARS IN INPUT
+        variablesRef.current[sym.name] = {
+          ...sym,
+          value: parsedVal
+        };
       }
 
       setVariables({ ...variablesRef.current });
@@ -851,8 +880,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }, delay);
       }
     } catch (e: any) {
-      addConsoleMessage('error', `Errore di validazione: ${e.message}`);
-      addConsoleMessage('system', `Inserisci valore per ${name}:`);
+      addConsoleMessage('error', `Validation error: ${e.message}`);
+      addConsoleMessage('system', `Please enter a value for ${name}:`);
     }
   };
 

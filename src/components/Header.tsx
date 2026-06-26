@@ -65,17 +65,17 @@ SOFTWARE.`;
   // Dynamically load the LICENSE file from the repository root/build folder
   useEffect(() => {
     if (showAbout) {
-      setLicenseText('Caricamento licenza in corso...');
+      setLicenseText('Loading license...');
       fetch('./LICENSE')
         .then((res) => {
           if (!res.ok) {
-            throw new Error('File LICENSE non trovato o non leggibile.');
+            throw new Error('LICENSE file not found or not readable.');
           }
           return res.text();
         })
         .then((text) => setLicenseText(text))
         .catch((err) => {
-          console.warn('Impossibile caricare LICENSE in tempo reale, uso del fallback:', err);
+          console.warn('Unable to load LICENSE in real-time, using fallback:', err);
           setLicenseText(mitLicenseTextFallback);
         });
     }
@@ -98,7 +98,7 @@ SOFTWARE.`;
         const parsed = FprgParser.parse(content);
         loadProgram(parsed.statements, parsed.title, parsed.author);
       } catch (err: any) {
-        alert(`Errore nell'apertura del file .fprg: ${err.message}`);
+        alert(`Error opening .fprg file: ${err.message}`);
       }
     };
     reader.readAsText(file);
@@ -113,11 +113,11 @@ SOFTWARE.`;
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `${programTitle.toLowerCase().replace(/\s+/g, '_') || 'diagramma'}.fprg`;
+      link.download = `${programTitle.toLowerCase().replace(/\s+/g, '_') || 'diagram'}.fprg`;
       link.click();
       URL.revokeObjectURL(url);
     } catch (err: any) {
-      alert(`Errore nel salvataggio: ${err.message}`);
+      alert(`Error saving file: ${err.message}`);
     }
     setActiveDropdown(null);
   };
@@ -132,7 +132,7 @@ SOFTWARE.`;
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${programTitle.toLowerCase().replace(/\s+/g, '_') || 'diagramma'}_backup.json`;
+    link.download = `${programTitle.toLowerCase().replace(/\s+/g, '_') || 'diagram'}_backup.json`;
     link.click();
     URL.revokeObjectURL(url);
     setActiveDropdown(null);
@@ -141,7 +141,7 @@ SOFTWARE.`;
   const handleExportSvg = () => {
     const svgEl = document.getElementById('flowchart-svg-export-target');
     if (!svgEl) {
-      alert('Impossibile trovare il diagramma SVG da esportare.');
+      alert('Unable to find SVG flowchart elements for export.');
       return;
     }
     const svgClone = svgEl.cloneNode(true) as SVGElement;
@@ -151,7 +151,7 @@ SOFTWARE.`;
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${programTitle.toLowerCase().replace(/\s+/g, '_') || 'diagramma'}.svg`;
+    link.download = `${programTitle.toLowerCase().replace(/\s+/g, '_') || 'diagram'}.svg`;
     link.click();
     URL.revokeObjectURL(url);
     setActiveDropdown(null);
@@ -169,11 +169,11 @@ SOFTWARE.`;
   const isStopped = executionStatus === 'stopped' || executionStatus === 'idle';
 
   const layoutButtons: Array<{ id: AppLayout; label: string; tooltip: string }> = [
-    { id: 'flowchart_only', label: '🖥️', tooltip: 'Solo Diagramma' },
-    { id: 'flow_variables', label: '📊', tooltip: 'Diagramma e Watch' },
-    { id: 'flow_console', label: '💬', tooltip: 'Diagramma e Console' },
-    { id: 'triple_split', label: '🚀', tooltip: 'Tutto Insieme (Triple Split)' },
-    { id: 'flow_code', label: '📝', tooltip: 'Diagramma e Codice' }
+    { id: 'flowchart_only', label: '🖥️', tooltip: 'Flowchart Only' },
+    { id: 'flow_variables', label: '📊', tooltip: 'Flowchart & Watch' },
+    { id: 'flow_console', label: '💬', tooltip: 'Flowchart & Console' },
+    { id: 'triple_split', label: '🚀', tooltip: 'Triple Split View' },
+    { id: 'flow_code', label: '📝', tooltip: 'Flowchart & Source Code' }
   ];
 
   return (
@@ -327,10 +327,10 @@ SOFTWARE.`;
           >
             <option value="en">English (US)</option>
             <option value="en_GB">English (UK)</option>
+            <option value="it">Italiano</option>
             <option value="de">Deutsch</option>
             <option value="fr">Français</option>
             <option value="es">Español</option>
-            <option value="it">Italiano</option>
           </select>
         </div>
       </div>
@@ -432,9 +432,9 @@ SOFTWARE.`;
 
         <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
 
-        {/* SPEED CONTROL */}
+        {/* SPEED CONTROL (FAITHFUL MULTILINGUAL LABEL - SPEED / VELOCITÀ) */}
         <div className="flex items-center gap-2 pl-2 text-slate-500 text-[10px] font-bold font-sans">
-          <span>RITARDO:</span>
+          <span>{t.toolbar.speed.toUpperCase()}:</span>
           <input
             type="range"
             min="1"
@@ -450,23 +450,23 @@ SOFTWARE.`;
         {/* META ATTRIBUTI (Editable directly on Toolbar) */}
         <div className="hidden lg:flex items-center gap-3 pl-2">
           <div className="flex flex-col text-[10px] font-sans">
-            <span className="text-slate-400 uppercase font-black tracking-tight text-[7px] leading-none mb-0.5">Nome Algoritmo</span>
+            <span className="text-slate-400 uppercase font-black tracking-tight text-[7px] leading-none mb-0.5">Algorithm Name</span>
             <input
               type="text"
               value={programTitle}
               onChange={(e) => setProgramTitle(e.target.value)}
               className="bg-white hover:bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500 rounded border border-slate-300 text-[10px] font-bold text-slate-800 px-1 py-0.5 w-32 focus:outline-none"
-              placeholder="Mio Algoritmo"
+              placeholder="My Algorithm"
             />
           </div>
           <div className="flex flex-col text-[10px] font-sans">
-            <span className="text-slate-400 uppercase font-black tracking-tight text-[7px] leading-none mb-0.5">Autore</span>
+            <span className="text-slate-400 uppercase font-black tracking-tight text-[7px] leading-none mb-0.5">Author</span>
             <input
               type="text"
               value={programAuthor}
               onChange={(e) => setProgramAuthor(e.target.value)}
               className="bg-white hover:bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500 rounded border border-slate-300 text-[10px] text-slate-700 px-1 py-0.5 w-24 focus:outline-none"
-              placeholder="Autore"
+              placeholder="Author"
             />
           </div>
         </div>
@@ -475,8 +475,7 @@ SOFTWARE.`;
       {/* ============ WIN32 ABOUT DIALOG MODAL (FAITHFUL SIMULATION) ============ */}
       {showAbout && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
-          <div className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl w-[380px] overflow-hidden flex flex-col font-sans select-none">
-            
+          <div className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl w-[380px] overflow-hidden flex flex-col">
             {/* About Modal Title Bar */}
             <div 
               className="h-[24px] text-white flex items-center justify-between px-2 cursor-default"
@@ -500,7 +499,7 @@ SOFTWARE.`;
               
               <div className="flex items-start gap-4">
                 {/* Large Flowgorithm Colored logo */}
-                <div className="w-12 h-12 bg-white border border-slate-300 shadow-inner rounded flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 bg-white rounded border border-slate-300 shadow-inner flex items-center justify-center shrink-0">
                   <svg className="w-9 h-9" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                     <rect x="4" y="4" width="10" height="8" fill="#84C44C" stroke="#333" strokeWidth="1.5" />
                     <rect x="18" y="4" width="10" height="8" fill="#F2A93B" stroke="#333" strokeWidth="1.5" />
