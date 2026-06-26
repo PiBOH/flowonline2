@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Statement, Language } from '../types/flow';
 import { useFlow, ColorSchemeType } from '../context/FlowContext';
 import { translations } from '../utils/translations';
@@ -121,8 +121,20 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
 }) => {
   const { colorScheme } = useFlow();
   const t = translations[lang].blocks;
-
   const sc = colorSchemes[colorScheme];
+
+  // Ref to automatically scroll and center the executing block in the viewport (ALPHA 2.0.12 Requirement!)
+  const nodeRef = useRef<SVGGElement>(null);
+
+  useEffect(() => {
+    if (isHighlighted && nodeRef.current) {
+      nodeRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      });
+    }
+  }, [isHighlighted]);
 
   // Active executing or selected highlights
   const highlightClass = isHighlighted 
@@ -142,7 +154,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
   // MAIN BLOCK (Terminal)
   if (type === 'main') {
     return (
-      <g className="cursor-pointer" onDoubleClick={onDoubleClick}>
+      <g ref={nodeRef} className="cursor-pointer" onDoubleClick={onDoubleClick}>
         <defs>
           <linearGradient id={`mainGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor={sc.mainStartFill} />
@@ -176,7 +188,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
   // END BLOCK (Terminal)
   if (type === 'end') {
     return (
-      <g>
+      <g ref={nodeRef}>
         <defs>
           <linearGradient id={`endGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor={sc.mainStartFill} />
@@ -215,7 +227,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
       const isArrayText = statement.isArray ? `[${statement.arraySize}]` : '';
       const displayLabel = `${statement.variableName}${isArrayText} : ${statement.variableType}`;
       return (
-        <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
+        <g ref={nodeRef} className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id={`processGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={sc.processFill} />
@@ -270,7 +282,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     case 'assign': {
       const displayLabel = `${statement.variableName} = ${statement.expression}`;
       return (
-        <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
+        <g ref={nodeRef} className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id={`processGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={sc.processFill} />
@@ -312,7 +324,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     case 'input': {
       const displayLabel = statement.variableName;
       return (
-        <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
+        <g ref={nodeRef} className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id={`inputGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={sc.inputFill} />
@@ -328,11 +340,11 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             className={highlightClass}
           />
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
             fill={sc.textColor}
             fillOpacity="0.6"
-            className="font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.input}
           </text>
@@ -340,7 +352,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             y="12"
             textAnchor="middle"
             fill={sc.textColor}
-            className="font-mono text-[12px] font-bold select-none pointer-events-none"
+            className="font-mono text-[11px] font-bold select-none pointer-events-none"
           >
             {truncateText(displayLabel, 20)}
           </text>
@@ -352,7 +364,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     case 'output': {
       const displayLabel = statement.expression;
       return (
-        <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
+        <g ref={nodeRef} className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id={`outputGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={sc.outputFill} />
@@ -367,11 +379,11 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             className={highlightClass}
           />
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
             fill={sc.textColor}
             fillOpacity="0.6"
-            className="font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.output}
           </text>
@@ -379,7 +391,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             y="12"
             textAnchor="middle"
             fill={sc.textColor}
-            className="font-mono text-[12px] font-bold select-none pointer-events-none"
+            className="font-mono text-[11px] font-bold select-none pointer-events-none"
           >
             {truncateText(displayLabel, 20)}
           </text>
@@ -391,7 +403,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     case 'if': {
       const displayLabel = statement.condition;
       return (
-        <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
+        <g ref={nodeRef} className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id={`ifGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={sc.ifFill} />
@@ -431,7 +443,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     case 'while': {
       const displayLabel = statement.condition;
       return (
-        <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
+        <g ref={nodeRef} className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id={`loopGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={sc.loopFill} />
@@ -470,7 +482,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     case 'for': {
       const displayLabel = `${statement.variableName} = ${statement.startValue} to ${statement.endValue}`;
       return (
-        <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
+        <g ref={nodeRef} className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id={`loopGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={sc.loopFill} />
@@ -509,7 +521,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     case 'do': {
       const displayLabel = statement.condition;
       return (
-        <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
+        <g ref={nodeRef} className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id={`loopGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={sc.loopFill} />
@@ -548,7 +560,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     case 'call': {
       const displayLabel = `${statement.functionName}(${statement.arguments || ''})`;
       return (
-        <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
+        <g ref={nodeRef} className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id={`callGrad-${colorScheme}`} x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={sc.callFill} />
@@ -594,7 +606,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     case 'comment': {
       const displayLabel = statement.text;
       return (
-        <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
+        <g ref={nodeRef} className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <rect
             x="-90"
             y="-25"
@@ -657,3 +669,4 @@ const renderDeleteBtn = (onDeleteClick?: (e: React.MouseEvent) => void, xOffset 
     </g>
   );
 };
+export default BlockNode;

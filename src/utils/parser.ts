@@ -109,6 +109,12 @@ export class ExpressionParser {
         i += 2;
         continue;
       }
+      // CRITICAL COMPATIBILITY FIX: Support Flowgorithm's inequality operator '<>' as alternative to '!='
+      if (expr.substring(i, i + 2) === '<>') {
+        this.tokens.push({ type: 'OPERATOR', value: '!=' });
+        i += 2;
+        continue;
+      }
       if (expr.substring(i, i + 2) === '<=') {
         this.tokens.push({ type: 'OPERATOR', value: '<=' });
         i += 2;
