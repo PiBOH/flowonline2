@@ -33,6 +33,7 @@ export const Header: React.FC = () => {
   } = useFlow();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const menuBarRef = useRef<HTMLDivElement>(null);
   const t = translations[language];
 
   // Dropdown states for Menus
@@ -264,6 +265,19 @@ SOFTWARE.`;
     }
   }, [showAbout]);
 
+  // Global click listener to close dropdowns when clicking outside (Win32 behavior!)
+  useEffect(() => {
+    const handleGlobalClick = (e: MouseEvent) => {
+      if (menuBarRef.current && !menuBarRef.current.contains(e.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleGlobalClick);
+    return () => {
+      document.removeEventListener('mousedown', handleGlobalClick);
+    };
+  }, []);
+
   // File IO actions
   const handleNew = () => {
     clearAll();
@@ -397,15 +411,18 @@ SOFTWARE.`;
         </div>
       </div>
 
-      {/* ============ MENU BAR (Faithful Windows Desktop Style) ============ */}
-      <div className="h-[24px] bg-[#F0F0F0] border-b border-[#C8C8C8] flex items-center px-[4px] relative z-40 text-slate-800 text-[12px] font-sans">
+      {/* ============ MENU BAR (Faithful Windows Desktop Style with hover sliding) ============ */}
+      <div 
+        ref={menuBarRef}
+        className="h-[24px] bg-[#F0F0F0] border-b border-[#C8C8C8] flex items-center px-[4px] relative z-40 text-slate-800 text-[12px] font-sans"
+      >
         
         {/* FILE MENU */}
         <div className="relative">
           <button
             onClick={() => toggleDropdown('file')}
             onMouseEnter={() => handleMenuMouseEnter('file')}
-            className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'file' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
