@@ -39,14 +39,20 @@ export class ExpressionParser {
         continue;
       }
 
-      // Strings (double quotes)
+      // Strings (double quotes with robust escape decoder!)
       if (char === '"') {
         let strVal = '';
         i++; // skip open quote
         while (i < len && expr[i] !== '"') {
           if (expr[i] === '\\') {
             i++;
-            if (i < len) strVal += expr[i];
+            if (i < len) {
+              const nextChar = expr[i];
+              if (nextChar === 'n') strVal += '\n';
+              else if (nextChar === 'r') strVal += '\r';
+              else if (nextChar === 't') strVal += '\t';
+              else strVal += nextChar;
+            }
           } else {
             strVal += expr[i];
           }

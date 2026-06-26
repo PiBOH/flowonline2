@@ -11,7 +11,6 @@ export class FprgParser {
    */
   private static normalizeToChar(expr: string): string {
     if (!expr) return '';
-    // Replaces tochar(13) with spaces and spaces case insensitively
     return expr.replace(/tochar\(\s*13\s*\)/gi, '"\\n"');
   }
 
@@ -20,7 +19,6 @@ export class FprgParser {
    */
   private static denormalizeToChar(expr: string): string {
     if (!expr) return '';
-    // Replaces both double and single quoted "\n" with ToChar(13)
     return expr.replace(/"\\n"/g, 'ToChar(13)').replace(/'\\n'/g, 'ToChar(13)');
   }
 
@@ -97,8 +95,10 @@ export class FprgParser {
       case 'declare': {
         const name = el.getAttribute('name') || 'x';
         const rawType = el.getAttribute('type') || 'Integer';
-        const isArray = el.getAttribute('array') === 'True';
-        const size = el.getAttribute('size') || '10';
+        // Support both boolean and string representations safely
+        const arrayAttr = el.getAttribute('array');
+        const isArray = arrayAttr === 'True' || arrayAttr === 'true';
+        const size = el.getAttribute('size') || '';
         return {
           id,
           type: 'declare',
@@ -257,9 +257,13 @@ export class FprgParser {
       const commentAttr = stmt.comment ? ` comment="${this.escapeXml(stmt.comment)}"` : '';
 
       switch (stmt.type) {
-        case 'declare':
-          result += `${indent}<declare name="${this.escapeXml(stmt.variableName)}" type="${stmt.variableType}" array="${stmt.isArray ? 'True' : 'False'}" size="${this.escapeXml(this.denormalizeToChar(stmt.arraySize))}"${commentAttr}/>\n`;
+        case 'declare': {
+          // CRITICAL BUG FIX (Issue #1): Ensure strict boolean type-checking to prevent regular variables from becoming arrays!
+          const isArr = stmt.isArray === true || String(stmt.isArray).toLowerCase() === 'true';
+          const sizeAttr = isArr ? this.escapeXml(this.denormalizeToChar(stmt.arraySize)) : '';
+          result += `${indent}<declare name="${this.escapeXml(stmt.variableName)}" type="${stmt.variableType}" array="${isArr ? 'True' : 'False'}" size="${sizeAttr}"${commentAttr}/>\n`;
           break;
+        }
         case 'assign':
           result += `${indent}<assign variable="${this.escapeXml(stmt.variableName)}" expression="${this.escapeXml(this.denormalizeToChar(stmt.expression))}"${commentAttr}/>\n`;
           break;

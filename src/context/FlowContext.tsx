@@ -737,6 +737,11 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // CONTROLS
   const startRun = () => {
+    // CRITICAL REQUIREMENT: Automatically open the Console pane if it's currently hidden when we start running the flowchart!
+    if (layout !== 'flow_console' && layout !== 'triple_split') {
+      setLayout('triple_split'); // Automatically defaults to triple split (canvas + watch + console) for a perfect UX!
+    }
+
     if (executionStatus === 'idle' || executionStatus === 'stopped' || executionStatus === 'finished' || executionStatus === 'error') {
       instructionsRef.current = compileProgram();
       pcRef.current = 0;
@@ -750,29 +755,24 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     if (intervalIdRef.current) window.clearInterval(intervalIdRef.current);
 
-    const delay = speed === 100 ? 0 : Math.max(10, (101 - speed) * 8);
+    // Speed=100 is maximum speed. We use delay=1ms to yield thread but execute at light-speed.
+    const delay = speed === 100 ? 1 : Math.max(15, (101 - speed) * 10);
 
-    const runLoop = () => {
-      let active = true;
-      if (speed === 100) {
-        while (active) {
-          active = executeStep();
-        }
-      } else {
-        intervalIdRef.current = window.setInterval(() => {
-          const activeStep = executeStep();
-          if (!activeStep && intervalIdRef.current) {
-            window.clearInterval(intervalIdRef.current);
-            intervalIdRef.current = null;
-          }
-        }, delay);
+    intervalIdRef.current = window.setInterval(() => {
+      const activeStep = executeStep();
+      if (!activeStep && intervalIdRef.current) {
+        window.clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
       }
-    };
-
-    runLoop();
+    }, delay);
   };
 
   const stepRun = () => {
+    // CRITICAL REQUIREMENT: Automatically open the Console pane if it's currently hidden!
+    if (layout !== 'flow_console' && layout !== 'triple_split') {
+      setLayout('triple_split');
+    }
+
     if (executionStatus === 'idle' || executionStatus === 'stopped' || executionStatus === 'finished' || executionStatus === 'error') {
       instructionsRef.current = compileProgram();
       pcRef.current = 0;
@@ -881,22 +881,15 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setVariables({ ...variablesRef.current });
 
       setExecutionStatus('running');
-      const delay = speed === 100 ? 0 : Math.max(10, (101 - speed) * 8);
+      const delay = speed === 100 ? 1 : Math.max(15, (101 - speed) * 10);
 
-      if (speed === 100) {
-        let active = true;
-        while (active) {
-          active = executeStep();
+      intervalIdRef.current = window.setInterval(() => {
+        const activeStep = executeStep();
+        if (!activeStep && intervalIdRef.current) {
+          window.clearInterval(intervalIdRef.current);
+          intervalIdRef.current = null;
         }
-      } else {
-        intervalIdRef.current = window.setInterval(() => {
-          const activeStep = executeStep();
-          if (!activeStep && intervalIdRef.current) {
-            window.clearInterval(intervalIdRef.current);
-            intervalIdRef.current = null;
-          }
-        }, delay);
-      }
+      }, delay);
     } catch (e: any) {
       addConsoleMessage('error', `Validation error: ${e.message}`);
       addConsoleMessage('system', `Please enter a value for ${name}:`);

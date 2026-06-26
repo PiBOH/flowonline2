@@ -3,7 +3,6 @@ import { useFlow } from '../context/FlowContext';
 import { Statement, BlockType } from '../types/flow';
 import { BlockNode, colorSchemes } from './BlockNode';
 import { translations } from '../utils/translations';
-import { Trash2, ZoomIn, ZoomOut, RefreshCw } from 'lucide-react';
 
 interface LayoutNode {
   id: string;
@@ -34,12 +33,12 @@ export const FlowchartCanvas: React.FC = () => {
     deleteBlock,
     openEditor,
     language,
-    clearAll,
-    colorScheme
+    colorScheme,
+    zoom
   } = useFlow();
 
-  const [zoom, setZoom] = useState<number>(1);
-  const [activeInserter, setActiveInserter] = useState<{ parentId: string | 'main_start' | 'main_end'; index?: number } | null>(null);
+  // Robust contextual menu coordinate state
+  const [activeInserter, setActiveInserter] = useState<{ parentId: string | 'main_start' | 'main_end'; index?: number; x: number; y: number } | null>(null);
 
   const t = translations[language];
   const sc = colorSchemes[colorScheme];
@@ -284,7 +283,13 @@ export const FlowchartCanvas: React.FC = () => {
         className="cursor-pointer group/insert"
         onClick={(e) => {
           e.stopPropagation();
-          setActiveInserter({ parentId, index });
+          // CRITICAL FIXED POSITIONING FIX: Capture exact click client coordinates to show menu exactly at click site!
+          setActiveInserter({ 
+            parentId, 
+            index, 
+            x: e.clientX, 
+            y: e.clientY 
+          });
         }}
       >
         {/* Invisible wider mouse-capture cylinder for a highly responsive UX */}
@@ -364,43 +369,8 @@ export const FlowchartCanvas: React.FC = () => {
 
   return (
     <div className={`flex-1 flex flex-col h-full relative overflow-hidden select-none border-r border-slate-200 ${isDark ? 'bg-zinc-900' : 'bg-white'}`}>
-      {/* Dynamic Canvas Header / Local Toolbar */}
-      <div className={`h-11 border-b px-4 flex items-center justify-between z-10 ${isDark ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-slate-50 border-slate-200'}`}>
-        <div className="flex items-center space-x-1">
-          <button
-            onClick={() => setZoom((prev) => Math.max(0.4, prev - 0.1))}
-            className={`p-1.5 rounded transition ${isDark ? 'text-zinc-300 hover:bg-zinc-700' : 'text-slate-600 hover:bg-slate-200'}`}
-            title="Zoom Out"
-          >
-            <ZoomOut size={16} />
-          </button>
-          <span className="text-xs font-semibold w-12 text-center">
-            {Math.round(zoom * 100)}%
-          </span>
-          <button
-            onClick={() => setZoom((prev) => Math.min(1.8, prev + 0.1))}
-            className={`p-1.5 rounded transition ${isDark ? 'text-zinc-300 hover:bg-zinc-700' : 'text-slate-600 hover:bg-slate-200'}`}
-            title="Zoom In"
-          >
-            <ZoomIn size={16} />
-          </button>
-          <button
-            onClick={() => setZoom(1.0)}
-            className="p-1.5 rounded transition opacity-50 hover:opacity-100"
-            title="Reset Zoom"
-          >
-            <RefreshCw size={14} />
-          </button>
-        </div>
-
-        <button
-          onClick={clearAll}
-          className="flex items-center space-x-1.5 px-2.5 py-1 text-xs bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded font-medium transition"
-        >
-          <Trash2 size={13} />
-          <span>{t.toolbar.clear}</span>
-        </button>
-      </div>
+      
+      {/* LOCAL h-11 TOOLBAR REMOVED AS REQUESTED TO AVOID DOUBLE ZOOM BAR PROBLEMS! */}
 
       {/* SVG Canvas Workspace with Engineering Graph-Paper Grid Background */}
       <div 
@@ -472,13 +442,13 @@ export const FlowchartCanvas: React.FC = () => {
           </g>
         </svg>
 
-        {/* Floating Context Block Selector Popup Menu */}
+        {/* Floating Context Block Selector Popup Menu (USING FIXED POSITIONING EXACTLY AT CLICK COORDINATES!) */}
         {activeInserter && (
           <div
-            className="absolute bg-white rounded-lg shadow-xl border border-slate-200 p-2 grid grid-cols-2 gap-1 w-64 z-20 animate-in fade-in zoom-in-95 duration-100"
+            className="fixed bg-white rounded-lg shadow-xl border border-slate-200 p-2 grid grid-cols-2 gap-1 w-64 z-50 animate-in fade-in zoom-in-95 duration-100"
             style={{
-              left: `calc(50% - 128px)`,
-              top: `calc(${activeInserter.parentId === 'main_start' ? 100 : activeInserter.parentId === 'main_end' ? diagramLayout.endY * zoom - 60 : 250}px)`
+              left: `${activeInserter.x - 128}px`,
+              top: `${activeInserter.y + 10}px`
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -577,3 +547,4 @@ export const FlowchartCanvas: React.FC = () => {
     </div>
   );
 };
+export default FlowchartCanvas;
