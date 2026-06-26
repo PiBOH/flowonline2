@@ -136,7 +136,6 @@ export const FlowchartCanvas: React.FC = () => {
   // GENERATE LAYOUT & DIMENSIONS
   const diagramLayout = useMemo(() => {
     const listLayout = computeListLayout(statements);
-    // Draw Main start and End blocks
     const startY = MAIN_H + V_GAP;
     alignCoordinates(listLayout, 0, startY);
     
@@ -177,7 +176,8 @@ export const FlowchartCanvas: React.FC = () => {
             y1={currentY}
             x2={centerX}
             y2={nodeTopY}
-            className="stroke-slate-500 stroke-2"
+            stroke="#555"
+            strokeWidth="2"
             markerEnd="url(#arrow)"
           />
           {renderInserterButton(centerX, currentY + (nodeTopY - currentY) / 2, node.id, i)}
@@ -192,35 +192,34 @@ export const FlowchartCanvas: React.FC = () => {
         const leftX = node.thenLayout.nodes.length > 0 ? node.thenLayout.nodes[0].x : centerX - (node.thenLayout.width + node.elseLayout.width + H_GAP) / 2 + node.thenLayout.width / 2;
         const rightX = node.elseLayout.nodes.length > 0 ? node.elseLayout.nodes[0].x : centerX + (node.thenLayout.width + node.elseLayout.width + H_GAP) / 2 - node.elseLayout.width / 2;
 
-        // True branch lines
+        // True branch lines (True is on the right, False is on the left in flowonline!)
         elements.push(
           <g key={`if-then-${node.id}`}>
-            {/* Horizontal line out to left */}
-            <line x1={centerX} y1={diamondCenterY} x2={leftX} y2={diamondCenterY} className="stroke-slate-500 stroke-2" />
-            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" className="fill-green-600 font-sans text-[11px] font-bold select-none">Vero (True)</text>
+            {/* Horizontal line out to left (False) */}
+            <line x1={centerX} y1={diamondCenterY} x2={leftX} y2={diamondCenterY} stroke="#555" strokeWidth="2" />
+            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" className="fill-[#555] font-sans text-[10px] font-bold select-none">FALSO (False)</text>
             
             {/* Draw child branch statements */}
             {renderLinesAndArrows(node.thenLayout, leftX, diamondCenterY, branchEndY)}
             
             {/* Return from left branch back to main path */}
-            <line x1={leftX} y1={branchEndY} x2={leftX} y2={branchEndY + V_GAP / 2} className="stroke-slate-500 stroke-2" />
-            <line x1={leftX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} className="stroke-slate-500 stroke-2" />
+            <line x1={leftX} y1={branchEndY} x2={leftX} y2={branchEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
+            <line x1={leftX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
           </g>
         );
 
-        // False branch lines
         elements.push(
           <g key={`if-else-${node.id}`}>
-            {/* Horizontal line out to right */}
-            <line x1={centerX} y1={diamondCenterY} x2={rightX} y2={diamondCenterY} className="stroke-slate-500 stroke-2" />
-            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" className="fill-red-600 font-sans text-[11px] font-bold select-none">Falso (False)</text>
+            {/* Horizontal line out to right (True) */}
+            <line x1={centerX} y1={diamondCenterY} x2={rightX} y2={diamondCenterY} stroke="#555" strokeWidth="2" />
+            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" className="fill-green-600 font-sans text-[10px] font-bold select-none">VERO (True)</text>
             
             {/* Draw child branch statements */}
             {renderLinesAndArrows(node.elseLayout, rightX, diamondCenterY, branchEndY)}
             
             {/* Return from right branch back to main path */}
-            <line x1={rightX} y1={branchEndY} x2={rightX} y2={branchEndY + V_GAP / 2} className="stroke-slate-500 stroke-2" />
-            <line x1={rightX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} className="stroke-slate-500 stroke-2" />
+            <line x1={rightX} y1={branchEndY} x2={rightX} y2={branchEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
+            <line x1={rightX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
           </g>
         );
 
@@ -233,17 +232,17 @@ export const FlowchartCanvas: React.FC = () => {
         elements.push(
           <g key={`loop-body-${node.id}`}>
             {/* Horizontal branch out of loop */}
-            <line x1={centerX} y1={loopCenterY} x2={bodyX} y2={loopCenterY} className="stroke-slate-500 stroke-2" />
+            <line x1={centerX} y1={loopCenterY} x2={bodyX} y2={loopCenterY} stroke="#555" strokeWidth="2" />
             
             {/* Recurse body */}
             {renderLinesAndArrows(node.bodyLayout, bodyX, loopCenterY, bodyEndY)}
             
             {/* Return wire lines representing Flowgorithm's loop back loops */}
-            <line x1={bodyX} y1={bodyEndY} x2={bodyX} y2={bodyEndY + V_GAP / 2} className="stroke-slate-500 stroke-2" />
+            <line x1={bodyX} y1={bodyEndY} x2={bodyX} y2={bodyEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
             {/* Left wire returning back up and left to loop header */}
-            <line x1={bodyX} y1={bodyEndY + V_GAP / 2} x2={centerX - H_GAP / 2} y2={bodyEndY + V_GAP / 2} className="stroke-slate-500 stroke-2" />
-            <line x1={centerX - H_GAP / 2} y1={bodyEndY + V_GAP / 2} x2={centerX - H_GAP / 2} y2={loopCenterY} className="stroke-slate-500 stroke-2" />
-            <line x1={centerX - H_GAP / 2} y1={loopCenterY} x2={centerX} y2={loopCenterY} className="stroke-slate-500 stroke-2" markerEnd="url(#arrow)" />
+            <line x1={bodyX} y1={bodyEndY + V_GAP / 2} x2={centerX - H_GAP / 2} y2={bodyEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
+            <line x1={centerX - H_GAP / 2} y1={bodyEndY + V_GAP / 2} x2={centerX - H_GAP / 2} y2={loopCenterY} stroke="#555" strokeWidth="2" />
+            <line x1={centerX - H_GAP / 2} y1={loopCenterY} x2={centerX} y2={loopCenterY} stroke="#555" strokeWidth="2" markerEnd="url(#arrow)" />
           </g>
         );
       }
@@ -260,7 +259,8 @@ export const FlowchartCanvas: React.FC = () => {
           y1={currentY}
           x2={centerX}
           y2={endY}
-          className="stroke-slate-500 stroke-2"
+          stroke="#555"
+          strokeWidth="2"
           markerEnd="url(#arrow)"
         />
         {renderInserterButton(centerX, currentY + (endY - currentY) / 2, 'main_end')}
@@ -270,7 +270,7 @@ export const FlowchartCanvas: React.FC = () => {
     return elements;
   };
 
-  // DRAW INTERACTIVE INSERTER CIRCULAR BUTTON
+  // DRAW INTERACTIVE INSERTER CIRCULAR BUTTON (Faithful 18px circle, glowing blue, expanding on hover!)
   const renderInserterButton = (
     x: number, 
     y: number, 
@@ -285,18 +285,33 @@ export const FlowchartCanvas: React.FC = () => {
           setActiveInserter({ parentId, index });
         }}
       >
+        {/* Invisible wider mouse-capture cylinder for a highly responsive UX */}
         <circle
           cx={x}
           cy={y}
-          r="8"
-          className="fill-white stroke-slate-400 stroke-1 group-hover/insert:stroke-blue-600 group-hover/insert:fill-blue-50 transition-all duration-150"
+          r="16"
+          fill="transparent"
+          className="pointer-events-all"
+        />
+        
+        {/* Visual inserter circle dot */}
+        <circle
+          cx={x}
+          cy={y}
+          r="9"
+          fill="url(#blueDotGrad)"
+          stroke="#1F3354"
+          strokeWidth="2"
+          className="group-hover/insert:scale-[1.25] group-hover/insert:stroke-amber-400 group-hover/insert:filter group-hover/insert:drop-shadow-[0_0_6px_rgba(245,158,11,0.8)] transition-all duration-150 origin-center"
+          style={{ transformOrigin: `${x}px ${y}px` }}
         />
         <text
           x={x}
-          y={y}
+          y={y - 0.5}
           textAnchor="middle"
           dominantBaseline="central"
-          className="fill-slate-500 group-hover/insert:fill-blue-600 font-sans font-bold text-[9px] pointer-events-none select-none"
+          fill="white"
+          className="font-sans font-black text-[12px] pointer-events-none select-none"
         >
           +
         </text>
@@ -344,13 +359,13 @@ export const FlowchartCanvas: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-slate-100 relative overflow-hidden select-none border-r border-slate-200">
+    <div className="flex-1 flex flex-col h-full bg-white relative overflow-hidden select-none border-r border-slate-200">
       {/* Dynamic Canvas Header / Local Toolbar */}
-      <div className="h-11 bg-white border-b border-slate-200 px-4 flex items-center justify-between z-10">
+      <div className="h-11 bg-slate-50 border-b border-slate-200 px-4 flex items-center justify-between z-10">
         <div className="flex items-center space-x-1">
           <button
             onClick={() => setZoom((prev) => Math.max(0.4, prev - 0.1))}
-            className="p-1.5 text-slate-600 hover:bg-slate-100 rounded transition"
+            className="p-1.5 text-slate-600 hover:bg-slate-200 rounded transition"
             title="Zoom Out"
           >
             <ZoomOut size={16} />
@@ -360,14 +375,14 @@ export const FlowchartCanvas: React.FC = () => {
           </span>
           <button
             onClick={() => setZoom((prev) => Math.min(1.8, prev + 0.1))}
-            className="p-1.5 text-slate-600 hover:bg-slate-100 rounded transition"
+            className="p-1.5 text-slate-600 hover:bg-slate-200 rounded transition"
             title="Zoom In"
           >
             <ZoomIn size={16} />
           </button>
           <button
             onClick={() => setZoom(1.0)}
-            className="p-1.5 text-slate-400 hover:bg-slate-100 rounded transition"
+            className="p-1.5 text-slate-400 hover:bg-slate-200 rounded transition"
             title="Reset Zoom"
           >
             <RefreshCw size={14} />
@@ -383,18 +398,24 @@ export const FlowchartCanvas: React.FC = () => {
         </button>
       </div>
 
-      {/* SVG Canvas Workspace */}
-      <div className="flex-1 overflow-auto p-8 flex items-start justify-center relative">
+      {/* SVG Canvas Workspace with Engineering Graph-Paper Grid Background */}
+      <div 
+        className="flex-1 overflow-auto p-8 flex items-start justify-center relative"
+        style={{
+          background: 'linear-gradient(to right, rgba(200, 200, 210, 0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(200, 200, 210, 0.15) 1px, transparent 1px), #FFFFFF',
+          backgroundSize: '20px 20px'
+        }}
+      >
         <svg
           id="flowchart-svg-export-target"
           width={diagramLayout.width * zoom}
           height={diagramLayout.height * zoom}
           viewBox={`${-diagramLayout.width / 2} 0 ${diagramLayout.width} ${diagramLayout.height}`}
-          className="bg-white rounded-lg shadow-sm border border-slate-200/60 transition-transform duration-75 origin-top"
+          className="bg-transparent transition-transform duration-75 origin-top"
           style={{ transform: `scale(${zoom})` }}
           onClick={() => setActiveInserter(null)}
         >
-          {/* SVG Arrow Marker definitions */}
+          {/* SVG definitions */}
           <defs>
             <marker
               id="arrow"
@@ -405,8 +426,14 @@ export const FlowchartCanvas: React.FC = () => {
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 1.5 L 8 5 L 0 8.5 z" className="fill-slate-500" />
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#555" />
             </marker>
+
+            {/* Glowing Blue Dot gradient */}
+            <linearGradient id="blueDotGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#6BB0E0" />
+              <stop offset="100%" stopColor="#3380C0" />
+            </linearGradient>
           </defs>
 
           {/* 1. Draw Start Oval */}
@@ -495,7 +522,7 @@ export const FlowchartCanvas: React.FC = () => {
               onClick={() => handleInsertBlockType('if')}
               className="flex items-center space-x-2 p-1.5 rounded hover:bg-orange-50 text-left border border-transparent hover:border-orange-200 transition"
             >
-              <span className="w-2.5 h-2.5 bg-orange-400 rounded-sm"></span>
+              <span className="w-2.5 h-2.5 bg-rose-400 rounded-sm"></span>
               <span className="text-xs font-semibold text-slate-700">{t.blocks.if}</span>
             </button>
             
@@ -503,7 +530,7 @@ export const FlowchartCanvas: React.FC = () => {
               onClick={() => handleInsertBlockType('while')}
               className="flex items-center space-x-2 p-1.5 rounded hover:bg-rose-50 text-left border border-transparent hover:border-rose-200 transition"
             >
-              <span className="w-2.5 h-2.5 bg-rose-400 rounded-sm"></span>
+              <span className="w-2.5 h-2.5 bg-orange-300 rounded-sm"></span>
               <span className="text-xs font-semibold text-slate-700">{t.blocks.while}</span>
             </button>
             
@@ -511,7 +538,7 @@ export const FlowchartCanvas: React.FC = () => {
               onClick={() => handleInsertBlockType('for')}
               className="flex items-center space-x-2 p-1.5 rounded hover:bg-rose-50 text-left border border-transparent hover:border-rose-200 transition"
             >
-              <span className="w-2.5 h-2.5 bg-rose-500 rounded-sm"></span>
+              <span className="w-2.5 h-2.5 bg-orange-400 rounded-sm"></span>
               <span className="text-xs font-semibold text-slate-700">{t.blocks.for}</span>
             </button>
             
@@ -519,7 +546,7 @@ export const FlowchartCanvas: React.FC = () => {
               onClick={() => handleInsertBlockType('do')}
               className="flex items-center space-x-2 p-1.5 rounded hover:bg-rose-50 text-left border border-transparent hover:border-rose-200 transition"
             >
-              <span className="w-2.5 h-2.5 bg-rose-600 rounded-sm"></span>
+              <span className="w-2.5 h-2.5 bg-orange-500 rounded-sm"></span>
               <span className="text-xs font-semibold text-slate-700">{t.blocks.do}</span>
             </button>
             
@@ -527,7 +554,7 @@ export const FlowchartCanvas: React.FC = () => {
               onClick={() => handleInsertBlockType('call')}
               className="flex items-center space-x-2 p-1.5 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 transition"
             >
-              <span className="w-2.5 h-2.5 bg-blue-400 rounded-sm"></span>
+              <span className="w-2.5 h-2.5 bg-purple-400 rounded-sm"></span>
               <span className="text-xs font-semibold text-slate-700">{t.blocks.call}</span>
             </button>
             
