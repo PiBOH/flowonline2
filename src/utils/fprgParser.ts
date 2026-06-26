@@ -93,7 +93,8 @@ export class FprgParser {
       }
       case 'assign': {
         const varName = el.getAttribute('variable') || '';
-        const expr = el.getAttribute('value') || '';
+        // CRITICAL FLOWGORITHM COMPATIBILITY FIX: Assign uses 'expression' attribute, not 'value'!
+        const expr = el.getAttribute('expression') || el.getAttribute('value') || '';
         return {
           id,
           type: 'assign',
@@ -240,7 +241,8 @@ export class FprgParser {
           result += `${indent}<declare name="${this.escapeXml(stmt.variableName)}" type="${stmt.variableType}" array="${stmt.isArray ? 'True' : 'False'}" size="${this.escapeXml(stmt.arraySize)}"${commentAttr}/>\n`;
           break;
         case 'assign':
-          result += `${indent}<assign variable="${this.escapeXml(stmt.variableName)}" value="${this.escapeXml(stmt.expression)}"${commentAttr}/>\n`;
+          // CRITICAL FLOWGORITHM COMPATIBILITY FIX: Assign uses 'expression' attribute, not 'value'!
+          result += `${indent}<assign variable="${this.escapeXml(stmt.variableName)}" expression="${this.escapeXml(stmt.expression)}"${commentAttr}/>\n`;
           break;
         case 'input':
           result += `${indent}<input variable="${this.escapeXml(stmt.variableName)}"${commentAttr}/>\n`;
