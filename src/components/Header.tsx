@@ -1,26 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useFlow } from '../context/FlowContext';
 import { translations } from '../utils/translations';
 import { FprgParser } from '../utils/fprgParser';
-import {
-  Play,
-  Pause,
-  Square,
-  ChevronRight,
-  RotateCcw,
-  RotateCw,
-  FolderOpen,
-  Save,
-  Download,
-  Image,
-  Globe
-} from 'lucide-react';
 
 export const Header: React.FC = () => {
   const {
     programTitle,
-    programAuthor,
     setProgramTitle,
+    programAuthor,
     setProgramAuthor,
     executionStatus,
     speed,
@@ -36,13 +23,22 @@ export const Header: React.FC = () => {
     pauseRun,
     stopRun,
     statements,
-    loadProgram
+    loadProgram,
+    clearAll
   } = useFlow();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const t = translations[language];
 
-  // FILE OPEN: load .fprg file
+  // Dropdown states for Menus
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  // File IO actions
+  const handleNew = () => {
+    clearAll();
+    setActiveDropdown(null);
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -58,11 +54,10 @@ export const Header: React.FC = () => {
       }
     };
     reader.readAsText(file);
-    // Reset file input value
     if (fileInputRef.current) fileInputRef.current.value = '';
+    setActiveDropdown(null);
   };
 
-  // FILE SAVE: export .fprg file
   const handleExportFprg = () => {
     try {
       const xml = FprgParser.serialize(statements, programTitle, programAuthor);
@@ -76,9 +71,9 @@ export const Header: React.FC = () => {
     } catch (err: any) {
       alert(`Errore nel salvataggio: ${err.message}`);
     }
+    setActiveDropdown(null);
   };
 
-  // JSON BACKUP
   const handleExportJson = () => {
     const data = {
       title: programTitle,
@@ -92,21 +87,17 @@ export const Header: React.FC = () => {
     link.download = `${programTitle.toLowerCase().replace(/\s+/g, '_') || 'diagramma'}_backup.json`;
     link.click();
     URL.revokeObjectURL(url);
+    setActiveDropdown(null);
   };
 
-  // SVG IMAGE EXPORT
   const handleExportSvg = () => {
     const svgEl = document.getElementById('flowchart-svg-export-target');
     if (!svgEl) {
       alert('Impossibile trovare il diagramma SVG da esportare.');
       return;
     }
-
-    // Clone the node to clean export styles
     const svgClone = svgEl.cloneNode(true) as SVGElement;
-    // Remove scale style to ensure correct sizes
     svgClone.style.transform = '';
-    
     const svgString = new XMLSerializer().serializeToString(svgClone);
     const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -115,207 +106,275 @@ export const Header: React.FC = () => {
     link.download = `${programTitle.toLowerCase().replace(/\s+/g, '_') || 'diagramma'}.svg`;
     link.click();
     URL.revokeObjectURL(url);
+    setActiveDropdown(null);
+  };
+
+  const toggleDropdown = (menu: string) => {
+    if (activeDropdown === menu) {
+      setActiveDropdown(null);
+    } else {
+      setActiveDropdown(menu);
+    }
   };
 
   const isRunning = executionStatus === 'running';
   const isStopped = executionStatus === 'stopped' || executionStatus === 'idle';
 
   return (
-    <header className="h-16 bg-slate-800 text-white border-b border-slate-900 px-5 flex items-center justify-between z-30 select-none shadow-md shrink-0">
-      {/* Brand License Logo */}
-      <div className="flex items-center space-x-3 shrink-0">
-        <div className="w-9 h-9 bg-emerald-500 rounded-lg flex items-center justify-center font-bold font-sans text-white text-xl tracking-tighter shadow-md">
-          F2
+    <div className="flex flex-col w-full z-30 select-none shadow-md shrink-0">
+      
+      {/* ============ TITLE BAR (Faithful Windows Desktop Style) ============ */}
+      <div 
+        className="h-[28px] text-white flex items-center justify-between px-[6px] border-b border-[#1F3354]"
+        style={{
+          background: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)'
+        }}
+      >
+        <div className="flex items-center gap-[6px]">
+          {/* Flowgorithm 4-box Colored Logo */}
+          <svg className="w-[16px] h-[16px]" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="10" height="8" fill="#84C44C" stroke="#333" strokeWidth="1.5" />
+            <rect x="18" y="4" width="10" height="8" fill="#F2A93B" stroke="#333" strokeWidth="1.5" />
+            <polygon points="4,18 14,18 12,26 6,26" fill="#E14C4C" stroke="#333" strokeWidth="1.5" />
+            <polygon points="18,18 28,18 26,26 20,26" fill="#4B9DDC" stroke="#333" strokeWidth="1.5" />
+          </svg>
+          <span className="text-[12px] font-semibold text-white font-sans tracking-wide">
+            Flowonline2 BETA - {programTitle || 'Untitled'}.fprg
+          </span>
         </div>
-        <div>
-          <div className="flex items-center space-x-2">
-            <h1 className="font-sans font-black text-sm tracking-wide uppercase leading-none text-emerald-400">
-              Flowonline2
-            </h1>
-            <span className="text-[9px] bg-slate-700 text-slate-300 font-mono font-bold px-1 py-0.5 rounded">
-              v1.0 MIT
-            </span>
-          </div>
-          <p className="text-[10px] font-sans text-slate-400 leading-tight">
-            sviluppato da <span className="font-semibold text-slate-300">PiBOH</span>
-          </p>
+
+        {/* Windows Frame Minimize / Maximize / Close simulation */}
+        <div className="flex h-full">
+          <button className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition">─</button>
+          <button className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition">▢</button>
+          <button className="w-[44px] h-[28px] hover:bg-red-600 text-white font-sans text-[11px] transition">✕</button>
         </div>
       </div>
 
-      {/* Program Info Fields (Editable) */}
-      <div className="hidden lg:flex items-center space-x-3 px-4 border-l border-r border-slate-700/60 max-w-xs xl:max-w-md">
-        <div className="flex flex-col">
-          <span className="text-[9px] font-mono font-bold text-slate-500 uppercase tracking-wider leading-none">Nome Programma</span>
-          <input
-            type="text"
-            value={programTitle}
-            onChange={(e) => setProgramTitle(e.target.value)}
-            className="bg-transparent hover:bg-slate-700/40 focus:bg-slate-900 focus:ring-1 focus:ring-blue-500 rounded border border-transparent focus:border-blue-500 text-xs font-bold text-white px-1.5 py-0.5 w-36 transition focus:outline-none"
-            placeholder="Mio Algoritmo"
-          />
+      {/* ============ MENU BAR (Faithful Windows Desktop Style) ============ */}
+      <div className="h-[24px] bg-[#F0F0F0] border-b border-[#C8C8C8] flex items-center px-[4px] relative z-40 text-slate-800 text-[12px] font-sans">
+        
+        {/* FILE MENU */}
+        <div className="relative">
+          <button
+            onClick={() => toggleDropdown('file')}
+            className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+              activeDropdown === 'file' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
+            }`}
+          >
+            File
+          </button>
+          {activeDropdown === 'file' && (
+            <div className="absolute left-0 top-full mt-[1px] min-w-[200px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
+              <button onClick={handleNew} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
+                <span>📄 Nuovo</span>
+                <span className="text-[10px] text-slate-400">Ctrl+N</span>
+              </button>
+              <button onClick={() => { fileInputRef.current?.click(); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
+                <span>📂 Apri...</span>
+                <span className="text-[10px] text-slate-400">Ctrl+O</span>
+              </button>
+              <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".fprg" className="hidden" />
+              <div className="h-[1px] bg-slate-300 my-1"></div>
+              <button onClick={handleExportFprg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
+                <span>💾 Salva (.fprg)</span>
+                <span className="text-[10px] text-slate-400">Ctrl+S</span>
+              </button>
+              <button onClick={handleExportJson} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>📦 Backup JSON</span>
+              </button>
+              <button onClick={handleExportSvg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>🖼️ Esporta Immagine SVG</span>
+              </button>
+            </div>
+          )}
         </div>
-        <div className="flex flex-col">
-          <span className="text-[9px] font-mono font-bold text-slate-500 uppercase tracking-wider leading-none">Autore</span>
-          <input
-            type="text"
-            value={programAuthor}
-            onChange={(e) => setProgramAuthor(e.target.value)}
-            className="bg-transparent hover:bg-slate-700/40 focus:bg-slate-900 focus:ring-1 focus:ring-blue-500 rounded border border-transparent focus:border-blue-500 text-xs text-slate-300 px-1.5 py-0.5 w-24 transition focus:outline-none"
-            placeholder="Autore"
-          />
+
+        {/* MODIFICA MENU */}
+        <div className="relative ml-1">
+          <button
+            onClick={() => toggleDropdown('edit')}
+            className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+              activeDropdown === 'edit' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
+            }`}
+          >
+            Modifica
+          </button>
+          {activeDropdown === 'edit' && (
+            <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
+              <button onClick={undo} disabled={!canUndo} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-40 text-slate-800">
+                <span>↩ Annulla (Undo)</span>
+                <span className="text-[10px] text-slate-400">Ctrl+Z</span>
+              </button>
+              <button onClick={redo} disabled={!canRedo} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-40 text-slate-800">
+                <span>↪ Ripristina (Redo)</span>
+                <span className="text-[10px] text-slate-400">Ctrl+Y</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* PROGRAMMA MENU */}
+        <div className="relative ml-1">
+          <button
+            onClick={() => toggleDropdown('program')}
+            className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+              activeDropdown === 'program' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
+            }`}
+          >
+            Programma
+          </button>
+          {activeDropdown === 'program' && (
+            <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
+              <button onClick={() => { startRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>▶ Esegui (Run)</span>
+              </button>
+              <button onClick={() => { stepRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>⏭ Passo-Passo (Step)</span>
+              </button>
+              <button onClick={() => { pauseRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>⏸ Pausa</span>
+              </button>
+              <button onClick={() => { stopRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>⏹ Stop</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* GLOBE LANGUAGE SWITCHER */}
+        <div className="relative ml-auto mr-2 flex items-center gap-1.5 text-slate-600 text-[11px] font-semibold">
+          <span>Lingua:</span>
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value as any)}
+            className="border border-[#B0B0B0] bg-white rounded-md py-0.5 px-1.5 text-slate-700 font-bold focus:outline-none cursor-pointer"
+          >
+            <option value="en">English (US)</option>
+            <option value="en_GB">English (UK)</option>
+            <option value="de">Deutsch</option>
+            <option value="fr">Français</option>
+            <option value="es">Español</option>
+            <option value="it">Italiano</option>
+          </select>
         </div>
       </div>
 
-      {/* RUNTIME INTERPRETER CONTROLS */}
-      <div className="flex items-center space-x-1.5 bg-slate-900/40 p-1.5 rounded-lg border border-slate-700/40">
+      {/* ============ TOOLBAR (Faithful Windows Desktop Style) ============ */}
+      <div 
+        className="h-[36px] border-b border-[#B0B0B0] flex items-center px-[4px] gap-[1px]"
+        style={{
+          background: 'linear-gradient(to bottom, #FAFAFA, #E4E4E4)'
+        }}
+      >
+        {/* NEW BUTTON */}
+        <button
+          onClick={handleNew}
+          className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
+          title="Nuovo"
+        >
+          📄
+        </button>
+
+        {/* OPEN BUTTON */}
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
+          title="Apri"
+        >
+          📂
+        </button>
+
+        {/* SAVE BUTTON */}
+        <button
+          onClick={handleExportFprg}
+          className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
+          title="Salva"
+        >
+          💾
+        </button>
+
+        <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
+
+        {/* RUN BUTTON */}
         <button
           onClick={startRun}
           disabled={isRunning}
-          className={`p-1.5 rounded transition ${
-            isRunning
-              ? 'text-slate-600 cursor-not-allowed'
-              : 'text-emerald-400 hover:bg-slate-700'
-          }`}
+          className="w-[32px] h-[32px] hover:bg-[#D5EAFA] hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-emerald-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
           title={t.toolbar.run}
         >
-          <Play size={15} fill="currentColor" />
+          ▶
         </button>
 
+        {/* STEP BUTTON */}
         <button
           onClick={stepRun}
-          className="p-1.5 text-blue-400 hover:bg-slate-700 rounded transition"
+          className="w-[32px] h-[32px] hover:bg-[#D5EAFA] hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-blue-600 font-bold active:scale-95 transition-all"
           title={t.toolbar.step}
         >
-          <ChevronRight size={15} className="stroke-[2.5]" />
+          ⏭
         </button>
 
+        {/* PAUSE BUTTON */}
         <button
           onClick={pauseRun}
           disabled={!isRunning}
-          className={`p-1.5 rounded transition ${
-            !isRunning
-              ? 'text-slate-600 cursor-not-allowed'
-              : 'text-amber-400 hover:bg-slate-700'
-          }`}
+          className="w-[32px] h-[32px] hover:bg-[#FCD2E6] hover:border hover:border-[#B03F70] hover:shadow-sm rounded-[3px] flex items-center justify-center text-amber-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
           title={t.toolbar.pause}
         >
-          <Pause size={15} fill="currentColor" />
+          ⏸
         </button>
 
+        {/* STOP BUTTON */}
         <button
           onClick={stopRun}
           disabled={isStopped}
-          className={`p-1.5 rounded transition ${
-            isStopped
-              ? 'text-slate-600 cursor-not-allowed'
-              : 'text-red-400 hover:bg-slate-700'
-          }`}
+          className="w-[32px] h-[32px] hover:bg-rose-100 hover:border hover:border-red-400 hover:shadow-sm rounded-[3px] flex items-center justify-center text-red-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
           title={t.toolbar.stop}
         >
-          <Square size={14} fill="currentColor" />
+          ⏹
         </button>
 
-        {/* SPEED SLIDER */}
-        <div className="flex items-center space-x-2 pl-3 border-l border-slate-700/60">
-          <span className="text-[10px] font-bold text-slate-500 font-mono uppercase tracking-wider">
-            {t.toolbar.speed}
-          </span>
+        <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
+
+        {/* SPEED CONTROL */}
+        <div className="flex items-center gap-2 pl-2 text-slate-500 text-[11px] font-bold font-sans">
+          <span>VELOCITÀ:</span>
           <input
             type="range"
             min="1"
             max="100"
             value={speed}
             onChange={(e) => setSpeed(parseInt(e.target.value, 10))}
-            className="w-16 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500 focus:outline-none"
+            className="w-[80px] h-[4px] bg-slate-300 rounded appearance-none cursor-pointer accent-[#2F5A8C]"
           />
+        </div>
+
+        <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
+
+        {/* META ATTRIBUTI (Editable directly on Toolbar) */}
+        <div className="hidden md:flex items-center gap-3 pl-2">
+          <div className="flex flex-col text-[10px] font-sans">
+            <span className="text-slate-400 uppercase font-black tracking-tight text-[8px] leading-none">TITOLO ALGORITMO</span>
+            <input
+              type="text"
+              value={programTitle}
+              onChange={(e) => setProgramTitle(e.target.value)}
+              className="bg-white border border-slate-300 rounded text-slate-800 px-1 py-0.5 w-[140px] text-[11px] font-bold focus:outline-none focus:border-[#5B8DC4]"
+            />
+          </div>
+          <div className="flex flex-col text-[10px] font-sans">
+            <span className="text-slate-400 uppercase font-black tracking-tight text-[8px] leading-none">AUTORE</span>
+            <input
+              type="text"
+              value={programAuthor}
+              onChange={(e) => setProgramAuthor(e.target.value)}
+              className="bg-white border border-slate-300 rounded text-slate-800 px-1 py-0.5 w-[100px] text-[11px] focus:outline-none focus:border-[#5B8DC4]"
+            />
+          </div>
         </div>
       </div>
 
-      {/* UNDO / REDO & FILE SYSTEM */}
-      <div className="flex items-center space-x-1 pl-4">
-        {/* Undo / Redo */}
-        <div className="flex items-center space-x-0.5 border-r border-slate-700/60 pr-2.5">
-          <button
-            onClick={undo}
-            disabled={!canUndo}
-            className={`p-1.5 rounded transition ${
-              !canUndo ? 'text-slate-600 cursor-not-allowed' : 'text-slate-300 hover:bg-slate-700 hover:text-white'
-            }`}
-            title={t.toolbar.undo}
-          >
-            <RotateCcw size={14} />
-          </button>
-          <button
-            onClick={redo}
-            disabled={!canRedo}
-            className={`p-1.5 rounded transition ${
-              !canRedo ? 'text-slate-600 cursor-not-allowed' : 'text-slate-300 hover:bg-slate-700 hover:text-white'
-            }`}
-            title={t.toolbar.redo}
-          >
-            <RotateCw size={14} />
-          </button>
-        </div>
-
-        {/* Bidirectional File IO / Export Options */}
-        <div className="flex items-center space-x-1 pl-1.5">
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="p-1.5 text-slate-300 hover:bg-slate-700 hover:text-white rounded transition"
-            title={t.toolbar.import}
-          >
-            <FolderOpen size={14} />
-          </button>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            accept=".fprg"
-            className="hidden"
-          />
-
-          <button
-            onClick={handleExportFprg}
-            className="p-1.5 text-slate-300 hover:bg-slate-700 hover:text-white rounded transition"
-            title={t.toolbar.export}
-          >
-            <Save size={14} />
-          </button>
-
-          <button
-            onClick={handleExportSvg}
-            className="p-1.5 text-slate-300 hover:bg-slate-700 hover:text-white rounded transition"
-            title={t.toolbar.exportImage}
-          >
-            <Image size={14} />
-          </button>
-
-          <button
-            onClick={handleExportJson}
-            className="p-1.5 text-slate-300 hover:bg-slate-700 hover:text-white rounded transition"
-            title={t.toolbar.exportJson}
-          >
-            <Download size={14} />
-          </button>
-        </div>
-
-        {/* LANGUAGE SELECTOR */}
-        <div className="flex items-center space-x-1.5 pl-3 border-l border-slate-700/60">
-          <Globe size={13} className="text-slate-400" />
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value as any)}
-            className="bg-slate-900 border border-slate-700 text-slate-300 text-xs font-semibold px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
-          >
-            <option value="en">EN (US)</option>
-            <option value="en_GB">EN (UK)</option>
-            <option value="it">Italiano</option>
-            <option value="de">Deutsch</option>
-            <option value="fr">Français</option>
-            <option value="es">Español</option>
-          </select>
-        </div>
-      </div>
-    </header>
+    </div>
   );
 };
