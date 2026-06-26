@@ -7,6 +7,24 @@ export function generateId(): string {
 
 export class FprgParser {
   /**
+   * Automatically normalizes ToChar(13) into "\n" when loading .fprg files
+   */
+  private static normalizeToChar(expr: string): string {
+    if (!expr) return '';
+    // Replaces tochar(13) with spaces and spaces case insensitively
+    return expr.replace(/tochar\(\s*13\s*\)/gi, '"\\n"');
+  }
+
+  /**
+   * Automatically converts "\n" back to ToChar(13) when saving .fprg files
+   */
+  private static denormalizeToChar(expr: string): string {
+    if (!expr) return '';
+    // Replaces both double and single quoted "\n" with ToChar(13)
+    return expr.replace(/"\\n"/g, 'ToChar(13)').replace(/'\\n'/g, 'ToChar(13)');
+  }
+
+  /**
    * Parses an FPRG XML string and extracts the Main function's body statements.
    */
   public static parse(xmlString: string): { statements: Statement[]; title: string; author: string } {
@@ -87,19 +105,18 @@ export class FprgParser {
           variableName: name,
           variableType: rawType as VariableType,
           isArray,
-          arraySize: size,
+          arraySize: this.normalizeToChar(size),
           comment
         };
       }
       case 'assign': {
         const varName = el.getAttribute('variable') || '';
-        // CRITICAL FLOWGORITHM COMPATIBILITY FIX: Assign uses 'expression' attribute, not 'value'!
         const expr = el.getAttribute('expression') || el.getAttribute('value') || '';
         return {
           id,
           type: 'assign',
           variableName: varName,
-          expression: expr,
+          expression: this.normalizeToChar(expr),
           comment
         };
       }
@@ -118,7 +135,7 @@ export class FprgParser {
         return {
           id,
           type: 'output',
-          expression: expr,
+          expression: this.normalizeToChar(expr),
           newline,
           comment
         };
@@ -133,7 +150,7 @@ export class FprgParser {
         return {
           id,
           type: 'if',
-          condition: cond,
+          condition: this.normalizeToChar(cond),
           thenBranch: thenEl ? this.parseStatements(thenEl) : [],
           elseBranch: elseEl ? this.parseStatements(elseEl) : [],
           comment
@@ -144,7 +161,7 @@ export class FprgParser {
         return {
           id,
           type: 'while',
-          condition: cond,
+          condition: this.normalizeToChar(cond),
           body: this.parseStatements(el),
           comment
         };
@@ -159,10 +176,10 @@ export class FprgParser {
           id,
           type: 'for',
           variableName: varName,
-          startValue: start,
-          endValue: end,
+          startValue: this.normalizeToChar(start),
+          endValue: this.normalizeToChar(end),
           direction: dir,
-          stepValue: step,
+          stepValue: this.normalizeToChar(step),
           body: this.parseStatements(el),
           comment
         };
@@ -172,7 +189,7 @@ export class FprgParser {
         return {
           id,
           type: 'do',
-          condition: cond,
+          condition: this.normalizeToChar(cond),
           body: this.parseStatements(el),
           comment
         };
@@ -191,7 +208,7 @@ export class FprgParser {
           id,
           type: 'call',
           functionName: name,
-          arguments: args,
+          arguments: this.normalizeToChar(args),
           comment
         };
       }
@@ -241,20 +258,19 @@ export class FprgParser {
 
       switch (stmt.type) {
         case 'declare':
-          result += `${indent}<declare name="${this.escapeXml(stmt.variableName)}" type="${stmt.variableType}" array="${stmt.isArray ? 'True' : 'False'}" size="${this.escapeXml(stmt.arraySize)}"${commentAttr}/>\n`;
+          result += `${indent}<declare name="${this.escapeXml(stmt.variableName)}" type="${stmt.variableType}" array="${stmt.isArray ? 'True' : 'False'}" size="${this.escapeXml(this.denormalizeToChar(stmt.arraySize))}"${commentAttr}/>\n`;
           break;
         case 'assign':
-          // CRITICAL FLOWGORITHM COMPATIBILITY FIX: Assign uses 'expression' attribute, not 'value'!
-          result += `${indent}<assign variable="${this.escapeXml(stmt.variableName)}" expression="${this.escapeXml(stmt.expression)}"${commentAttr}/>\n`;
+          result += `${indent}<assign variable="${this.escapeXml(stmt.variableName)}" expression="${this.escapeXml(this.denormalizeToChar(stmt.expression))}"${commentAttr}/>\n`;
           break;
         case 'input':
           result += `${indent}<input variable="${this.escapeXml(stmt.variableName)}"${commentAttr}/>\n`;
           break;
         case 'output':
-          result += `${indent}<output expression="${this.escapeXml(stmt.expression)}" newline="${stmt.newline ? 'True' : 'False'}"${commentAttr}/>\n`;
+          result += `${indent}<output expression="${this.escapeXml(this.denormalizeToChar(stmt.expression))}" newline="${stmt.newline ? 'True' : 'False'}"${commentAttr}/>\n`;
           break;
         case 'if':
-          result += `${indent}<if expression="${this.escapeXml(stmt.condition)}"${commentAttr}>\n`;
+          result += `${indent}<if expression="${this.escapeXml(this.denormalizeToChar(stmt.condition))}"${commentAttr}>\n`;
           result += `${indent}    <then>\n`;
           result += this.serializeStatements(stmt.thenBranch, indent + '        ');
           result += `${indent}    </then>\n`;
@@ -264,23 +280,24 @@ export class FprgParser {
           result += `${indent}</if>\n`;
           break;
         case 'while':
-          result += `${indent}<while expression="${this.escapeXml(stmt.condition)}"${commentAttr}>\n`;
+          result += `${indent}<while expression="${this.escapeXml(this.denormalizeToChar(stmt.condition))}"${commentAttr}>\n`;
           result += this.serializeStatements(stmt.body, indent + '    ');
           result += `${indent}</while>\n`;
           break;
         case 'for':
-          result += `${indent}<for variable="${this.escapeXml(stmt.variableName)}" start="${this.escapeXml(stmt.startValue)}" end="${this.escapeXml(stmt.endValue)}" direction="${stmt.direction}" step="${this.escapeXml(stmt.stepValue)}"${commentAttr}>\n`;
+          result += `${indent}<for variable="${this.escapeXml(stmt.variableName)}" start="${this.escapeXml(this.denormalizeToChar(stmt.startValue))}" end="${this.escapeXml(this.denormalizeToChar(stmt.endValue))}" direction="${stmt.direction}" step="${this.escapeXml(this.denormalizeToChar(stmt.stepValue))}"${commentAttr}>\n`;
           result += this.serializeStatements(stmt.body, indent + '    ');
           result += `${indent}</for>\n`;
           break;
         case 'do':
-          result += `${indent}<do expression="${this.escapeXml(stmt.condition)}"${commentAttr}>\n`;
+          result += `${indent}<do expression="${this.escapeXml(this.denormalizeToChar(stmt.condition))}"${commentAttr}>\n`;
           result += this.serializeStatements(stmt.body, indent + '    ');
           result += `${indent}</do>\n`;
           break;
         case 'call': {
           const argStr = stmt.arguments ? `(${stmt.arguments})` : '()';
-          result += `${indent}<call expression="${this.escapeXml(stmt.functionName + argStr)}"${commentAttr}/>\n`;
+          const combined = this.denormalizeToChar(stmt.functionName + argStr);
+          result += `${indent}<call expression="${this.escapeXml(combined)}"${commentAttr}/>\n`;
           break;
         }
         case 'comment':

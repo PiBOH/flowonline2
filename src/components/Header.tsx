@@ -77,6 +77,7 @@ SOFTWARE.`;
     file: string;
     edit: string;
     program: string;
+    styleMenu: string; // Dynamic Chart Style & Color menu title!
     help: string;
     new: string;
     open: string;
@@ -111,6 +112,7 @@ SOFTWARE.`;
       file: "File",
       edit: "Edit",
       program: "Program",
+      styleMenu: "Chart Style & Color",
       help: "Help",
       new: "New",
       open: "Open...",
@@ -125,7 +127,7 @@ SOFTWARE.`;
       stop: "Stop",
       about: "About Flowonline2...",
       aboutTitle: "About Flowonline2",
-      aboutVersion: "Version ALPHA 2.0.8",
+      aboutVersion: "Version ALPHA 2.0.9",
       aboutAuthor: "Author",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
@@ -145,6 +147,7 @@ SOFTWARE.`;
       file: "File",
       edit: "Edit",
       program: "Program",
+      styleMenu: "Chart Style & Color",
       help: "Help",
       new: "New",
       open: "Open...",
@@ -159,7 +162,7 @@ SOFTWARE.`;
       stop: "Stop",
       about: "About Flowonline2...",
       aboutTitle: "About Flowonline2",
-      aboutVersion: "Version ALPHA 2.0.8",
+      aboutVersion: "Version ALPHA 2.0.9",
       aboutAuthor: "Author",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
@@ -179,6 +182,7 @@ SOFTWARE.`;
       file: "File",
       edit: "Modifica",
       program: "Programma",
+      styleMenu: "Stile & Colori",
       help: "?",
       new: "Nuovo",
       open: "Apri...",
@@ -193,13 +197,13 @@ SOFTWARE.`;
       stop: "Stop",
       about: "Informazioni su Flowonline2...",
       aboutTitle: "Informazioni su Flowonline2",
-      aboutVersion: "Versione ALPHA 2.0.8",
+      aboutVersion: "Versione ALPHA 2.0.9",
       aboutAuthor: "Autore",
       aboutWebsite: "Sito Web",
       aboutRepo: "Repository",
       aboutLicense: "Licenza del Programma:",
       colorSchemeLabel: "Schema Colori:",
-      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna funzione pratica se non quella di aprire questa finestra informativa di avviso.",
+      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna função pratica se non quella di aprire questa finestra informativa di avviso.",
       languageLabel: "Lingua",
       layoutLabel: "Disposizione",
       zoomInLabel: "Aumenta Zoom",
@@ -213,6 +217,7 @@ SOFTWARE.`;
       file: "Datei",
       edit: "Bearbeiten",
       program: "Programm",
+      styleMenu: "Diagrammstil & Farbe",
       help: "Hilfe",
       new: "Neu",
       open: "Öffnen...",
@@ -227,7 +232,7 @@ SOFTWARE.`;
       stop: "Stopp",
       about: "Über Flowonline2...",
       aboutTitle: "Über Flowonline2",
-      aboutVersion: "Version ALPHA 2.0.8",
+      aboutVersion: "Version ALPHA 2.0.9",
       aboutAuthor: "Autor",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
@@ -247,6 +252,7 @@ SOFTWARE.`;
       file: "Fichier",
       edit: "Édition",
       program: "Programme",
+      styleMenu: "Style & Couleur",
       help: "Aide",
       new: "Nouveau",
       open: "Ouvrir...",
@@ -261,7 +267,7 @@ SOFTWARE.`;
       stop: "Arrêter",
       about: "À propos de Flowonline2...",
       aboutTitle: "À propos de Flowonline2",
-      aboutVersion: "Version ALPHA 2.0.8",
+      aboutVersion: "Version ALPHA 2.0.9",
       aboutAuthor: "Auteur",
       aboutWebsite: "Site Web",
       aboutRepo: "Dépôt",
@@ -273,14 +279,15 @@ SOFTWARE.`;
       zoomInLabel: "Zoom avant",
       zoomOutLabel: "Zoom arrière",
       zoomResetLabel: "Réinitialiser",
-      licenseRepoLoaded: "Licence chargée dynamiquement à partir de la racine",
-      licenseFallbackLoaded: "Licence chargée à partir du code compilé de secours",
+      licenseRepoLoaded: "Licence chargée de la racine",
+      licenseFallbackLoaded: "Licence de secours chargée",
       warningModalTitle: "Informations Système Windows"
     },
     es: {
       file: "Archivo",
       edit: "Editar",
       program: "Programa",
+      styleMenu: "Estilo & Color",
       help: "Ayuda",
       new: "Nuevo",
       open: "Abrir...",
@@ -307,7 +314,7 @@ SOFTWARE.`;
       zoomInLabel: "Acercar",
       zoomOutLabel: "Alejar",
       zoomResetLabel: "Restablecer",
-      licenseRepoLoaded: "Licencia cargada dinámicamente desde la raíz",
+      licenseRepoLoaded: "Licencia cargada desde la raíz",
       licenseFallbackLoaded: "Licencia cargada desde el código compilado de reserva",
       warningModalTitle: "Información del Sistema Windows"
     }
@@ -315,15 +322,15 @@ SOFTWARE.`;
 
   const mt = menuTranslations[language];
 
-  // Dynamically load the LICENSE file from the repository root/build folder
+  // Dynamically load the LICENSE file FROM THE OFFICIAL GITHUB URL (Ensuring absolute live updating!)
   useEffect(() => {
     if (showAbout) {
-      setLicenseText('Loading license...');
+      setLicenseText('Loading license from GitHub...');
       setLicenseSource('repo');
-      fetch('./LICENSE')
+      fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/refs/heads/main/LICENSE')
         .then((res) => {
           if (!res.ok) {
-            throw new Error('LICENSE file not found or not readable.');
+            throw new Error('LICENSE not found in remote repo.');
           }
           return res.text();
         })
@@ -332,9 +339,21 @@ SOFTWARE.`;
           setLicenseSource('repo');
         })
         .catch((err) => {
-          console.warn('Unable to load LICENSE in real-time, using fallback:', err);
-          setLicenseText(mitLicenseTextFallback);
-          setLicenseSource('fallback');
+          console.warn('Unable to load remote LICENSE, trying local fallback:', err);
+          // Try local fetch as first-level fallback
+          fetch('./LICENSE')
+            .then((localRes) => {
+              if (!localRes.ok) throw new Error('Local LICENSE missing.');
+              return localRes.text();
+            })
+            .then((text) => {
+              setLicenseText(text);
+              setLicenseSource('repo');
+            })
+            .catch(() => {
+              setLicenseText(mitLicenseTextFallback);
+              setLicenseSource('fallback');
+            });
         });
     }
   }, [showAbout]);
@@ -542,12 +561,12 @@ SOFTWARE.`;
           )}
         </div>
 
-        {/* MODIFICA MENU (Includes Zoom, Reset, and Color Schemes to ensure NO duplicates with complete parity!) */}
+        {/* MODIFICA MENU (Includes Zoom, Reset - completely separated from Chart Style!) */}
         <div className="relative ml-1">
           <button
             onClick={() => toggleDropdown('edit')}
             onMouseEnter={() => handleMenuMouseEnter('edit')}
-            className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'edit' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -576,31 +595,46 @@ SOFTWARE.`;
               <button onClick={() => setZoom(1.0)} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] text-slate-800 flex items-center gap-1.5">
                 <span>🔄 {mt.zoomResetLabel}</span>
               </button>
+            </div>
+          )}
+        </div>
 
-              <div className="h-[1px] bg-slate-300 my-1"></div>
+        {/* DEDICATED STYLE MENU: Chart Style & Color (ALPHA 2.0.10 Requirement!) */}
+        <div className="relative ml-1">
+          <button
+            onClick={() => toggleDropdown('styleMenu')}
+            onMouseEnter={() => handleMenuMouseEnter('styleMenu')}
+            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+              activeDropdown === 'styleMenu' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
+            }`}
+          >
+            🎨 {mt.styleMenu}
+          </button>
+          {activeDropdown === 'styleMenu' && (
+            <div className="absolute left-0 top-full mt-[1px] min-w-[200px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
               <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">{mt.colorSchemeLabel}</div>
               
-              <button onClick={() => { setColorScheme('classic'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+              <button onClick={() => { setColorScheme('classic'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1.5 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
                 <span>Classic</span>
                 {colorScheme === 'classic' && <span className="text-emerald-600 font-bold">✓</span>}
               </button>
-              <button onClick={() => { setColorScheme('pastel'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+              <button onClick={() => { setColorScheme('pastel'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1.5 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
                 <span>Pastel</span>
                 {colorScheme === 'pastel' && <span className="text-emerald-600 font-bold">✓</span>}
               </button>
-              <button onClick={() => { setColorScheme('vibrant'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+              <button onClick={() => { setColorScheme('vibrant'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1.5 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
                 <span>Vibrant</span>
                 {colorScheme === 'vibrant' && <span className="text-emerald-600 font-bold">✓</span>}
               </button>
-              <button onClick={() => { setColorScheme('retro'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+              <button onClick={() => { setColorScheme('retro'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1.5 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
                 <span>Retro</span>
                 {colorScheme === 'retro' && <span className="text-emerald-600 font-bold">✓</span>}
               </button>
-              <button onClick={() => { setColorScheme('twilight'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
-                <span>Twilight (Dark)</span>
+              <button onClick={() => { setColorScheme('twilight'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1.5 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+                <span>Twilight (Dark Theme)</span>
                 {colorScheme === 'twilight' && <span className="text-emerald-600 font-bold">✓</span>}
               </button>
-              <button onClick={() => { setColorScheme('black_white'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+              <button onClick={() => { setColorScheme('black_white'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1.5 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
                 <span>Black & White</span>
                 {colorScheme === 'black_white' && <span className="text-emerald-600 font-bold">✓</span>}
               </button>
@@ -613,7 +647,7 @@ SOFTWARE.`;
           <button
             onClick={() => toggleDropdown('program')}
             onMouseEnter={() => handleMenuMouseEnter('program')}
-            className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'program' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -669,7 +703,7 @@ SOFTWARE.`;
           <button
             onClick={() => toggleDropdown('help')}
             onMouseEnter={() => handleMenuMouseEnter('help')}
-            className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'help' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -875,16 +909,16 @@ SOFTWARE.`;
 
       </div>
 
-      {/* ============ WIN32 ABOUT DIALOG MODAL (ENLARGED TO 600px & DYNAMICALLY DETECTED LICENSE ORIGIN) ============ */}
+      {/* ============ WIN32 ABOUT DIALOG MODAL (ENLARGED TO EXACTLY 700x525 PIXELS! ALPHA 2.0.10) ============ */}
       {showAbout && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
           <div 
             className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl overflow-hidden flex flex-col font-sans select-none"
-            style={{ width: '600px' }} // EXPLICIT OVERRIDE SET TO EXACTLY 600 PIXELS!
+            style={{ width: '700px', height: '525px' }} // EXPLICIT WIN32 SIZE SET TO 700 x 525!
           >
             {/* About Modal Title Bar */}
             <div 
-              className="h-[24px] text-white flex items-center justify-between px-2 cursor-default"
+              className="h-[24px] text-white flex items-center justify-between px-2 cursor-default shrink-0"
               style={{
                 background: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)'
               }}
@@ -901,12 +935,12 @@ SOFTWARE.`;
             </div>
 
             {/* About Modal Body (Win32 Dialog layout) */}
-            <div className="p-4 flex flex-col space-y-3.5 bg-[#F0F0F0] text-slate-800">
+            <div className="p-4 flex-1 flex flex-col justify-between bg-[#F0F0F0] text-slate-800 overflow-hidden">
               
               <div className="flex items-start gap-4">
                 {/* Large Flowgorithm Colored logo */}
-                <div className="w-12 h-12 bg-white rounded border border-slate-300 shadow-inner flex items-center justify-center shrink-0">
-                  <svg className="w-9 h-9" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <div className="w-16 h-16 bg-white rounded border border-slate-300 shadow-inner flex items-center justify-center shrink-0">
+                  <svg className="w-12 h-12" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                     <rect x="4" y="4" width="10" height="8" fill="#84C44C" stroke="#333" strokeWidth="1.5" />
                     <rect x="18" y="4" width="10" height="8" fill="#F2A93B" stroke="#333" strokeWidth="1.5" />
                     <polygon points="4,18 14,18 12,26 6,26" fill="#E14C4C" stroke="#333" strokeWidth="1.5" />
@@ -915,40 +949,40 @@ SOFTWARE.`;
                 </div>
 
                 <div className="flex flex-col gap-0.5 leading-tight text-[12px] font-sans">
-                  <h4 className="font-extrabold text-[14px] text-slate-900 tracking-wide">Flowonline2</h4>
-                  <p className="text-[11px] text-slate-500 font-semibold">{mt.aboutVersion}</p>
-                  <p className="text-[11px] text-slate-600 mt-1">
+                  <h4 className="font-extrabold text-[17px] text-slate-900 tracking-wide">Flowonline2</h4>
+                  <p className="text-[12px] text-slate-500 font-semibold">{mt.aboutVersion}</p>
+                  <p className="text-[12px] text-slate-600 mt-2">
                     {mt.aboutAuthor}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">PiBOH</a>
                   </p>
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-[12px] text-slate-500">
                     {mt.aboutWebsite}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">piboh.github.io</a>
                   </p>
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-[12px] text-slate-500">
                     {mt.aboutRepo}: <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">github.com/PiBOH/flowonline2</a>
                   </p>
                 </div>
               </div>
 
               {/* License automatically loaded text box */}
-              <div className="flex flex-col space-y-1">
-                <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+              <div className="flex-1 flex flex-col space-y-1.5 my-3 overflow-hidden">
+                <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide shrink-0">
                   <span>{mt.aboutLicense}</span>
-                  <span className={`px-2 py-0.5 rounded-full font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
+                  <span className={`px-2.5 py-0.5 rounded-full font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
                     {licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
                   </span>
                 </div>
                 <textarea
                   readOnly
                   value={licenseText}
-                  className="w-full h-32 border border-slate-300 rounded p-2 font-mono text-[10px] bg-white text-slate-600 focus:outline-none resize-none overflow-auto leading-relaxed shadow-inner"
+                  className="w-full flex-1 border border-slate-300 rounded p-3 font-mono text-[11px] bg-white text-slate-600 focus:outline-none resize-none overflow-auto leading-relaxed shadow-inner"
                 />
               </div>
 
               {/* OK button to close dialog (Win32 styled) */}
-              <div className="flex items-center justify-end">
+              <div className="flex items-center justify-end shrink-0">
                 <button
                   onClick={() => setShowAbout(false)}
-                  className="px-6 py-1 bg-white hover:bg-slate-100 border border-slate-400 hover:border-slate-500 text-slate-800 text-[11px] font-bold rounded shadow-sm focus:outline-none transition active:scale-95"
+                  className="px-8 py-1.5 bg-white hover:bg-slate-100 border border-slate-400 hover:border-slate-500 text-slate-800 text-[11px] font-bold rounded shadow-sm focus:outline-none transition active:scale-95"
                 >
                   OK
                 </button>

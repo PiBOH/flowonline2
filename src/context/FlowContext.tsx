@@ -177,7 +177,9 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [currentBlockId, setCurrentBlockId] = useState<string | null>(null);
   const [executionStatus, setExecutionStatus] = useState<FlowContextType['executionStatus']>('idle');
   const [consoleMessages, setConsoleMessages] = useState<ConsoleMessage[]>([]);
-  const [speed, setSpeed] = useState<number>(75); // speed slider (1 to 100)
+  
+  // Default speed set to maximum (100) as requested!
+  const [speed, setSpeed] = useState<number>(100); 
 
   // Editor states
   const [editingBlock, setEditingBlock] = useState<Statement | null>(null);
