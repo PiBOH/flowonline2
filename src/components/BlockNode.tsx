@@ -21,10 +21,10 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
 }) => {
   const t = translations[lang].blocks;
 
-  // Active highlights
+  // Active executing or selected highlights
   const highlightClass = isHighlighted 
-    ? "stroke-red-600 stroke-[4px] filter drop-shadow-[0_0_8px_rgba(239,68,68,0.7)] animate-pulse" 
-    : "stroke-slate-700 stroke-[1.5px] hover:stroke-slate-900";
+    ? "stroke-amber-500 stroke-[4px] filter drop-shadow-[0_0_12px_rgba(245,158,11,0.9)] animate-pulse" 
+    : "stroke-[#555] stroke-[2px] hover:stroke-slate-900 transition-colors";
 
   // Text helper
   const truncateText = (str: string, max = 22) => {
@@ -32,63 +32,67 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     return str;
   };
 
-  // MAIN BLOCK
+  // MAIN BLOCK (Terminal - Purple/Lavender in Flowgorithm/Flowonline)
   if (type === 'main') {
     return (
       <g className="cursor-pointer" onDoubleClick={onDoubleClick}>
         <defs>
           <linearGradient id="mainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#c8e6c9" />
-            <stop offset="100%" stopColor="#4caf50" />
+            <stop offset="0%" stopColor="#D8C0EC" />
+            <stop offset="100%" stopColor="#C0A0DC" />
           </linearGradient>
         </defs>
-        {/* Oval shape */}
+        {/* Rounded oval terminal shape */}
         <rect
-          x="-50"
-          y="-20"
-          width="100"
-          height="40"
-          rx="20"
+          x="-75"
+          y="-19"
+          width="150"
+          height="38"
+          rx="19"
           fill="url(#mainGrad)"
-          className={highlightClass}
+          stroke="#5B2C8B"
+          strokeWidth="2"
+          className={isHighlighted ? "stroke-amber-500 stroke-[4px] filter drop-shadow-[0_0_12px_rgba(245,158,11,0.9)] animate-pulse" : "hover:stroke-slate-900"}
         />
         <text
           textAnchor="middle"
           dominantBaseline="central"
-          className="fill-slate-950 font-sans font-bold text-sm select-none pointer-events-none"
+          className="fill-[#5B2C8B] font-sans font-bold text-xs select-none pointer-events-none tracking-wide"
         >
-          {t.main}
+          {t.main.toUpperCase()}
         </text>
       </g>
     );
   }
 
-  // END BLOCK
+  // END BLOCK (Terminal - Purple/Lavender)
   if (type === 'end') {
     return (
       <g>
         <defs>
           <linearGradient id="endGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#ffcdd2" />
-            <stop offset="100%" stopColor="#ef5350" />
+            <stop offset="0%" stopColor="#D8C0EC" />
+            <stop offset="100%" stopColor="#C0A0DC" />
           </linearGradient>
         </defs>
-        {/* Oval shape */}
+        {/* Rounded oval terminal shape */}
         <rect
-          x="-50"
-          y="-20"
-          width="100"
-          height="40"
-          rx="20"
+          x="-75"
+          y="-19"
+          width="150"
+          height="38"
+          rx="19"
           fill="url(#endGrad)"
-          className={highlightClass}
+          stroke="#5B2C8B"
+          strokeWidth="2"
+          className={isHighlighted ? "stroke-amber-500 stroke-[4px] filter drop-shadow-[0_0_12px_rgba(245,158,11,0.9)] animate-pulse" : "hover:stroke-slate-900"}
         />
         <text
           textAnchor="middle"
           dominantBaseline="central"
-          className="fill-slate-950 font-sans font-bold text-sm select-none pointer-events-none"
+          className="fill-[#5B2C8B] font-sans font-bold text-xs select-none pointer-events-none tracking-wide"
         >
-          {t.end}
+          {t.end.toUpperCase()}
         </text>
       </g>
     );
@@ -104,37 +108,47 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
       return (
         <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
-            <linearGradient id="declareGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#fffde7" />
-              <stop offset="100%" stopColor="#fdd835" />
+            <linearGradient id="processGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FAF4B5" />
+              <stop offset="100%" stopColor="#F2E98A" />
             </linearGradient>
           </defs>
-          {/* Rectangle with slight indent inside */}
+          {/* Folder Tab Decoration for Declare (Matches Flowgorithm/Flowonline perfectly!) */}
+          <path
+            d="M -75 -25 L -75 -32 L -35 -32 L -30 -25 Z"
+            fill="url(#processGrad)"
+            stroke="#A89A1F"
+            strokeWidth="2"
+          />
+          <line x1="-74" y1="-25" x2="-31" y2="-25" stroke="#FAF4B5" strokeWidth="3" />
+          
+          {/* Main rectangle box */}
           <rect
             x="-90"
             y="-25"
             width="180"
             height="50"
-            rx="4"
-            fill="url(#declareGrad)"
+            fill="url(#processGrad)"
+            stroke="#A89A1F"
+            strokeWidth="2"
             className={highlightClass}
           />
-          {/* Inner horizontal decoration line like standard Flowgorithm declare */}
-          <line x1="-90" y1="-18" x2="90" y2="-18" className="stroke-yellow-600/50 stroke-1 pointer-events-none" />
+          {/* Inner horizontal decoration line like standard Declare */}
+          <line x1="-90" y1="-17" x2="90" y2="-17" className="stroke-[#A89A1F]/40 stroke-[1.5px] pointer-events-none" />
           
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
-            className="fill-slate-800 font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="fill-amber-900/60 font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.declare}
           </text>
           <text
             y="12"
             textAnchor="middle"
-            className="fill-slate-950 font-mono text-[12px] font-bold select-none pointer-events-none"
+            className="fill-slate-950 font-mono text-[11px] font-bold select-none pointer-events-none"
           >
-            {truncateText(displayLabel, 20)}
+            {truncateText(displayLabel, 22)}
           </text>
           {renderDeleteBtn(onDeleteClick)}
         </g>
@@ -146,9 +160,9 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
       return (
         <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
-            <linearGradient id="assignGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#fffde7" />
-              <stop offset="100%" stopColor="#fdd835" />
+            <linearGradient id="processGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FAF4B5" />
+              <stop offset="100%" stopColor="#F2E98A" />
             </linearGradient>
           </defs>
           <rect
@@ -156,23 +170,24 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             y="-25"
             width="180"
             height="50"
-            rx="4"
-            fill="url(#assignGrad)"
+            fill="url(#processGrad)"
+            stroke="#A89A1F"
+            strokeWidth="2"
             className={highlightClass}
           />
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
-            className="fill-slate-800 font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="fill-amber-900/60 font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.assign}
           </text>
           <text
             y="12"
             textAnchor="middle"
-            className="fill-slate-950 font-mono text-[12px] font-bold select-none pointer-events-none"
+            className="fill-slate-950 font-mono text-[11px] font-bold select-none pointer-events-none"
           >
-            {truncateText(displayLabel, 20)}
+            {truncateText(displayLabel, 22)}
           </text>
           {renderDeleteBtn(onDeleteClick)}
         </g>
@@ -185,27 +200,29 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
         <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id="inputGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#e0f7fa" />
-              <stop offset="100%" stopColor="#4dd0e1" />
+              <stop offset="0%" stopColor="#D5EAFA" />
+              <stop offset="100%" stopColor="#9FCDEE" />
             </linearGradient>
           </defs>
-          {/* Parallelogram slanting right */}
+          {/* Parallelogram skewed 18deg leftwards (Flowgorithm standard input) */}
           <polygon
             points="-80,-25 100,-25 80,25 -100,25"
             fill="url(#inputGrad)"
+            stroke="#4A7BA8"
+            strokeWidth="2"
             className={highlightClass}
           />
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
-            className="fill-slate-800 font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="fill-blue-900/60 font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.input}
           </text>
           <text
             y="12"
             textAnchor="middle"
-            className="fill-slate-950 font-mono text-[12px] font-bold select-none pointer-events-none"
+            className="fill-slate-950 font-mono text-[11px] font-bold select-none pointer-events-none"
           >
             {truncateText(displayLabel, 20)}
           </text>
@@ -220,27 +237,28 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
         <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id="outputGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#e8f5e9" />
-              <stop offset="100%" stopColor="#81c784" />
+              <stop offset="0%" stopColor="#D0F2D0" />
+              <stop offset="100%" stopColor="#9FDB9F" />
             </linearGradient>
           </defs>
-          {/* Parallelogram slanting right (output has slanting in opposite/same depending on preference, Flowgorithm has same cyan layout) */}
           <polygon
             points="-80,-25 100,-25 80,25 -100,25"
             fill="url(#outputGrad)"
+            stroke="#3F8B3F"
+            strokeWidth="2"
             className={highlightClass}
           />
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
-            className="fill-slate-800 font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="fill-green-900/60 font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.output}
           </text>
           <text
             y="12"
             textAnchor="middle"
-            className="fill-slate-950 font-mono text-[12px] font-bold select-none pointer-events-none"
+            className="fill-slate-950 font-mono text-[11px] font-bold select-none pointer-events-none"
           >
             {truncateText(displayLabel, 20)}
           </text>
@@ -255,20 +273,22 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
         <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id="ifGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#ffe0b2" />
-              <stop offset="100%" stopColor="#ffb74d" />
+              <stop offset="0%" stopColor="#FCD2E6" />
+              <stop offset="100%" stopColor="#F4A3C8" />
             </linearGradient>
           </defs>
-          {/* Diamond shape */}
+          {/* Diamond shape (If is Rose/Pink in Flowgorithm/Flowonline!) */}
           <polygon
-            points="0,-35 75,0 0,35 -75,0"
+            points="0,-32 80,0 0,32 -80,0"
             fill="url(#ifGrad)"
+            stroke="#B03F70"
+            strokeWidth="2"
             className={highlightClass}
           />
           <text
             y="-6"
             textAnchor="middle"
-            className="fill-slate-800 font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="fill-rose-900/60 font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.if}
           </text>
@@ -277,9 +297,9 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             textAnchor="middle"
             className="fill-slate-950 font-mono text-[11px] font-bold select-none pointer-events-none"
           >
-            {truncateText(displayLabel, 11)}
+            {truncateText(displayLabel, 12)}
           </text>
-          {renderDeleteBtn(onDeleteClick, 50, -10)}
+          {renderDeleteBtn(onDeleteClick, 55, -12)}
         </g>
       );
     }
@@ -289,32 +309,34 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
       return (
         <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
-            <linearGradient id="whileGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#ffebee" />
-              <stop offset="100%" stopColor="#e57373" />
+            <linearGradient id="loopGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FCE2C4" />
+              <stop offset="100%" stopColor="#F2B36B" />
             </linearGradient>
           </defs>
-          {/* Hexagon shape */}
+          {/* Hexagon shape (Loops are soft orange in Flowgorithm/Flowonline) */}
           <polygon
-            points="-60,-25 60,-25 80,0 60,25 -60,25 -80,0"
-            fill="url(#whileGrad)"
+            points="-65,-25 65,-25 80,0 65,25 -65,25 -80,0"
+            fill="url(#loopGrad)"
+            stroke="#B57B3F"
+            strokeWidth="2"
             className={highlightClass}
           />
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
-            className="fill-slate-800 font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="fill-orange-900/60 font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.while}
           </text>
           <text
             y="12"
             textAnchor="middle"
-            className="fill-slate-950 font-mono text-[12px] font-bold select-none pointer-events-none"
+            className="fill-slate-950 font-mono text-[11px] font-bold select-none pointer-events-none"
           >
-            {truncateText(displayLabel, 20)}
+            {truncateText(displayLabel, 22)}
           </text>
-          {renderDeleteBtn(onDeleteClick, 65, -10)}
+          {renderDeleteBtn(onDeleteClick, 65, -12)}
         </g>
       );
     }
@@ -324,32 +346,33 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
       return (
         <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
-            <linearGradient id="forGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#ffebee" />
-              <stop offset="100%" stopColor="#e57373" />
+            <linearGradient id="loopGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FCE2C4" />
+              <stop offset="100%" stopColor="#F2B36B" />
             </linearGradient>
           </defs>
-          {/* Hexagon shape */}
           <polygon
             points="-80,-25 80,-25 95,0 80,25 -80,25 -95,0"
-            fill="url(#forGrad)"
+            fill="url(#loopGrad)"
+            stroke="#B57B3F"
+            strokeWidth="2"
             className={highlightClass}
           />
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
-            className="fill-slate-800 font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="fill-orange-900/60 font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.for}
           </text>
           <text
             y="12"
             textAnchor="middle"
-            className="fill-slate-950 font-mono text-[12px] font-bold select-none pointer-events-none"
+            className="fill-slate-950 font-mono text-[11px] font-bold select-none pointer-events-none"
           >
-            {truncateText(displayLabel, 22)}
+            {truncateText(displayLabel, 24)}
           </text>
-          {renderDeleteBtn(onDeleteClick, 80, -10)}
+          {renderDeleteBtn(onDeleteClick, 80, -12)}
         </g>
       );
     }
@@ -359,31 +382,33 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
       return (
         <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
-            <linearGradient id="doGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#ffebee" />
-              <stop offset="100%" stopColor="#e57373" />
+            <linearGradient id="loopGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FCE2C4" />
+              <stop offset="100%" stopColor="#F2B36B" />
             </linearGradient>
           </defs>
           <polygon
-            points="-60,-25 60,-25 80,0 60,25 -60,25 -80,0"
-            fill="url(#doGrad)"
+            points="-65,-25 65,-25 80,0 65,25 -65,25 -80,0"
+            fill="url(#loopGrad)"
+            stroke="#B57B3F"
+            strokeWidth="2"
             className={highlightClass}
           />
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
-            className="fill-slate-800 font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="fill-orange-900/60 font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.do}
           </text>
           <text
             y="12"
             textAnchor="middle"
-            className="fill-slate-950 font-mono text-[12px] font-bold select-none pointer-events-none"
+            className="fill-slate-950 font-mono text-[11px] font-bold select-none pointer-events-none"
           >
-            {truncateText(displayLabel, 20)}
+            {truncateText(displayLabel, 22)}
           </text>
-          {renderDeleteBtn(onDeleteClick, 65, -10)}
+          {renderDeleteBtn(onDeleteClick, 65, -12)}
         </g>
       );
     }
@@ -394,36 +419,37 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
         <g className="group cursor-pointer" onDoubleClick={onDoubleClick}>
           <defs>
             <linearGradient id="callGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#e3f2fd" />
-              <stop offset="100%" stopColor="#64b5f6" />
+              <stop offset="0%" stopColor="#E9DBF5" />
+              <stop offset="100%" stopColor="#C9ABE2" />
             </linearGradient>
           </defs>
-          {/* Double line vertical borders on left and right */}
           <rect
             x="-90"
             y="-25"
             width="180"
             height="50"
-            rx="4"
             fill="url(#callGrad)"
+            stroke="#6B3C8C"
+            strokeWidth="2"
             className={highlightClass}
           />
-          <line x1="-82" y1="-25" x2="-82" y2="25" className="stroke-blue-700 stroke-[1.5]" />
-          <line x1="82" y1="-25" x2="82" y2="25" className="stroke-blue-700 stroke-[1.5]" />
+          {/* Double vertical line borders inside */}
+          <line x1="-81" y1="-25" x2="-81" y2="25" className="stroke-[#6B3C8C] stroke-[1.5px]" />
+          <line x1="81" y1="-25" x2="81" y2="25" className="stroke-[#6B3C8C] stroke-[1.5px]" />
 
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
-            className="fill-slate-800 font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="fill-purple-900/60 font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.call}
           </text>
           <text
             y="12"
             textAnchor="middle"
-            className="fill-slate-950 font-mono text-[12px] font-bold select-none pointer-events-none"
+            className="fill-slate-950 font-mono text-[11px] font-bold select-none pointer-events-none"
           >
-            {truncateText(displayLabel, 20)}
+            {truncateText(displayLabel, 22)}
           </text>
           {renderDeleteBtn(onDeleteClick)}
         </g>
@@ -439,25 +465,26 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             y="-25"
             width="180"
             height="50"
-            rx="4"
-            fill="#fafafa"
-            stroke="#9e9e9e"
+            rx="2"
+            fill="#FFFFFF"
+            stroke="#888"
+            strokeWidth="1.5"
             strokeDasharray="4 4"
-            className={isHighlighted ? "stroke-red-500 stroke-[3px] filter drop-shadow" : "hover:stroke-slate-900"}
+            className={isHighlighted ? "stroke-amber-500 stroke-[3px] filter drop-shadow" : "hover:stroke-slate-900"}
           />
           <text
-            y="-5"
+            y="-6"
             textAnchor="middle"
-            className="fill-slate-500 font-sans text-[11px] font-semibold tracking-wide uppercase select-none pointer-events-none"
+            className="fill-slate-400 font-sans text-[9px] font-extrabold tracking-wider uppercase select-none pointer-events-none"
           >
             {t.comment}
           </text>
           <text
             y="12"
             textAnchor="middle"
-            className="fill-slate-700 font-mono text-[12px] italic select-none pointer-events-none"
+            className="fill-slate-600 font-sans text-[11px] italic select-none pointer-events-none"
           >
-            {truncateText(displayLabel, 20)}
+            {truncateText(displayLabel, 22)}
           </text>
           {renderDeleteBtn(onDeleteClick)}
         </g>
@@ -485,7 +512,7 @@ const renderDeleteBtn = (onDeleteClick?: (e: React.MouseEvent) => void, xOffset 
         textAnchor="middle"
         dominantBaseline="central"
         fill="white"
-        className="font-sans font-bold text-[10px] select-none pointer-events-none"
+        className="font-sans font-bold text-[10px] select-none pointer-events-none animate-in fade-in duration-100"
       >
         ×
       </text>
