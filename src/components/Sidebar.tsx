@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { useFlow } from '../context/FlowContext';
 import { CodeGenerator } from '../utils/codeGenerator';
 import { translations } from '../utils/translations';
-import { Eye, Code, Copy, Check, Info } from 'lucide-react';
+import { Copy, Check, Info } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
-  const { variables, statements, language } = useFlow();
-  const [activeTab, setActiveTab] = useState<'watch' | 'code'>('watch');
+  const { variables, statements, language, layout, setLayout } = useFlow();
   const [targetLang, setTargetLang] = useState<'python' | 'cpp' | 'java' | 'javascript' | 'csharp'>('javascript');
   const [copied, setCopied] = useState(false);
 
@@ -25,82 +24,98 @@ export const Sidebar: React.FC = () => {
 
   const variableList = Object.values(variables);
 
+  // Determine what to show in the sidebar based on the layout
+  const isWatchLayout = layout === 'flow_variables' || layout === 'triple_split';
+  const isCodeLayout = layout === 'flow_code';
+
+  // If neither layout is active, do not render sidebar at all
+  if (!isWatchLayout && !isCodeLayout) return null;
+
   return (
-    <div className="w-80 h-full bg-white border-l border-slate-200 flex flex-col z-10">
-      {/* Tabs Headers */}
-      <div className="flex border-b border-slate-200 bg-slate-50">
-        <button
-          onClick={() => setActiveTab('watch')}
-          className={`flex-1 py-3 px-4 flex items-center justify-center space-x-2 text-xs font-bold border-b-2 transition ${
-            activeTab === 'watch'
-              ? 'border-blue-600 text-blue-600 bg-white'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
-          }`}
-        >
-          <Eye size={14} />
-          <span>{t.sidebar.variables}</span>
-        </button>
-        <button
-          onClick={() => setActiveTab('code')}
-          className={`flex-1 py-3 px-4 flex items-center justify-center space-x-2 text-xs font-bold border-b-2 transition ${
-            activeTab === 'code'
-              ? 'border-blue-600 text-blue-600 bg-white'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
-          }`}
-        >
-          <Code size={14} />
-          <span>{t.sidebar.codeGen}</span>
-        </button>
+    <div className="w-[300px] h-full flex flex-col bg-[#F0F0F0] border-l border-slate-300 p-1 shrink-0 z-15">
+      
+      {/* ============ WIN32 PANEL HEADER ============ */}
+      <div 
+        className="h-[24px] text-white flex items-center justify-between px-2 cursor-default shrink-0"
+        style={{
+          background: 'linear-gradient(to right, #3E6FA8 0%, #7AAFE0 100%)'
+        }}
+      >
+        <span className="text-[11px] font-bold text-white font-sans tracking-wide">
+          {isWatchLayout ? '👁️ Watch Variabili - Flowonline2' : '📝 Codice Sorgente - Flowonline2'}
+        </span>
+        <div className="flex items-center gap-1.5">
+          <button 
+            onClick={() => {
+              // Close this panel
+              if (layout === 'triple_split') setLayout('flow_console');
+              else setLayout('flowchart_only');
+            }}
+            className="w-[14px] h-[14px] bg-[#E81123]/80 hover:bg-[#E81123] rounded-sm flex items-center justify-center text-[10px] text-white font-bold"
+            title="Chiudi Finestra"
+          >
+            ×
+          </button>
+        </div>
       </div>
 
-      {/* Tabs Content */}
-      <div className="flex-1 overflow-auto p-4 flex flex-col">
-        {activeTab === 'watch' ? (
-          /* VARIABLE WATCH */
-          <div className="flex-1 flex flex-col h-full">
+      {/* Pane Content */}
+      <div className="flex-1 bg-white border border-[#C8C8C8] mt-1 p-3 flex flex-col overflow-hidden">
+        {isWatchLayout ? (
+          /* ============ VARIABLE WATCH GRID ============ */
+          <div className="flex-1 flex flex-col h-full overflow-hidden">
+            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 font-sans select-none">
+              Variabili Attive in Memoria
+            </h4>
+            
             {variableList.length === 0 ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center p-6 text-slate-400">
-                <Info size={28} className="mb-2 stroke-[1.5]" />
-                <p className="text-xs">{t.sidebar.noVariables}</p>
+              <div className="flex-1 flex flex-col items-center justify-center text-center p-6 text-slate-400 select-none">
+                <Info size={24} className="mb-2 stroke-[1.5] text-slate-300" />
+                <p className="text-[11px] font-sans italic">{t.sidebar.noVariables}</p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="flex-1 overflow-auto space-y-2">
                 {variableList.map((v) => (
                   <div
                     key={v.name}
-                    className="p-3 bg-slate-50 rounded-lg border border-slate-200/60 hover:border-blue-300 transition"
+                    className="p-2.5 bg-slate-50 border border-slate-200 rounded flex flex-col gap-1.5"
                   >
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-1.5 mb-1.5">
-                      <span className="font-mono text-sm font-bold text-slate-800">{v.name}</span>
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                        v.type === 'Integer' || v.type === 'Real'
-                          ? 'bg-amber-100 text-amber-800'
-                          : v.type === 'Boolean'
-                          ? 'bg-purple-100 text-purple-800'
-                          : 'bg-emerald-100 text-emerald-800'
-                      }`}>
+                    {/* Variable Name and Badge */}
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                      <div className="flex items-center gap-1.5">
+                        {/* Type Icon circles mimicking Flowgorithm! */}
+                        <span className={`w-[9px] h-[9px] rounded-full inline-block ${
+                          v.type === 'Integer'
+                            ? 'bg-emerald-500'
+                            : v.type === 'Real'
+                            ? 'bg-amber-400'
+                            : v.type === 'Boolean'
+                            ? 'bg-purple-500'
+                            : 'bg-sky-400'
+                        }`} title={v.type} />
+                        <span className="font-mono text-[12px] font-bold text-slate-800">{v.name}</span>
+                      </div>
+                      <span className="text-[9px] font-black uppercase text-slate-400 font-mono tracking-tight">
                         {v.type}{v.isArray ? '[]' : ''}
                       </span>
                     </div>
 
+                    {/* Variable Value */}
                     {v.isArray ? (
-                      /* Array item sublist expansion */
                       <div className="space-y-1">
-                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Vettore (Dime: {v.arraySize})</div>
-                        <div className="max-h-28 overflow-y-auto border border-slate-150 rounded bg-white p-1 divide-y divide-slate-50">
+                        <div className="max-h-[100px] overflow-y-auto border border-slate-200 rounded bg-white p-1 divide-y divide-slate-50">
                           {(v.value as any[]).map((val, idx) => (
-                            <div key={idx} className="flex items-center justify-between py-1 px-1.5 text-xs font-mono">
+                            <div key={idx} className="flex items-center justify-between py-0.5 px-1.5 text-[11px] font-mono">
                               <span className="text-slate-400">[{idx}]</span>
-                              <span className="font-bold text-slate-700">{String(val === null || val === undefined ? 'None' : val)}</span>
+                              <span className="font-bold text-[#1F3354]">{String(val === null || val === undefined ? 'None' : val)}</span>
                             </div>
                           ))}
                         </div>
                       </div>
                     ) : (
-                      /* Scalar Values */
-                      <div className="flex items-center justify-between text-xs font-mono">
-                        <span className="text-slate-400">{t.sidebar.varVal}:</span>
-                        <span className="font-bold text-blue-600">{String(v.value === null || v.value === undefined ? 'None' : v.value)}</span>
+                      <div className="flex items-center justify-between text-[11px] font-mono">
+                        <span className="text-slate-400">Valore:</span>
+                        <span className="font-black text-blue-600">{String(v.value === null || v.value === undefined ? 'None' : v.value)}</span>
                       </div>
                     )}
                   </div>
@@ -109,17 +124,16 @@ export const Sidebar: React.FC = () => {
             )}
           </div>
         ) : (
-          /* CODE GENERATOR PANEL */
-          <div className="flex-1 flex flex-col h-full space-y-3">
-            {/* Language Selector */}
-            <div className="flex flex-col space-y-1">
+          /* ============ SOURCE CODE GENERATOR ============ */
+          <div className="flex-1 flex flex-col h-full overflow-hidden space-y-3">
+            <div className="flex flex-col space-y-1 select-none">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
-                Linguaggio Target
+                Seleziona Linguaggio
               </label>
               <select
                 value={targetLang}
                 onChange={(e) => setTargetLang(e.target.value as any)}
-                className="w-full text-xs font-semibold text-slate-700 p-2 border border-slate-200 rounded focus:border-blue-500 focus:outline-none"
+                className="w-full text-xs font-semibold text-slate-700 p-1.5 border border-[#B0B0B0] bg-white rounded focus:outline-none"
               >
                 <option value="python">Python 3</option>
                 <option value="javascript">JavaScript (Node/Web)</option>
@@ -129,30 +143,30 @@ export const Sidebar: React.FC = () => {
               </select>
             </div>
 
-            {/* Generated Code Window */}
-            <div className="flex-1 flex flex-col border border-slate-200 rounded-lg overflow-hidden relative bg-slate-900">
-              <div className="h-8 bg-slate-850 border-b border-slate-800 px-3 flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono">
-                  {targetLang}.txt
+            <div className="flex-1 flex flex-col border border-[#C8C8C8] rounded overflow-hidden relative bg-slate-900">
+              <div className="h-7 bg-slate-800 border-b border-slate-700 px-2 flex items-center justify-between select-none">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider font-mono">
+                  {targetLang}_output.txt
                 </span>
                 <button
                   onClick={handleCopy}
-                  className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition"
-                  title="Copy to Clipboard"
+                  className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-700 transition"
+                  title="Copy"
                 >
-                  {copied ? <Check size={13} className="text-emerald-500" /> : <Copy size={13} />}
+                  {copied ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
                 </button>
               </div>
 
               <textarea
                 value={generatedCode}
                 readOnly
-                className="flex-1 p-3 font-mono text-[11px] text-slate-300 bg-slate-950 focus:outline-none resize-none leading-relaxed overflow-auto"
+                className="flex-1 p-2 font-mono text-[10px] text-slate-300 bg-slate-950 focus:outline-none resize-none leading-relaxed overflow-auto"
               />
             </div>
           </div>
         )}
       </div>
+      
     </div>
   );
 };

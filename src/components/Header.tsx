@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useFlow } from '../context/FlowContext';
+import { useFlow, AppLayout } from '../context/FlowContext';
 import { translations } from '../utils/translations';
 import { FprgParser } from '../utils/fprgParser';
 
@@ -9,6 +9,8 @@ export const Header: React.FC = () => {
     setProgramTitle,
     programAuthor,
     setProgramAuthor,
+    layout,
+    setLayout,
     executionStatus,
     speed,
     setSpeed,
@@ -120,6 +122,14 @@ export const Header: React.FC = () => {
   const isRunning = executionStatus === 'running';
   const isStopped = executionStatus === 'stopped' || executionStatus === 'idle';
 
+  const layoutButtons: Array<{ id: AppLayout; label: string; tooltip: string }> = [
+    { id: 'flowchart_only', label: '🖥️', tooltip: 'Solo Diagramma' },
+    { id: 'flow_variables', label: '📊', tooltip: 'Diagramma e Watch' },
+    { id: 'flow_console', label: '💬', tooltip: 'Diagramma e Console' },
+    { id: 'triple_split', label: '🚀', tooltip: 'Tutto Insieme (Triple Split)' },
+    { id: 'flow_code', label: '📝', tooltip: 'Diagramma e Codice' }
+  ];
+
   return (
     <div className="flex flex-col w-full z-30 select-none shadow-md shrink-0">
       
@@ -138,8 +148,8 @@ export const Header: React.FC = () => {
             <polygon points="4,18 14,18 12,26 6,26" fill="#E14C4C" stroke="#333" strokeWidth="1.5" />
             <polygon points="18,18 28,18 26,26 20,26" fill="#4B9DDC" stroke="#333" strokeWidth="1.5" />
           </svg>
-          <span className="text-[12px] font-semibold text-white font-sans tracking-wide">
-            Flowonline2 BETA - {programTitle || 'Untitled'}.fprg
+          <span className="text-[11px] font-semibold text-white font-sans tracking-wide">
+            Flowonline BETA 2.0.3 - {programTitle || 'Untitled'}.fprg
           </span>
         </div>
 
@@ -271,7 +281,7 @@ export const Header: React.FC = () => {
         <button
           onClick={handleNew}
           className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
-          title="Nuovo"
+          title="Nuovo (Ctrl+N)"
         >
           📄
         </button>
@@ -280,7 +290,7 @@ export const Header: React.FC = () => {
         <button
           onClick={() => fileInputRef.current?.click()}
           className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
-          title="Apri"
+          title="Apri (Ctrl+O)"
         >
           📂
         </button>
@@ -289,7 +299,7 @@ export const Header: React.FC = () => {
         <button
           onClick={handleExportFprg}
           className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
-          title="Salva"
+          title="Salva (Ctrl+S)"
         >
           💾
         </button>
@@ -337,9 +347,29 @@ export const Header: React.FC = () => {
 
         <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
 
+        {/* LAYOUT SELECTOR CONTROL WINDOWS (Classic Flowgorithm buttons!) */}
+        <div className="flex items-center gap-[1px]">
+          {layoutButtons.map((btn) => (
+            <button
+              key={btn.id}
+              onClick={() => setLayout(btn.id)}
+              className={`w-[26px] h-[26px] flex items-center justify-center rounded-[3px] border text-xs transition-all ${
+                layout === btn.id
+                  ? 'bg-[#C9DEF5] border-[#5B8DC4] shadow-inner font-bold'
+                  : 'bg-transparent border-transparent hover:bg-slate-200/50 hover:border-slate-300'
+              }`}
+              title={btn.tooltip}
+            >
+              {btn.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
+
         {/* SPEED CONTROL */}
-        <div className="flex items-center gap-2 pl-2 text-slate-500 text-[11px] font-bold font-sans">
-          <span>VELOCITÀ:</span>
+        <div className="flex items-center gap-2 pl-2 text-slate-500 text-[10px] font-bold font-sans">
+          <span>RITARDO:</span>
           <input
             type="range"
             min="1"
@@ -353,28 +383,29 @@ export const Header: React.FC = () => {
         <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
 
         {/* META ATTRIBUTI (Editable directly on Toolbar) */}
-        <div className="hidden md:flex items-center gap-3 pl-2">
+        <div className="hidden lg:flex items-center gap-3 pl-2">
           <div className="flex flex-col text-[10px] font-sans">
-            <span className="text-slate-400 uppercase font-black tracking-tight text-[8px] leading-none">TITOLO ALGORITMO</span>
+            <span className="text-slate-400 uppercase font-black tracking-tight text-[7px] leading-none mb-0.5">Nome Algoritmo</span>
             <input
               type="text"
               value={programTitle}
               onChange={(e) => setProgramTitle(e.target.value)}
-              className="bg-white border border-slate-300 rounded text-slate-800 px-1 py-0.5 w-[140px] text-[11px] font-bold focus:outline-none focus:border-[#5B8DC4]"
+              className="bg-white hover:bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500 rounded border border-slate-300 text-[10px] font-bold text-slate-800 px-1 py-0.5 w-32 focus:outline-none"
+              placeholder="Mio Algoritmo"
             />
           </div>
           <div className="flex flex-col text-[10px] font-sans">
-            <span className="text-slate-400 uppercase font-black tracking-tight text-[8px] leading-none">AUTORE</span>
+            <span className="text-slate-400 uppercase font-black tracking-tight text-[7px] leading-none mb-0.5">Autore</span>
             <input
               type="text"
               value={programAuthor}
               onChange={(e) => setProgramAuthor(e.target.value)}
-              className="bg-white border border-slate-300 rounded text-slate-800 px-1 py-0.5 w-[100px] text-[11px] focus:outline-none focus:border-[#5B8DC4]"
+              className="bg-white hover:bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500 rounded border border-slate-300 text-[10px] text-slate-700 px-1 py-0.5 w-24 focus:outline-none"
+              placeholder="Autore"
             />
           </div>
         </div>
       </div>
-
     </div>
   );
 };

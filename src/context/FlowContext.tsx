@@ -15,6 +15,8 @@ import {
 import { ExpressionParser } from '../utils/parser';
 import { generateId } from '../utils/fprgParser';
 
+export type AppLayout = 'flowchart_only' | 'flow_console' | 'flow_variables' | 'triple_split' | 'flow_code';
+
 interface FlowContextType {
   // Flowchart state
   statements: Statement[];
@@ -22,6 +24,10 @@ interface FlowContextType {
   programAuthor: string;
   setProgramTitle: (t: string) => void;
   setProgramAuthor: (a: string) => void;
+  
+  // App Layout MDI Splitting
+  layout: AppLayout;
+  setLayout: (l: AppLayout) => void;
   
   // Execution state
   variables: Record<string, VariableSymbol>;
@@ -133,6 +139,9 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [statements, setStatements] = useState<Statement[]>(initialSample);
   const [programTitle, setProgramTitleState] = useState('Flowonline2 Program');
   const [programAuthor, setProgramAuthorState] = useState('PiBOH');
+
+  // Win32 MDI Layout split state
+  const [layout, setLayout] = useState<AppLayout>('triple_split');
 
   // History for undo/redo
   const [undoStack, setUndoStack] = useState<Array<{ statements: Statement[]; title: string; author: string }>>([]);
@@ -483,7 +492,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       switch (inst.op) {
         case 'HIGHLIGHT':
-          // Visual step only. No logical execution.
           break;
 
         case 'DECLARE': {
@@ -520,7 +528,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const name = b.variableName.trim();
           const rValue = parser.parseAndEvaluate(b.expression);
 
-          // Handle array index assignments e.g. myArray[index] = x
           if (name.includes('[') && name.endsWith(']')) {
             const startBracket = name.indexOf('[');
             const arrName = name.substring(0, startBracket).trim();
@@ -537,10 +544,9 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
               throw new Error(`La variabile '${arrName}' non è un vettore.`);
             }
             if (indexVal < 0 || indexVal >= (sym.arraySize ?? 0)) {
-              throw new Error(`Indice ${indexVal} fuori dai limites per il vettore '${arrName}' (dimensione: ${sym.arraySize}).`);
+              throw new Error(`Indice ${indexVal} fuori dai limiti per il vettore '${arrName}' (dimensione: ${sym.arraySize}).`);
             }
 
-            // Type verification
             let validatedVal = rValue;
             if (sym.type === 'Integer') validatedVal = Math.floor(Number(rValue));
             if (sym.type === 'Real') validatedVal = Number(rValue);
@@ -549,7 +555,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             sym.value[indexVal] = validatedVal;
           } else {
-            // Standard scalar assignment
             const sym = variablesRef.current[name];
             if (!sym) {
               throw new Error(`Variabile '${name}' non dichiarata.`);
@@ -573,7 +578,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const name = b.variableName.trim();
           let targetName = name;
 
-          // Check if index input e.g. myArray[i]
           if (name.includes('[') && name.endsWith(']')) {
             const startBracket = name.indexOf('[');
             targetName = name.substring(0, startBracket).trim();
@@ -584,7 +588,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             throw new Error(`Variabile di input '${targetName}' non dichiarata.`);
           }
 
-          // Pause VM for input
           setExecutionStatus('input_pause');
           addConsoleMessage('system', `Inserisci valore per ${name}:`);
           
@@ -592,7 +595,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             window.clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
           }
-          return false; // pause execution loop
+          return false;
         }
 
         case 'OUTPUT': {
@@ -625,7 +628,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
               pcRef.current = inst.args.targetIdx;
             }
           } else {
-            // Standard boolean expression
             const isTrue = Boolean(parser.parseAndEvaluate(conditionStr));
             if (!isTrue) {
               pcRef.current = inst.args.targetIdx;
@@ -688,7 +690,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // CONTROLS
   const startRun = () => {
     if (executionStatus === 'idle' || executionStatus === 'stopped' || executionStatus === 'finished' || executionStatus === 'error') {
-      // compile and start at PC = 0
       instructionsRef.current = compileProgram();
       pcRef.current = 0;
       variablesRef.current = {};
@@ -701,19 +702,15 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     if (intervalIdRef.current) window.clearInterval(intervalIdRef.current);
 
-    // Calculate delay from speed slider
-    // speed=100 is instant, speed=1 is very slow
     const delay = speed === 100 ? 0 : Math.max(10, (101 - speed) * 8);
 
     const runLoop = () => {
       let active = true;
       if (speed === 100) {
-        // Run blocks instantly
         while (active) {
           active = executeStep();
         }
       } else {
-        // Stepwise running using interval
         intervalIdRef.current = window.setInterval(() => {
           const activeStep = executeStep();
           if (!activeStep && intervalIdRef.current) {
@@ -743,7 +740,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
 
-    // execute a single step
     executeStep();
   };
 
@@ -791,7 +787,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     addConsoleMessage('input', `> ${val}`);
 
-    // Parse and validate types
     try {
       let parsedVal: any;
       if (sym.type === 'Integer') {
@@ -810,7 +805,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           throw new Error("Inserire 'true' o 'false' per il tipo booleano.");
         }
       } else {
-        parsedVal = val; // String is always valid
+        parsedVal = val;
       }
 
       if (sym.isArray && arrayIdx !== null) {
@@ -824,7 +819,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setVariables({ ...variablesRef.current });
 
-      // Resume execution
       setExecutionStatus('running');
       const delay = speed === 100 ? 0 : Math.max(10, (101 - speed) * 8);
 
@@ -857,7 +851,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const clearConsole = () => setConsoleMessages([]);
 
-  // Auto clean intervals on dismount
   useEffect(() => {
     return () => {
       if (intervalIdRef.current) window.clearInterval(intervalIdRef.current);
@@ -872,6 +865,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         programAuthor,
         setProgramTitle,
         setProgramAuthor,
+        layout,
+        setLayout,
         variables,
         currentBlockId,
         executionStatus,
