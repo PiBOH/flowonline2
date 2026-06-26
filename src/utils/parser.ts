@@ -239,16 +239,18 @@ export class ExpressionParser {
     while (true) {
       if (this.match('OPERATOR', '<')) {
         const right = this.parseAdditive();
-        val = Number(val) < Number(right);
+        // CRITICAL BUG FIX FOR STRING COMPARISONS: Avoid Number() cast which returned NaN for alphabetical strings!
+        // Uses native JS operator which correctly supports both alphabetical string comparison and numeric comparisons!
+        val = val < right;
       } else if (this.match('OPERATOR', '>')) {
         const right = this.parseAdditive();
-        val = Number(val) > Number(right);
+        val = val > right;
       } else if (this.match('OPERATOR', '<=')) {
         const right = this.parseAdditive();
-        val = Number(val) <= Number(right);
+        val = val <= right;
       } else if (this.match('OPERATOR', '>=')) {
         const right = this.parseAdditive();
-        val = Number(val) >= Number(right);
+        val = val >= right;
       } else {
         break;
       }
