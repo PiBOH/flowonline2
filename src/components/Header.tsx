@@ -91,6 +91,7 @@ SOFTWARE.`;
     aboutRepo: string;
     aboutLicense: string;
     colorSchemeLabel: string;
+    decorativeWindowAlert: string;
   }> = {
     en: {
       file: "File",
@@ -115,7 +116,8 @@ SOFTWARE.`;
       aboutWebsite: "Website",
       aboutRepo: "Repository",
       aboutLicense: "Program License:",
-      colorSchemeLabel: "Color Scheme:"
+      colorSchemeLabel: "Color Scheme:",
+      decorativeWindowAlert: "Flowonline2 is a web-based replica of Flowgorithm for Windows. These window control buttons (Minimize, Maximize, and Close) are purely decorative and have no functional purpose other than displaying this informational alert."
     },
     en_GB: {
       file: "File",
@@ -140,7 +142,8 @@ SOFTWARE.`;
       aboutWebsite: "Website",
       aboutRepo: "Repository",
       aboutLicense: "Program License:",
-      colorSchemeLabel: "Color Scheme:"
+      colorSchemeLabel: "Color Scheme:",
+      decorativeWindowAlert: "Flowonline2 is a web-based replica of Flowgorithm for Windows. These window control buttons (Minimize, Maximize, and Close) are purely decorative and have no functional purpose other than displaying this informational alert."
     },
     it: {
       file: "File",
@@ -165,7 +168,8 @@ SOFTWARE.`;
       aboutWebsite: "Sito Web",
       aboutRepo: "Repository",
       aboutLicense: "Licenza del Programma:",
-      colorSchemeLabel: "Schema Colori:"
+      colorSchemeLabel: "Schema Colori:",
+      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna funzione pratica se non quella di aprire questo messaggio informativo di avviso."
     },
     de: {
       file: "Datei",
@@ -190,7 +194,8 @@ SOFTWARE.`;
       aboutWebsite: "Website",
       aboutRepo: "Repository",
       aboutLicense: "Lizenz:",
-      colorSchemeLabel: "Farbschema:"
+      colorSchemeLabel: "Farbschema:",
+      decorativeWindowAlert: "Flowonline2 ist eine webbasierte Replik von Flowgorithm für Windows. Diese Fensterschaltflächen (Minimieren, Maximieren und Schließen) sind rein dekorativ und haben keine praktische Funktion, außer dieses Informationsfenster anzuzeigen."
     },
     fr: {
       file: "Fichier",
@@ -215,7 +220,8 @@ SOFTWARE.`;
       aboutWebsite: "Site Web",
       aboutRepo: "Dépôt",
       aboutLicense: "Licence:",
-      colorSchemeLabel: "Palette de couleurs:"
+      colorSchemeLabel: "Palette de couleurs:",
+      decorativeWindowAlert: "Flowonline2 est une réplique Web de Flowgorithm pour Windows. Ces boutons de contrôle de fenêtre (Réduire, Agrandir et Fermer) sont purement décoratifs et n'ont aucune fonction pratique autre que celle d'afficher ce message d'avertissement."
     },
     es: {
       file: "Archivo",
@@ -240,7 +246,8 @@ SOFTWARE.`;
       aboutWebsite: "Sitio Web",
       aboutRepo: "Repositorio",
       aboutLicense: "Licencia:",
-      colorSchemeLabel: "Esquema de colores:"
+      colorSchemeLabel: "Esquema de colores:",
+      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente decorativos y no tienen ninguna función práctica más que mostrar este mensaje de advertencia."
     }
   };
 
@@ -380,6 +387,10 @@ SOFTWARE.`;
     { id: 'flow_code', label: '📝', tooltip: 'Flowchart & Source Code' }
   ];
 
+  const handleDecorativeButtonClick = () => {
+    alert(mt.decorativeWindowAlert);
+  };
+
   return (
     <div className="flex flex-col w-full z-30 select-none shadow-md shrink-0">
       
@@ -403,11 +414,26 @@ SOFTWARE.`;
           </span>
         </div>
 
-        {/* Windows Frame Minimize / Maximize / Close simulation */}
+        {/* Windows Frame Minimize / Maximize / Close simulation with custom informational alert! */}
         <div className="flex h-full">
-          <button className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition">─</button>
-          <button className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition">▢</button>
-          <button onClick={() => window.close()} className="w-[44px] h-[28px] hover:bg-red-600 text-white font-sans text-[11px] transition">✕</button>
+          <button 
+            onClick={handleDecorativeButtonClick}
+            className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition"
+          >
+            ─
+          </button>
+          <button 
+            onClick={handleDecorativeButtonClick}
+            className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition"
+          >
+            ▢
+          </button>
+          <button 
+            onClick={handleDecorativeButtonClick}
+            className="w-[44px] h-[28px] hover:bg-red-600 text-white font-sans text-[11px] transition"
+          >
+            ✕
+          </button>
         </div>
       </div>
 
