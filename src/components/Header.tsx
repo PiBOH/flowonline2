@@ -12,6 +12,8 @@ export const Header: React.FC = () => {
     setProgramAuthor,
     layout,
     setLayout,
+    colorScheme,
+    setColorScheme,
     executionStatus,
     speed,
     setSpeed,
@@ -87,6 +89,7 @@ SOFTWARE.`;
     aboutWebsite: string;
     aboutRepo: string;
     aboutLicense: string;
+    colorSchemeLabel: string;
   }> = {
     en: {
       file: "File",
@@ -110,7 +113,8 @@ SOFTWARE.`;
       aboutAuthor: "Author",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
-      aboutLicense: "Program License:"
+      aboutLicense: "Program License:",
+      colorSchemeLabel: "Color Scheme:"
     },
     en_GB: {
       file: "File",
@@ -134,7 +138,8 @@ SOFTWARE.`;
       aboutAuthor: "Author",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
-      aboutLicense: "Program License:"
+      aboutLicense: "Program License:",
+      colorSchemeLabel: "Color Scheme:"
     },
     it: {
       file: "File",
@@ -158,7 +163,8 @@ SOFTWARE.`;
       aboutAuthor: "Autore",
       aboutWebsite: "Sito Web",
       aboutRepo: "Repository",
-      aboutLicense: "Licenza del Programma:"
+      aboutLicense: "Licenza del Programma:",
+      colorSchemeLabel: "Schema Colori:"
     },
     de: {
       file: "Datei",
@@ -182,7 +188,8 @@ SOFTWARE.`;
       aboutAuthor: "Autor",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
-      aboutLicense: "Lizenz:"
+      aboutLicense: "Lizenz:",
+      colorSchemeLabel: "Farbschema:"
     },
     fr: {
       file: "Fichier",
@@ -206,7 +213,8 @@ SOFTWARE.`;
       aboutAuthor: "Auteur",
       aboutWebsite: "Site Web",
       aboutRepo: "Dépôt",
-      aboutLicense: "Licence:"
+      aboutLicense: "Licence:",
+      colorSchemeLabel: "Palette de couleurs:"
     },
     es: {
       file: "Archivo",
@@ -230,7 +238,8 @@ SOFTWARE.`;
       aboutAuthor: "Autor",
       aboutWebsite: "Sitio Web",
       aboutRepo: "Repositorio",
-      aboutLicense: "Licencia:"
+      aboutLicense: "Licencia:",
+      colorSchemeLabel: "Esquema de colores:"
     }
   };
 
@@ -339,6 +348,13 @@ SOFTWARE.`;
     }
   };
 
+  // Win32 hover-to-slide menu bar logic!
+  const handleMenuMouseEnter = (menuId: string) => {
+    if (activeDropdown !== null) {
+      setActiveDropdown(menuId);
+    }
+  };
+
   const isRunning = executionStatus === 'running';
   const isStopped = executionStatus === 'stopped' || executionStatus === 'idle';
 
@@ -388,6 +404,7 @@ SOFTWARE.`;
         <div className="relative">
           <button
             onClick={() => toggleDropdown('file')}
+            onMouseEnter={() => handleMenuMouseEnter('file')}
             className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'file' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
@@ -419,10 +436,11 @@ SOFTWARE.`;
           )}
         </div>
 
-        {/* MODIFICA MENU */}
+        {/* MODIFICA MENU (Includes Flowgorithm's official Color Schemes) */}
         <div className="relative ml-1">
           <button
             onClick={() => toggleDropdown('edit')}
+            onMouseEnter={() => handleMenuMouseEnter('edit')}
             className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'edit' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
@@ -430,7 +448,7 @@ SOFTWARE.`;
             {mt.edit}
           </button>
           {activeDropdown === 'edit' && (
-            <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
+            <div className="absolute left-0 top-full mt-[1px] min-w-[200px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
               <button onClick={undo} disabled={!canUndo} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-40 text-slate-800">
                 <span>↩ {mt.undo}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+Z</span>
@@ -438,6 +456,34 @@ SOFTWARE.`;
               <button onClick={redo} disabled={!canRedo} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-40 text-slate-800">
                 <span>↪ {mt.redo}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+Y</span>
+              </button>
+              
+              <div className="h-[1px] bg-slate-300 my-1"></div>
+              <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">{mt.colorSchemeLabel}</div>
+              
+              <button onClick={() => { setColorScheme('classic'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+                <span>Classic</span>
+                {colorScheme === 'classic' && <span className="text-emerald-600 font-bold">✓</span>}
+              </button>
+              <button onClick={() => { setColorScheme('pastel'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+                <span>Pastel</span>
+                {colorScheme === 'pastel' && <span className="text-emerald-600 font-bold">✓</span>}
+              </button>
+              <button onClick={() => { setColorScheme('vibrant'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+                <span>Vibrant</span>
+                {colorScheme === 'vibrant' && <span className="text-emerald-600 font-bold">✓</span>}
+              </button>
+              <button onClick={() => { setColorScheme('retro'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+                <span>Retro</span>
+                {colorScheme === 'retro' && <span className="text-emerald-600 font-bold">✓</span>}
+              </button>
+              <button onClick={() => { setColorScheme('twilight'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+                <span>Twilight (Dark)</span>
+                {colorScheme === 'twilight' && <span className="text-emerald-600 font-bold">✓</span>}
+              </button>
+              <button onClick={() => { setColorScheme('black_white'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
+                <span>Black & White</span>
+                {colorScheme === 'black_white' && <span className="text-emerald-600 font-bold">✓</span>}
               </button>
             </div>
           )}
@@ -447,6 +493,7 @@ SOFTWARE.`;
         <div className="relative ml-1">
           <button
             onClick={() => toggleDropdown('program')}
+            onMouseEnter={() => handleMenuMouseEnter('program')}
             className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'program' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
@@ -475,6 +522,7 @@ SOFTWARE.`;
         <div className="relative ml-1">
           <button
             onClick={() => toggleDropdown('help')}
+            onMouseEnter={() => handleMenuMouseEnter('help')}
             className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'help' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
@@ -649,10 +697,13 @@ SOFTWARE.`;
         </div>
       </div>
 
-      {/* ============ WIN32 ABOUT DIALOG MODAL (FAITHFUL SIMULATION - LOCALIZED & ENLARGED w-[430px]) ============ */}
+      {/* ============ WIN32 ABOUT DIALOG MODAL (ENLARGED & PERFECT INLINE SIZING) ============ */}
       {showAbout && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
-          <div className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl w-[430px] overflow-hidden flex flex-col font-sans select-none">
+          <div 
+            className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl overflow-hidden flex flex-col font-sans select-none"
+            style={{ width: '450px' }} // EXPLICIT INLINE SIZE ENLARGEMENT!
+          >
             {/* About Modal Title Bar */}
             <div 
               className="h-[24px] text-white flex items-center justify-between px-2 cursor-default"

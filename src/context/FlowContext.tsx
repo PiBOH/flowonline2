@@ -16,6 +16,7 @@ import { ExpressionParser } from '../utils/parser';
 import { generateId } from '../utils/fprgParser';
 
 export type AppLayout = 'flowchart_only' | 'flow_console' | 'flow_variables' | 'triple_split' | 'flow_code';
+export type ColorSchemeType = 'classic' | 'pastel' | 'vibrant' | 'retro' | 'twilight' | 'black_white';
 
 interface FlowContextType {
   // Flowchart state
@@ -28,6 +29,10 @@ interface FlowContextType {
   // App Layout MDI Splitting
   layout: AppLayout;
   setLayout: (l: AppLayout) => void;
+  
+  // Color Scheme (Flowchart Styles)
+  colorScheme: ColorSchemeType;
+  setColorScheme: (s: ColorSchemeType) => void;
   
   // Execution state
   variables: Record<string, VariableSymbol>;
@@ -149,6 +154,9 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Win32 MDI Layout split state
   const [layout, setLayout] = useState<AppLayout>('triple_split');
+
+  // Color Scheme (Flowchart Styles)
+  const [colorScheme, setColorScheme] = useState<ColorSchemeType>('classic');
 
   // History for undo/redo
   const [undoStack, setUndoStack] = useState<Array<{ statements: Statement[]; title: string; author: string }>>([]);
@@ -911,6 +919,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setProgramAuthor, // EXPLICIT PROVIDER VALUE!
         layout,
         setLayout,
+        colorScheme,
+        setColorScheme,
         variables,
         currentBlockId,
         executionStatus,

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useFlow } from '../context/FlowContext';
 import { Statement, BlockType } from '../types/flow';
-import { BlockNode } from './BlockNode';
+import { BlockNode, colorSchemes } from './BlockNode';
 import { translations } from '../utils/translations';
 import { Trash2, ZoomIn, ZoomOut, RefreshCw } from 'lucide-react';
 
@@ -34,13 +34,15 @@ export const FlowchartCanvas: React.FC = () => {
     deleteBlock,
     openEditor,
     language,
-    clearAll
+    clearAll,
+    colorScheme
   } = useFlow();
 
   const [zoom, setZoom] = useState<number>(1);
   const [activeInserter, setActiveInserter] = useState<{ parentId: string | 'main_start' | 'main_end'; index?: number } | null>(null);
 
   const t = translations[language];
+  const sc = colorSchemes[colorScheme];
 
   // CONSTANTS FOR VISUALS
   const NODE_W = 180;
@@ -176,7 +178,7 @@ export const FlowchartCanvas: React.FC = () => {
             y1={currentY}
             x2={centerX}
             y2={nodeTopY}
-            stroke="#555"
+            stroke={sc.lineColor}
             strokeWidth="2"
             markerEnd="url(#arrow)"
           />
@@ -196,30 +198,30 @@ export const FlowchartCanvas: React.FC = () => {
         elements.push(
           <g key={`if-then-${node.id}`}>
             {/* Horizontal line out to left (False) */}
-            <line x1={centerX} y1={diamondCenterY} x2={leftX} y2={diamondCenterY} stroke="#555" strokeWidth="2" />
-            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" className="fill-[#555] font-sans text-[10px] font-bold select-none">FALSO (False)</text>
+            <line x1={centerX} y1={diamondCenterY} x2={leftX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
+            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill={sc.textColor} fillOpacity="0.7" className="font-sans text-[10px] font-bold select-none">FALSO (False)</text>
             
             {/* Draw child branch statements */}
             {renderLinesAndArrows(node.thenLayout, leftX, diamondCenterY, branchEndY)}
             
             {/* Return from left branch back to main path */}
-            <line x1={leftX} y1={branchEndY} x2={leftX} y2={branchEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
-            <line x1={leftX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
+            <line x1={leftX} y1={branchEndY} x2={leftX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
+            <line x1={leftX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
           </g>
         );
 
         elements.push(
           <g key={`if-else-${node.id}`}>
             {/* Horizontal line out to right (True) */}
-            <line x1={centerX} y1={diamondCenterY} x2={rightX} y2={diamondCenterY} stroke="#555" strokeWidth="2" />
-            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" className="fill-green-600 font-sans text-[10px] font-bold select-none">VERO (True)</text>
+            <line x1={centerX} y1={diamondCenterY} x2={rightX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
+            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill="green" className="font-sans text-[10px] font-bold select-none">VERO (True)</text>
             
             {/* Draw child branch statements */}
             {renderLinesAndArrows(node.elseLayout, rightX, diamondCenterY, branchEndY)}
             
             {/* Return from right branch back to main path */}
-            <line x1={rightX} y1={branchEndY} x2={rightX} y2={branchEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
-            <line x1={rightX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
+            <line x1={rightX} y1={branchEndY} x2={rightX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
+            <line x1={rightX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
           </g>
         );
 
@@ -232,17 +234,17 @@ export const FlowchartCanvas: React.FC = () => {
         elements.push(
           <g key={`loop-body-${node.id}`}>
             {/* Horizontal branch out of loop */}
-            <line x1={centerX} y1={loopCenterY} x2={bodyX} y2={loopCenterY} stroke="#555" strokeWidth="2" />
+            <line x1={centerX} y1={loopCenterY} x2={bodyX} y2={loopCenterY} stroke={sc.lineColor} strokeWidth="2" />
             
             {/* Recurse body */}
             {renderLinesAndArrows(node.bodyLayout, bodyX, loopCenterY, bodyEndY)}
             
             {/* Return wire lines representing Flowgorithm's loop back loops */}
-            <line x1={bodyX} y1={bodyEndY} x2={bodyX} y2={bodyEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
+            <line x1={bodyX} y1={bodyEndY} x2={bodyX} y2={bodyEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
             {/* Left wire returning back up and left to loop header */}
-            <line x1={bodyX} y1={bodyEndY + V_GAP / 2} x2={centerX - H_GAP / 2} y2={bodyEndY + V_GAP / 2} stroke="#555" strokeWidth="2" />
-            <line x1={centerX - H_GAP / 2} y1={bodyEndY + V_GAP / 2} x2={centerX - H_GAP / 2} y2={loopCenterY} stroke="#555" strokeWidth="2" />
-            <line x1={centerX - H_GAP / 2} y1={loopCenterY} x2={centerX} y2={loopCenterY} stroke="#555" strokeWidth="2" markerEnd="url(#arrow)" />
+            <line x1={bodyX} y1={bodyEndY + V_GAP / 2} x2={centerX - H_GAP / 2} y2={bodyEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
+            <line x1={centerX - H_GAP / 2} y1={bodyEndY + V_GAP / 2} x2={centerX - H_GAP / 2} y2={loopCenterY} stroke={sc.lineColor} strokeWidth="2" />
+            <line x1={centerX - H_GAP / 2} y1={loopCenterY} x2={centerX} y2={loopCenterY} stroke={sc.lineColor} strokeWidth="2" markerEnd="url(#arrow)" />
           </g>
         );
       }
@@ -259,7 +261,7 @@ export const FlowchartCanvas: React.FC = () => {
           y1={currentY}
           x2={centerX}
           y2={endY}
-          stroke="#555"
+          stroke={sc.lineColor}
           strokeWidth="2"
           markerEnd="url(#arrow)"
         />
@@ -358,31 +360,33 @@ export const FlowchartCanvas: React.FC = () => {
     }
   };
 
+  const isDark = colorScheme === 'twilight';
+
   return (
-    <div className="flex-1 flex flex-col h-full bg-white relative overflow-hidden select-none border-r border-slate-200">
+    <div className={`flex-1 flex flex-col h-full relative overflow-hidden select-none border-r border-slate-200 ${isDark ? 'bg-zinc-900' : 'bg-white'}`}>
       {/* Dynamic Canvas Header / Local Toolbar */}
-      <div className="h-11 bg-slate-50 border-b border-slate-200 px-4 flex items-center justify-between z-10">
+      <div className={`h-11 border-b px-4 flex items-center justify-between z-10 ${isDark ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-slate-50 border-slate-200'}`}>
         <div className="flex items-center space-x-1">
           <button
             onClick={() => setZoom((prev) => Math.max(0.4, prev - 0.1))}
-            className="p-1.5 text-slate-600 hover:bg-slate-200 rounded transition"
+            className={`p-1.5 rounded transition ${isDark ? 'text-zinc-300 hover:bg-zinc-700' : 'text-slate-600 hover:bg-slate-200'}`}
             title="Zoom Out"
           >
             <ZoomOut size={16} />
           </button>
-          <span className="text-xs font-semibold text-slate-500 w-12 text-center">
+          <span className="text-xs font-semibold w-12 text-center">
             {Math.round(zoom * 100)}%
           </span>
           <button
             onClick={() => setZoom((prev) => Math.min(1.8, prev + 0.1))}
-            className="p-1.5 text-slate-600 hover:bg-slate-200 rounded transition"
+            className={`p-1.5 rounded transition ${isDark ? 'text-zinc-300 hover:bg-zinc-700' : 'text-slate-600 hover:bg-slate-200'}`}
             title="Zoom In"
           >
             <ZoomIn size={16} />
           </button>
           <button
             onClick={() => setZoom(1.0)}
-            className="p-1.5 text-slate-400 hover:bg-slate-200 rounded transition"
+            className="p-1.5 rounded transition opacity-50 hover:opacity-100"
             title="Reset Zoom"
           >
             <RefreshCw size={14} />
@@ -402,7 +406,9 @@ export const FlowchartCanvas: React.FC = () => {
       <div 
         className="flex-1 overflow-auto p-8 flex items-start justify-center relative"
         style={{
-          background: 'linear-gradient(to right, rgba(200, 200, 210, 0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(200, 200, 210, 0.15) 1px, transparent 1px), #FFFFFF',
+          background: isDark
+            ? 'linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px), #1e1e1e'
+            : 'linear-gradient(to right, rgba(200, 200, 210, 0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(200, 200, 210, 0.15) 1px, transparent 1px), #FFFFFF',
           backgroundSize: '20px 20px'
         }}
       >
@@ -426,7 +432,7 @@ export const FlowchartCanvas: React.FC = () => {
               markerHeight="6"
               orient="auto-start-reverse"
             >
-              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#555" />
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill={sc.lineColor} />
             </marker>
 
             {/* Glowing Blue Dot gradient */}
