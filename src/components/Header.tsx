@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useFlow, AppLayout } from '../context/FlowContext';
 import { translations } from '../utils/translations';
 import { FprgParser } from '../utils/fprgParser';
@@ -34,6 +34,52 @@ export const Header: React.FC = () => {
 
   // Dropdown states for Menus
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  // About Modal state
+  const [showAbout, setShowAbout] = useState(false);
+  const [licenseText, setLicenseText] = useState('Caricamento licenza...');
+
+  // Hardcoded fallback license text
+  const mitLicenseTextFallback = `MIT License
+
+Copyright (c) 2026 PiBOH
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.`;
+
+  // Dynamically load the LICENSE file from the repository root/build folder
+  useEffect(() => {
+    if (showAbout) {
+      setLicenseText('Caricamento licenza in corso...');
+      fetch('./LICENSE')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('File LICENSE non trovato o non leggibile.');
+          }
+          return res.text();
+        })
+        .then((text) => setLicenseText(text))
+        .catch((err) => {
+          console.warn('Impossibile caricare LICENSE in tempo reale, uso del fallback:', err);
+          setLicenseText(mitLicenseTextFallback);
+        });
+    }
+  }, [showAbout]);
 
   // File IO actions
   const handleNew = () => {
@@ -149,7 +195,7 @@ export const Header: React.FC = () => {
             <polygon points="18,18 28,18 26,26 20,26" fill="#4B9DDC" stroke="#333" strokeWidth="1.5" />
           </svg>
           <span className="text-[11px] font-semibold text-white font-sans tracking-wide">
-            Flowonline2 BETA 2.0.4 - {programTitle || 'Untitled'}.fprg
+            Flowonline2 BETA 2.0.5 - {programTitle || 'Untitled'}.fprg
           </span>
         </div>
 
@@ -157,7 +203,7 @@ export const Header: React.FC = () => {
         <div className="flex h-full">
           <button className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition">─</button>
           <button className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition">▢</button>
-          <button className="w-[44px] h-[28px] hover:bg-red-600 text-white font-sans text-[11px] transition">✕</button>
+          <button onClick={() => window.close()} className="w-[44px] h-[28px] hover:bg-red-600 text-white font-sans text-[11px] transition">✕</button>
         </div>
       </div>
 
@@ -247,6 +293,25 @@ export const Header: React.FC = () => {
               </button>
               <button onClick={() => { stopRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span>⏹ Stop</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* HELP / ? MENU */}
+        <div className="relative ml-1">
+          <button
+            onClick={() => toggleDropdown('help')}
+            className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+              activeDropdown === 'help' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
+            }`}
+          >
+            ?
+          </button>
+          {activeDropdown === 'help' && (
+            <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
+              <button onClick={() => { setShowAbout(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 font-bold">
+                <span>ℹ️ Informazioni su Flowonline2...</span>
               </button>
             </div>
           )}
@@ -406,6 +471,85 @@ export const Header: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* ============ WIN32 ABOUT DIALOG MODAL (FAITHFUL SIMULATION) ============ */}
+      {showAbout && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
+          <div className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl w-[380px] overflow-hidden flex flex-col font-sans select-none">
+            
+            {/* About Modal Title Bar */}
+            <div 
+              className="h-[24px] text-white flex items-center justify-between px-2 cursor-default"
+              style={{
+                background: 'linear-gradient(to right, #3E6FA8 0%, #7AAFE0 100%)'
+              }}
+            >
+              <span className="text-[11px] font-bold text-white font-sans tracking-wide">
+                Informazioni su Flowonline2
+              </span>
+              <button 
+                onClick={() => setShowAbout(false)}
+                className="w-[14px] h-[14px] bg-[#E81123]/80 hover:bg-[#E81123] rounded-sm flex items-center justify-center text-[10px] text-white font-bold"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* About Modal Body (Win32 Dialog layout) */}
+            <div className="p-4 flex flex-col space-y-3.5 bg-[#F0F0F0] text-slate-800">
+              
+              <div className="flex items-start gap-4">
+                {/* Large Flowgorithm Colored logo */}
+                <div className="w-12 h-12 bg-white border border-slate-300 shadow-inner rounded flex items-center justify-center shrink-0">
+                  <svg className="w-9 h-9" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="4" width="10" height="8" fill="#84C44C" stroke="#333" strokeWidth="1.5" />
+                    <rect x="18" y="4" width="10" height="8" fill="#F2A93B" stroke="#333" strokeWidth="1.5" />
+                    <polygon points="4,18 14,18 12,26 6,26" fill="#E14C4C" stroke="#333" strokeWidth="1.5" />
+                    <polygon points="18,18 28,18 26,26 20,26" fill="#4B9DDC" stroke="#333" strokeWidth="1.5" />
+                  </svg>
+                </div>
+
+                <div className="flex flex-col gap-0.5 leading-tight text-[12px] font-sans">
+                  <h4 className="font-extrabold text-[14px] text-slate-900 tracking-wide">Flowonline2</h4>
+                  <p className="text-[11px] text-slate-500 font-semibold">Versione BETA 2.0.5</p>
+                  <p className="text-[11px] text-slate-600 mt-1">
+                    Sviluppato da <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">PiBOH</a>
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    Sito Web: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">piboh.github.io</a>
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    Repository: <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">github.com/PiBOH/flowonline2</a>
+                  </p>
+                </div>
+              </div>
+
+              {/* License automatically loaded text box */}
+              <div className="flex flex-col space-y-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Licenza del Programma:</span>
+                <textarea
+                  readOnly
+                  value={licenseText}
+                  className="w-full h-32 border border-slate-300 rounded p-2 font-mono text-[10px] bg-white text-slate-600 focus:outline-none resize-none overflow-auto leading-relaxed shadow-inner"
+                />
+              </div>
+
+              {/* OK button to close dialog (Win32 styled) */}
+              <div className="flex items-center justify-end">
+                <button
+                  onClick={() => setShowAbout(false)}
+                  className="px-6 py-1 bg-white hover:bg-slate-100 border border-slate-400 hover:border-slate-500 text-slate-800 text-[11px] font-bold rounded shadow-sm focus:outline-none transition active:scale-95"
+                >
+                  OK
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
