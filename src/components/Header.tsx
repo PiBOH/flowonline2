@@ -63,7 +63,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.`;
 
-  // LOCAL MENU TRANSLATIONS (For 1000% multilingual fidelity!)
+  // LOCAL MENU & ABOUT TRANSLATIONS (For 1000% multilingual fidelity!)
   const menuTranslations: Record<Language, {
     file: string;
     edit: string;
@@ -81,6 +81,12 @@ SOFTWARE.`;
     pause: string;
     stop: string;
     about: string;
+    aboutTitle: string;
+    aboutVersion: string;
+    aboutAuthor: string;
+    aboutWebsite: string;
+    aboutRepo: string;
+    aboutLicense: string;
   }> = {
     en: {
       file: "File",
@@ -98,7 +104,13 @@ SOFTWARE.`;
       step: "Step",
       pause: "Pause",
       stop: "Stop",
-      about: "About Flowonline2..."
+      about: "About Flowonline2...",
+      aboutTitle: "About Flowonline2",
+      aboutVersion: "Version ALPHA 2.0.8",
+      aboutAuthor: "Author",
+      aboutWebsite: "Website",
+      aboutRepo: "Repository",
+      aboutLicense: "Program License:"
     },
     en_GB: {
       file: "File",
@@ -116,7 +128,13 @@ SOFTWARE.`;
       step: "Step",
       pause: "Pause",
       stop: "Stop",
-      about: "About Flowonline2..."
+      about: "About Flowonline2...",
+      aboutTitle: "About Flowonline2",
+      aboutVersion: "Version ALPHA 2.0.8",
+      aboutAuthor: "Author",
+      aboutWebsite: "Website",
+      aboutRepo: "Repository",
+      aboutLicense: "Program License:"
     },
     it: {
       file: "File",
@@ -134,7 +152,13 @@ SOFTWARE.`;
       step: "Passo-Passo (Step)",
       pause: "Pausa",
       stop: "Stop",
-      about: "Informazioni su Flowonline2..."
+      about: "Informazioni su Flowonline2...",
+      aboutTitle: "Informazioni su Flowonline2",
+      aboutVersion: "Versione ALPHA 2.0.8",
+      aboutAuthor: "Autore",
+      aboutWebsite: "Sito Web",
+      aboutRepo: "Repository",
+      aboutLicense: "Licenza del Programma:"
     },
     de: {
       file: "Datei",
@@ -152,7 +176,13 @@ SOFTWARE.`;
       step: "Schritt-für-Schritt",
       pause: "Pause",
       stop: "Stopp",
-      about: "Über Flowonline2..."
+      about: "Über Flowonline2...",
+      aboutTitle: "Über Flowonline2",
+      aboutVersion: "Version ALPHA 2.0.8",
+      aboutAuthor: "Autor",
+      aboutWebsite: "Website",
+      aboutRepo: "Repository",
+      aboutLicense: "Lizenz:"
     },
     fr: {
       file: "Fichier",
@@ -170,7 +200,13 @@ SOFTWARE.`;
       step: "Pas-à-pas",
       pause: "Pause",
       stop: "Arrêter",
-      about: "À propos de Flowonline2..."
+      about: "À propos de Flowonline2...",
+      aboutTitle: "À propos de Flowonline2",
+      aboutVersion: "Version ALPHA 2.0.8",
+      aboutAuthor: "Auteur",
+      aboutWebsite: "Site Web",
+      aboutRepo: "Dépôt",
+      aboutLicense: "Licence:"
     },
     es: {
       file: "Archivo",
@@ -188,7 +224,13 @@ SOFTWARE.`;
       step: "Paso a paso",
       pause: "Pausa",
       stop: "Detener",
-      about: "Acerca de Flowonline2..."
+      about: "Acerca de Flowonline2...",
+      aboutTitle: "Acerca de Flowonline2",
+      aboutVersion: "Versión ALPHA 2.0.8",
+      aboutAuthor: "Autor",
+      aboutWebsite: "Sitio Web",
+      aboutRepo: "Repositorio",
+      aboutLicense: "Licencia:"
     }
   };
 
@@ -327,7 +369,7 @@ SOFTWARE.`;
             <polygon points="18,18 28,18 26,26 20,26" fill="#4B9DDC" stroke="#333" strokeWidth="1.5" />
           </svg>
           <span className="text-[11px] font-semibold text-white font-sans tracking-wide">
-            Flowonline2 ALPHA 2.0.7 - {programTitle || 'Untitled'}.fprg
+            Flowonline2 ALPHA 2.0.8 - {programTitle || 'Untitled'}.fprg
           </span>
         </div>
 
@@ -362,7 +404,6 @@ SOFTWARE.`;
                 <span>📂 {mt.open}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+O</span>
               </button>
-              <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".fprg" className="hidden" />
               <div className="h-[1px] bg-slate-300 my-1"></div>
               <button onClick={handleExportFprg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
                 <span>💾 {mt.save}</span>
@@ -483,9 +524,13 @@ SOFTWARE.`;
           📄
         </button>
 
-        {/* OPEN BUTTON */}
+        {/* OPEN BUTTON (CRITICAL FIX: This now works perfectly because input type=file is always in DOM!) */}
         <button
-          onClick={() => fileInputRef.current?.click()}
+          onClick={() => {
+            if (fileInputRef.current) {
+              fileInputRef.current.click();
+            }
+          }}
           className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
           title="Apri (Ctrl+O)"
         >
@@ -604,10 +649,10 @@ SOFTWARE.`;
         </div>
       </div>
 
-      {/* ============ WIN32 ABOUT DIALOG MODAL (FAITHFUL SIMULATION) ============ */}
+      {/* ============ WIN32 ABOUT DIALOG MODAL (FAITHFUL SIMULATION - LOCALIZED & ENLARGED w-[430px]) ============ */}
       {showAbout && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
-          <div className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl w-[380px] overflow-hidden flex flex-col">
+          <div className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl w-[430px] overflow-hidden flex flex-col font-sans select-none">
             {/* About Modal Title Bar */}
             <div 
               className="h-[24px] text-white flex items-center justify-between px-2 cursor-default"
@@ -616,7 +661,7 @@ SOFTWARE.`;
               }}
             >
               <span className="text-[11px] font-bold text-white font-sans tracking-wide">
-                About Flowonline2
+                {mt.aboutTitle}
               </span>
               <button 
                 onClick={() => setShowAbout(false)}
@@ -642,22 +687,22 @@ SOFTWARE.`;
 
                 <div className="flex flex-col gap-0.5 leading-tight text-[12px] font-sans">
                   <h4 className="font-extrabold text-[14px] text-slate-900 tracking-wide">Flowonline2</h4>
-                  <p className="text-[11px] text-slate-500 font-semibold">Version ALPHA 2.0.7</p>
+                  <p className="text-[11px] text-slate-500 font-semibold">{mt.aboutVersion}</p>
                   <p className="text-[11px] text-slate-600 mt-1">
-                    Sviluppato da <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">PiBOH</a>
+                    {mt.aboutAuthor}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">PiBOH</a>
                   </p>
                   <p className="text-[11px] text-slate-500">
-                    Sito Web: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">piboh.github.io</a>
+                    {mt.aboutWebsite}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">piboh.github.io</a>
                   </p>
                   <p className="text-[11px] text-slate-500">
-                    Repository: <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">github.com/PiBOH/flowonline2</a>
+                    {mt.aboutRepo}: <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">github.com/PiBOH/flowonline2</a>
                   </p>
                 </div>
               </div>
 
               {/* License automatically loaded text box */}
               <div className="flex flex-col space-y-1">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Licenza del Programma:</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">{mt.aboutLicense}</span>
                 <textarea
                   readOnly
                   value={licenseText}
@@ -680,6 +725,15 @@ SOFTWARE.`;
           </div>
         </div>
       )}
+
+      {/* CRITICAL FILE INPUT (Rendered outside conditional blocks so it's always in the DOM and available for toolbar click!) */}
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        onChange={handleFileChange} 
+        accept=".fprg" 
+        className="hidden" 
+      />
 
     </div>
   );
