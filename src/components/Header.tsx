@@ -41,6 +41,9 @@ export const Header: React.FC = () => {
   // Dropdown states for Menus
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
+  // Dynamic App Version state (ALPHA 2.0.11 fallback default)
+  const [appVersion, setAppVersion] = useState('ALPHA 2.0.11');
+
   // About Modal state
   const [showAbout, setShowAbout] = useState(false);
   const [licenseText, setLicenseText] = useState('Loading license...');
@@ -92,7 +95,7 @@ SOFTWARE.`;
     stop: string;
     about: string;
     aboutTitle: string;
-    aboutVersion: string;
+    aboutVersionLabel: string; // "Version" label only, version value is dynamic!
     aboutAuthor: string;
     aboutWebsite: string;
     aboutRepo: string;
@@ -127,7 +130,7 @@ SOFTWARE.`;
       stop: "Stop",
       about: "About Flowonline2...",
       aboutTitle: "About Flowonline2",
-      aboutVersion: "Version ALPHA 2.0.9",
+      aboutVersionLabel: "Version",
       aboutAuthor: "Author",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
@@ -162,7 +165,7 @@ SOFTWARE.`;
       stop: "Stop",
       about: "About Flowonline2...",
       aboutTitle: "About Flowonline2",
-      aboutVersion: "Version ALPHA 2.0.9",
+      aboutVersionLabel: "Version",
       aboutAuthor: "Author",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
@@ -197,13 +200,13 @@ SOFTWARE.`;
       stop: "Stop",
       about: "Informazioni su Flowonline2...",
       aboutTitle: "Informazioni su Flowonline2",
-      aboutVersion: "Versione ALPHA 2.0.9",
+      aboutVersionLabel: "Versione",
       aboutAuthor: "Autore",
       aboutWebsite: "Sito Web",
       aboutRepo: "Repository",
       aboutLicense: "Licenza del Programma:",
       colorSchemeLabel: "Schema Colori:",
-      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna função pratica se non quella di aprire questa finestra informativa di avviso.",
+      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna funzione pratica se non quella di aprire questa finestra informativa di avviso.",
       languageLabel: "Lingua",
       layoutLabel: "Disposizione",
       zoomInLabel: "Aumenta Zoom",
@@ -232,7 +235,7 @@ SOFTWARE.`;
       stop: "Stopp",
       about: "Über Flowonline2...",
       aboutTitle: "Über Flowonline2",
-      aboutVersion: "Version ALPHA 2.0.9",
+      aboutVersionLabel: "Version",
       aboutAuthor: "Autor",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
@@ -267,7 +270,7 @@ SOFTWARE.`;
       stop: "Arrêter",
       about: "À propos de Flowonline2...",
       aboutTitle: "À propos de Flowonline2",
-      aboutVersion: "Version ALPHA 2.0.9",
+      aboutVersionLabel: "Version",
       aboutAuthor: "Auteur",
       aboutWebsite: "Site Web",
       aboutRepo: "Dépôt",
@@ -302,25 +305,48 @@ SOFTWARE.`;
       stop: "Detener",
       about: "Acerca de Flowonline2...",
       aboutTitle: "Acerca de Flowonline2",
-      aboutVersion: "Versión ALPHA 2.0.8",
+      aboutVersionLabel: "Versión",
       aboutAuthor: "Autor",
       aboutWebsite: "Sitio Web",
       aboutRepo: "Repositorio",
       aboutLicense: "Licencia:",
       colorSchemeLabel: "Esquema de colores:",
-      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente decorativos y no tienen ninguna función práctica más que mostrar este mensaje de advertencia.",
+      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente de diseño y no tienen ninguna función práctica más que mostrar este mensaje de advertencia.",
       languageLabel: "Idioma",
       layoutLabel: "Disposición",
       zoomInLabel: "Acercar",
       zoomOutLabel: "Alejar",
       zoomResetLabel: "Restablecer",
       licenseRepoLoaded: "Licencia cargada desde la raíz",
-      licenseFallbackLoaded: "Licencia cargada desde el código compilado de reserva",
+      licenseFallbackLoaded: "Licencia cargada desde el código de reserva",
       warningModalTitle: "Información del Sistema Windows"
     }
   };
 
   const mt = menuTranslations[language];
+
+  // Dynamically load the version.txt file FROM THE OFFICIAL GITHUB URL (Ensuring absolute live updating!)
+  useEffect(() => {
+    fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/refs/heads/main/version.txt')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to load version.');
+        return res.text();
+      })
+      .then((text) => setAppVersion(text.trim()))
+      .catch((err) => {
+        console.warn('Unable to load live version, trying local fallback:', err);
+        // Fallback local fetch
+        fetch('./version.txt')
+          .then((localRes) => {
+            if (!localRes.ok) throw new Error('Local version.txt missing.');
+            return localRes.text();
+          })
+          .then((text) => setAppVersion(text.trim()))
+          .catch(() => {
+            setAppVersion('ALPHA 2.0.11'); // Local final fallback
+          });
+      });
+  }, []);
 
   // Dynamically load the LICENSE file FROM THE OFFICIAL GITHUB URL (Ensuring absolute live updating!)
   useEffect(() => {
@@ -473,10 +499,14 @@ SOFTWARE.`;
     { id: 'flow_code', label: '📝', tooltip: 'Flowchart & Source Code' }
   ];
 
+  const handleDecorativeButtonClick = () => {
+    setShowWarningModal(true);
+  };
+
   return (
     <div className="flex flex-col w-full z-30 select-none shadow-md shrink-0">
       
-      {/* ============ TITLE BAR (Faithful Windows Desktop Style) ============ */}
+      {/* ============ TITLE BAR (Faithful Windows Desktop Style - VERSION DYNAMICALLY LOADED!) ============ */}
       <div 
         className="h-[28px] text-white flex items-center justify-between px-[6px] border-b border-[#1F3354]"
         style={{
@@ -492,26 +522,26 @@ SOFTWARE.`;
             <polygon points="18,18 28,18 26,26 20,26" fill="#4B9DDC" stroke="#333" strokeWidth="1.5" />
           </svg>
           <span className="text-[11px] font-semibold text-white font-sans tracking-wide">
-            Flowonline2 ALPHA 2.0.8 - {programTitle || 'Untitled'}.fprg
+            Flowonline2 {appVersion} - {programTitle || 'Untitled'}.fprg
           </span>
         </div>
 
         {/* Windows Frame Minimize / Maximize / Close simulation with custom Win32 warning dialog modal! */}
         <div className="flex h-full">
           <button 
-            onClick={() => setShowWarningModal(true)}
+            onClick={handleDecorativeButtonClick}
             className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition"
           >
             ─
           </button>
           <button 
-            onClick={() => setShowWarningModal(true)}
+            onClick={handleDecorativeButtonClick}
             className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition"
           >
             ▢
           </button>
           <button 
-            onClick={() => setShowWarningModal(true)}
+            onClick={handleDecorativeButtonClick}
             className="w-[44px] h-[28px] hover:bg-red-600 text-white font-sans text-[11px] transition"
           >
             ✕
@@ -647,7 +677,7 @@ SOFTWARE.`;
           <button
             onClick={() => toggleDropdown('program')}
             onMouseEnter={() => handleMenuMouseEnter('program')}
-            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'program' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -878,7 +908,7 @@ SOFTWARE.`;
           </div>
         </div>
 
-        {/* INTEGRATE ZOOM CONTROLS ON THE RIGHT SIDE OF THE TOOLBAR (ALPHA 2.0.8 Requirement!) */}
+        {/* INTEGRATE ZOOM CONTROLS ON THE RIGHT SIDE OF THE TOOLBAR */}
         <div className="flex items-center gap-1.5 pr-2.5">
           <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[4px] shadow-[1px_0_0_#FAFAFA]"></div>
           <button
@@ -950,7 +980,7 @@ SOFTWARE.`;
 
                 <div className="flex flex-col gap-0.5 leading-tight text-[12px] font-sans">
                   <h4 className="font-extrabold text-[17px] text-slate-900 tracking-wide">Flowonline2</h4>
-                  <p className="text-[12px] text-slate-500 font-semibold">{mt.aboutVersion}</p>
+                  <p className="text-[12px] text-slate-500 font-semibold">{mt.aboutVersionLabel} {appVersion}</p>
                   <p className="text-[12px] text-slate-600 mt-2">
                     {mt.aboutAuthor}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">PiBOH</a>
                   </p>
