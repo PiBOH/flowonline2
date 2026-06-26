@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="Euclid's Algorithm"/>
+        <attribute name="authors" value="Euclid"/>
+        <attribute name="about" value="This ancient algorithm finds the greatest common demoninator between two integers. There are variations that exist - which make use modulus rather than an If Statement. This is the original version."/>
+        <attribute name="saved" value="2026-03-07 08:40:49 "/>
+        <attribute name="created" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTA2OyIwNDowMTowNCAiOzI2MzY="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTA3OyIwODo0MDo0OSAiOzQ7Mjc2NA=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="A" type="Real" array="False" size=""/>
+            <declare name="B" type="Real" array="False" size=""/>
+            <output expression="&quot;inserisci due numeri. Questo algoritmo andr&#224; a calcolarne poi il massimo comune divisore (MCD).&quot;" newline="True"/>
+            <output expression="&quot;Inserire il primo&quot;" newline="True"/>
+            <input variable="A"/>
+            <output expression="&quot;OK, Inserire il secondo&quot;" newline="True"/>
+            <input variable="B"/>
+            <output expression="&quot;Calcolo in corso...&quot;" newline="True"/>
+            <while expression="not (B = 0)">
+                <if expression="A &gt; B">
+                    <then>
+                        <assign variable="A" expression="A - B"/>
+                    </then>
+                    <else>
+                        <assign variable="B" expression="B - A"/>
+                    </else>
+                </if>
+            </while>
+            <output expression="A" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

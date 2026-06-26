@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="COMPITOCLASSE_5 NUMERI INTERI IN INPUT CONTA QUANTI SONO PARI"/>
+        <attribute name="authors" value="pietro.bonaldo"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-03-20 09:56:59 "/>
+        <attribute name="created" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0xOTsiMTI6NTY6MTggIjszMzYy"/>
+        <attribute name="edited" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0xOTsiMDE6NTQ6MTkgIjsxMDszNTE1"/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTIwOyIwOTo1Njo1OSAiOzY7Mjc3MA=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="CONSEGNA&#13;&#10;&#13;&#10;DATI 5 NUMERI INTERI IN INPUT CONTA QUANTI SONO PARI"/>
+            <output expression="&quot;Inserisci 5 numeri reali e io ti dir&#242; quanti sono pari e la somma tra questi ultimi&quot;" newline="True"/>
+            <declare name="A, B, C, D, E, P, s" type="Real" array="False" size=""/>
+            <input variable="a"/>
+            <input variable="b"/>
+            <input variable="c"/>
+            <input variable="d"/>
+            <input variable="e"/>
+            <assign variable="P" expression="0"/>
+            <assign variable="s" expression="0"/>
+            <if expression="a%2==0">
+                <then>
+                    <assign variable="P" expression="P+1"/>
+                    <assign variable="S" expression="S+A"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="B%2==0">
+                <then>
+                    <assign variable="P" expression="P+1"/>
+                    <assign variable="S" expression="S+B"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="C%2==0">
+                <then>
+                    <assign variable="P" expression="P+1"/>
+                    <assign variable="s" expression="s+c"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="D%2==0">
+                <then>
+                    <assign variable="P" expression="P+1"/>
+                    <assign variable="s" expression="s+d"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="E%2==0">
+                <then>
+                    <assign variable="P" expression="P+1"/>
+                    <assign variable="s" expression="s+e"/>
+                </then>
+                <else/>
+            </if>
+            <output expression="&quot;IL NUMERO DI NUMERI PARI CHE HAI INSERITO &#232; &quot;&amp;P" newline="True"/>
+            <output expression="&quot;La somma tra i numeri pari &#232; &quot;&amp;s" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

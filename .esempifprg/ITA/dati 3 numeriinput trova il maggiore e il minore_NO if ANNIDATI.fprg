@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="dati 3 numeriinput trova il maggiore e il minore_NO if ANNIDATI"/>
+        <attribute name="authors" value="pietro.bonaldo"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-03-25 04:34:59 "/>
+        <attribute name="created" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTE3OyIwNDoxNjozNyAiOzI2NTA="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTE3OyIwNDoxOTozMiAiOzE7VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTEyOyIwODo1NzozNSAiO2RhdGkgMyBudW1lcmlpbnB1dCB0cm92YSBpbCBtYWdnaW9yZV9ubyBpZiBhbm5pZGF0aS5mcHJnOzEwODg3"/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTI1OyIwNDozNDo1OSAiOzE1OzI4MTQ="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="CONSEGNA&#13;&#10;&#13;&#10;Sul quaderno con la penna: scrivere un algoritmo come flowchart che, dati tre numeri in input, stampi in output il maggiore e il minore."/>
+            <declare name="x, y, z, mg, min" type="Real" array="False" size=""/>
+            <declare name="txtmg, txtmin" type="String" array="False" size=""/>
+            <assign variable="txtmg" expression="&quot;il numero MAGGIORE tra i tre che hai inserito &#232;: &quot;"/>
+            <assign variable="txtmin" expression="&quot;il numero minore tra i tre che hai inserito &#232;: &quot;"/>
+            <output expression="&quot;questo programma trover&#224;, tra i tre numeri reali che inserirai, quello maggiore e quello minore&quot;" newline="True"/>
+            <output expression="&quot;Inserire il primo numero&quot;" newline="True"/>
+            <input variable="x"/>
+            <output expression="&quot;Inserire il secondo&quot;" newline="True"/>
+            <input variable="y"/>
+            <output expression="&quot;Inserire il terzo&quot;" newline="True"/>
+            <input variable="z"/>
+            <comment text="escludo y e trovo il numero maggiore tra &quot;x&quot; e &quot;z&quot;&#13;&#10;assegno quindi a mg1 il numero che risulter&#224; maggiore"/>
+            <if expression="x&gt;z">
+                <then>
+                    <assign variable="mg" expression="x"/>
+                </then>
+                <else>
+                    <assign variable="mg" expression="z"/>
+                </else>
+            </if>
+            <comment text="ora confronto mg con y e assegno a mg il valore maggiore tra i due"/>
+            <if expression="mg&gt;y">
+                <then/>
+                <else>
+                    <assign variable="mg" expression="y"/>
+                </else>
+            </if>
+            <comment text="una volta trovato il numero maggiore lo stampo sullo schermo"/>
+            <output expression="txtmg&amp;mg" newline="True"/>
+            <comment text="Ora confronto &quot;x&quot; e &quot;z&quot; trovo quello minore e assegno a min il valore minore tra i due"/>
+            <if expression="x&lt;z">
+                <then>
+                    <assign variable="min" expression="x"/>
+                </then>
+                <else>
+                    <assign variable="min" expression="z"/>
+                </else>
+            </if>
+            <comment text="Ora confronto &quot;min&quot; e &quot;y&quot; trovo quello minore e assegno a min il valore minore tra i due"/>
+            <if expression="min&lt;y">
+                <then/>
+                <else>
+                    <assign variable="min" expression="y"/>
+                </else>
+            </if>
+            <comment text="una volta trovato il numero minore lo stampo sullo schermo"/>
+            <output expression="txtmin&amp;min" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

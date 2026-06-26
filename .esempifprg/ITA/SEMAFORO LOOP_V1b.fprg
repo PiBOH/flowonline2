@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="SEMAFORO LOOP_V1"/>
+        <attribute name="authors" value="PiBOH"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-05-01 02:49:24 "/>
+        <attribute name="created" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA1LTAxOyIxMjowMzoxMSAiOzI2MzI="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA1LTAxOyIwMjo0OToyMSAiOzEwO1V0ZW50ZTtBU1VTSTctSzU1VkQ7MjAyNi0wNS0wMTsiMTI6MDM6MTEgIjtTRU1BRk9STyBMT09QX1YxLmZwcmc7NzIwNQ=="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA1LTAxOyIwMjo0OToyNCAiOzMyOzI4MDU="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="Immagina di progettare il cervello di un semaforo intelligente per un incrocio. Il tuo compito &#232; creare un programma su Flowgorithm che chieda all'utente il colore della luce del semaforo e decida, grazie a una condizione, quale messaggio mostrare agli automobilisti."/>
+            <declare name="clr, txt, txts, loop" type="String" array="False" size=""/>
+            <declare name="cn" type="Integer" array="False" size=""/>
+            <assign variable="cn" expression="3"/>
+            <output expression="&quot;Ora scrivi in MAIUSCOLO di che colore &#232; il semaforo&quot;&amp;ToChar(13)&amp;&quot;Scegli tra:&quot;&amp;ToChar(13)&amp;ToChar(13)&amp;&quot;VERDE&quot;&amp;ToChar(13)&amp;&quot;GIALLO&quot;&amp;ToChar(13)&amp;&quot;ROSSO&quot;" newline="True"/>
+            <assign variable="txts" expression="&quot;Il colore del Semaforo &#232;: &quot;"/>
+            <comment text="ora controllo se la variabile cn (contatore) ha valore diverso da 0&#13;&#10;se corrisponde a 0 allora il programma si arresta&#13;&#10;se ha valore diverso da zero allora fa richiesta del colore del semaforo"/>
+            <while expression="cn&lt;&gt;0">
+                <comment text="ora chiedo di che colore &#232; il semaforo&#13;&#10;N.B. il colore va scritto in MAIUSCOLO O IL PROGRAMMA DAR&#224; ERRORE"/>
+                <input variable="clr"/>
+                <comment text="se il colore non corrispponde a &quot;VERDE&quot; &quot;GIALLO&quot; &quot;ROSSO&quot; allora assegno alla variabile txt un messaggio di errore"/>
+                <assign variable="txt" expression="ToChar(13)&amp;&quot;-x-x-x- ERRORE -x-x-x-&quot;&amp;ToChar(13)&amp;&quot;Controlla di avere scritto correttamente il colore del semaforo&quot;&amp;ToChar(13)&amp;ToChar(13)&amp;&quot;Error Code: Color not found (0x001)&quot;"/>
+                <comment text="ora controllo di che colore &#232; il semaforo e in base al colore assegno ad un variabile txt il rispettivo testo al posto del messaggio di errore"/>
+                <if expression="clr==&quot;VERDE&quot;">
+                    <then>
+                        <assign variable="txt" expression="ToChar(13)&amp;&quot;Puoi Prosegiure Tranquillamente&quot;"/>
+                    </then>
+                    <else/>
+                </if>
+                <if expression="clr==&quot;GIALLO&quot;">
+                    <then>
+                        <assign variable="txt" expression="ToChar(13)&amp;&quot;Fai Attenzione, Rallenta e fermati&quot;"/>
+                    </then>
+                    <else/>
+                </if>
+                <if expression="clr==&quot;ROSSO&quot;">
+                    <then>
+                        <assign variable="txt" expression="ToChar(13)&amp;&quot;FERMATI O VERRAI MULTATO!&quot;"/>
+                    </then>
+                    <else/>
+                </if>
+                <comment text="mando in output la variabile txt"/>
+                <output expression="txts&amp;clr&amp;ToChar(13)&amp;txt" newline="True"/>
+                <comment text="chiedo se si vuole ripetere il tutto"/>
+                <output expression="&quot;Vuoi ripetere il Programma?&quot;&amp;ToChar(13)&amp;&quot;digita in MAIUSCOLO la tua risporta (scegli tra le seguenti)&quot;&amp;ToChar(13)&amp;ToChar(13)&amp;&quot;SI&quot;&amp;ToChar(13)&amp;&quot;NO&quot;" newline="True"/>
+                <input variable="loop"/>
+                <if expression="loop==&quot;SI&quot;">
+                    <then>
+                        <comment text="se la risposta &#232; &quot;SI&quot; allora assegno a cn un valora diverso da zero in modo che il ciclo ricominci"/>
+                        <assign variable="cn" expression="3"/>
+                        <output expression="&quot;Di che colore &#232; il semaforo adesso?&quot;" newline="True"/>
+                    </then>
+                    <else>
+                        <comment text="se loop &#232; diverso da &quot;SI&quot; allora assegno a cn il valore 0 cos&#236; al prossimo cilco il programma si arrester&#224;"/>
+                        <assign variable="cn" expression="0"/>
+                        <output expression="&quot;dato che la tua risposta non corrisponde a SI il programma si &#232; arrestato.&quot;&amp;ToChar(13)&amp;&quot;(la tua risposta &#232;: ''&quot;&amp;loop&amp;&quot;'')&quot;" newline="True"/>
+                    </else>
+                </if>
+            </while>
+        </body>
+    </function>
+</flowgorithm>

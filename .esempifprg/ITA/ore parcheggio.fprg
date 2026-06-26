@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="ore parcheggio"/>
+        <attribute name="authors" value="pietro.bonaldo"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-06-04 01:26:18 "/>
+        <attribute name="created" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wNi0wNDsiMTI6NDY6MDcgIjszMzU2"/>
+        <attribute name="edited" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wNi0wNDsiMDE6MjY6MTggIjs3OzM0Njg="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="Scrivi un algoritmo che riceva in input il numero di ore intere di permanenza di un'auto nel parcheggio e calcoli il costo totale del biglietto in base alle seguenti regole tariffarie:&#13;&#10;Fino a 2 ore (comprese): il costo &#232; di 2,00 &#8364; all'ora.&#13;&#10;Oltre le 2 ore e fino a 5 ore (comprese): le prime due ore si pagano sempre 2,00 &#8364; l'una, mentre per le ore successive la tariffa scende a 1,50 &#8364; all'ora.&#13;&#10;Oltre le 5 ore: viene applicata una tariffa fissa giornaliera pari a 12,00 &#8364;, indipendentemente da quante ore l'auto rimanga parcheggiata (fino a un massimo di 24 ore).&#13;&#10;Se l'utente inserisce un numero di ore minore o uguale a 0, l'algoritmo deve mostrare un messaggio di errore: &quot;Input non valido&quot;."/>
+            <declare name="ore, ore2" type="Integer" array="False" size=""/>
+            <declare name="costo, c5, c2" type="Real" array="False" size=""/>
+            <output expression="&quot;Inserire il numero di ore che hai parcheggiato&quot;" newline="True"/>
+            <input variable="ore"/>
+            <if expression="ore&lt;=0">
+                <then>
+                    <output expression="&quot;-x-x-X- ERRORE -X-x-x-&quot;&amp;ToChar(13)&amp;&quot;Input non valido&quot;" newline="True"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="ore&lt;=2&amp;&amp;ore&gt;0">
+                <then>
+                    <assign variable="costo" expression="ore*2"/>
+                    <output expression="&quot;devi pagare &#8364;&quot;&amp;costo&amp;&quot;.00&quot;" newline="True"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="ore&gt;2&amp;&amp;ore&lt;=5">
+                <then>
+                    <assign variable="ore2" expression="2"/>
+                    <assign variable="ore" expression="ore-ore2"/>
+                    <assign variable="c2" expression="ore2*2"/>
+                    <assign variable="c5" expression="ore*1.50"/>
+                    <assign variable="costo" expression="c2+c5"/>
+                    <output expression="&quot;devi pagare &#8364;&quot;&amp;costo" newline="True"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="ore&gt;5">
+                <then>
+                    <assign variable="costo" expression="12"/>
+                    <output expression="&quot;devi pagare &#8364;&quot;&amp;costo&amp;&quot;.00&quot;" newline="True"/>
+                </then>
+                <else/>
+            </if>
+        </body>
+    </function>
+</flowgorithm>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="COMPITOCLASSE_dati 3 num input calcola meddia e media quardati"/>
+        <attribute name="authors" value="pietro.bonaldo"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-03-07 08:33:37 "/>
+        <attribute name="created" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0wNTsiMDE6NDM6MjAgIjszMzQ0"/>
+        <attribute name="edited" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0wNTsiMDE6NTk6MjEgIjs1OzM0NjQ="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTA3OyIwODozMzozNyAiOzQ7Mjc2Mw=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="CONSEGNA DATA IN CLASSE:&#13;&#10;&#13;&#10;Dati 3 numeri in INPUT, calcolare la media e la media dei quadrati."/>
+            <declare name="x, y, z, M, Mq, x2, y2, z2" type="Real" array="False" size=""/>
+            <output expression="&quot;Questo programma calcola la media tra i 3 numeri (anche con la virgola e\o negativi) che inserirai&quot;" newline="True"/>
+            <output expression="&quot;inserisci il primo numero&quot;" newline="True"/>
+            <input variable="x"/>
+            <output expression="&quot;OK, il primo numero(&quot;&amp;x&amp;&quot;) &#232; stato inserito con successo!&quot;&amp;ToChar(13)&amp;&quot;Ora inserisci il secondo&quot;" newline="True"/>
+            <input variable="y"/>
+            <output expression="&quot;OK, anche il secondo numero(&quot;&amp;y&amp;&quot;) &#232; stato inserito con successo!&quot;&amp;ToChar(13)&amp;&quot;Ora inserisci il terzo e ultimo&quot;" newline="True"/>
+            <input variable="z"/>
+            <output expression="&quot;Hai inserito i seguenti numeri:&quot;&amp;toChar (13)&amp;x&amp;toChar (13)&amp;y&amp;toChar (13)&amp;z&amp;toChar (13)&amp;&quot;Ora procedo con il calcolo della media e della media dei loro quedrati&quot;" newline="True"/>
+            <assign variable="M" expression="(x+y+z)/3"/>
+            <assign variable="x2" expression="x^2"/>
+            <assign variable="y2" expression="y^2"/>
+            <assign variable="z2" expression="z^2"/>
+            <assign variable="mq" expression="(x2+y2+z2)/3"/>
+            <output expression="&quot;la media tra i numeri inseriti &#232; &quot;&amp;M" newline="True"/>
+            <output expression="&quot;la media tra i quardati dei numeri inseriti &#232; &quot;&amp;Mq" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

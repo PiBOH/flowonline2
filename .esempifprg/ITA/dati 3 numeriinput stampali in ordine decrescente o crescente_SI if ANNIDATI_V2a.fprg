@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="Es 13"/>
+        <attribute name="authors" value="PC"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-03-25 09:52:02 "/>
+        <attribute name="created" value="UEM7REVTS1RPUC1ER1AwSzNJOzIwMjYtMDMtMjQ7IjA1OjI5OjU1ICI7MjM5Ng=="/>
+        <attribute name="edited" value="UEM7REVTS1RPUC1ER1AwSzNJOzIwMjYtMDMtMjQ7IjA2OjA0OjEwICI7MTsyNDg5"/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTI1OyIwNDozNTowMiAiOzE7VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTE3OyIwNDoxNjozNyAiO2RhdGkgMyBudW1lcmlpbnB1dCB0cm92YSBpbCBtYWdnaW9yZSBlIGlsIG1pbm9yZV9OTyBpZiBBTk5JREFUSS5mcHJnOzExNjE5"/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTI1OyIwOTo1MjowMCAiOzE7UEM7REVTS1RPUC1ER1AwSzNJOzIwMjYtMDMtMjQ7IjA1OjI5OjU1ICI7ZGF0aSAzIG51bWVyaWlucHV0IHN0YW1wYWxpIGluIG9yZGluZSBkZWNyZXNjZW50ZSBvIGNyZXNjZW50ZV9TSSBpZiBBTk5JREFUSV9WMmItYWdnaXVudG8gaWYgY3Jlc2NudGUuZnByZzsxNTA5MQ=="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTI1OyIwOTo1MjowMiAiOzIwOzI4MDM="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="CONSEGNA&#13;&#10;&#13;&#10;dati 3 numeri in input stampali in ordine decrescente o crescente"/>
+            <declare name="x, y, z, mg, min, med" type="Real" array="False" size=""/>
+            <declare name="scelta, txt" type="String" array="False" size=""/>
+            <output expression="&quot;inserisci 3 numeri separandoli premendo invio&quot;" newline="True"/>
+            <input variable="x"/>
+            <input variable="y"/>
+            <input variable="z"/>
+            <if expression="x&lt;z">
+                <then>
+                    <assign variable="min" expression="x"/>
+                    <assign variable="mg" expression="z"/>
+                </then>
+                <else>
+                    <assign variable="min" expression="z"/>
+                    <assign variable="mg" expression="x"/>
+                </else>
+            </if>
+            <if expression="min&lt;y">
+                <then/>
+                <else>
+                    <assign variable="min" expression="y"/>
+                </else>
+            </if>
+            <if expression="mg&gt;y">
+                <then/>
+                <else>
+                    <assign variable="mg" expression="y"/>
+                </else>
+            </if>
+            <if expression="mg==x&amp;&amp;min==y">
+                <then>
+                    <assign variable="med" expression="z"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="mg==x&amp;&amp;min==z">
+                <then>
+                    <assign variable="med" expression="y"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="mg==y&amp;&amp;min==x">
+                <then>
+                    <assign variable="med" expression="z"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="mg==y&amp;&amp;min==z">
+                <then>
+                    <assign variable="med" expression="x"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="mg==z&amp;&amp;min==y">
+                <then>
+                    <assign variable="med" expression="x"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="mg==z&amp;&amp;min==x">
+                <then>
+                    <assign variable="med" expression="y"/>
+                </then>
+                <else/>
+            </if>
+            <output expression="&quot;ora scrivi&quot;&amp;ToChar(13)&amp;&quot;crescente (in MAIUSCLO) se vuoi i numeri in ordine crescente&quot;&amp;ToChar(13)&amp;&quot;decrescente (in MAIUSCLO) se vuoi i numeri in ordine decrescente&quot;" newline="True"/>
+            <input variable="scelta"/>
+            <if expression="scelta==&quot;decrescente&quot;">
+                <then>
+                    <assign variable="txt" expression="&quot;I tuoi numeri ordinati in ordine decrescente sono: &quot;"/>
+                    <output expression="txt&amp;mg&amp;&quot;, &quot;&amp;med&amp;&quot;, &quot;&amp;min" newline="True"/>
+                </then>
+                <else>
+                    <assign variable="txt" expression="&quot;I tuoi numeri ordinati in ordine crescente sono: &quot;"/>
+                    <output expression="txt&amp;min&amp;&quot;, &quot;&amp;med&amp;&quot;, &quot;&amp;mg" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>

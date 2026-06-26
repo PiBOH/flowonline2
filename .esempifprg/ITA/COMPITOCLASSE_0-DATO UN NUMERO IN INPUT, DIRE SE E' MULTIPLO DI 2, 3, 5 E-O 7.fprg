@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="COMPITOCLASSE_0-DATO UN NUMERO IN INPUT, DIRE SE E' MULTIPLO DI 2, 3, 5 E-O 7"/>
+        <attribute name="authors" value="pietro.bonaldo"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-04-02 02:32:21 "/>
+        <attribute name="created" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0yNjsiMDE6MDk6MzIgIjszMzUy"/>
+        <attribute name="edited" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0yNjsiMDE6MjE6NDMgIjs2OzM0NjE="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA0LTAyOyIwMjozMjoyMSAiOzE7Mjc0Mg=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="CONSEGNA&#13;&#10;&#13;&#10;DATO UN NUMERO IN INPUT, DIRE SE E' MULTIPLO DI 2, 3, 5 E/O 7"/>
+            <declare name="X" type="Integer" array="False" size=""/>
+            <input variable="X"/>
+            <if expression="X%2==0">
+                <then>
+                    <output expression="X&amp;&quot; &#232; MULTIPLO DI 2&quot;" newline="True"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="X%3==0">
+                <then>
+                    <output expression="X&amp;&quot; &#232; MULTIPLO DI 3&quot;" newline="True"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="X%5==0">
+                <then>
+                    <output expression="X&amp;&quot; &#232; MULTIPLO DI 5&quot;" newline="True"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="X%7==0">
+                <then>
+                    <output expression="X&amp;&quot; &#232; MULTIPLO DI 7&quot;" newline="True"/>
+                </then>
+                <else/>
+            </if>
+        </body>
+    </function>
+</flowgorithm>

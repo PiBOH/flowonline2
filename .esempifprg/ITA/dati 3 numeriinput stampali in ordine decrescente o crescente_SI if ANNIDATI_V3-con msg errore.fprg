@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="COMPITOCASA_dati 3 num input scegli se vedere in ordine cescente o decrescente"/>
+        <attribute name="authors" value="pietro.bonaldo"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-03-26 01:48:54 "/>
+        <attribute name="created" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0yNjsiMTI6MDk6NDAgIjszMzUz"/>
+        <attribute name="edited" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0yNjsiMDE6NDg6NTQgIjs3OzM0NzM="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="x, y, z, mg, min, med" type="Real" array="False" size=""/>
+            <declare name="scelta, txt" type="String" array="False" size=""/>
+            <output expression="&quot;dammi 3 numeri&quot;" newline="True"/>
+            <input variable="x"/>
+            <input variable="y"/>
+            <input variable="z"/>
+            <if expression="x&lt;z">
+                <then>
+                    <assign variable="min" expression="x"/>
+                    <assign variable="mg" expression="z"/>
+                </then>
+                <else>
+                    <assign variable="min" expression="z"/>
+                    <assign variable="mg" expression="x"/>
+                </else>
+            </if>
+            <if expression="min&lt;y">
+                <then/>
+                <else>
+                    <assign variable="min" expression="y"/>
+                </else>
+            </if>
+            <if expression="mg&gt;y">
+                <then/>
+                <else>
+                    <assign variable="mg" expression="y"/>
+                </else>
+            </if>
+            <if expression="mg==x&amp;&amp;min==y">
+                <then>
+                    <assign variable="med" expression="z"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="mg==x&amp;&amp;min==z">
+                <then>
+                    <assign variable="med" expression="y"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="mg==y&amp;&amp;min==x">
+                <then>
+                    <assign variable="med" expression="z"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="mg==y&amp;&amp;min==z">
+                <then>
+                    <assign variable="med" expression="x"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="mg==z&amp;&amp;min==y">
+                <then>
+                    <assign variable="med" expression="x"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="mg==z&amp;&amp;min==x">
+                <then>
+                    <assign variable="med" expression="y"/>
+                </then>
+                <else/>
+            </if>
+            <output expression="&quot;ora scrivi DECRESCENTE (in maiuscolo) se vuoi vedere i numeri in ordine decrescente&quot;&amp;ToChar(13)&amp;&quot;CRESCENTE (in maiuscolo) se vuoi vedere i numeri in ordine crescente&quot;" newline="True"/>
+            <input variable="scelta"/>
+            <if expression="scelta&lt;&gt;&quot;CRESCENTE&quot;">
+                <then>
+                    <if expression="scelta==&quot;DECRESCENTE&quot;">
+                        <then>
+                            <assign variable="txt" expression="&quot;I tuoi numeri in ordine decrescente sono: &quot;"/>
+                            <output expression="txt&amp;mg&amp;&quot;, &quot;&amp;med&amp;&quot;, &quot;&amp;min" newline="True"/>
+                        </then>
+                        <else>
+                            <output expression="&quot;ERRORE&quot;&amp;ToChar(13)&amp;&quot;Controlla di avere scritto bene l'ordine in cui li volevi&quot;" newline="True"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <if expression="scelta==&quot;CRESCENTE&quot;">
+                        <then>
+                            <assign variable="txt" expression="&quot;I tuoi numeri in ordine crescente sono: &quot;"/>
+                            <output expression="txt&amp;min&amp;&quot;, &quot;&amp;med&amp;&quot;, &quot;&amp;mg" newline="True"/>
+                        </then>
+                        <else>
+                            <if expression="scelta&lt;&gt;&quot;DECRESCENTE&quot;">
+                                <then>
+                                    <output expression="&quot;ERRORE&quot;&amp;ToChar(13)&amp;&quot;Controlla di avere scritto bene l'ordine in cui li volevi&quot;" newline="True"/>
+                                </then>
+                                <else/>
+                            </if>
+                        </else>
+                    </if>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>

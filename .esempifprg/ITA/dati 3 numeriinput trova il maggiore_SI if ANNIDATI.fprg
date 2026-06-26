@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="dati 3 numeriinput trova il maggiore_SI if ANNIDATI"/>
+        <attribute name="authors" value="Utente"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-03-13 04:14:15 "/>
+        <attribute name="created" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTEzOyIwNDoxMTowMiAiOzI2MzM="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTEzOyIwNDoxNDoxNSAiOzM7Mjc1MA=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="x, y, z, mag" type="Real" array="False" size=""/>
+            <input variable="x"/>
+            <input variable="y"/>
+            <input variable="z"/>
+            <if expression="x&lt;y">
+                <then>
+                    <if expression="y&gt;z">
+                        <then>
+                            <assign variable="mag" expression="y"/>
+                        </then>
+                        <else>
+                            <assign variable="mag" expression="z"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <if expression="x&gt;z">
+                        <then>
+                            <assign variable="mag" expression="x"/>
+                        </then>
+                        <else>
+                            <assign variable="mag" expression="z"/>
+                        </else>
+                    </if>
+                </else>
+            </if>
+            <output expression="&quot;il numero maggiore &#232; &quot;&amp;mag" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

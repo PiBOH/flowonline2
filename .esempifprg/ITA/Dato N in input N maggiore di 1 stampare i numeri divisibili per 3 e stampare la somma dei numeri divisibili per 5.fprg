@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="Dato N in input N maggiore di 1 stampare i numeri divisibili per 3 e stampare la somma dei numeri divisibili per 5"/>
+        <attribute name="authors" value="Utente"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-05-23 04:19:53 "/>
+        <attribute name="created" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA1LTIyOyIwNjoxMjoxMiAiOzI2Mzk="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA1LTIzOyIwNDoxOTo1MyAiOzEzOzI4MDk="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="Fare sul quaderno questo algoritmo: Dato N in input (N maggiore di 1) stampare i numeri divisibili per 3 e stampare la somma dei numeri divisibili per 5.&#13;&#10;Verificare il corretto funzionamento dell'algoritmo facendo tabella di traccia e output per N=13.&#13;&#10;"/>
+            <declare name="n, s, cndiv3, cnug3, norigi, m" type="Integer" array="False" size=""/>
+            <input variable="n"/>
+            <assign variable="m" expression="n"/>
+            <assign variable="s" expression="0"/>
+            <if expression="n&lt;1">
+                <then>
+                    <output expression="&quot;ERRORE&quot;&amp;ToChar(13)&amp;&quot;Il numero inserito deve essere MAGGIORE di 1&quot;" newline="True"/>
+                    <output expression="&quot;-x-x-X- RIAVVIO DELLO SCRIPT -X-x-x-&quot;" newline="True"/>
+                    <output expression="&quot;Inserire ora un numero intero&quot;" newline="True"/>
+                    <input variable="n"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="n%3!=0">
+                <then>
+                    <assign variable="n" expression="n-(N%3)"/>
+                </then>
+                <else/>
+            </if>
+            <while expression="n%3==0&amp;&amp;n&gt;0">
+                <output expression="n" newline="True"/>
+                <assign variable="n" expression="n-3"/>
+            </while>
+            <output expression="&quot;la soma dei valori di ''&quot;&amp;m&amp;&quot;'' diviso per 5 &#232;: &quot;" newline="True"/>
+            <if expression="m%5!=0">
+                <then>
+                    <assign variable="m" expression="m-(m%5)"/>
+                </then>
+                <else/>
+            </if>
+            <while expression="m%5==0&amp;&amp;m&gt;0">
+                <assign variable="s" expression="s+m"/>
+                <assign variable="m" expression="m-5"/>
+            </while>
+            <output expression="s" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

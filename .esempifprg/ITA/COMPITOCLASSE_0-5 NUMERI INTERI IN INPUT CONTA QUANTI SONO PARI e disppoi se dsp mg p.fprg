@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="COMPITOCLASSE_5 NUMERI INTERI IN INPUT CONTA QUANTI SONO PARI"/>
+        <attribute name="authors" value="pietro.bonaldo"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-03-26 01:08:58 "/>
+        <attribute name="created" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0xOTsiMTI6NTY6MTggIjszMzYy"/>
+        <attribute name="edited" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0yNjsiMDE6MDg6NTggIjsxMzszNTE4"/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="CONSEGNA&#13;&#10;&#13;&#10;DATI 5 NUMERI IN INPUT, DIRE SE CI SONO PIU' PARI O PIU' DISPARI"/>
+            <declare name="A, B, C, D, E, P, dsp" type="Real" array="False" size=""/>
+            <declare name="TXT" type="String" array="False" size=""/>
+            <input variable="a"/>
+            <input variable="b"/>
+            <input variable="c"/>
+            <input variable="d"/>
+            <input variable="e"/>
+            <assign variable="P" expression="0"/>
+            <assign variable="dsp" expression="0"/>
+            <if expression="a%2==0">
+                <then>
+                    <assign variable="P" expression="P+1"/>
+                </then>
+                <else>
+                    <assign variable="dsp" expression="dsp+1"/>
+                </else>
+            </if>
+            <if expression="B%2==0">
+                <then>
+                    <assign variable="P" expression="P+1"/>
+                </then>
+                <else>
+                    <assign variable="dsp" expression="dsp+1"/>
+                </else>
+            </if>
+            <if expression="C%2==0">
+                <then>
+                    <assign variable="P" expression="P+1"/>
+                </then>
+                <else>
+                    <assign variable="dsp" expression="dsp+1"/>
+                </else>
+            </if>
+            <if expression="D%2==0">
+                <then>
+                    <assign variable="P" expression="P+1"/>
+                </then>
+                <else>
+                    <assign variable="dsp" expression="dsp+1"/>
+                </else>
+            </if>
+            <if expression="E%2==0">
+                <then>
+                    <assign variable="P" expression="P+1"/>
+                </then>
+                <else>
+                    <assign variable="dsp" expression="dsp+1"/>
+                </else>
+            </if>
+            <comment text="e fino a qua ho trovato i numeri pari e dispari"/>
+            <if expression="dsp&gt;P">
+                <then>
+                    <assign variable="TXT" expression="&quot;I NUMERI DISPARI SONO DI PI&#249; DI QUELLI PARI&quot;"/>
+                </then>
+                <else>
+                    <assign variable="TXT" expression="&quot;I NUMERI PARI SONO DI PI&#249; DI QUELLI DISPARI&quot;"/>
+                </else>
+            </if>
+            <output expression="TXT" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

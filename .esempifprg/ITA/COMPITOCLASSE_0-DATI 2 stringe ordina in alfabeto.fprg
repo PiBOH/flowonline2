@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="COMPITOCLASSE_0-DATI 3 stringe ordina in alfabeto"/>
+        <attribute name="authors" value="pietro.bonaldo"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-04-01 08:12:10 "/>
+        <attribute name="created" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0yNjsiMTI6NTc6MTUgIjszMzU4"/>
+        <attribute name="edited" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0yNjsiMDE6NDM6MTMgIjs2OzM0NjI="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA0LTAxOyIwODoxMjoxMCAiOzI7Mjc0NA=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text=" DATE TRE STRINGHE IN INPUT, STAMPARLE IN ORDINE ALFABETICO"/>
+            <declare name="s1, s2, s3, txt" type="String" array="False" size=""/>
+            <output expression="&quot;dammi 2 frasi e io te le metter&#242; in ordine alfabetico&quot;" newline="True"/>
+            <input variable="s1"/>
+            <input variable="s2"/>
+            <if expression="s1&lt;s2">
+                <then>
+                    <assign variable="txt" expression="s1&amp;ToChar(13)&amp;s2"/>
+                </then>
+                <else>
+                    <assign variable="txt" expression="s2&amp;ToChar(13)&amp;s1"/>
+                </else>
+            </if>
+            <output expression="txt" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

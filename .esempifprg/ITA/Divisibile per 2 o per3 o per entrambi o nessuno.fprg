@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="Divisibile per 2 o per3 o per entrambi o nessuno"/>
+        <attribute name="authors" value="Utente"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-04-02 02:22:02 "/>
+        <attribute name="created" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA0LTAyOyIwMjoxMzo1MiAiOzI2Mzc="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA0LTAyOyIwMjoyMjowMiAiOzE7Mjc0MA=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="x" type="Integer" array="False" size=""/>
+            <declare name="txt" type="String" array="False" size=""/>
+            <output expression="&quot;dammi un numero e ti dir&#242; se &#232; divisibile per 2, per 3,  per entrambi, o se non &#232; divisibile per nessuno dei due&quot;" newline="True"/>
+            <input variable="x"/>
+            <if expression="x%2==0">
+                <then>
+                    <assign variable="txt" expression="&quot;Il tuo numero &#232; divisibile per 2&quot;"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="x%3==0">
+                <then>
+                    <assign variable="txt" expression="&quot;Il tuo numero &#232; divisibile per 3&quot;"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="x%2==0&amp;&amp;x%3==0">
+                <then>
+                    <assign variable="txt" expression="&quot;Il tuo numero &#232; divisibile sia per 2 sia per 3&quot;"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="x%2&lt;&gt;0&amp;&amp;x%3&lt;&gt;0">
+                <then>
+                    <assign variable="txt" expression="&quot;Il tuo numero non &#232; divisibile ne per 2 ne per 3&quot;"/>
+                </then>
+                <else/>
+            </if>
+            <output expression="txt" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

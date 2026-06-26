@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="COMPITOCLASSE_dati 3 num input calcola meddia e media quardati"/>
+        <attribute name="authors" value="pietro.bonaldo"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-03-06 08:41:41 "/>
+        <attribute name="created" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0wNTsiMDE6NDM6MjAgIjszMzQ0"/>
+        <attribute name="edited" value="cGlldHJvLmJvbmFsZG87TEFCSU5GMS1QQzQ7MjAyNi0wMy0wNTsiMDE6NTk6MjEgIjs1OzM0NjQ="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTA2OyIwODo0MTo0MSAiOzE7Mjc1Mw=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="n1, n2, n3, M, Mq, n12, n22, n32" type="Real" array="False" size=""/>
+            <output expression="&quot;inserisci 3 numeri&quot;" newline="True"/>
+            <input variable="n1"/>
+            <input variable="n2"/>
+            <input variable="n3"/>
+            <assign variable="M" expression="(n1+n2+n3)/3"/>
+            <assign variable="n12" expression="n1^2"/>
+            <assign variable="n22" expression="n2^2"/>
+            <assign variable="n32" expression="n3^2"/>
+            <assign variable="Mq" expression="(n12+n22+n32)/3"/>
+            <output expression="&quot;la media tra i numeri inseriti &#232; &quot;&amp;M" newline="True"/>
+            <output expression="&quot;la media tra i quardati numeri inseriti &#232; &quot;&amp;Mq" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

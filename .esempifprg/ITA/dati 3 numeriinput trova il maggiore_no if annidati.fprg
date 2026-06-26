@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="dati 3 numeriinput trova il maggiore_no if annidati"/>
+        <attribute name="authors" value="Utente"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-03-12 09:45:30 "/>
+        <attribute name="created" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTEyOyIwODo1NzozNSAiOzI2NTI="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTAzLTEyOyIwOTo0NTozMCAiOzg7Mjc2MA=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="CONSEGNA del compito&#13;&#10;dati tre numeri in input, stampi il maggiore dei tre &#8211; SENZA BLOCCHI CONDIZIONE ANNIDATI! "/>
+            <declare name="x, y, z, mg1, mg2, mg3" type="Real" array="False" size=""/>
+            <output expression="&quot;questo programma trover&#224;, tra i tre numeri reali che inserirai, quello maggiore&quot;" newline="True"/>
+            <output expression="&quot;Inserire il primo numero&quot;" newline="True"/>
+            <input variable="x"/>
+            <output expression="&quot;Inserire il secondo&quot;" newline="True"/>
+            <input variable="y"/>
+            <output expression="&quot;Inserire il terzo&quot;" newline="True"/>
+            <input variable="z"/>
+            <comment text="escludo y e trovo il numero maggiore tra &quot;x&quot; e &quot;z&quot;&#13;&#10;assegno quindi a mg1 il numero che risulter&#224; maggiore"/>
+            <if expression="x&gt;z">
+                <then>
+                    <assign variable="mg1" expression="x"/>
+                </then>
+                <else>
+                    <assign variable="mg1" expression="z"/>
+                </else>
+            </if>
+            <comment text="ora confronto mg1 con y e assegno a mg2 il valore maggiore tra i due"/>
+            <if expression="mg1&gt;y">
+                <then>
+                    <assign variable="mg2" expression="mg1"/>
+                </then>
+                <else>
+                    <assign variable="mg2" expression="y"/>
+                </else>
+            </if>
+            <comment text="ora metto invece a confronto mg1 e mg2, la variabile con valore pi&#249; alto verr&#224; assegnata a mg3"/>
+            <if expression="mg1&gt;mg2">
+                <then>
+                    <assign variable="mg3" expression="mg1"/>
+                </then>
+                <else>
+                    <assign variable="mg3" expression="mg2"/>
+                </else>
+            </if>
+            <comment text="una volta trovato il numero maggiore tra tutti questi (il quale corrisponder&#224; a mg3) dico al programma di farmelo leggere, completando quindi l'esercizio"/>
+            <comment text="il tutto senza annidare blocchi condizione"/>
+            <output expression="&quot;il numero maggiore tra i tre che hai inserito &#232;: &quot;&amp;mg3" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="dati n numeri positivi in input trovare il maggiore"/>
+        <attribute name="authors" value="Utente"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-05-23 04:42:04 "/>
+        <attribute name="created" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA1LTIzOyIwNDoyMDowNyAiOzI2NDE="/>
+        <attribute name="edited" value="VXRlbnRlO0FTVVNJNy1LNTVWRDsyMDI2LTA1LTIzOyIwNDo0MjowNCAiOzc7Mjc1Ng=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="dati n numeri positivi in input trovare il maggiore"/>
+            <declare name="n, mg, tmp, txtn" type="Integer" array="False" size=""/>
+            <assign variable="mg" expression="0"/>
+            <assign variable="txtn" expression="1"/>
+            <output expression="&quot;quanti numeri vuoi inserire?&quot;" newline="True"/>
+            <input variable="n"/>
+            <if expression="n&lt;0">
+                <then>
+                    <assign variable="n" expression="n*-1"/>
+                </then>
+                <else/>
+            </if>
+            <while expression="n&gt;0">
+                <output expression="&quot;Inserisci li &quot;&amp;txtn&amp;&quot;&#176; numero&quot;" newline="True"/>
+                <output expression="&quot;ti mancano &quot;&amp;n&amp;&quot; numeri da inserire&quot;" newline="True"/>
+                <input variable="tmp"/>
+                <if expression="mg&gt;tmp">
+                    <then/>
+                    <else>
+                        <assign variable="mg" expression="tmp"/>
+                    </else>
+                </if>
+                <assign variable="n" expression="n-1"/>
+                <assign variable="txtn" expression="txtn+1"/>
+            </while>
+            <output expression="&quot;Il numero maggiore tra i &quot;&amp;txtn-1&amp;&quot; numeri che hai inserito &#232;: &quot;&amp;ToChar(13)&amp;mg" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>
