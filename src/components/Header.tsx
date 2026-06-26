@@ -43,6 +43,7 @@ export const Header: React.FC = () => {
 
   // Dynamic App Version state (ALPHA 2.0.11 fallback default)
   const [appVersion, setAppVersion] = useState('ALPHA 2.0.11');
+  const [versionSource, setVersionSource] = useState<'repo' | 'fallback'>('repo');
 
   // About Modal state
   const [showAbout, setShowAbout] = useState(false);
@@ -95,7 +96,7 @@ SOFTWARE.`;
     stop: string;
     about: string;
     aboutTitle: string;
-    aboutVersionLabel: string; // "Version" label only, version value is dynamic!
+    aboutVersion: string; // Unified property name!
     aboutAuthor: string;
     aboutWebsite: string;
     aboutRepo: string;
@@ -109,6 +110,8 @@ SOFTWARE.`;
     zoomResetLabel: string;
     licenseRepoLoaded: string;
     licenseFallbackLoaded: string;
+    versionRepoLoaded: string;
+    versionFallbackLoaded: string;
     warningModalTitle: string;
   }> = {
     en: {
@@ -130,7 +133,7 @@ SOFTWARE.`;
       stop: "Stop",
       about: "About Flowonline2...",
       aboutTitle: "About Flowonline2",
-      aboutVersionLabel: "Version",
+      aboutVersion: "Version",
       aboutAuthor: "Author",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
@@ -142,8 +145,10 @@ SOFTWARE.`;
       zoomInLabel: "Zoom In",
       zoomOutLabel: "Zoom Out",
       zoomResetLabel: "Reset Zoom",
-      licenseRepoLoaded: "License dynamically loaded from repository root",
+      licenseRepoLoaded: "License dynamically loaded from GitHub",
       licenseFallbackLoaded: "License loaded from hardcoded fallback compilation code",
+      versionRepoLoaded: "Version dynamically loaded from GitHub",
+      versionFallbackLoaded: "Version loaded from hardcoded fallback compilation code",
       warningModalTitle: "Windows System Information"
     },
     en_GB: {
@@ -165,7 +170,7 @@ SOFTWARE.`;
       stop: "Stop",
       about: "About Flowonline2...",
       aboutTitle: "About Flowonline2",
-      aboutVersionLabel: "Version",
+      aboutVersion: "Version",
       aboutAuthor: "Author",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
@@ -177,8 +182,10 @@ SOFTWARE.`;
       zoomInLabel: "Zoom In",
       zoomOutLabel: "Zoom Out",
       zoomResetLabel: "Reset Zoom",
-      licenseRepoLoaded: "License dynamically loaded from repository root",
+      licenseRepoLoaded: "License dynamically loaded from GitHub",
       licenseFallbackLoaded: "License loaded from hardcoded fallback compilation code",
+      versionRepoLoaded: "Version dynamically loaded from GitHub",
+      versionFallbackLoaded: "Version loaded from hardcoded fallback compilation code",
       warningModalTitle: "Windows System Information"
     },
     it: {
@@ -200,7 +207,7 @@ SOFTWARE.`;
       stop: "Stop",
       about: "Informazioni su Flowonline2...",
       aboutTitle: "Informazioni su Flowonline2",
-      aboutVersionLabel: "Versione",
+      aboutVersion: "Versione",
       aboutAuthor: "Autore",
       aboutWebsite: "Sito Web",
       aboutRepo: "Repository",
@@ -212,8 +219,10 @@ SOFTWARE.`;
       zoomInLabel: "Aumenta Zoom",
       zoomOutLabel: "Riduci Zoom",
       zoomResetLabel: "Ripristina Zoom",
-      licenseRepoLoaded: "Licenza caricata dinamicamente dalla root del repository",
+      licenseRepoLoaded: "Licenza caricata dinamicamente da GitHub",
       licenseFallbackLoaded: "Licenza caricata dal codice compilato hardcoded (Fallback)",
+      versionRepoLoaded: "Versione caricata dinamicamente da GitHub",
+      versionFallbackLoaded: "Versione caricata dal codice compilato hardcoded (Fallback)",
       warningModalTitle: "Informazione di Sistema Windows"
     },
     de: {
@@ -235,7 +244,7 @@ SOFTWARE.`;
       stop: "Stopp",
       about: "Über Flowonline2...",
       aboutTitle: "Über Flowonline2",
-      aboutVersionLabel: "Version",
+      aboutVersion: "Version",
       aboutAuthor: "Autor",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
@@ -247,9 +256,11 @@ SOFTWARE.`;
       zoomInLabel: "Vergrößern",
       zoomOutLabel: "Verkleinern",
       zoomResetLabel: "Zoom zurücksetzen",
-      licenseRepoLoaded: "Lizenz dynamisch aus dem Repository-Stammverzeichnis geladen",
-      licenseFallbackLoaded: "Lizenz aus dem fest codierten Fallback-Kompilierungscode geladen",
-      warningModalTitle: "Windows-Systeminformationen"
+      licenseRepoLoaded: "Licence loaded from GitHub",
+      licenseFallbackLoaded: "Licence loaded from fallback",
+      versionRepoLoaded: "Version loaded from GitHub",
+      versionFallbackLoaded: "Version loaded from fallback",
+      warningModalTitle: "Windows Systeminformationen"
     },
     fr: {
       file: "Fichier",
@@ -270,7 +281,7 @@ SOFTWARE.`;
       stop: "Arrêter",
       about: "À propos de Flowonline2...",
       aboutTitle: "À propos de Flowonline2",
-      aboutVersionLabel: "Version",
+      aboutVersion: "Version",
       aboutAuthor: "Auteur",
       aboutWebsite: "Site Web",
       aboutRepo: "Dépôt",
@@ -282,8 +293,10 @@ SOFTWARE.`;
       zoomInLabel: "Zoom avant",
       zoomOutLabel: "Zoom arrière",
       zoomResetLabel: "Réinitialiser",
-      licenseRepoLoaded: "Licence chargée de la racine",
+      licenseRepoLoaded: "Licence chargée dynamiquement à partir de GitHub",
       licenseFallbackLoaded: "Licence de secours chargée",
+      versionRepoLoaded: "Version chargée dynamiquement à partir de GitHub",
+      versionFallbackLoaded: "Version de secours chargée",
       warningModalTitle: "Informations Système Windows"
     },
     es: {
@@ -305,20 +318,22 @@ SOFTWARE.`;
       stop: "Detener",
       about: "Acerca de Flowonline2...",
       aboutTitle: "Acerca de Flowonline2",
-      aboutVersionLabel: "Versión",
+      aboutVersion: "Versión",
       aboutAuthor: "Autor",
       aboutWebsite: "Sitio Web",
       aboutRepo: "Repositorio",
       aboutLicense: "Licencia:",
       colorSchemeLabel: "Esquema de colores:",
-      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente de diseño y no tienen ninguna función práctica más que mostrar este mensaje de advertencia.",
+      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente decorativos y no tienen ninguna función práctica más que mostrar este mensaje de advertencia.",
       languageLabel: "Idioma",
       layoutLabel: "Disposición",
       zoomInLabel: "Acercar",
       zoomOutLabel: "Alejar",
       zoomResetLabel: "Restablecer",
-      licenseRepoLoaded: "Licencia cargada desde la raíz",
+      licenseRepoLoaded: "Licencia cargada desde GitHub",
       licenseFallbackLoaded: "Licencia cargada desde el código de reserva",
+      versionRepoLoaded: "Versión cargada desde GitHub",
+      versionFallbackLoaded: "Versión cargada desde el código de reserva",
       warningModalTitle: "Información del Sistema Windows"
     }
   };
@@ -327,23 +342,31 @@ SOFTWARE.`;
 
   // Dynamically load the version.txt file FROM THE OFFICIAL GITHUB URL (Ensuring absolute live updating!)
   useEffect(() => {
+    setVersionSource('repo');
     fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/refs/heads/main/version.txt')
       .then((res) => {
         if (!res.ok) throw new Error('Failed to load version.');
         return res.text();
       })
-      .then((text) => setAppVersion(text.trim()))
+      .then((text) => {
+        setAppVersion(text.trim());
+        setVersionSource('repo');
+      })
       .catch((err) => {
-        console.warn('Unable to load live version, trying local fallback:', err);
+        console.warn('Unable to load live version from GitHub, trying local:', err);
         // Fallback local fetch
         fetch('./version.txt')
           .then((localRes) => {
             if (!localRes.ok) throw new Error('Local version.txt missing.');
             return localRes.text();
           })
-          .then((text) => setAppVersion(text.trim()))
+          .then((text) => {
+            setAppVersion(text.trim());
+            setVersionSource('repo');
+          })
           .catch(() => {
             setAppVersion('ALPHA 2.0.11'); // Local final fallback
+            setVersionSource('fallback');
           });
       });
   }, []);
@@ -411,10 +434,17 @@ SOFTWARE.`;
     reader.onload = (event) => {
       try {
         const content = event.target?.result as string;
-        const parsed = FprgParser.parse(content);
-        loadProgram(parsed.statements, parsed.title, parsed.author);
+        if (file.name.toLowerCase().endsWith('.json')) {
+          // Parse JSON backup safely as requested!
+          const parsed = JSON.parse(content);
+          loadProgram(parsed.statements || [], parsed.title || 'Backup', parsed.author || 'PiBOH');
+        } else {
+          // Parse FPRG (DO NOT TOUCH THIS LOGIC AS REQUESTED!)
+          const parsed = FprgParser.parse(content);
+          loadProgram(parsed.statements, parsed.title, parsed.author);
+        }
       } catch (err: any) {
-        alert(`Error opening .fprg file: ${err.message}`);
+        alert(`Error opening file: ${err.message}`);
       }
     };
     reader.readAsText(file);
@@ -616,7 +646,7 @@ SOFTWARE.`;
               <div className="h-[1px] bg-slate-300 my-1"></div>
               
               {/* Zoom options inside menu */}
-              <button onClick={() => setZoom((prev) => Math.min(1.8, prev + 0.1))} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] text-slate-800 flex items-center gap-1.5">
+              <button onClick={() => setZoom((prev) => Math.min(6.0, prev + 0.1))} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] text-slate-800 flex items-center gap-1.5">
                 <span>🔍 {mt.zoomInLabel}</span>
               </button>
               <button onClick={() => setZoom((prev) => Math.max(0.4, prev - 0.1))} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] text-slate-800 flex items-center gap-1.5">
@@ -629,7 +659,7 @@ SOFTWARE.`;
           )}
         </div>
 
-        {/* DEDICATED STYLE MENU: Chart Style & Color (ALPHA 2.0.10 Requirement!) */}
+        {/* DEDICATED STYLE MENU: Chart Style & Color */}
         <div className="relative ml-1">
           <button
             onClick={() => toggleDropdown('styleMenu')}
@@ -922,7 +952,7 @@ SOFTWARE.`;
             {Math.round(zoom * 100)}%
           </span>
           <button
-            onClick={() => setZoom((prev) => Math.min(1.8, prev + 0.1))}
+            onClick={() => setZoom((prev) => Math.min(6.0, prev + 0.1))}
             className="w-[24px] h-[24px] hover:bg-slate-200/50 rounded flex items-center justify-center text-slate-600 active:scale-95 transition"
             title={mt.zoomInLabel}
           >
@@ -970,7 +1000,7 @@ SOFTWARE.`;
               <div className="flex items-start gap-4">
                 {/* Large Flowgorithm Colored logo */}
                 <div className="w-16 h-16 bg-white rounded border border-slate-300 shadow-inner flex items-center justify-center shrink-0">
-                  <svg className="w-12 h-12" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="w-9 h-9" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                     <rect x="4" y="4" width="10" height="8" fill="#84C44C" stroke="#333" strokeWidth="1.5" />
                     <rect x="18" y="4" width="10" height="8" fill="#F2A93B" stroke="#333" strokeWidth="1.5" />
                     <polygon points="4,18 14,18 12,26 6,26" fill="#E14C4C" stroke="#333" strokeWidth="1.5" />
@@ -978,9 +1008,14 @@ SOFTWARE.`;
                   </svg>
                 </div>
 
-                <div className="flex flex-col gap-0.5 leading-tight text-[12px] font-sans">
-                  <h4 className="font-extrabold text-[17px] text-slate-900 tracking-wide">Flowonline2</h4>
-                  <p className="text-[12px] text-slate-500 font-semibold">{mt.aboutVersionLabel} {appVersion}</p>
+                <div className="flex-col gap-0.5 leading-tight text-[12px] font-sans">
+                  <h4 className="font-extrabold text-[14px] text-slate-900 tracking-wide">Flowonline2</h4>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <p className="text-[12px] text-slate-500 font-semibold">{mt.aboutVersion} {appVersion}</p>
+                    <span className={`px-1.5 py-0.5 rounded font-mono text-[7px] font-black ${versionSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 animate-pulse' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
+                      {versionSource === 'repo' ? mt.versionRepoLoaded : mt.versionFallbackLoaded}
+                    </span>
+                  </div>
                   <p className="text-[12px] text-slate-600 mt-2">
                     {mt.aboutAuthor}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">PiBOH</a>
                   </p>
@@ -997,7 +1032,7 @@ SOFTWARE.`;
               <div className="flex-1 flex flex-col space-y-1.5 my-3 overflow-hidden">
                 <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide shrink-0">
                   <span>{mt.aboutLicense}</span>
-                  <span className={`px-2.5 py-0.5 rounded-full font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
+                  <span className={`px-2.5 py-0.5 rounded font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
                     {licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
                   </span>
                 </div>
@@ -1077,7 +1112,7 @@ SOFTWARE.`;
         type="file" 
         ref={fileInputRef} 
         onChange={handleFileChange} 
-        accept=".fprg" 
+        accept=".fprg,.json" // Now natively accepts BOTH .fprg and .json files!
         className="hidden" 
       />
 
