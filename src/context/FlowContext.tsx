@@ -77,7 +77,7 @@ interface FlowContextType {
   submitInput: (val: string) => void;
   clearConsole: () => void;
 
-  // BLOCK SELECTION, COPY & PASTE (FLOWGORTHM WIN32 FIDELITY - Version 2.0.13!)
+  // SINGLE BLOCK SELECTION, COPY & PASTE (FOR 100% BACKWARDS COMPATIBILITY!)
   selectedBlockId: string | null;
   setSelectedBlockId: (id: string | null) => void;
   copiedBlock: Statement | null;
@@ -85,6 +85,16 @@ interface FlowContextType {
   copyBlock: (id: string) => void;
   cutBlock: (id: string) => void;
   pasteBlock: (targetId?: string | 'main_start' | 'main_end') => void;
+
+  // MULTIPLE BLOCK SELECTION, COPY & PASTE (FLOWGORTHM WIN32 FIDELITY!)
+  selectedBlockIds: string[];
+  setSelectedBlockIds: (ids: string[]) => void;
+  copiedBlocks: Statement[];
+  setCopiedBlocks: (blocks: Statement[]) => void;
+  copyBlocks: (ids: string[]) => void;
+  cutBlocks: (ids: string[]) => void;
+  pasteBlocks: (targetId?: string | 'main_start' | 'main_end') => void;
+  deleteBlocks: (ids: string[]) => void;
 }
 
 const FlowContext = createContext<FlowContextType | undefined>(undefined);
@@ -209,9 +219,20 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Shared zoom state
   const [zoom, setZoom] = useState<number>(1.0);
 
-  // BLOCK SELECTION, COPY & PASTE (WINDOWS FIDELITY STATES!)
-  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-  const [copiedBlock, setCopiedBlock] = useState<Statement | null>(null);
+  // MULTIPLE BLOCK SELECTION, COPY & PASTE (WINDOWS FIDELITY STATES!)
+  const [selectedBlockIds, setSelectedBlockIds] = useState<string[]>([]);
+  const [copiedBlocks, setCopiedBlocks] = useState<Statement[]>([]);
+
+  // BACKWARDS-COMPATIBLE GETTERS & SETTERS (Keeps other modules working flawlessly!)
+  const selectedBlockId = selectedBlockIds.length > 0 ? selectedBlockIds[selectedBlockIds.length - 1] : null;
+  const setSelectedBlockId = (id: string | null) => {
+    setSelectedBlockIds(id ? [id] : []);
+  };
+
+  const copiedBlock = copiedBlocks.length > 0 ? copiedBlocks[copiedBlocks.length - 1] : null;
+  const setCopiedBlock = (block: Statement | null) => {
+    setCopiedBlocks(block ? [block] : []);
+  };
 
   // History for undo/redo
   const [undoStack, setUndoStack] = useState<Array<{ statements: Statement[]; title: string; author: string }>>([]);
@@ -280,14 +301,14 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // CLEAR ALL
   const clearAll = () => {
     pushHistory([]);
-    setSelectedBlockId(null);
+    setSelectedBlockIds([]);
     stopRun();
   };
 
   // LOAD PROGRAM
   const loadProgram = (newStatements: Statement[], title: string, author: string) => {
     pushHistory(newStatements, title, author);
-    setSelectedBlockId(null);
+    setSelectedBlockIds([]);
     stopRun();
   };
 
@@ -350,15 +371,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const deleteBlock = (id: string) => {
-    const copy = JSON.parse(JSON.stringify(statements)) as Statement[];
-    const deleted = recursiveDelete(copy, id);
-    if (deleted) {
-      pushHistory(copy);
-      if (selectedBlockId === id) {
-        setSelectedBlockId(null);
-      }
-      stopRun();
-    }
+    deleteBlocks([id]);
   };
 
   const updateBlock = (id: string, updatedFields: Partial<Statement>) => {
@@ -427,72 +440,100 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
-  // BLOCK SELECTION COPY-PASTE METHODS
-  const copyBlock = (id: string) => {
-    const block = findBlockById(statements, id);
-    if (block) {
-      setCopiedBlock(block);
+  // MULTIPLE BLOCKS COPY, CUT, PASTE AND DELETE (FLOWGORTHM FULL FIDELITY!)
+  const copyBlock = (id: string) => copyBlocks([id]);
+  const cutBlock = (id: string) => cutBlocks([id]);
+  const pasteBlock = (targetId?: string | 'main_start' | 'main_end') => pasteBlocks(targetId);
+
+  const copyBlocks = (ids: string[]) => {
+    const list: Statement[] = [];
+    for (const id of ids) {
+      const block = findBlockById(statements, id);
+      if (block) list.push(block);
+    }
+    if (list.length > 0) {
+      setCopiedBlocks(list);
     }
   };
 
-  const cutBlock = (id: string) => {
-    const block = findBlockById(statements, id);
-    if (block) {
-      setCopiedBlock(block);
-      deleteBlock(id);
-    }
+  const cutBlocks = (ids: string[]) => {
+    copyBlocks(ids);
+    deleteBlocks(ids);
   };
 
-  const pasteBlock = (targetId?: string | 'main_start' | 'main_end') => {
-    if (!copiedBlock) return;
-
-    // Default to selected block if no targetId is explicitly specified!
-    const resolvedTargetId = targetId || selectedBlockId || 'main_end';
-
-    const newBlock = regenerateBlockIds(copiedBlock);
+  const deleteBlocks = (ids: string[]) => {
     const copy = JSON.parse(JSON.stringify(statements)) as Statement[];
+    let anyDeleted = false;
+    for (const id of ids) {
+      if (recursiveDelete(copy, id)) {
+        anyDeleted = true;
+      }
+    }
+    if (anyDeleted) {
+      pushHistory(copy);
+      setSelectedBlockIds([]); // Reset selection
+      stopRun();
+    }
+  };
 
-    if (resolvedTargetId === 'main_start') {
-      copy.unshift(newBlock);
-    } else if (resolvedTargetId === 'main_end') {
-      copy.push(newBlock);
-    } else {
-      const inserted = recursiveInsert(copy, resolvedTargetId, newBlock);
-      if (!inserted) {
-        console.warn(`Could not find target ID ${resolvedTargetId} to paste after.`);
+  const pasteBlocks = (targetId?: string | 'main_start' | 'main_end') => {
+    if (copiedBlocks.length === 0) return;
+
+    // Default to pasting after the last selected block if any, or main_end
+    const resolvedTargetId = targetId || (selectedBlockIds.length > 0 ? selectedBlockIds[selectedBlockIds.length - 1] : 'main_end');
+
+    const copy = JSON.parse(JSON.stringify(statements)) as Statement[];
+    const pastedIds: string[] = [];
+
+    let activeTargetId = resolvedTargetId;
+    for (const blockToPaste of copiedBlocks) {
+      const newBlock = regenerateBlockIds(blockToPaste);
+      pastedIds.push(newBlock.id);
+
+      if (activeTargetId === 'main_start') {
+        copy.unshift(newBlock);
+        activeTargetId = newBlock.id;
+      } else if (activeTargetId === 'main_end') {
+        copy.push(newBlock);
+        activeTargetId = newBlock.id;
+      } else {
+        const inserted = recursiveInsert(copy, activeTargetId, newBlock);
+        if (inserted) {
+          activeTargetId = newBlock.id;
+        }
       }
     }
 
     pushHistory(copy);
     stopRun();
-    setSelectedBlockId(newBlock.id); // Select newly pasted node!
+    setSelectedBlockIds(pastedIds); // Select the pasted blocks altogether!
   };
 
-  // KEYBOARD DELETION & CLIPBOARD COMMANDS EMULATION
+  // KEYBOARD DELETION & CLIPBOARD COMMANDS EMULATION (SUPPORT MULTI-SELECTION BATCHES!)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if inside an active form/input/textarea
+      // Ignore if inside an active form/input/textarea/select
       const tag = document.activeElement?.tagName.toLowerCase();
       if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
 
-      if (selectedBlockId) {
+      if (selectedBlockIds.length > 0) {
         if (e.key === 'Delete' || e.key === 'Backspace') {
           e.preventDefault();
-          deleteBlock(selectedBlockId);
+          deleteBlocks(selectedBlockIds);
         } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c') {
           e.preventDefault();
-          copyBlock(selectedBlockId);
+          copyBlocks(selectedBlockIds);
         } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'x') {
           e.preventDefault();
-          cutBlock(selectedBlockId);
+          cutBlocks(selectedBlockIds);
         }
       }
 
       // Ctrl+V Paste anywhere on the graph (defaults to inserting after selected or at the end!)
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'v') {
-        if (copiedBlock) {
+        if (copiedBlocks.length > 0) {
           e.preventDefault();
-          pasteBlock();
+          pasteBlocks();
         }
       }
     };
@@ -501,7 +542,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [selectedBlockId, copiedBlock, statements]);
+  }, [selectedBlockIds, copiedBlocks, statements]);
 
   // MODAL EDITOR HANDLERS
   const openEditor = (block: Statement) => setEditingBlock(block);
@@ -1081,14 +1122,23 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         stopRun,
         submitInput,
         clearConsole,
-        // BLOCK SELECTION, COPY-PASTE (FLOWGORTHM WIN32 FIDELITY!)
+        // BACKWARDS-COMPATIBLE FALLBACKS (Zero-Config compatibility!)
         selectedBlockId,
         setSelectedBlockId,
         copiedBlock,
         setCopiedBlock,
         copyBlock,
         cutBlock,
-        pasteBlock
+        pasteBlock,
+        // MULTIPLE BLOCKS SELECTION, COPY-PASTE (Version 2.0.13 Premium!)
+        selectedBlockIds,
+        setSelectedBlockIds,
+        copiedBlocks,
+        setCopiedBlocks,
+        copyBlocks,
+        cutBlocks,
+        pasteBlocks,
+        deleteBlocks
       }}
     >
       {children}
