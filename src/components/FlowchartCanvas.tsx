@@ -223,15 +223,15 @@ export const FlowchartCanvas: React.FC = () => {
         const leftX = node.thenLayout.nodes.length > 0 ? node.thenLayout.nodes[0].x : centerX - (node.thenLayout.width + node.elseLayout.width + H_GAP) / 2 + node.thenLayout.width / 2;
         const rightX = node.elseLayout.nodes.length > 0 ? node.elseLayout.nodes[0].x : centerX + (node.thenLayout.width + node.elseLayout.width + H_GAP) / 2 - node.elseLayout.width / 2;
 
-        // FALSE branch on the left (elseBranch is FALSE in original Flowgorithm desktop!)
+        // TRUE branch on the left (thenBranch is TRUE in original Flowonline layout!)
         elements.push(
-          <g key={`if-else-${node.id}`}>
-            {/* Horizontal line out to left (False) */}
+          <g key={`if-then-${node.id}`}>
+            {/* Horizontal line out to left (True) */}
             <line x1={centerX} y1={diamondCenterY} x2={leftX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
-            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill={sc.textColor} fillOpacity="0.7" className="font-sans text-[10px] font-bold select-none">FALSO (False)</text>
+            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill="green" className="font-sans text-[10px] font-bold select-none">VERO (True)</text>
             
-            {/* Draw child else branch statements recursively on the LEFT side passing the parent context! */}
-            {renderLinesAndArrows(node.elseLayout, leftX, diamondCenterY, branchEndY, { id: node.id, branch: 'else' })}
+            {/* Draw child then branch statements recursively on the LEFT side passing the parent context! */}
+            {renderLinesAndArrows(node.thenLayout, leftX, diamondCenterY, branchEndY, { id: node.id, branch: 'then' })}
             
             {/* Return from left branch back to main path */}
             <line x1={leftX} y1={branchEndY} x2={leftX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
@@ -239,15 +239,15 @@ export const FlowchartCanvas: React.FC = () => {
           </g>
         );
 
-        // TRUE branch on the right (thenBranch is TRUE in original Flowgorithm desktop!)
+        // FALSE branch on the right (elseBranch is FALSE in original Flowonline layout!)
         elements.push(
-          <g key={`if-then-${node.id}`}>
-            {/* Horizontal line out to right (True) */}
+          <g key={`if-else-${node.id}`}>
+            {/* Horizontal line out to right (False) */}
             <line x1={centerX} y1={diamondCenterY} x2={rightX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
-            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill="green" className="font-sans text-[10px] font-bold select-none">VERO (True)</text>
+            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill={sc.textColor} fillOpacity="0.7" className="font-sans text-[10px] font-bold select-none">FALSO (False)</text>
             
-            {/* Draw child then branch statements recursively on the RIGHT side passing the parent context! */}
-            {renderLinesAndArrows(node.thenLayout, rightX, diamondCenterY, branchEndY, { id: node.id, branch: 'then' })}
+            {/* Draw child else branch statements recursively on the RIGHT side passing the parent context! */}
+            {renderLinesAndArrows(node.elseLayout, rightX, diamondCenterY, branchEndY, { id: node.id, branch: 'else' })}
             
             {/* Return from right branch back to main path */}
             <line x1={rightX} y1={branchEndY} x2={rightX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
