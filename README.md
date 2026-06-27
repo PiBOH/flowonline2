@@ -7,6 +7,6 @@
 </div>
 
 # flowonline2
-Una copia di flowgorithm utilizzabile in un browser web. vecchio repository: https://github.com/PiBOH/flowonline
+a web multilingual clone of flowgorithm. old repository: https://github.com/PiBOH/flowonline
 
 ### For more information read the [MANUAL.md](https://github.com/PiBOH/flowonline2/blob/main/MANUAL.md) file (multilingual ([English](https://github.com/PiBOH/flowonline2/blob/main/MANUAL.md#english), [Italiano](https://github.com/PiBOH/flowonline2/blob/main/MANUAL.md#italiano), [Deutsch](https://github.com/PiBOH/flowonline2/blob/main/MANUAL.md#deutsch), [Français](https://github.com/PiBOH/flowonline2/blob/main/MANUAL.md#fran%C3%A7ais), [Español](https://github.com/PiBOH/flowonline2/blob/main/MANUAL.md#espa%C3%B1ol))).
