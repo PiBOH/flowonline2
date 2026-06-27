@@ -1,11 +1,11 @@
 # Flowonline2 Manual / Manuale / Handbuch / Manuel / Manual
 
 Choose your language / Scegli la lingua:
-*   [English (US/UK)](#english)
-*   [Italiano](#italiano)
-*   [Deutsch](#deutsch)
-*   [Français](#français)
-*   [Español](#español)
+* [English (US/UK)](#english)
+* [Italiano](#italiano)
+* [Deutsch](#deutsch)
+* [Français](#français)
+* [Español](#español)
 
 ---
 
@@ -15,14 +15,14 @@ Choose your language / Scegli la lingua:
 > **⚠️ ATTENTION / NOTICE:**
 > The translations of Flowonline2, MANUAL.md, and all other local project files might not be 100% accurate.
 
-Welcome to **Flowonline2**, a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart interpreter **Flowgorithm** (Windows version 4.5). 
+Welcome to **Flowonline2**, a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart interpreter **Flowgorithm** (Windows version 4.5).
 
 Developed by PiBOH under the MIT License, this static, client-side application brings the full power of Flowgorithm to any web browser with zero configuration.
 
 ### 1. User Interface & Emulation
-*   **Title Bar (Windows Style):** Emulates a classic Windows desktop window, complete with the multi-colored Flowgorithm logo and decorative window controls (Minimize, Maximize, Close). Clicking these controls will open an authentic Win32 dialog box warning stating they are decorative.
-*   **Menu Bar:** Multi-lingual dropdowns (*File*, *Edit*, *Program*, *Chart Style & Color*, *Disposal*, and *Help*). Hovering over other menus while one is active will slide open the adjacent menus automatically.
-*   **Toolbar:** Houses standard `32x32px` flat-button shortcuts, speed slider, and zoom controls.
+* **Title Bar (Windows Style):** Emulates a classic Windows desktop window, complete with the multi-colored Flowgorithm logo and decorative window controls (Minimize, Maximize, Close). Clicking these controls will open an authentic Win32 dialog box warning stating they are decorative.
+* **Menu Bar:** Multi-lingual dropdowns (*File*, *Edit*, *Program*, *Chart Style & Color*, *Disposal*, and *Help*). Hovering over other menus while one is active will slide open the adjacent menus automatically.
+* **Toolbar:** Houses standard `32x32px` flat-button shortcuts, speed slider, and zoom controls.
 
 ### 2. Operators & Syntax Rules
 Flowonline2 evaluates standard Flowgorithm operators. Below is a detailed reference:
@@ -47,14 +47,14 @@ Flowonline2 evaluates standard Flowgorithm operators. Below is a detailed refere
 | `not` / `!` | Logical | Logical NOT (case-insensitive) | `not isAdult` |
 
 ### 3. Save & Load Operations (.fprg vs .json)
-*   **FPRG Files (.fprg):** This is the native Flowgorithm XML format. 
-    *   **Loading:** The XML is parsed recursively. Strict child element matching is used for `<if>` tags (preventing nested branching errors).
-    *   **Saving:** Writes standard XML matching Flowgorithm's strict layout. Regular variables are written with `array="False"` and `size=""` to prevent them from becoming arrays in the desktop application (Issue #1 Fix).
-*   **JSON Backup Files (.json):** Saves the exact internal state of Flowonline2 blocks. These can be saved and reloaded directly using *File -> Open* or the toolbar.
-*   **ToChar(13) and Newline (\n) Auto-Translation:**
-    *   **In Flowgorithm (Windows):** Newlines must be entered using the `ToChar(13)` function.
-    *   **In Flowonline2 (Web):** You can use the unquoted newline constant `\n` directly (e.g., `text & \n & "more text"`). 
-    *   **Auto-Translation:** When opening a `.fprg` file, all occurrences of `ToChar(13)` are converted to `\n`. When saving, all `\n` are converted back to `ToChar(13)` to maintain perfect desktop compatibility.
+* **FPRG Files (.fprg):** This is the native Flowgorithm XML format.
+ * **Loading:** The XML is parsed recursively. Strict child element matching is used for `<if>` tags (preventing nested branching errors).
+ * **Saving:** Writes standard XML matching Flowgorithm's strict layout. Regular variables are written with `array="False"` and `size=""` to prevent them from becoming arrays in the desktop application (Issue #1 Fix).
+* **JSON Backup Files (.json):** Saves the exact internal state of Flowonline2 blocks. These can be saved and reloaded directly using *File -> Open* or the toolbar.
+* **ToChar(13) and Newline (\n) Auto-Translation:**
+ * **In Flowgorithm (Windows):** Newlines must be entered using the `ToChar(13)` function.
+ * **In Flowonline2 (Web):** You can use the unquoted newline constant `\n` directly (e.g., `text & \n & "more text"`).
+ * **Auto-Translation:** When opening a `.fprg` file, all occurrences of `ToChar(13)` are converted to `\n`. When saving, all `\n` are converted back to `ToChar(13)` to maintain perfect desktop compatibility.
 
 ---
 
@@ -69,9 +69,9 @@ Benvenuto su **Flowonline2**, un clone web straordinariamente fedele al 1000% de
 Sviluppato da PiBOH sotto licenza MIT, questo applicativo statico porta tutta la potenza di Flowgorithm nel browser, senza bisogno di alcuna configurazione.
 
 ### 1. Interfaccia Utente ed Emulazione
-*   **Barra del Titolo (Stile Windows):** Emula una classica finestra desktop, completa del logo di Flowgorithm a 4 colori e tasti di controllo fittizi (Riduci a icona, Ingrandisci, Chiudi). Cliccando su di essi apparirà un avviso di sistema Win32.
-*   **Barra dei Menu:** Menu a tendina multilingua (*File*, *Modifica*, *Programma*, *Stile & Colori*, *Disposizione*, e *?*). Al passaggio del mouse, i menu a discesa adiacenti si aprono automaticamente.
-*   **Barra Strumenti:** Contiene scorciatoie con pulsanti `32x32px`, slider della velocità e i controlli dello zoom.
+* **Barra del Titolo (Stile Windows):** Emula una classica finestra desktop, completa del logo di Flowgorithm a 4 colori e tasti di controllo fittizi (Riduci a icona, Ingrandisci, Chiudi). Cliccando su di essi apparirà un avviso di sistema Win32.
+* **Barra dei Menu:** Menu a tendina multilingua (*File*, *Modifica*, *Programma*, *Stile & Colori*, *Disposizione*, e *?*). Al passaggio del mouse, i menu a discesa adiacenti si aprono automaticamente.
+* **Barra Strumenti:** Contiene scorciatoie con pulsanti `32x32px`, slider della velocità e i controlli dello zoom.
 
 ### 2. Regole di Sintassi e Operatori
 Flowonline2 supporta tutti gli operatori formali di Flowgorithm. Di seguito la tabella di riferimento dettagliata:
@@ -96,14 +96,14 @@ Flowonline2 supporta tutti gli operatori formali di Flowgorithm. Di seguito la t
 | `not` / `!` | Logico | NOT Logico (case-insensitive) | `not maggiorenne` |
 
 ### 3. Operazioni di Salvataggio e Caricamento (.fprg vs .json)
-*   **File FPRG (.fprg):** È il formato XML originale di Flowgorithm.
-    *   **Caricamento:** L'XML viene decodificato ricorsivamente. La lettura dei rami `then` ed `else` è rigidamente limitata ai figli diretti del tag `<if>`, evitando conflitti di nidificazione.
-    *   **Salvataggio:** Genera codice XML standard. Per prevenire il bug di conversione automatica delle variabili in array (risoluzione Issue #1), le variabili scalari vengono salvate rigorosamente con `array="False"` e `size=""`.
-*   **File di Backup JSON (.json):** Salva lo stato interno puro di Flowonline2. Può essere esportato e riaperto direttamente dal menu *File -> Apri*.
-*   **Traduzione Automatica ToChar(13) e Newline (\n):**
-    *   **In Flowgorithm (Windows):** I ritorni a capo richiedono l'uso della funzione `ToChar(13)`.
-    *   **In Flowonline2 (Web):** Puoi inserire direttamente la costante non virgolettata `\n` (es. `testo & \n & "altro"`).
-    *   **Conversione automatica:** All'apertura del file `.fprg`, l'app converte tutti i `ToChar(13)` in `\n`. Al salvataggio, converte tutti i `\n` in `ToChar(13)` per garantire compatibilità assoluta!
+* **File FPRG (.fprg):** È il formato XML originale di Flowgorithm.
+ * **Caricamento:** L'XML viene decodificato ricorsivamente. La lettura dei rami `then` ed `else` è rigidamente limitata ai figli diretti del tag `<if>`, evitando conflitti di nidificazione.
+ * **Salvataggio:** Genera codice XML standard. Per prevenire il bug di conversione automatica delle variabili in array (risoluzione Issue #1), le variabili scalari vengono salvate rigorosamente con `array="False"` e `size=""`.
+* **File di Backup JSON (.json):** Salva lo stato interno puro di Flowonline2. Può essere esportato e riaperto direttamente dal menu *File -> Apri*.
+* **Traduzione Automatica ToChar(13) e Newline (\n):**
+ * **In Flowgorithm (Windows):** I ritorni a capo richiedono l'uso della funzione `ToChar(13)`.
+ * **In Flowonline2 (Web):** Puoi inserire direttamente la costante non virgolettata `\n` (es. `testo & \n & "altro"`).
+ * **Conversione automatica:** All'apertura del file `.fprg`, l'app converte tutti i `ToChar(13)` in `\n`. Al salvataggio, converte tutti i `\n` in `ToChar(13)` per garantire compatibilità assoluta!
 
 ---
 
@@ -116,12 +116,12 @@ Flowonline2 supporta tutti gli operatori formali di Flowgorithm. Di seguito la t
 Willkommen bei **Flowonline2**, einem Klon des Flussdiagramm-Interpreters **Flowgorithm** (Windows-Version 4.5).
 
 ### 1. Operatoren & Auswertung
-*   Unterstützt standardmäßige mathematische Operatoren (`+`, `-`, `*`, `/`, `%`, `^`).
-*   Unterstützt Vergleichsoperatoren (`==`, `=`, `!=`, `<>`, `<`, `>`, `<=`, `>=`). Das Symbol `<>` wird als Ungleichheitsoperator (`!=`) interpretiert. Der einzelne `=` wird in Bedingungen als `==` gewertet.
-*   Unterstützt logische Operatoren (`and`, `or`, `not`, `&&`, `||`, `!`).
+* Unterstützt standardmäßige mathematische Operatoren (`+`, `-`, `*`, `/`, `%`, `^`).
+* Unterstützt Vergleichsoperatoren (`==`, `=`, `!=`, `<>`, `<`, `>`, `<=`, `>=\`). Das Symbol `<>` wird als Ungleichheitsoperator (`!=`) interpretiert. Der einzelne `=` wird in Bedingungen als `==` gewertet.
+* Unterstützt logische Operatoren (`and`, `or`, `not`, `&&`, `||`, `!`).
 
-### 2. ToChar(13) und Zeilenumbruch (\\n)
-*   In Flowonline2 können Sie `\n` ohne Anführungszeichen als Konstante eingeben (z. B. `text & \n & "text"`). Beim Speichern im `.fprg`-Format wird diese automatisch in die Windows-Funktion `ToChar(13)` umgewandelt.
+### 2. ToChar(13) und Zeilenumbruch (\n)
+* In Flowonline2 können Sie `\n` ohne Anführungszeichen als Konstante eingeben (z. B. `text & \n & "text"`). Beim Speichern im `.fprg`-Format wird diese automatisch in die Windows-Funktion `ToChar(13)` umgewandelt.
 
 ---
 
@@ -134,11 +134,11 @@ Willkommen bei **Flowonline2**, einem Klon des Flussdiagramm-Interpreters **Flow
 Bienvenue sur **Flowonline2**, un clone web fidèle à 1000 % de l'interpréteur pédagogique de logigrammes **Flowgorithm** (Windows version 4.5).
 
 ### 1. Opérateurs et Syntaxe
-*   Prend en charge tous les opérateurs mathématiques standard (`+`, `-`, `*`, `/`, `%`, `^`).
-*   Prend en charge les opérateurs de comparaison (`==`, `=`, `!=`, `<>`, `<`, `>`, `<=`, `>=`). Le symbole `<>` est interprété comme différent de (`!=`). Un seul `=` est traité comme une comparaison d'égalité (`==`).
+* text Prend en charge tous les opérateurs mathématiques standard (`+`, `-`, `*`, `/`, `%`, `^`).
+* Prend en charge les opérateurs de comparaison (`==`, `=`, `!=`, `<>`, `<`, `>`, `<=`, `>=`). Le symbole `<>` est interprété comme différent de (`!=`). Un seul `=` est traité comme une comparaison d'égalité (`==`).
 
-### 2. Conversion automatique ToChar(13) et Newline (\\n)
-*   Dans Flowonline2, vous pouvez utiliser directement `\n` sans guillemets. Lors de l'exportation vers un fichier `.fprg`, l'application le reconvertit en `ToChar(13)` pour une compatibilité parfaite avec Windows.
+### 2. Conversion automatique ToChar(13) et Newline (\n)
+* Dans Flowonline2, vous pouvez utiliser directement `\n` sans guillemets. Lors de l'exportation vers un fichier `.fprg`, l'application le reconvertit en `ToChar(13)` pour une compatibilité parfaite avec Windows.
 
 ---
 
@@ -151,8 +151,8 @@ Bienvenue sur **Flowonline2**, un clone web fidèle à 1000 % de l'interpréteur
 Bienvenido a **Flowonline2**, un clon web extraordinariamente fiel al 1000% del popular intérprete de diagramas de flujo **Flowgorithm** (versión de Windows 4.5).
 
 ### 1. Operadores y Sintaxis
-*   Admite todos los operadores matemáticos estándar (`+`, `-`, `*`, `/`, `%`, `^`).
-*   Admite los operadores de comparación (`==`, `=`, `!=`, `<>`, `<`, `>`, `<=`, `>=`). El símbolo `<>` se interpreta como distinto de (`!=`). Un solo `=` se trata como una comparación de igualdad (`==`).
+* Admite todos los operadores matemáticos estándar (`+`, `-`, `*`, `/`, `%`, `^`).
+* Admite los operadores de comparación (`==`, `=`, `!=`, `<>`, `<`, `>`, `<=`, `>=`). El símbolo `<>` se interpreta como distinto de (`!=`). Un solo `=` se trata como una comparación de igualdad (`==`).
 
-### 2. Conversión ToChar(13) y salto de línea (\\n)
-*   En Flowonline2, puede utilizar directamente la constante `\n` sin comillas. Al guardar en formato `.fprg`, la aplicación la vuelve a convertir en `ToChar(13)` de forma totalmente automática.
+### 2. Conversión ToChar(13) y salto de línea (\n)
+* En Flowonline2, puede utilizar directamente la constante `\n` sin comillas. Al guardar en formato `.fprg`, la aplicación la vuelve a convertir en `ToChar(13)` de forma totalmente automática.
