@@ -141,6 +141,71 @@ export const findBlockById = (list: Statement[], id: string): Statement | null =
   return null;
 };
 
+// RECURSIVE INSERT AFTER NODE (Used for Pasting blocks in correct order!)
+export const recursiveInsertAfter = (list: Statement[], targetId: string, newBlock: Statement): boolean => {
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i];
+    if (item.id === targetId) {
+      list.splice(i + 1, 0, newBlock);
+      return true;
+    }
+    if (item.type === 'if') {
+      if (recursiveInsertAfter(item.thenBranch, targetId, newBlock)) return true;
+      if (recursiveInsertAfter(item.elseBranch, targetId, newBlock)) return true;
+    } else if (item.type === 'while' || item.type === 'do' || item.type === 'for') {
+      if (recursiveInsertAfter(item.body, targetId, newBlock)) return true;
+    }
+  }
+  return false;
+};
+
+// RECURSIVE INSERT BEFORE NODE (Used for + Inserters above nodes — solves visual bug!)
+export const recursiveInsertBefore = (list: Statement[], targetId: string, newBlock: Statement): boolean => {
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i];
+    if (item.id === targetId) {
+      list.splice(i, 0, newBlock);
+      return true;
+    }
+    if (item.type === 'if') {
+      if (recursiveInsertBefore(item.thenBranch, targetId, newBlock)) return true;
+      if (recursiveInsertBefore(item.elseBranch, targetId, newBlock)) return true;
+    } else if (item.type === 'while' || item.type === 'do' || item.type === 'for') {
+      if (recursiveInsertBefore(item.body, targetId, newBlock)) return true;
+    }
+  }
+  return false;
+};
+
+// RECURSIVE APPEND BLOCK TO END OF CORRESPONDING BRANCH
+export const insertIntoBranch = (list: Statement[], parentId: string, branchType: string, newBlock: Statement): boolean => {
+  for (const item of list) {
+    if (item.id === parentId) {
+      if (item.type === 'if') {
+        if (branchType === 'then') {
+          item.thenBranch.push(newBlock);
+          return true;
+        } else if (branchType === 'else') {
+          item.elseBranch.push(newBlock);
+          return true;
+        }
+      } else if (item.type === 'while' || item.type === 'for' || item.type === 'do') {
+        if (branchType === 'body') {
+          item.body.push(newBlock);
+          return true;
+        }
+      }
+    }
+    if (item.type === 'if') {
+      if (insertIntoBranch(item.thenBranch, parentId, branchType, newBlock)) return true;
+      if (insertIntoBranch(item.elseBranch, parentId, branchType, newBlock)) return true;
+    } else if (item.type === 'while' || item.type === 'for' || item.type === 'do') {
+      if (insertIntoBranch(item.body, parentId, branchType, newBlock)) return true;
+    }
+  }
+  return false;
+};
+
 // INITIAL DEFAULT SAMPLE PROGRAM
 const initialSample: Statement[] = [
   {
@@ -356,10 +421,18 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       copy.unshift(newBlock);
     } else if (targetId === 'main_end') {
       copy.push(newBlock);
-    } else {
-      const inserted = recursiveInsert(copy, targetId, newBlock);
+    } else if (targetId.startsWith('branch_end:')) {
+      // Append block to end of nested branch/body!
+      const [, parentId, branchType] = targetId.split(':');
+      const inserted = insertIntoBranch(copy, parentId, branchType, newBlock);
       if (!inserted) {
-        console.warn(`Could not find target ID ${targetId} to insert after.`);
+        console.warn(`Could not insert block at branch end of parent ${parentId}.`);
+      }
+    } else {
+      // Insert BEFORE node targetId (Solves ordering and nested-list bugs!)
+      const inserted = recursiveInsertBefore(copy, targetId, newBlock);
+      if (!inserted) {
+        console.warn(`Could not find target ID ${targetId} to insert before.`);
       }
     }
 
@@ -384,26 +457,6 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // RECURSIVE FLOWCHART MODIFIERS
-  const recursiveInsert = (list: Statement[], targetId: string, newBlock: Statement): boolean => {
-    for (let i = 0; i < list.length; i++) {
-      const item = list[i];
-      if (item.id === targetId) {
-        // Insert after this node
-        list.splice(i + 1, 0, newBlock);
-        return true;
-      }
-
-      // Check nested branches
-      if (item.type === 'if') {
-        if (recursiveInsert(item.thenBranch, targetId, newBlock)) return true;
-        if (recursiveInsert(item.elseBranch, targetId, newBlock)) return true;
-      } else if (item.type === 'while' || item.type === 'do' || item.type === 'for') {
-        if (recursiveInsert(item.body, targetId, newBlock)) return true;
-      }
-    }
-    return false;
-  };
-
   const recursiveDelete = (list: Statement[], id: string): boolean => {
     for (let i = 0; i < list.length; i++) {
       const item = list[i];
@@ -496,8 +549,15 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else if (activeTargetId === 'main_end') {
         copy.push(newBlock);
         activeTargetId = newBlock.id;
+      } else if (activeTargetId.startsWith('branch_end:')) {
+        const [, parentId, branchType] = activeTargetId.split(':');
+        const inserted = insertIntoBranch(copy, parentId, branchType, newBlock);
+        if (inserted) {
+          activeTargetId = newBlock.id; // next block pastes AFTER newly pasted block!
+        }
       } else {
-        const inserted = recursiveInsert(copy, activeTargetId, newBlock);
+        // Paste AFTER activeTargetId
+        const inserted = recursiveInsertAfter(copy, activeTargetId, newBlock);
         if (inserted) {
           activeTargetId = newBlock.id;
         }
