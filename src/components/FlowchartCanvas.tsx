@@ -187,7 +187,8 @@ export const FlowchartCanvas: React.FC = () => {
     layout: ListLayout, 
     centerX: number, 
     startY: number, 
-    endY: number
+    endY: number,
+    parentContext?: { id: string; branch: 'then' | 'else' | 'body' } // DOCK PARENT CONTEXT PARAMS!
   ): JSX.Element[] => {
     const elements: JSX.Element[] = [];
     let currentY = startY;
@@ -229,8 +230,8 @@ export const FlowchartCanvas: React.FC = () => {
             <line x1={centerX} y1={diamondCenterY} x2={leftX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
             <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill={sc.textColor} fillOpacity="0.7" className="font-sans text-[10px] font-bold select-none">FALSO (False)</text>
             
-            {/* Draw child branch statements */}
-            {renderLinesAndArrows(node.thenLayout, leftX, diamondCenterY, branchEndY)}
+            {/* Draw child branch statements recursively passing the parent context! */}
+            {renderLinesAndArrows(node.thenLayout, leftX, diamondCenterY, branchEndY, { id: node.id, branch: 'then' })}
             
             {/* Return from left branch back to main path */}
             <line x1={leftX} y1={branchEndY} x2={leftX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
@@ -244,8 +245,8 @@ export const FlowchartCanvas: React.FC = () => {
             <line x1={centerX} y1={diamondCenterY} x2={rightX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
             <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill="green" className="font-sans text-[10px] font-bold select-none">VERO (True)</text>
             
-            {/* Draw child branch statements */}
-            {renderLinesAndArrows(node.elseLayout, rightX, diamondCenterY, branchEndY)}
+            {/* Draw child branch statements recursively passing the parent context! */}
+            {renderLinesAndArrows(node.elseLayout, rightX, diamondCenterY, branchEndY, { id: node.id, branch: 'else' })}
             
             {/* Return from right branch back to main path */}
             <line x1={rightX} y1={branchEndY} x2={rightX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
@@ -264,8 +265,8 @@ export const FlowchartCanvas: React.FC = () => {
             {/* Horizontal branch out of loop */}
             <line x1={centerX} y1={loopCenterY} x2={bodyX} y2={loopCenterY} stroke={sc.lineColor} strokeWidth="2" />
             
-            {/* Recurse body */}
-            {renderLinesAndArrows(node.bodyLayout, bodyX, loopCenterY, bodyEndY)}
+            {/* Recurse body recursively passing the parent context! */}
+            {renderLinesAndArrows(node.bodyLayout, bodyX, loopCenterY, bodyEndY, { id: node.id, branch: 'body' })}
             
             {/* Return wire lines representing Flowgorithm's loop back loops */}
             <line x1={bodyX} y1={bodyEndY} x2={bodyX} y2={bodyEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
@@ -282,6 +283,10 @@ export const FlowchartCanvas: React.FC = () => {
     }
 
     // Connect last node to end of list
+    const endTargetId = parentContext 
+      ? `branch_end:${parentContext.id}:${parentContext.branch}`
+      : 'main_end';
+
     elements.push(
       <g key={`arrow-to-list-end`}>
         <line
@@ -293,7 +298,7 @@ export const FlowchartCanvas: React.FC = () => {
           strokeWidth="2"
           markerEnd="url(#arrow)"
         />
-        {renderInserterButton(centerX, currentY + (endY - currentY) / 2, 'main_end')}
+        {renderInserterButton(centerX, currentY + (endY - currentY) / 2, endTargetId)}
       </g>
     );
 
