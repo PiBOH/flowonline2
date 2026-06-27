@@ -3,5 +3,11 @@
 /.assetsai
 /.assetsai/
 /.assetsai/*
+.logo-images
+.logo-images/
+.logo-images/*
+/.logo-images
+/.logo-images/
+/.logo-images/*
 -e
 arenaai.md
