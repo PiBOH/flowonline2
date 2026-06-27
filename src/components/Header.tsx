@@ -622,6 +622,216 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     setShowWarningModal(true);
   };
 
+  // ============ IN-APP MARKDOWN TO REACT JSX TRANSLATOR (Fulfill user request!) ============
+  const renderInlineMarkdown = (textStr: string): React.ReactNode => {
+    let parts: Array<string | JSX.Element> = [textStr];
+
+    // 1. Process inline Code blocks: `code`
+    parts = parts.flatMap((part) => {
+      if (typeof part !== 'string') return part;
+      const split = part.split(/`([^`]+)`/g);
+      return split.map((chunk, idx) => {
+        if (idx % 2 === 1) {
+          return (
+            <code key={idx} className="bg-slate-100 px-1 py-0.5 rounded font-mono text-[10px] text-rose-600 border border-slate-200 font-bold">
+              {chunk}
+            </code>
+          );
+        }
+        return chunk;
+      });
+    });
+
+    // 2. Process Bold tags: **bold**
+    parts = parts.flatMap((part) => {
+      if (typeof part !== 'string') return part;
+      const split = part.split(/\*\*([^*]+)\*\*/g);
+      return split.map((chunk, idx) => {
+        if (idx % 2 === 1) {
+          return <strong key={idx} className="font-extrabold text-slate-950">{chunk}</strong>;
+        }
+        return chunk;
+      });
+    });
+
+    // 3. Process hyper links: [text](url)
+    parts = parts.flatMap((part) => {
+      if (typeof part !== 'string') return part;
+      const split = part.split(/\[([^\]]+)\]\(([^)]+)\)/g);
+      const result: Array<string | JSX.Element> = [];
+      let idx = 0;
+      while (idx < split.length) {
+        if (idx % 3 === 0) {
+          result.push(split[idx]);
+          idx++;
+        } else {
+          const linkText = split[idx];
+          const linkUrl = split[idx + 1];
+          result.push(
+            <a
+              key={idx}
+              href={linkUrl}
+              target={linkUrl.startsWith('#') ? undefined : "_blank"}
+              rel="noopener noreferrer"
+              className="text-blue-600 font-bold hover:underline"
+            >
+              {linkText}
+            </a>
+          );
+          idx += 2;
+        }
+      }
+      return result;
+    });
+
+    return <>{parts}</>;
+  };
+
+  const parseMarkdown = (mdText: string): React.ReactNode => {
+    const lines = mdText.split('\n');
+    const elements: React.ReactNode[] = [];
+
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i];
+
+      // Horizontal separator line
+      if (line.trim() === '---') {
+        elements.push(<hr key={i} className="my-4 border-slate-300" />);
+        i++;
+        continue;
+      }
+
+      // Blockquotes with warning highlights
+      if (line.trim().startsWith('>')) {
+        const quoteLines: string[] = [];
+        while (i < lines.length && lines[i].trim().startsWith('>')) {
+          quoteLines.push(lines[i].trim().replace(/^>\s*/, ''));
+          i++;
+        }
+        elements.push(
+          <blockquote key={i} className="border-l-4 border-amber-500 bg-amber-50 text-amber-950 p-3 my-3 rounded-r text-[11px] font-sans">
+            {quoteLines.map((ql, idx) => (
+              <div key={idx} className="leading-relaxed">{renderInlineMarkdown(ql)}</div>
+            ))}
+          </blockquote>
+        );
+        continue;
+      }
+
+      // Anchor tags
+      if (line.trim().startsWith('<a name=')) {
+        const match = line.trim().match(/<a name="([^"]+)"><\/a>/);
+        if (match) {
+          elements.push(<span key={`anchor-${i}`} id={match[1]} className="block scroll-mt-2" />);
+          i++;
+          continue;
+        }
+      }
+
+      // Headers (H1, H2, H3)
+      if (line.trim().startsWith('#')) {
+        const match = line.trim().match(/^(#{1,6})\s*(.*)$/);
+        if (match) {
+          const level = match[1].length;
+          const content = match[2];
+          const className = level === 1
+            ? "text-[16px] font-extrabold text-slate-900 border-b border-slate-300 pb-1 mt-4 mb-2 font-sans"
+            : level === 2
+            ? "text-[13px] font-bold text-slate-800 border-b border-slate-200 pb-0.5 mt-4 mb-2 font-sans"
+            : "text-[11px] font-bold text-slate-750 mt-3 mb-1 font-sans";
+
+          elements.push(React.createElement(`h${level}`, { key: i, className }, renderInlineMarkdown(content)));
+          i++;
+          continue;
+        }
+      }
+
+      // Tables (Operators parameters lookup)
+      if (line.trim().startsWith('|')) {
+        const rows: string[][] = [];
+        while (i < lines.length && lines[i].trim().startsWith('|')) {
+          const l = lines[i].trim();
+          if (l.includes('---')) {
+            i++;
+            continue;
+          }
+          const parts = l.split('|').map(s => s.trim()).slice(1, -1);
+          rows.push(parts);
+          i++;
+        }
+
+        if (rows.length > 0) {
+          const headerRow = rows[0];
+          const bodyRows = rows.slice(1);
+
+          elements.push(
+            <div key={i} className="overflow-x-auto my-3 border border-slate-300 rounded shadow-sm">
+              <table className="min-w-full border-collapse bg-white text-[11px] text-left">
+                <thead>
+                  <tr className="bg-slate-100 border-b border-slate-300">
+                    {headerRow.map((cell, idx) => (
+                      <th key={idx} className="p-2 font-bold text-slate-800 border-r border-slate-200 last:border-0 font-sans">
+                        {renderInlineMarkdown(cell)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {bodyRows.map((row, rowIdx) => (
+                    <tr key={rowIdx} className="border-b border-slate-150 last:border-0 hover:bg-slate-50">
+                      {row.map((cell, cellIdx) => (
+                        <td key={cellIdx} className="p-2 text-slate-700 border-r border-slate-150 last:border-0 font-sans leading-normal">
+                          {renderInlineMarkdown(cell)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+        }
+        continue;
+      }
+
+      // Unordered List tags
+      if (line.trim().startsWith('*') || line.trim().startsWith('-')) {
+        const listItems: string[] = [];
+        while (i < lines.length && (lines[i].trim().startsWith('*') || lines[i].trim().startsWith('-'))) {
+          listItems.push(lines[i].trim().replace(/^[\*\-]\s*/, ''));
+          i++;
+        }
+        elements.push(
+          <ul key={i} className="list-disc pl-5 my-2 text-[11.5px] text-slate-700 font-sans space-y-1">
+            {listItems.map((item, idx) => (
+              <li key={idx} className="leading-relaxed">
+                {renderInlineMarkdown(item)}
+              </li>
+            ))}
+          </ul>
+        );
+        continue;
+      }
+
+      // Skip whitespace lines
+      if (line.trim() === '') {
+        i++;
+        continue;
+      }
+
+      // Normal text paragraphs
+      elements.push(
+        <p key={i} className="text-[11.5px] leading-relaxed text-slate-700 my-2 font-sans">
+          {renderInlineMarkdown(line)}
+        </p>
+      );
+      i++;
+    }
+
+    return elements;
+  };
+
   return (
     <div className="flex flex-col w-full z-30 select-none shadow-md shrink-0">
       
@@ -1100,7 +1310,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                   </svg>
                 </div>
 
-                <div className="flex-col gap-0.5 leading-tight text-[12px] font-sans">
+                <div className="flex flex-col gap-0.5 leading-tight text-[12px] font-sans">
                   <h4 className="font-extrabold text-[14px] text-slate-900 tracking-wide">Flowonline2</h4>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <p className="text-[12px] text-slate-500 font-semibold">{mt.aboutVersion} {appVersion}</p>
@@ -1199,12 +1409,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </div>
       )}
 
-      {/* ============ WIN32 MANUAL DIALOG MODAL (ENLARGED TO EXACTLY 700x525 PIXELS! BETA 2.0.12) ============ */}
+      {/* ============ WIN32 MANUAL DIALOG MODAL (ENLARGED TO EXACTLY 800x600 PIXELS! WITH BEAUTIFUL MARKDOWN RENDER!) ============ */}
       {showManual && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
           <div 
             className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl overflow-hidden flex flex-col font-sans select-none"
-            style={{ width: '700px', height: '525px' }} // EXPLICIT WIN32 SIZE SET TO 700 x 525!
+            style={{ width: '800px', height: '600px' }} // EXPLICIT WIN32 SIZE SET TO EXACTLY 800 x 600!
           >
             {/* Manual Modal Title Bar */}
             <div 
@@ -1233,11 +1443,13 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                 </span>
               </div>
               
-              <textarea
-                readOnly
-                value={manualText}
-                className="w-full flex-1 border border-slate-300 rounded p-3 font-mono text-[11px] bg-white text-slate-700 focus:outline-none resize-none overflow-auto leading-relaxed shadow-inner"
-              />
+              {/* BEAUTIFULLY STYLED MARKDOWN VIEWER PANEL (Zero-dependency, high performance parser) */}
+              <div
+                className="w-full flex-1 border border-slate-300 rounded p-4 bg-white text-slate-800 overflow-y-auto shadow-inner select-text leading-relaxed"
+                style={{ height: '480px' }}
+              >
+                {parseMarkdown(manualText)}
+              </div>
 
               {/* OK button to close dialog (Win32 styled) */}
               <div className="flex items-center justify-end shrink-0 mt-3">
