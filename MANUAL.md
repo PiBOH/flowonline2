@@ -15,7 +15,7 @@ Choose your language / Scegli la lingua:
 > **⚠️ ATTENTION / NOTICE:**
 > The translations of Flowonline2, MANUAL.md, and all other local project files might not be 100% accurate.
 
-Welcome to **Flowonline2**, a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart interpreter **Flowgorithm** (Windows version 2.0.3). 
+Welcome to **Flowonline2**, a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart interpreter **Flowgorithm** (Windows version 4.5). 
 
 Developed by PiBOH under the MIT License, this static, client-side application brings the full power of Flowgorithm to any web browser with zero configuration.
 
@@ -43,7 +43,7 @@ Flowonline2 evaluates standard Flowgorithm operators. Below is a detailed refere
 | `<=` | Relational | Less than or equal to | `a <= b` |
 | `>=` | Relational | Greater than or equal to | `a >= b` |
 | `and` / `&&` | Logical | Logical AND (case-insensitive) | `x > 0 and y < 10` |
-| `or` / `||` | Logical | Logical OR (case-insensitive) | `x == 0 or y == 0` |
+| `or` | Logical | Logical OR (case-insensitive) | `x == 0 or y == 0` |
 | `not` / `!` | Logical | Logical NOT (case-insensitive) | `not isAdult` |
 
 ### 3. Save & Load Operations (.fprg vs .json)
@@ -64,7 +64,7 @@ Flowonline2 evaluates standard Flowgorithm operators. Below is a detailed refere
 > **⚠️ ATTENZIONE / NOTA:**
 > Le traduzioni di Flowonline2, di MANUAL.md e di tutti gli altri file di progetto potrebbero non essere accurate al 100%.
 
-Benvenuto su **Flowonline2**, un clone web straordinariamente fedele al 1000% del celebre interprete educativo di diagrammi di flusso **Flowgorithm** (versione Windows 2.0.3).
+Benvenuto su **Flowonline2**, un clone web straordinariamente fedele al 1000% del celebre interprete educativo di diagrammi di flusso **Flowgorithm** (versione Windows 4.5).
 
 Sviluppato da PiBOH sotto licenza MIT, questo applicativo statico porta tutta la potenza di Flowgorithm nel browser, senza bisogno di alcuna configurazione.
 
@@ -92,7 +92,7 @@ Flowonline2 supporta tutti gli operatori formali di Flowgorithm. Di seguito la t
 | `<=` | Relazionale | Minore o uguale | `a <= b` |
 | `>=` | Relazionale | Maggiore o uguale | `a >= b` |
 | `and` / `&&` | Logico | AND Logico (case-insensitive) | `x > 0 and y < 10` |
-| `or` / `||` | Logico | OR Logico (case-insensitive) | `x == 0 or y == 0` |
+| `or` | Logico | OR Logico (case-insensitive) | `x == 0 or y == 0` |
 | `not` / `!` | Logico | NOT Logico (case-insensitive) | `not maggiorenne` |
 
 ### 3. Operazioni di Salvataggio e Caricamento (.fprg vs .json)
@@ -113,7 +113,7 @@ Flowonline2 supporta tutti gli operatori formali di Flowgorithm. Di seguito la t
 > **⚠️ ACHTUNG / HINWEIS:**
 > Die Übersetzungen von Flowonline2, MANUAL.md und allen anderen Projektdateien sind möglicherweise nicht zu 100 % korrekt.
 
-Willkommen bei **Flowonline2**, einem Klon des Flussdiagramm-Interpreters **Flowgorithm** (Windows-Version 2.0.3).
+Willkommen bei **Flowonline2**, einem Klon des Flussdiagramm-Interpreters **Flowgorithm** (Windows-Version 4.5).
 
 ### 1. Operatoren & Auswertung
 *   Unterstützt standardmäßige mathematische Operatoren (`+`, `-`, `*`, `/`, `%`, `^`).
@@ -131,7 +131,7 @@ Willkommen bei **Flowonline2**, einem Klon des Flussdiagramm-Interpreters **Flow
 > **⚠️ ATTENTION / AVIS:**
 > Les traductions de Flowonline2, de MANUAL.md et de tous les autres fichiers du projet peuvent ne pas être exactes à 100 %.
 
-Bienvenue sur **Flowonline2**, un clone web fidèle à 1000 % de l'interpréteur pédagogique de logigrammes **Flowgorithm** (Windows version 2.0.3).
+Bienvenue sur **Flowonline2**, un clone web fidèle à 1000 % de l'interpréteur pédagogique de logigrammes **Flowgorithm** (Windows version 4.5).
 
 ### 1. Opérateurs et Syntaxe
 *   Prend en charge tous les opérateurs mathématiques standard (`+`, `-`, `*`, `/`, `%`, `^`).
@@ -148,7 +148,7 @@ Bienvenue sur **Flowonline2**, un clone web fidèle à 1000 % de l'interpréteur
 > **⚠️ ATENCIÓN / AVISO:**
 > Las traducciones de Flowonline2, MANUAL.md y todos los demás archivos del proyecto pueden no ser exactas al 100%.
 
-Bienvenido a **Flowonline2**, un clon web extraordinariamente fiel al 1000% del popular intérprete de diagramas de flujo **Flowgorithm** (versión de Windows 2.0.3).
+Bienvenido a **Flowonline2**, un clon web extraordinariamente fiel al 1000% del popular intérprete de diagramas de flujo **Flowgorithm** (versión de Windows 4.5).
 
 ### 1. Operadores y Sintaxis
 *   Admite todos los operadores matemáticos estándar (`+`, `-`, `*`, `/`, `%`, `^`).
