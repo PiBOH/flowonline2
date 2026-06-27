@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { useFlow } from '../context/FlowContext';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useFlow, findBlockById } from '../context/FlowContext';
 import { Statement, BlockType } from '../types/flow';
 import { BlockNode, colorSchemes } from './BlockNode';
 import { translations } from '../utils/translations';
@@ -34,11 +34,39 @@ export const FlowchartCanvas: React.FC = () => {
     openEditor,
     language,
     colorScheme,
-    zoom
+    zoom,
+    // BLOCK SELECTION, COPY & PASTE (Version 2.0.13!)
+    selectedBlockId,
+    setSelectedBlockId,
+    copiedBlock,
+    copyBlock,
+    cutBlock,
+    pasteBlock
   } = useFlow();
 
   // Robust contextual menu coordinate state
   const [activeInserter, setActiveInserter] = useState<{ parentId: string | 'main_start' | 'main_end'; index?: number; x: number; y: number } | null>(null);
+
+  // Custom Right-Click Context Menu State
+  const [contextMenu, setContextMenu] = useState<{
+    type: 'block' | 'inserter';
+    blockId?: string;
+    parentId?: string | 'main_start' | 'main_end';
+    index?: number;
+    x: number;
+    y: number;
+  } | null>(null);
+
+  // Close context menu on any outside click
+  useEffect(() => {
+    const handleOutsideClick = () => {
+      setContextMenu(null);
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
 
   const t = translations[language];
   const sc = colorSchemes[colorScheme];
@@ -283,12 +311,24 @@ export const FlowchartCanvas: React.FC = () => {
         className="cursor-pointer group/insert"
         onClick={(e) => {
           e.stopPropagation();
-          // CRITICAL FIXED POSITIONING FIX: Capture exact click client coordinates to show menu exactly at click site!
+          // Capture exact click coordinates to show insert menu!
           setActiveInserter({ 
             parentId, 
             index, 
             x: e.clientX, 
             y: e.clientY 
+          });
+        }}
+        // RIGHT-CLICK ON INSERTER PIN (Paste or Insert context choices!)
+        onContextMenu={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setContextMenu({
+            type: 'inserter',
+            parentId,
+            index,
+            x: e.clientX,
+            y: e.clientY
           });
         }}
       >
@@ -332,12 +372,34 @@ export const FlowchartCanvas: React.FC = () => {
 
     for (const node of layout.nodes) {
       const isHighlighted = currentBlockId === node.id;
+      const isSelected = selectedBlockId === node.id;
 
       list.push(
-        <g key={`node-${node.id}`} transform={`translate(${node.x}, ${node.y})`}>
+        <g 
+          key={`node-${node.id}`} 
+          transform={`translate(${node.x}, ${node.y})`}
+          // SINGLE CLICK TO SELECT BLOCK (Flowgorithm Original Style!)
+          onClick={(e) => {
+            e.stopPropagation(); // Avoid deselecting by clicking empty SVG space
+            setSelectedBlockId(node.id);
+          }}
+          // RIGHT-CLICK TO OPEN CUSTOM WINDOWS CONTEXT MENU!
+          onContextMenu={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setSelectedBlockId(node.id); // Also select block on right-click!
+            setContextMenu({
+              type: 'block',
+              blockId: node.id,
+              x: e.clientX,
+              y: e.clientY
+            });
+          }}
+        >
           <BlockNode
             statement={node.statement}
             isHighlighted={isHighlighted}
+            isSelected={isSelected}
             lang={language}
             onDoubleClick={() => node.statement && openEditor(node.statement)}
             onDeleteClick={() => deleteBlock(node.id)}
@@ -370,8 +432,6 @@ export const FlowchartCanvas: React.FC = () => {
   return (
     <div className={`flex-1 flex flex-col h-full relative overflow-hidden select-none border-r border-slate-200 ${isDark ? 'bg-zinc-900' : 'bg-white'}`}>
       
-      {/* LOCAL h-11 TOOLBAR REMOVED AS REQUESTED TO AVOID DOUBLE ZOOM BAR PROBLEMS! */}
-
       {/* SVG Canvas Workspace with Engineering Graph-Paper Grid Background */}
       <div 
         className="flex-1 overflow-auto p-8 flex items-start justify-center relative"
@@ -389,7 +449,11 @@ export const FlowchartCanvas: React.FC = () => {
           viewBox={`${-diagramLayout.width / 2} 0 ${diagramLayout.width} ${diagramLayout.height}`}
           className="bg-transparent transition-transform duration-75 origin-top"
           style={{ transform: `scale(${zoom})` }}
-          onClick={() => setActiveInserter(null)}
+          // CLICKING EMPTY SPACE ON CANVAS DESELECTS EVERYTHING!
+          onClick={() => {
+            setSelectedBlockId(null);
+            setActiveInserter(null);
+          }}
         >
           {/* SVG definitions */}
           <defs>
@@ -543,6 +607,105 @@ export const FlowchartCanvas: React.FC = () => {
             </button>
           </div>
         )}
+
+        {/* Win32 Classic Contextual Menu (EMULATES ORIGINAL WINDOWS RIGHT-CLICK POPUPS!) */}
+        {contextMenu && (
+          <div
+            className="fixed bg-[#F5F5F5] border border-[#999] shadow-2xl py-[2px] z-50 rounded-[1px] min-w-[150px] font-sans text-xs select-none text-slate-800 animate-in fade-in zoom-in-95 duration-75"
+            style={{
+              left: `${contextMenu.x}px`,
+              top: `${contextMenu.y}px`
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {contextMenu.type === 'block' ? (
+              <>
+                <button
+                  onClick={() => {
+                    const stmt = findBlockById(statements, contextMenu.blockId!);
+                    if (stmt) openEditor(stmt);
+                    setContextMenu(null);
+                  }}
+                  className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between transition-colors"
+                >
+                  <span>📝 {language === 'it' ? 'Modifica...' : 'Edit...'}</span>
+                </button>
+                <div className="h-[1px] bg-slate-300 my-1"></div>
+                <button
+                  onClick={() => {
+                    cutBlock(contextMenu.blockId!);
+                    setContextMenu(null);
+                  }}
+                  className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between transition-colors"
+                >
+                  <span>✂️ {language === 'it' ? 'Taglia' : 'Cut'}</span>
+                  <span className="text-[9px] text-slate-400 font-mono">Ctrl+X</span>
+                </button>
+                <button
+                  onClick={() => {
+                    copyBlock(contextMenu.blockId!);
+                    setContextMenu(null);
+                  }}
+                  className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between transition-colors"
+                >
+                  <span>📋 {language === 'it' ? 'Copia' : 'Copy'}</span>
+                  <span className="text-[9px] text-slate-400 font-mono">Ctrl+C</span>
+                </button>
+                <button
+                  onClick={() => {
+                    pasteBlock(contextMenu.blockId!);
+                    setContextMenu(null);
+                  }}
+                  disabled={!copiedBlock}
+                  className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                >
+                  <span>📥 {language === 'it' ? 'Incolla dopo' : 'Paste After'}</span>
+                  <span className="text-[9px] text-slate-400 font-mono">Ctrl+V</span>
+                </button>
+                <div className="h-[1px] bg-slate-300 my-1"></div>
+                <button
+                  onClick={() => {
+                    deleteBlock(contextMenu.blockId!);
+                    setContextMenu(null);
+                  }}
+                  className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] text-red-600 font-bold flex items-center justify-between transition-colors"
+                >
+                  <span>❌ {language === 'it' ? 'Elimina' : 'Delete'}</span>
+                  <span className="text-[9px] text-slate-400 font-mono">Del</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    pasteBlock(contextMenu.parentId!);
+                    setContextMenu(null);
+                  }}
+                  disabled={!copiedBlock}
+                  className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                >
+                  <span>📋 {language === 'it' ? 'Incolla Blocco' : 'Paste Block'}</span>
+                </button>
+                <div className="h-[1px] bg-slate-300 my-1"></div>
+                <button
+                  onClick={() => {
+                    setActiveInserter({
+                      parentId: contextMenu.parentId!,
+                      index: contextMenu.index,
+                      x: contextMenu.x,
+                      y: contextMenu.y
+                    });
+                    setContextMenu(null);
+                  }}
+                  className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between font-bold transition-colors"
+                >
+                  <span>➕ {language === 'it' ? 'Inserisci Blocco...' : 'Insert Block...'}</span>
+                </button>
+              </>
+            )}
+          </div>
+        )}
+
       </div>
     </div>
   );

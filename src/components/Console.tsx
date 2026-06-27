@@ -89,8 +89,9 @@ export const Console: React.FC = () => {
       </div>
 
       {/* Messages Output Area (supports ToChar(13) carriage returns mapped to Line Feeds) */}
+      {/* select-text added to make console content perfectly selectable and copyable! */}
       <div 
-        className={`flex-1 overflow-auto p-4 space-y-2.5 flex flex-col ${listBg}`}
+        className={`flex-1 overflow-auto p-4 space-y-2.5 flex flex-col select-text ${listBg}`}
         style={{ whiteSpace: 'pre-wrap' }} // EXPLICIT BULLETPROOF STYLE ENSURING CARRIAGE RETURNS WORK IN BALOONS!
       >
         {consoleMessages.length === 0 && (
@@ -102,7 +103,7 @@ export const Console: React.FC = () => {
         {consoleMessages.map((msg) => {
           if (msg.type === 'system') {
             return (
-              <div key={msg.id} className="text-[10px] font-bold font-mono text-purple-500 text-center py-0.5 select-none">
+              <div key={msg.id} className="text-[10px] font-bold font-mono text-purple-500 text-center py-0.5 select-text">
                 {msg.text}
               </div>
             );
@@ -110,7 +111,7 @@ export const Console: React.FC = () => {
 
           if (msg.type === 'error') {
             return (
-              <div key={msg.id} className="self-center bg-red-100 border border-red-300 text-red-700 p-2 rounded text-xs font-mono max-w-[90%] shadow-sm">
+              <div key={msg.id} className="self-center bg-red-100 border border-red-300 text-red-700 p-2 rounded text-xs font-mono max-w-[90%] shadow-sm select-text">
                 ❌ {msg.text}
               </div>
             );
@@ -119,7 +120,7 @@ export const Console: React.FC = () => {
           if (msg.type === 'input') {
             // User input bubble (Blue balloon on the right!)
             return (
-              <div key={msg.id} className={`self-end max-w-[80%] rounded-2xl rounded-tr-none px-3.5 py-1.5 text-xs font-mono font-bold shadow-sm ${getInputBubbleClass()}`}>
+              <div key={msg.id} className={`self-end max-w-[80%] rounded-2xl rounded-tr-none px-3.5 py-1.5 text-xs font-mono font-bold shadow-sm select-text ${getInputBubbleClass()}`}>
                 {msg.text.replace(/\r/g, '\n')}
               </div>
             );
@@ -127,7 +128,7 @@ export const Console: React.FC = () => {
 
           // Flowgorithm output bubbles (Classic mint-green rounded dialogue speech balloons on the left!)
           return (
-            <div key={msg.id} className={`self-start max-w-[80%] rounded-2xl rounded-tl-none px-3.5 py-1.5 text-xs font-mono font-semibold shadow-sm leading-relaxed ${getOutputBubbleClass()}`}>
+            <div key={msg.id} className={`self-start max-w-[80%] rounded-2xl rounded-tl-none px-3.5 py-1.5 text-xs font-mono font-semibold shadow-sm leading-relaxed select-text ${getOutputBubbleClass()}`}>
               {msg.text.replace(/\r/g, '\n')}
             </div>
           );

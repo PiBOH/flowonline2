@@ -31,7 +31,13 @@ export const Header: React.FC = () => {
     stopRun,
     statements,
     loadProgram,
-    clearAll
+    clearAll,
+    // BLOCK SELECTION, COPY & PASTE (Version 2.0.13!)
+    selectedBlockId,
+    copiedBlock,
+    copyBlock,
+    cutBlock,
+    pasteBlock
   } = useFlow();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -41,8 +47,8 @@ export const Header: React.FC = () => {
   // Dropdown states for Menus
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  // Dynamic App Version state (BETA 2.0.12 fallback default!)
-  const [appVersion, setAppVersion] = useState('BETA 2.0.12');
+  // Dynamic App Version state (BETA 2.0.13 fallback default!)
+  const [appVersion, setAppVersion] = useState('BETA 2.0.13');
   const [versionSource, setVersionSource] = useState<'repo' | 'fallback'>('repo');
 
   // About Modal state
@@ -50,7 +56,7 @@ export const Header: React.FC = () => {
   const [licenseText, setLicenseText] = useState('Loading license...');
   const [licenseSource, setLicenseSource] = useState<'repo' | 'fallback'>('repo');
 
-  // Manual Modal state (ALPHA 2.0.12 / BETA 2.0.12 New feature!)
+  // Manual Modal state (ALPHA 2.0.12 / BETA 2.0.13 New feature!)
   const [showManual, setShowManual] = useState(false);
   const [manualText, setManualText] = useState('Loading user manual...');
   const [manualSource, setManualSource] = useState<'repo' | 'fallback'>('repo');
@@ -247,7 +253,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       aboutRepo: "Repository",
       aboutLicense: "Licenza del Programma:",
       colorSchemeLabel: "Schema Colori:",
-      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna funzione pratica se non quella di aprire questa finestra informativa di avviso.",
+      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna função pratica se non quella di aprire questa finestra informativa di avviso.",
       languageLabel: "Lingua",
       layoutLabel: "Disposizione",
       zoomInLabel: "Aumenta Zoom",
@@ -364,13 +370,13 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       stop: "Detener",
       about: "Acerca de Flowonline2...",
       aboutTitle: "Acerca de Flowonline2",
-      aboutVersion: "Versión",
+      aboutVersion: "Version",
       aboutAuthor: "Autor",
       aboutWebsite: "Sitio Web",
       aboutRepo: "Repositorio",
       aboutLicense: "Licencia:",
       colorSchemeLabel: "Esquema de colores:",
-      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente de diseño y no tienen ninguna función práctica más que mostrar este mensaje de advertencia.",
+      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) sono puramente fittizi e non hanno alcuna funzione se non mostrare questo avviso.",
       languageLabel: "Idioma",
       layoutLabel: "Disposición",
       zoomInLabel: "Acercar",
@@ -415,9 +421,10 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             setVersionSource('repo');
           })
           .catch(() => {
-            setAppVersion('BETA 2.0.12'); // Local final fallback updated to BETA!
+            setAppVersion('BETA 2.0.13'); // Local final fallback updated to BETA!
             setVersionSource('fallback');
           });
+          setAppVersion('BETA 2.0.13');
       });
   }, []);
 
@@ -457,7 +464,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     }
   }, [showAbout]);
 
-  // Dynamically load the MANUAL.md file FROM THE OFFICIAL GITHUB URL (ALPHA 2.0.12 / BETA 2.0.12 New Feature!)
+  // Dynamically load the MANUAL.md file FROM THE OFFICIAL GITHUB URL (ALPHA 2.0.12 / BETA 2.0.13 New Feature!)
   useEffect(() => {
     if (showManual) {
       setManualText('Loading user manual from GitHub...');
@@ -940,6 +947,22 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               <button onClick={redo} disabled={!canRedo} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-40 text-slate-800">
                 <span>↪ {mt.redo}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+Y</span>
+              </button>
+              
+              <div className="h-[1px] bg-slate-300 my-1"></div>
+
+              {/* INTEGRATED BLOCK CLIPBOARD CONTROLS IN DROP-DOWN MENU (FLOWGORTHM WIN32 FIDELITY!) */}
+              <button onClick={() => { if (selectedBlockId) cutBlock(selectedBlockId); setActiveDropdown(null); }} disabled={!selectedBlockId} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-30 text-slate-800">
+                <span>✂️ {language === 'it' ? 'Taglia' : 'Cut'}</span>
+                <span className="text-[10px] text-slate-400 font-mono">Ctrl+X</span>
+              </button>
+              <button onClick={() => { if (selectedBlockId) copyBlock(selectedBlockId); setActiveDropdown(null); }} disabled={!selectedBlockId} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-30 text-slate-800">
+                <span>📋 {language === 'it' ? 'Copia' : 'Copy'}</span>
+                <span className="text-[10px] text-slate-400 font-mono">Ctrl+C</span>
+              </button>
+              <button onClick={() => { pasteBlock(); setActiveDropdown(null); }} disabled={!copiedBlock} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-30 text-slate-800">
+                <span>📥 {language === 'it' ? 'Incolla' : 'Paste'}</span>
+                <span className="text-[10px] text-slate-400 font-mono">Ctrl+V</span>
               </button>
               
               <div className="h-[1px] bg-slate-300 my-1"></div>

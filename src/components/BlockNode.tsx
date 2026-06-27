@@ -7,6 +7,7 @@ interface BlockNodeProps {
   statement?: Statement;
   type?: 'main' | 'end';
   isHighlighted?: boolean;
+  isSelected?: boolean; // NEW SELECTION HIGHLIGHT PROPERTY!
   onDoubleClick?: () => void;
   onDeleteClick?: (e: React.MouseEvent) => void;
   lang: Language;
@@ -115,6 +116,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
   statement,
   type,
   isHighlighted = false,
+  isSelected = false, // DEFAULT SELECT STATE IS FALSE
   onDoubleClick,
   onDeleteClick,
   lang
@@ -136,9 +138,11 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
     }
   }, [isHighlighted]);
 
-  // Active executing or selected highlights
+  // Active executing or selected highlights (Beautiful Win32 flowgorithm glow / dotted highlight!)
   const highlightClass = isHighlighted 
     ? "stroke-amber-500 stroke-[4px] filter drop-shadow-[0_0_12px_rgba(245,158,11,0.9)] animate-pulse" 
+    : isSelected
+    ? "stroke-[#3b82f6] stroke-[3px] filter drop-shadow-[0_0_8px_rgba(59,130,246,0.85)]"
     : `stroke-[2px] hover:stroke-slate-900 transition-colors`;
 
   // Text helper
@@ -148,7 +152,9 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
   };
 
   const getStrokeColor = (baseStroke: string) => {
-    return isHighlighted ? "rgba(245,158,11,0.9)" : baseStroke;
+    if (isHighlighted) return "rgba(245,158,11,0.9)";
+    if (isSelected) return "#3b82f6"; // Flowgorithm Blue Selection!
+    return baseStroke;
   };
 
   // MAIN BLOCK (Terminal)
@@ -170,7 +176,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
           rx="19"
           fill={`url(#mainGrad-${colorScheme})`}
           stroke={getStrokeColor(sc.mainStartStroke)}
-          strokeWidth={isHighlighted ? "4" : "2"}
+          strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+          strokeDasharray={isSelected ? "5,3" : undefined}
           className={highlightClass}
         />
         <text
@@ -204,7 +211,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
           rx="19"
           fill={`url(#endGrad-${colorScheme})`}
           stroke={getStrokeColor(sc.mainStartStroke)}
-          strokeWidth={isHighlighted ? "4" : "2"}
+          strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+          strokeDasharray={isSelected ? "5,3" : undefined}
           className={highlightClass}
         />
         <text
@@ -251,7 +259,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             height="50"
             fill={`url(#processGrad-${colorScheme})`}
             stroke={getStrokeColor(sc.processStroke)}
-            strokeWidth={isHighlighted ? "4" : "2"}
+            strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+            strokeDasharray={isSelected ? "5,3" : undefined}
             className={highlightClass}
           />
           {/* Inner horizontal decoration line like standard Declare */}
@@ -296,7 +305,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             height="50"
             fill={`url(#processGrad-${colorScheme})`}
             stroke={getStrokeColor(sc.processStroke)}
-            strokeWidth={isHighlighted ? "4" : "2"}
+            strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+            strokeDasharray={isSelected ? "5,3" : undefined}
             className={highlightClass}
           />
           <text
@@ -336,7 +346,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             points="-80,-25 100,-25 80,25 -100,25"
             fill={`url(#inputGrad-${colorScheme})`}
             stroke={getStrokeColor(sc.inputStroke)}
-            strokeWidth={isHighlighted ? "4" : "2"}
+            strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+            strokeDasharray={isSelected ? "5,3" : undefined}
             className={highlightClass}
           />
           <text
@@ -375,7 +386,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             points="-80,-25 100,-25 80,25 -100,25"
             fill={`url(#outputGrad-${colorScheme})`}
             stroke={getStrokeColor(sc.outputStroke)}
-            strokeWidth={isHighlighted ? "4" : "2"}
+            strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+            strokeDasharray={isSelected ? "5,3" : undefined}
             className={highlightClass}
           />
           <text
@@ -415,7 +427,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             points="0,-32 80,0 0,32 -80,0"
             fill={`url(#ifGrad-${colorScheme})`}
             stroke={getStrokeColor(sc.ifStroke)}
-            strokeWidth={isHighlighted ? "4" : "2"}
+            strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+            strokeDasharray={isSelected ? "5,3" : undefined}
             className={highlightClass}
           />
           <text
@@ -454,7 +467,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             points="-65,-25 65,-25 80,0 65,25 -65,25 -80,0"
             fill={`url(#loopGrad-${colorScheme})`}
             stroke={getStrokeColor(sc.loopStroke)}
-            strokeWidth={isHighlighted ? "4" : "2"}
+            strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+            strokeDasharray={isSelected ? "5,3" : undefined}
             className={highlightClass}
           />
           <text
@@ -493,7 +507,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             points="-80,-25 80,-25 95,0 80,25 -80,25 -95,0"
             fill={`url(#loopGrad-${colorScheme})`}
             stroke={getStrokeColor(sc.loopStroke)}
-            strokeWidth={isHighlighted ? "4" : "2"}
+            strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+            strokeDasharray={isSelected ? "5,3" : undefined}
             className={highlightClass}
           />
           <text
@@ -532,7 +547,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             points="-65,-25 65,-25 80,0 65,25 -65,25 -80,0"
             fill={`url(#loopGrad-${colorScheme})`}
             stroke={getStrokeColor(sc.loopStroke)}
-            strokeWidth={isHighlighted ? "4" : "2"}
+            strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+            strokeDasharray={isSelected ? "5,3" : undefined}
             className={highlightClass}
           />
           <text
@@ -574,7 +590,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             height="50"
             fill={`url(#callGrad-${colorScheme})`}
             stroke={getStrokeColor(sc.callStroke)}
-            strokeWidth={isHighlighted ? "4" : "2"}
+            strokeWidth={isHighlighted ? "4" : isSelected ? "3" : "2"}
+            strokeDasharray={isSelected ? "5,3" : undefined}
             className={highlightClass}
           />
           {/* Double vertical line borders inside */}
@@ -615,9 +632,9 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
             rx="2"
             fill={sc.commentBg}
             stroke={sc.commentStroke}
-            strokeWidth="1.5"
-            strokeDasharray="4 4"
-            className={isHighlighted ? "stroke-amber-500 stroke-[3px] filter drop-shadow" : "hover:stroke-slate-900"}
+            strokeWidth={isHighlighted ? "3" : isSelected ? "2.5" : "1.5"}
+            strokeDasharray={isHighlighted ? "4 4" : isSelected ? "4 3" : "4 4"}
+            className={isHighlighted ? "stroke-amber-500 stroke-[3px] filter drop-shadow" : isSelected ? "stroke-blue-500 stroke-[2.5px] filter drop-shadow" : "hover:stroke-slate-900"}
           />
           <text
             y="-6"
