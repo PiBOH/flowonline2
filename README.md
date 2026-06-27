@@ -89,3 +89,4 @@ npm run build
 Flowonline2 is developed by **PiBOH** and is licensed under the **MIT License**. For complete license terms, please read the [**LICENSE**](LICENSE) file.
 
 *Flowgorithm is a registered trademark of its respective authors. Flowonline2 is an independent open-source educational clone.*
+
