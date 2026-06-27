@@ -41,14 +41,19 @@ export const Header: React.FC = () => {
   // Dropdown states for Menus
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  // Dynamic App Version state (ALPHA 2.0.11 fallback default)
-  const [appVersion, setAppVersion] = useState('ALPHA 2.0.11');
+  // Dynamic App Version state (BETA 2.0.12 fallback default!)
+  const [appVersion, setAppVersion] = useState('BETA 2.0.12');
   const [versionSource, setVersionSource] = useState<'repo' | 'fallback'>('repo');
 
   // About Modal state
   const [showAbout, setShowAbout] = useState(false);
   const [licenseText, setLicenseText] = useState('Loading license...');
   const [licenseSource, setLicenseSource] = useState<'repo' | 'fallback'>('repo');
+
+  // Manual Modal state (ALPHA 2.0.12 / BETA 2.0.12 New feature!)
+  const [showManual, setShowManual] = useState(false);
+  const [manualText, setManualText] = useState('Loading user manual...');
+  const [manualSource, setManualSource] = useState<'repo' | 'fallback'>('repo');
 
   // Decorative Window controls warning modal state
   const [showWarningModal, setShowWarningModal] = useState(false);
@@ -75,6 +80,23 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.`;
+
+  // Hardcoded fallback manual text
+  const manualTextFallback = `# Flowonline2 User Manual
+
+> Notice: The translations of Flowonline2, MANUAL.md, and all other local project files might not be 100% accurate.
+
+Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
+
+### 1. Variables and Operators
+- Variables are case-insensitive.
+- The single '=' operator is treated as a comparison (equality) in conditions.
+- String comparative relational operators (<, >, <=, >=) compare strings lexicographically.
+- The inequality operator '<>' is fully supported as an alternative to '!='.
+
+### 2. Newlines and formatting
+- To introduce a newline carriage return, write \\n without quotes inside string expressions (e.g. text & \\n & "more text").
+- In saved .fprg files, \\n is automatically translated to ToChar(13) for full desktop compatibility!`;
 
   // LOCAL MENU & ABOUT TRANSLATIONS (For 1000% multilingual fidelity!)
   const menuTranslations: Record<Language, {
@@ -113,6 +135,10 @@ SOFTWARE.`;
     versionRepoLoaded: string;
     versionFallbackLoaded: string;
     warningModalTitle: string;
+    manualMenuOption: string; // Help submenu option!
+    manualTitle: string;
+    manualRepoLoaded: string;
+    manualFallbackLoaded: string;
   }> = {
     en: {
       file: "File",
@@ -149,7 +175,11 @@ SOFTWARE.`;
       licenseFallbackLoaded: "License loaded from hardcoded fallback compilation code",
       versionRepoLoaded: "Version dynamically loaded from GitHub",
       versionFallbackLoaded: "Version loaded from hardcoded fallback compilation code",
-      warningModalTitle: "Windows System Information"
+      warningModalTitle: "Windows System Information",
+      manualMenuOption: "User Manual (MANUAL.md)...",
+      manualTitle: "Flowonline2 User Manual - MANUAL.md",
+      manualRepoLoaded: "Manual dynamically loaded from GitHub",
+      manualFallbackLoaded: "Manual loaded from hardcoded fallback compilation code"
     },
     en_GB: {
       file: "File",
@@ -186,7 +216,11 @@ SOFTWARE.`;
       licenseFallbackLoaded: "License loaded from hardcoded fallback compilation code",
       versionRepoLoaded: "Version dynamically loaded from GitHub",
       versionFallbackLoaded: "Version loaded from hardcoded fallback compilation code",
-      warningModalTitle: "Windows System Information"
+      warningModalTitle: "Windows System Information",
+      manualMenuOption: "User Manual (MANUAL.md)...",
+      manualTitle: "Flowonline2 User Manual - MANUAL.md",
+      manualRepoLoaded: "Manual dynamically loaded from GitHub",
+      manualFallbackLoaded: "Manual loaded from hardcoded fallback compilation code"
     },
     it: {
       file: "File",
@@ -223,7 +257,11 @@ SOFTWARE.`;
       licenseFallbackLoaded: "Licenza caricata dal codice compilato hardcoded (Fallback)",
       versionRepoLoaded: "Versione caricata dinamicamente da GitHub",
       versionFallbackLoaded: "Versione caricata dal codice compilato hardcoded (Fallback)",
-      warningModalTitle: "Informazione di Sistema Windows"
+      warningModalTitle: "Informazione di Sistema Windows",
+      manualMenuOption: "Guida d'uso (MANUAL.md)...",
+      manualTitle: "Guida d'uso di Flowonline2 - MANUAL.md",
+      manualRepoLoaded: "Manuale caricato dinamicamente da GitHub",
+      manualFallbackLoaded: "Manuale caricato dal codice compilato di fallback"
     },
     de: {
       file: "Datei",
@@ -260,7 +298,11 @@ SOFTWARE.`;
       licenseFallbackLoaded: "Licence loaded from fallback",
       versionRepoLoaded: "Version loaded from GitHub",
       versionFallbackLoaded: "Version loaded from fallback",
-      warningModalTitle: "Windows Systeminformationen"
+      warningModalTitle: "Windows Systeminformationen",
+      manualMenuOption: "Benutzerhandbuch (MANUAL.md)...",
+      manualTitle: "Flowonline2 Benutzerhandbuch - MANUAL.md",
+      manualRepoLoaded: "Handbuch geladen aus GitHub",
+      manualFallbackLoaded: "Handbuch geladen aus Fallback"
     },
     fr: {
       file: "Fichier",
@@ -297,7 +339,11 @@ SOFTWARE.`;
       licenseFallbackLoaded: "Licence de secours chargée",
       versionRepoLoaded: "Version chargée dynamiquement à partir de GitHub",
       versionFallbackLoaded: "Version de secours chargée",
-      warningModalTitle: "Informations Système Windows"
+      warningModalTitle: "Informations Système Windows",
+      manualMenuOption: "Manuel d'utilisation (MANUAL.md)...",
+      manualTitle: "Manuel d'utilisation de Flowonline2 - MANUAL.md",
+      manualRepoLoaded: "Manuel chargé de GitHub",
+      manualFallbackLoaded: "Manuel de secours chargé"
     },
     es: {
       file: "Archivo",
@@ -324,17 +370,21 @@ SOFTWARE.`;
       aboutRepo: "Repositorio",
       aboutLicense: "Licencia:",
       colorSchemeLabel: "Esquema de colores:",
-      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente decorativos y no tienen ninguna función práctica más que mostrar este mensaje de advertencia.",
+      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente de diseño y no tienen ninguna función práctica más que mostrar este mensaje de advertencia.",
       languageLabel: "Idioma",
       layoutLabel: "Disposición",
       zoomInLabel: "Acercar",
       zoomOutLabel: "Alejar",
       zoomResetLabel: "Restablecer",
       licenseRepoLoaded: "Licencia cargada desde GitHub",
-      licenseFallbackLoaded: "Licencia cargada desde el código de reserva",
+      licenseFallbackLoaded: "Licencia cargada desde el código compilado de reserva",
       versionRepoLoaded: "Versión cargada desde GitHub",
-      versionFallbackLoaded: "Versión cargada desde el código de reserva",
-      warningModalTitle: "Información del Sistema Windows"
+      versionFallbackLoaded: "Versión cargada desde el código compilado de reserva",
+      warningModalTitle: "Información del Sistema Windows",
+      manualMenuOption: "Manual de usuario (MANUAL.md)...",
+      manualTitle: "Manual de usuario de Flowonline2 - MANUAL.md",
+      manualRepoLoaded: "Manual cargado desde GitHub",
+      manualFallbackLoaded: "Manual de reserva cargado"
     }
   };
 
@@ -365,7 +415,7 @@ SOFTWARE.`;
             setVersionSource('repo');
           })
           .catch(() => {
-            setAppVersion('ALPHA 2.0.11'); // Local final fallback
+            setAppVersion('BETA 2.0.12'); // Local final fallback updated to BETA!
             setVersionSource('fallback');
           });
       });
@@ -407,6 +457,41 @@ SOFTWARE.`;
     }
   }, [showAbout]);
 
+  // Dynamically load the MANUAL.md file FROM THE OFFICIAL GITHUB URL (ALPHA 2.0.12 / BETA 2.0.12 New Feature!)
+  useEffect(() => {
+    if (showManual) {
+      setManualText('Loading user manual from GitHub...');
+      setManualSource('repo');
+      fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/refs/heads/main/MANUAL.md')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('MANUAL.md not found in remote repo.');
+          }
+          return res.text();
+        })
+        .then((text) => {
+          setManualText(text);
+          setManualSource('repo');
+        })
+        .catch((err) => {
+          console.warn('Unable to load remote MANUAL.md, trying local fallback:', err);
+          fetch('./MANUAL.md')
+            .then((localRes) => {
+              if (!localRes.ok) throw new Error('Local MANUAL.md missing.');
+              return localRes.text();
+            })
+            .then((text) => {
+              setManualText(text);
+              setManualSource('repo');
+            })
+            .catch(() => {
+              setManualText(manualTextFallback);
+              setManualSource('fallback');
+            });
+        });
+    }
+  }, [showManual]);
+
   // Global click listener to close dropdowns when clicking outside (Win32 behavior!)
   useEffect(() => {
     const handleGlobalClick = (e: MouseEvent) => {
@@ -444,7 +529,11 @@ SOFTWARE.`;
           loadProgram(parsed.statements, parsed.title, parsed.author);
         }
       } catch (err: any) {
-        alert(`Error opening file: ${err.message}`);
+        if (file.name.toLowerCase().endsWith('.json')) {
+          alert(`Error opening .json file: ${err.message}`);
+        } else {
+          alert(`Error opening .fprg file: ${err.message}`);
+        }
       }
     };
     reader.readAsText(file);
@@ -707,7 +796,7 @@ SOFTWARE.`;
           <button
             onClick={() => toggleDropdown('program')}
             onMouseEnter={() => handleMenuMouseEnter('program')}
-            className={`px-[10px] py-[2px] h-full flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'program' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -771,14 +860,17 @@ SOFTWARE.`;
           </button>
           {activeDropdown === 'help' && (
             <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
-              <button onClick={() => { setShowAbout(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 font-bold">
+              <button onClick={() => { setShowManual(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 font-bold">
+                <span>📚 {mt.manualMenuOption}</span>
+              </button>
+              <button onClick={() => { setShowAbout(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span>ℹ️ {mt.about}</span>
               </button>
             </div>
           )}
         </div>
 
-        {/* GLOBE LANGUAGE SWITCHER (🌐 Icon added, "Lingua" translated dynamically!) */}
+        {/* GLOBE LANGUAGE SWITCHER */}
         <div className="relative ml-auto mr-2 flex items-center gap-1.5 text-slate-600 text-[11px] font-semibold">
           <span>🌐 {mt.languageLabel}:</span>
           <select
@@ -813,7 +905,7 @@ SOFTWARE.`;
             📄
           </button>
 
-          {/* OPEN BUTTON (CRITICAL FIX: This now works perfectly because input type=file is always in DOM!) */}
+          {/* OPEN BUTTON */}
           <button
             onClick={() => {
               if (fileInputRef.current) {
@@ -969,7 +1061,7 @@ SOFTWARE.`;
 
       </div>
 
-      {/* ============ WIN32 ABOUT DIALOG MODAL (ENLARGED TO EXACTLY 700x525 PIXELS! ALPHA 2.0.10) ============ */}
+      {/* ============ WIN32 ABOUT DIALOG MODAL (ENLARGED TO EXACTLY 700x525 PIXELS! BETA 2.0.12) ============ */}
       {showAbout && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
           <div 
@@ -1032,7 +1124,7 @@ SOFTWARE.`;
               <div className="flex-1 flex flex-col space-y-1.5 my-3 overflow-hidden">
                 <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide shrink-0">
                   <span>{mt.aboutLicense}</span>
-                  <span className={`px-2.5 py-0.5 rounded font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
+                  <span className={`px-2.5 py-0.5 rounded-full font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
                     {licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
                   </span>
                 </div>
@@ -1098,6 +1190,60 @@ SOFTWARE.`;
                 <button
                   onClick={() => setShowWarningModal(false)}
                   className="px-6 py-1 bg-white hover:bg-slate-100 border border-slate-400 hover:border-slate-500 text-slate-800 text-[11px] font-bold rounded shadow-sm focus:outline-none transition active:scale-95"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============ WIN32 MANUAL DIALOG MODAL (ENLARGED TO EXACTLY 700x525 PIXELS! BETA 2.0.12) ============ */}
+      {showManual && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
+          <div 
+            className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl overflow-hidden flex flex-col font-sans select-none"
+            style={{ width: '700px', height: '525px' }} // EXPLICIT WIN32 SIZE SET TO 700 x 525!
+          >
+            {/* Manual Modal Title Bar */}
+            <div 
+              className="h-[24px] text-white flex items-center justify-between px-2 cursor-default shrink-0"
+              style={{
+                background: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)'
+              }}
+            >
+              <span className="text-[11px] font-bold text-white font-sans tracking-wide">
+                {mt.manualTitle}
+              </span>
+              <button 
+                onClick={() => setShowManual(false)}
+                className="w-[14px] h-[14px] bg-[#E81123]/80 hover:bg-[#E81123] rounded-sm flex items-center justify-center text-[10px] text-white font-bold"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Manual Modal Body */}
+            <div className="p-4 flex-1 flex flex-col justify-between bg-[#F0F0F0] text-slate-800 overflow-hidden">
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide shrink-0 mb-1.5">
+                <span>Flowonline2 Documentation</span>
+                <span className={`px-2.5 py-0.5 rounded font-sans text-[7px] font-black ${manualSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 animate-pulse' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
+                  {manualSource === 'repo' ? mt.manualRepoLoaded : mt.manualFallbackLoaded}
+                </span>
+              </div>
+              
+              <textarea
+                readOnly
+                value={manualText}
+                className="w-full flex-1 border border-slate-300 rounded p-3 font-mono text-[11px] bg-white text-slate-700 focus:outline-none resize-none overflow-auto leading-relaxed shadow-inner"
+              />
+
+              {/* OK button to close dialog (Win32 styled) */}
+              <div className="flex items-center justify-end shrink-0 mt-3">
+                <button
+                  onClick={() => setShowManual(false)}
+                  className="px-8 py-1.5 bg-white hover:bg-slate-100 border border-slate-400 hover:border-slate-500 text-slate-800 text-[11px] font-bold rounded shadow-sm focus:outline-none transition active:scale-95"
                 >
                   OK
                 </button>
