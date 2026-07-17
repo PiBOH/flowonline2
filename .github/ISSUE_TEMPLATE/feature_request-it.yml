@@ -1,0 +1,44 @@
+name: 🚀 Richiesta di Funzionalità (Italiano)
+description: Hai un'idea o una proposta? Condividila!
+title: "[Feat]: "
+labels: ["enhancement", "triage"]
+body:
+- type: markdown
+  attributes:
+    value: |
+      ### 💡 Proposta di Funzionalità
+      Aiuta a migliorare Flowonline2 inviando la tua proposta per nuove funzioni o miglioramenti.
+- type: dropdown
+  id: category
+  attributes:
+    label: 🏷️ Categoria
+    options:
+    - ✨ Nuovo Tipo di Blocco / Funzionalità
+    - 🎨 UI / Miglioramento Design
+    - ⚡ Performance / Ottimizzazione
+    - 🌐 Traduzione / Nuova Lingua
+    - 🖼️ Export / Import Enhancement
+    - 🔧 Altro
+    validations:
+      required: true
+- type: textarea
+  id: description
+  attributes:
+    label: 📝 Cosa vorresti?
+    description: Descrivi in maniera dettagliata la tua idea. Come dovrebbe funzionare?
+    placeholder: "Mi piacerebbe vedere una funzione che consenta di..."
+    validations:
+      required: true
+- type: textarea
+  id: problem
+  attributes:
+    label: 🤝 Cosa dovrebbe risolvere o migliorare?
+    description: Perché questa feature è necessaria? Cosa renderebbe più facile o veloce?
+    placeholder: "Attualmente è difficile o macchinoso fare..."
+    validations:
+      required: true
+- type: textarea
+  id: context
+  attributes:
+    label: 🎨 Mockup / Screenshot / Extra
+    description: Trascina qui immagini, sketch o schemi se vuoi illustrare graficamente la tua idea!

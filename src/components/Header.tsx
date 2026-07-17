@@ -47,8 +47,8 @@ export const Header: React.FC = () => {
   // Dropdown states for Menus
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  // Dynamic App Version state (BETA 2.0.13 fallback default!)
-  const [appVersion, setAppVersion] = useState('BETA 2.0.13');
+  // Dynamic App Version state (BETA 2.1.0 fallback default!)
+  const [appVersion, setAppVersion] = useState('BETA 2.1.0');
   const [versionSource, setVersionSource] = useState<'repo' | 'fallback'>('repo');
 
   // About Modal state
@@ -56,13 +56,19 @@ export const Header: React.FC = () => {
   const [licenseText, setLicenseText] = useState('Loading license...');
   const [licenseSource, setLicenseSource] = useState<'repo' | 'fallback'>('repo');
 
-  // Manual Modal state (ALPHA 2.0.12 / BETA 2.0.13 New feature!)
+  // Manual Modal state (ALPHA 2.0.12 / BETA 2.1.0 New feature!)
   const [showManual, setShowManual] = useState(false);
   const [manualText, setManualText] = useState('Loading user manual...');
   const [manualSource, setManualSource] = useState<'repo' | 'fallback'>('repo');
 
   // Decorative Window controls warning modal state
   const [showWarningModal, setShowWarningModal] = useState(false);
+
+  // Changelog Modal state
+  const [showChangelog, setShowChangelog] = useState(false);
+  const [changelogText, setChangelogText] = useState('Loading changelog...');
+  const [changelogSource, setChangelogSource] = useState<'repo' | 'fallback'>('repo');
+  const changelogTextFallback = '# Flowonline2 Changelog\n\n> Fallback changelog not available.';
 
   // Hardcoded fallback license text (GNU GPL v3)
   const gplLicenseTextFallback = `GNU GENERAL PUBLIC LICENSE
@@ -141,6 +147,10 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     manualTitle: string;
     manualRepoLoaded: string;
     manualFallbackLoaded: string;
+    changelogMenuOption: string;
+    changelogTitle: string;
+    changelogRepoLoaded: string;
+    changelogFallbackLoaded: string;
   }> = {
     en: {
       file: "File",
@@ -181,7 +191,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       manualMenuOption: "User Manual (MANUAL.md)...",
       manualTitle: "Flowonline2 User Manual - MANUAL.md",
       manualRepoLoaded: "Manual dynamically loaded from GitHub",
-      manualFallbackLoaded: "Manual loaded from hardcoded fallback compilation code"
+      manualFallbackLoaded: "Manual loaded from hardcoded fallback compilation code",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog dynamically loaded from GitHub",
+      changelogFallbackLoaded: "Changelog loaded from hardcoded fallback compilation code"
     },
     en_GB: {
       file: "File",
@@ -222,7 +236,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       manualMenuOption: "User Manual (MANUAL.md)...",
       manualTitle: "Flowonline2 User Manual - MANUAL.md",
       manualRepoLoaded: "Manual dynamically loaded from GitHub",
-      manualFallbackLoaded: "Manual loaded from hardcoded fallback compilation code"
+      manualFallbackLoaded: "Manual loaded from hardcoded fallback compilation code",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog dynamically loaded from GitHub",
+      changelogFallbackLoaded: "Changelog loaded from hardcoded fallback compilation code"
     },
     it: {
       file: "File",
@@ -263,7 +281,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       manualMenuOption: "Guida d'uso (MANUAL.md)...",
       manualTitle: "Guida d'uso di Flowonline2 - MANUAL.md",
       manualRepoLoaded: "Manuale caricato dinamicamente da GitHub",
-      manualFallbackLoaded: "Manuale caricato dal codice compilato di fallback"
+      manualFallbackLoaded: "Manuale caricato dal codice compilato di fallback",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog caricato dinamicamente da GitHub",
+      changelogFallbackLoaded: "Changelog caricato dal codice compilato di fallback"
     },
     de: {
       file: "Datei",
@@ -304,7 +326,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       manualMenuOption: "Benutzerhandbuch (MANUAL.md)...",
       manualTitle: "Flowonline2 Benutzerhandbuch - MANUAL.md",
       manualRepoLoaded: "Handbuch geladen aus GitHub",
-      manualFallbackLoaded: "Handbuch geladen aus Fallback"
+      manualFallbackLoaded: "Handbuch geladen aus Fallback",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog geladen aus GitHub",
+      changelogFallbackLoaded: "Changelog geladen aus Fallback"
     },
     fr: {
       file: "Fichier",
@@ -345,7 +371,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       manualMenuOption: "Manuel d'utilisation (MANUAL.md)...",
       manualTitle: "Manuel d'utilisation de Flowonline2 - MANUAL.md",
       manualRepoLoaded: "Manuel chargé de GitHub",
-      manualFallbackLoaded: "Manuel de secours chargé"
+      manualFallbackLoaded: "Manuel de secours chargé",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog chargé de GitHub",
+      changelogFallbackLoaded: "Changelog de secours chargé"
     },
     es: {
       file: "Archivo",
@@ -372,7 +402,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       aboutRepo: "Repositorio",
       aboutLicense: "Licencia:",
       colorSchemeLabel: "Esquema de colores:",
-      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) sono puramente fittizi e non hanno alcuna funzione se non mostrare questo avviso.",
+      decorativeWindowAlert: "Flowonline2 es una réplica web de Flowgorithm para Windows. Estos botones de control de ventana (Minimizar, Maximizar y Cerrar) son puramente decorativos y no tienen ninguna función práctica aparte de mostrar este aviso informativo.",
       languageLabel: "Idioma",
       layoutLabel: "Disposición",
       zoomInLabel: "Acercar",
@@ -386,7 +416,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       manualMenuOption: "Manual de usuario (MANUAL.md)...",
       manualTitle: "Manual de usuario de Flowonline2 - MANUAL.md",
       manualRepoLoaded: "Manual cargado desde GitHub",
-      manualFallbackLoaded: "Manual de reserva cargado"
+      manualFallbackLoaded: "Manual de reserva cargado",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog cargado desde GitHub",
+      changelogFallbackLoaded: "Changelog de reserva cargado"
     }
   };
 
@@ -417,10 +451,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             setVersionSource('repo');
           })
           .catch(() => {
-            setAppVersion('BETA 2.0.13'); // Local final fallback updated to BETA!
+            setAppVersion('BETA 2.1.0'); // Local final fallback updated to BETA!
             setVersionSource('fallback');
           });
-          setAppVersion('BETA 2.0.13');
       });
   }, []);
 
@@ -460,7 +493,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     }
   }, [showAbout]);
 
-  // Dynamically load the MANUAL.md file FROM THE OFFICIAL GITHUB URL (ALPHA 2.0.12 / BETA 2.0.13 New Feature!)
+  // Dynamically load the MANUAL.md file FROM THE OFFICIAL GITHUB URL (ALPHA 2.0.12 / BETA 2.1.0 New Feature!)
   useEffect(() => {
     if (showManual) {
       setManualText('Loading user manual from GitHub...');
@@ -494,6 +527,41 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         });
     }
   }, [showManual]);
+
+  // Dynamically load the CHANGELOG.md file FROM THE OFFICIAL GITHUB URL
+  useEffect(() => {
+    if (showChangelog) {
+      setChangelogText('Loading changelog from GitHub...');
+      setChangelogSource('repo');
+      fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/refs/heads/main/CHANGELOG.md')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('CHANGELOG.md not found in remote repo.');
+          }
+          return res.text();
+        })
+        .then((text) => {
+          setChangelogText(text);
+          setChangelogSource('repo');
+        })
+        .catch((err) => {
+          console.warn('Unable to load remote CHANGELOG.md, trying local fallback:', err);
+          fetch('./CHANGELOG.md')
+            .then((localRes) => {
+              if (!localRes.ok) throw new Error('Local CHANGELOG.md missing.');
+              return localRes.text();
+            })
+            .then((text) => {
+              setChangelogText(text);
+              setChangelogSource('repo');
+            })
+            .catch(() => {
+              setChangelogText(changelogTextFallback);
+              setChangelogSource('fallback');
+            });
+        });
+    }
+  }, [showChangelog]);
 
   // Global click listener to close dropdowns when clicking outside (Win32 behavior!)
   useEffect(() => {
@@ -1089,6 +1157,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           </button>
           {activeDropdown === 'help' && (
             <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
+              <button onClick={() => { setShowChangelog(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 font-bold">
+                <span>📋 {mt.changelogMenuOption}</span>
+              </button>
               <button onClick={() => { setShowManual(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 font-bold">
                 <span>📚 {mt.manualMenuOption}</span>
               </button>
@@ -1482,6 +1553,65 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             </div>
           </div>
         </div>
+      )}
+
+      {/* ============ WIN32 CHANGELOG DIALOG MODAL ============ */}
+      {showChangelog && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
+          <div 
+            className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl overflow-hidden flex flex-col font-sans select-none"
+            style={{ width: '750px', height: '550px' }}
+          >
+            {/* Changelog Modal Title Bar */}
+            <div 
+              className="h-[24px] text-white flex items-center justify-between px-2 cursor-default shrink-0"
+              style={{
+                background: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)'
+              }}
+            >
+              <span className="text-[11px] font-bold text-white font-sans tracking-wide">
+                {mt.changelogTitle}
+              </span>
+              <button 
+                onClick={() => setShowChangelog(false)}
+                className="w-[14px] h-[14px] bg-[#E81123]/80 hover:bg-[#E81123] rounded-sm flex items-center justify-center text-[10px] text-white font-bold"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Changelog Source Badge */}
+            <div className="flex items-center gap-2 px-4 py-1.5 bg-[#E8E8E8] border-b border-slate-300 shrink-0">
+              <span className="text-[10px] font-bold text-slate-500 font-sans">
+                <span className="text-[10px] font-bold text-slate-700">CHANGELOG.md</span>
+              </span>
+              <span className={`px-2.5 py-0.5 rounded font-sans text-[7px] font-black ${changelogSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 animate-pulse' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
+                {changelogSource === 'repo' ? mt.changelogRepoLoaded : mt.changelogFallbackLoaded}
+              </span>
+            </div>
+            
+            {/* Changelog Content */}
+            <div 
+              className="flex-1 overflow-y-auto p-4 bg-white text-[11px] leading-relaxed font-sans"
+              style={{
+                fontFamily: '"Segoe UI", "SF Pro", Arial, sans-serif',
+                lineHeight: '1.6'
+              }}
+            >
+              {parseMarkdown(changelogText)}
+            </div>
+
+            {/* OK button */}
+            <div className="flex items-center justify-end shrink-0 p-2 bg-[#F0F0F0] border-t border-slate-300">
+              <button
+                onClick={() => setShowChangelog(false)}
+                className="px-8 py-1.5 bg-white hover:bg-slate-100 border border-slate-400 hover:border-slate-500 text-slate-800 text-[11px] font-bold rounded shadow-sm focus:outline-none transition active:scale-95"
+              >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
       )}
 
       {/* CRITICAL FILE INPUT (Rendered outside conditional blocks so it's always in the DOM and available for toolbar click!) */}

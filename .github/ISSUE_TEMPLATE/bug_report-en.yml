@@ -1,0 +1,100 @@
+name: 🐛 Bug Report (English)
+description: Something is broken? Help us fix it!
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+- type: markdown
+  attributes:
+    value: |
+      ### 🛠️ Bug Report
+      Thank you for reporting! Please fill out the form below with as much detail as possible.
+- type: checkboxes
+  id: checklist
+  attributes:
+    label: Pre-flight Checklist
+    options:
+    - label: I am using the [latest release](https://github.com/PiBOH/flowonline2/releases/latest) of Flowonline2.
+      required: true
+    - label: I have searched existing issues and verified this is not a duplicate.
+      required: true
+- type: dropdown
+  id: component
+  attributes:
+    label: 📍 Where do you believe the bug is?
+    description: Select the area of the application where you encounter the issue.
+    options:
+    - 🧩 Flowchart Canvas / Block Rendering
+    - ▶️ Execution Engine / VM (Run / Step / Pause)
+    - 💬 Console / Input / Output
+    - 📊 Variable Watch / Sidebar
+    - 🌐 Translations / Language Switching
+    - 📂 File IO (.fprg / .json import/export)
+    - 🖼️ Export (SVG / PNG)
+    - 🎨 Color Schemes / Themes
+    - ❓ Other
+    validations:
+      required: true
+- type: dropdown
+  id: frequency
+  attributes:
+    label: 📉 How frequently does it occur?
+    options:
+    - 🔴 Always (100%)
+    - 🟠 Often (> 50%)
+    - 🟡 Sometimes (< 50%)
+    - 🟢 Rarely (Once or twice)
+    validations:
+      required: true
+- type: textarea
+  id: reproduce-steps
+  attributes:
+    label: 🔄 Steps to reproduce the bug
+    description: Clear, precise steps lead to a faster fix!
+    placeholder: |
+      1. Open the app...
+      2. Add a block...
+      3. Click on...
+    value: |
+      1.
+      2.
+      3.
+    validations:
+      required: true
+- type: textarea
+  id: expected-actual
+  attributes:
+    label: 🆚 Expected behavior vs. Actual behavior
+    description: What should have happened vs. what actually happened.
+    placeholder: |
+      Expected: The flowchart executes correctly.
+      Actual: The application shows an error or crashes.
+    validations:
+      required: true
+- type: markdown
+  attributes:
+    value: "---"
+- type: dropdown
+  id: os-ver
+  attributes:
+    label: 💻 Operating System / Environment?
+    options:
+    - 🪟 Windows 11
+    - 🪟 Windows 10
+    - 🍎 macOS
+    - 🐧 Linux
+    - 🌐 Web (Browser / GitHub Pages)
+    validations:
+      required: true
+- type: input
+  id: app-version
+  attributes:
+    label: 📦 App Version
+    placeholder: e.g. BETA 2.1.0 (Check the title bar)
+    validations:
+      required: true
+- type: textarea
+  id: logs
+  attributes:
+    label: 📄 Logs / Screenshots
+    description: Paste logs/error messages or drag & drop screenshots here.
+    render: shell

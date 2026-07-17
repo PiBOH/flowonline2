@@ -51,7 +51,7 @@ export const Sidebar: React.FC = () => {
         className={`h-[24px] flex items-center justify-between px-2 cursor-default shrink-0 text-white font-sans ${headerBg}`}
       >
         <span className="text-[11px] font-bold tracking-wide">
-          {isWatchLayout ? '👁️ Watch Variabili - Flowonline2' : '📝 Codice Sorgente - Flowonline2'}
+          {isWatchLayout ? t.sidebar.watchTitle : t.sidebar.codeTitle}
         </span>
         <div className="flex items-center gap-1.5">
           <button 
@@ -60,7 +60,7 @@ export const Sidebar: React.FC = () => {
               else setLayout('flowchart_only');
             }}
             className="w-[14px] h-[14px] bg-[#E81123]/80 hover:bg-[#E81123] rounded-sm flex items-center justify-center text-[10px] text-white font-bold"
-            title="Chiudi Finestra"
+            title={t.sidebar.closeTooltip}
           >
             ×
           </button>
@@ -73,7 +73,7 @@ export const Sidebar: React.FC = () => {
           /* ============ VARIABLE WATCH GRID ============ */
           <div className="flex-1 flex flex-col h-full overflow-hidden">
             <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2 font-sans select-none ${subText}`}>
-              Variabili Attive in Memoria
+              {t.sidebar.activeVariables}
             </h4>
             
             {variableList.length === 0 ? (
@@ -122,7 +122,7 @@ export const Sidebar: React.FC = () => {
                       </div>
                     ) : (
                       <div className="flex items-center justify-between text-[11px] font-mono">
-                        <span className="text-slate-400">Valore:</span>
+                        <span className="text-slate-400">{t.sidebar.valueLabel}</span>
                         <span className={`font-black ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{String(v.value === null || v.value === undefined ? 'None' : v.value)}</span>
                       </div>
                     )}
@@ -136,7 +136,7 @@ export const Sidebar: React.FC = () => {
           <div className="flex-1 flex flex-col h-full overflow-hidden space-y-3">
             <div className="flex flex-col space-y-1 select-none">
               <label className={`text-[10px] font-bold uppercase tracking-wide ${subText}`}>
-                Seleziona Linguaggio
+                {t.sidebar.languageLabel}
               </label>
               <select
                 value={targetLang}

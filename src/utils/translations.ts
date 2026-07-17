@@ -24,7 +24,13 @@ export const translations: Record<Language, TranslationCatalog> = {
       noVariables: "No variables declared yet.",
       varName: "Name",
       varType: "Type",
-      varVal: "Value"
+      varVal: "Value",
+      watchTitle: "👁️ Variable Watch - Flowonline2",
+      codeTitle: "📝 Source Code - Flowonline2",
+      closeTooltip: "Close Panel",
+      languageLabel: "Select Language",
+      activeVariables: "Active Variables in Memory",
+      valueLabel: "Value:"
     },
     blocks: {
       main: "Main",
@@ -65,7 +71,15 @@ export const translations: Record<Language, TranslationCatalog> = {
       arguments: "Arguments (comma separated)",
       commentText: "Comment Text",
       errorTypeMismatch: "Value does not match the variable type.",
-      errorRequired: "This field is required."
+      errorRequired: "This field is required.",
+      callFuncPlaceholder: "e.g. MyFunction",
+      commentPlaceholder: "Write your annotations here...",
+      blockCommentLabel: "Block Note/Comment (Optional)",
+      blockCommentPlaceholder: "e.g. Check that age is greater than 18",
+      declarePlaceholder: "e.g. x, y, sum",
+      assignPlaceholder: "e.g. sum, arr[i]",
+      inputPlaceholder: "e.g. x, arr[idx]",
+      outputPlaceholder: "e.g. \"Result: \" & sum"
     },
     errors: {
       executionError: "Execution Error",
@@ -74,6 +88,19 @@ export const translations: Record<Language, TranslationCatalog> = {
       typeMismatch: "Type mismatch",
       arrayIndexOutOfBounds: "Array index out of bounds",
       divideByZero: "Division by zero"
+    },
+    console: {
+      title: "💬 Execution Console - Flowonline2",
+      clearBtn: "Clear",
+      closeTooltip: "Close Panel",
+      emptyMessage: "Console empty. Press \"Run\" to start the algorithm.",
+      inputPlaceholder: "Type value and press Enter...",
+      submitBtn: "Submit",
+      readyStatus: "Ready",
+      logCount: "Log: {0} lines"
+    },
+    canvas: {
+      selectBlock: "Select Block"
     }
   },
   en_GB: {
@@ -99,7 +126,13 @@ export const translations: Record<Language, TranslationCatalog> = {
       noVariables: "No variables declared yet.",
       varName: "Name",
       varType: "Type",
-      varVal: "Value"
+      varVal: "Value",
+      watchTitle: "👁️ Variable Watch - Flowonline2",
+      codeTitle: "📝 Source Code - Flowonline2",
+      closeTooltip: "Close Panel",
+      languageLabel: "Select Language",
+      activeVariables: "Active Variables in Memory",
+      valueLabel: "Value:"
     },
     blocks: {
       main: "Main",
@@ -140,7 +173,15 @@ export const translations: Record<Language, TranslationCatalog> = {
       arguments: "Arguments (comma separated)",
       commentText: "Comment Text",
       errorTypeMismatch: "Value does not match the variable type.",
-      errorRequired: "This field is required."
+      errorRequired: "This field is required.",
+      callFuncPlaceholder: "e.g. MyFunction",
+      commentPlaceholder: "Write your annotations here...",
+      blockCommentLabel: "Block Note/Comment (Optional)",
+      blockCommentPlaceholder: "e.g. Check that age is greater than 18",
+      declarePlaceholder: "e.g. x, y, sum",
+      assignPlaceholder: "e.g. sum, arr[i]",
+      inputPlaceholder: "e.g. x, arr[idx]",
+      outputPlaceholder: "e.g. \"Result: \" & sum"
     },
     errors: {
       executionError: "Execution Error",
@@ -149,6 +190,19 @@ export const translations: Record<Language, TranslationCatalog> = {
       typeMismatch: "Type mismatch",
       arrayIndexOutOfBounds: "Array index out of bounds",
       divideByZero: "Division by zero"
+    },
+    console: {
+      title: "💬 Execution Console - Flowonline2",
+      clearBtn: "Clear",
+      closeTooltip: "Close Panel",
+      emptyMessage: "Console empty. Press \"Run\" to start the algorithm.",
+      inputPlaceholder: "Type value and press Enter...",
+      submitBtn: "Submit",
+      readyStatus: "Ready",
+      logCount: "Log: {0} lines"
+    },
+    canvas: {
+      selectBlock: "Select Block"
     }
   },
   de: {
@@ -174,7 +228,13 @@ export const translations: Record<Language, TranslationCatalog> = {
       noVariables: "Noch keine Variablen deklariert.",
       varName: "Name",
       varType: "Typ",
-      varVal: "Wert"
+      varVal: "Wert",
+      watchTitle: "👁️ Variablen-Ansicht - Flowonline2",
+      codeTitle: "📝 Quellcode - Flowonline2",
+      closeTooltip: "Panel schließen",
+      languageLabel: "Sprache auswählen",
+      activeVariables: "Aktive Variablen im Speicher",
+      valueLabel: "Wert:"
     },
     blocks: {
       main: "Hauptprogramm",
@@ -215,7 +275,15 @@ export const translations: Record<Language, TranslationCatalog> = {
       arguments: "Argumente (Komma-separiert)",
       commentText: "Kommentartext",
       errorTypeMismatch: "Wert entspricht nicht dem Variablentyp.",
-      errorRequired: "Dieses Feld ist erforderlich."
+      errorRequired: "Dieses Feld ist erforderlich.",
+      callFuncPlaceholder: "z.B. MeineFunktion",
+      commentPlaceholder: "Schreiben Sie hier Ihre Anmerkungen...",
+      blockCommentLabel: "Block-Notiz/Kommentar (Optional)",
+      blockCommentPlaceholder: "z.B. Prüfen, ob Alter > 18 ist",
+      declarePlaceholder: "z.B. x, y, summe",
+      assignPlaceholder: "z.B. summe, arr[i]",
+      inputPlaceholder: "z.B. x, arr[idx]",
+      outputPlaceholder: "z.B. \"Ergebnis: \" & summe"
     },
     errors: {
       executionError: "Ausführungsfehler",
@@ -224,6 +292,19 @@ export const translations: Record<Language, TranslationCatalog> = {
       typeMismatch: "Typkonflikt",
       arrayIndexOutOfBounds: "Array-Index außerhalb der Grenzen",
       divideByZero: "Division durch Null"
+    },
+    console: {
+      title: "💬 Ausführungskonsole - Flowonline2",
+      clearBtn: "Löschen",
+      closeTooltip: "Panel schließen",
+      emptyMessage: "Konsole leer. Drücken Sie \"Ausführen\" um den Algorithmus zu starten.",
+      inputPlaceholder: "Wert eingeben und Enter drücken...",
+      submitBtn: "Senden",
+      readyStatus: "Bereit",
+      logCount: "Log: {0} Zeilen"
+    },
+    canvas: {
+      selectBlock: "Block auswählen"
     }
   },
   fr: {
@@ -249,7 +330,13 @@ export const translations: Record<Language, TranslationCatalog> = {
       noVariables: "Aucune variable déclarée.",
       varName: "Nom",
       varType: "Type",
-      varVal: "Valeur"
+      varVal: "Valeur",
+      watchTitle: "👁️ Variables - Flowonline2",
+      codeTitle: "📝 Code Source - Flowonline2",
+      closeTooltip: "Fermer le panneau",
+      languageLabel: "Sélectionner la langue",
+      activeVariables: "Variables actives en mémoire",
+      valueLabel: "Valeur :"
     },
     blocks: {
       main: "Principal (Main)",
@@ -290,7 +377,15 @@ export const translations: Record<Language, TranslationCatalog> = {
       arguments: "Arguments (séparés par des virgules)",
       commentText: "Texte du commentaire",
       errorTypeMismatch: "La valeur ne correspond pas au type de variable.",
-      errorRequired: "Ce champ est requis."
+      errorRequired: "Ce champ est requis.",
+      callFuncPlaceholder: "ex. MaFonction",
+      commentPlaceholder: "Écrivez vos annotations ici...",
+      blockCommentLabel: "Note/Commentaire de bloc (Optionnel)",
+      blockCommentPlaceholder: "ex. Vérifier que l'âge > 18",
+      declarePlaceholder: "ex. x, y, somme",
+      assignPlaceholder: "ex. somme, tab[i]",
+      inputPlaceholder: "ex. x, tab[idx]",
+      outputPlaceholder: "ex. \"Résultat : \" & somme"
     },
     errors: {
       executionError: "Erreur d'exécution",
@@ -299,6 +394,19 @@ export const translations: Record<Language, TranslationCatalog> = {
       typeMismatch: "Incompatibilité de type",
       arrayIndexOutOfBounds: "Index de tableau hors limites",
       divideByZero: "Division par zéro"
+    },
+    console: {
+      title: "💬 Console d'exécution - Flowonline2",
+      clearBtn: "Effacer",
+      closeTooltip: "Fermer le panneau",
+      emptyMessage: "Console vide. Appuyez sur \"Exécuter\" pour lancer l'algorithme.",
+      inputPlaceholder: "Saisissez une valeur et appuyez sur Entrée...",
+      submitBtn: "Envoyer",
+      readyStatus: "Prêt",
+      logCount: "Log : {0} lignes"
+    },
+    canvas: {
+      selectBlock: "Sélectionner un bloc"
     }
   },
   es: {
@@ -324,7 +432,13 @@ export const translations: Record<Language, TranslationCatalog> = {
       noVariables: "No hay variables declaradas.",
       varName: "Nombre",
       varType: "Tipo",
-      varVal: "Valor"
+      varVal: "Valor",
+      watchTitle: "👁️ Variables - Flowonline2",
+      codeTitle: "📝 Código Fuente - Flowonline2",
+      closeTooltip: "Cerrar Panel",
+      languageLabel: "Seleccionar Idioma",
+      activeVariables: "Variables Activas en Memoria",
+      valueLabel: "Valor:"
     },
     blocks: {
       main: "Principal (Main)",
@@ -365,7 +479,15 @@ export const translations: Record<Language, TranslationCatalog> = {
       arguments: "Argumentos (separados por comas)",
       commentText: "Texto del Comentario",
       errorTypeMismatch: "El valor no coincide con el tipo de variable.",
-      errorRequired: "Este campo es requerido."
+      errorRequired: "Este campo es requerido.",
+      callFuncPlaceholder: "ej. MiFunción",
+      commentPlaceholder: "Escriba sus anotaciones aquí...",
+      blockCommentLabel: "Nota/Commentario del Bloque (Opcional)",
+      blockCommentPlaceholder: "ej. Verificar que edad > 18",
+      declarePlaceholder: "ej. x, y, suma",
+      assignPlaceholder: "ej. suma, arr[i]",
+      inputPlaceholder: "ej. x, arr[idx]",
+      outputPlaceholder: "ej. \"Resultado: \" & suma"
     },
     errors: {
       executionError: "Error de Ejecución",
@@ -374,6 +496,19 @@ export const translations: Record<Language, TranslationCatalog> = {
       typeMismatch: "Incompatibilidad de tipos",
       arrayIndexOutOfBounds: "Índice fuera de rango",
       divideByZero: "División por cero"
+    },
+    console: {
+      title: "💬 Consola de Ejecución - Flowonline2",
+      clearBtn: "Limpiar",
+      closeTooltip: "Cerrar Panel",
+      emptyMessage: "Consola vacía. Presione \"Ejecutar\" para iniciar el algoritmo.",
+      inputPlaceholder: "Escriba un valor y presione Enter...",
+      submitBtn: "Enviar",
+      readyStatus: "Listo",
+      logCount: "Log: {0} líneas"
+    },
+    canvas: {
+      selectBlock: "Seleccionar Bloque"
     }
   },
   it: {
@@ -399,7 +534,13 @@ export const translations: Record<Language, TranslationCatalog> = {
       noVariables: "Nessuna variabile dichiarata.",
       varName: "Nome",
       varType: "Tipo",
-      varVal: "Valore"
+      varVal: "Valore",
+      watchTitle: "👁️ Watch Variabili - Flowonline2",
+      codeTitle: "📝 Codice Sorgente - Flowonline2",
+      closeTooltip: "Chiudi Pannello",
+      languageLabel: "Seleziona Linguaggio",
+      activeVariables: "Variabili Attive in Memoria",
+      valueLabel: "Valore:"
     },
     blocks: {
       main: "Main",
@@ -440,7 +581,15 @@ export const translations: Record<Language, TranslationCatalog> = {
       arguments: "Argomenti (separati da virgola)",
       commentText: "Testo del Commento",
       errorTypeMismatch: "Il valore inserito non corrisponde al tipo di dato.",
-      errorRequired: "Questo campo è obbligatorio."
+      errorRequired: "Questo campo è obbligatorio.",
+      callFuncPlaceholder: "es. MiaFunzione",
+      commentPlaceholder: "Scrivi qui le annotazioni...",
+      blockCommentLabel: "Nota/Commento del Blocco (Opzionale)",
+      blockCommentPlaceholder: "es. Controlla che eta sia maggiore di 18",
+      declarePlaceholder: "es. x, y, somma",
+      assignPlaceholder: "es. somma, vettore[i]",
+      inputPlaceholder: "es. x, vettore[idx]",
+      outputPlaceholder: "es. \"Risultato: \" & somma"
     },
     errors: {
       executionError: "Errore di Esecuzione",
@@ -449,6 +598,19 @@ export const translations: Record<Language, TranslationCatalog> = {
       typeMismatch: "Incompatibilità di tipo",
       arrayIndexOutOfBounds: "Indice dell'array fuori dai limiti",
       divideByZero: "Divisione per zero"
+    },
+    console: {
+      title: "💬 Console di Esecuzione - Flowonline2",
+      clearBtn: "Svuota",
+      closeTooltip: "Chiudi Pannello",
+      emptyMessage: "Console vuota. Premi \"Esegui\" per avviare l'algoritmo.",
+      inputPlaceholder: "Digita valore e premi Invio...",
+      submitBtn: "Invia",
+      readyStatus: "Pronto",
+      logCount: "Log: {0} righe"
+    },
+    canvas: {
+      selectBlock: "Seleziona Blocco"
     }
   }
 };

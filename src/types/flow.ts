@@ -155,6 +155,12 @@ export interface TranslationCatalog {
     varName: string;
     varType: string;
     varVal: string;
+    watchTitle: string;
+    codeTitle: string;
+    closeTooltip: string;
+    languageLabel: string;
+    activeVariables: string;
+    valueLabel: string;
   };
   blocks: {
     main: string;
@@ -196,6 +202,27 @@ export interface TranslationCatalog {
     commentText: string;
     errorTypeMismatch: string;
     errorRequired: string;
+    callFuncPlaceholder: string;
+    commentPlaceholder: string;
+    blockCommentLabel: string;
+    blockCommentPlaceholder: string;
+    declarePlaceholder: string;
+    assignPlaceholder: string;
+    inputPlaceholder: string;
+    outputPlaceholder: string;
+  };
+  console: {
+    title: string;
+    clearBtn: string;
+    closeTooltip: string;
+    emptyMessage: string;
+    inputPlaceholder: string;
+    submitBtn: string;
+    readyStatus: string;
+    logCount: string;
+  };
+  canvas: {
+    selectBlock: string;
   };
   errors: {
     executionError: string;

@@ -1,0 +1,100 @@
+name: 🐛 Segnalazione Bug (Italiano)
+description: Qualcosa non funziona? Aiutaci a risolverlo!
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+- type: markdown
+  attributes:
+    value: |
+      ### 🛠️ Segnalazione Bug
+      Grazie per la segnalazione! Compila il modulo sottostante con il maggior numero di dettagli possibile.
+- type: checkboxes
+  id: checklist
+  attributes:
+    label: Pre-flight Checklist
+    options:
+    - label: Utilizzo [l'ultima versione](https://github.com/PiBOH/flowonline2/releases/latest) di Flowonline2.
+      required: true
+    - label: Ho verificato e non esiste un'altra issue simile già aperta.
+      required: true
+- type: dropdown
+  id: component
+  attributes:
+    label: 📍 Dove credi che sia il bug?
+    description: Seleziona l'area dell'applicazione in cui riscontri il problema.
+    options:
+    - 🧩 Canvas Flowchart / Rendering Blocchi
+    - ▶️ Motore di Esecuzione / VM (Run / Step / Pause)
+    - 💬 Console / Input / Output
+    - 📊 Watch Variabili / Sidebar
+    - 🌐 Traduzioni / Cambio Lingua
+    - 📂 File IO (import/export .fprg / .json)
+    - 🖼️ Export (SVG / PNG)
+    - 🎨 Schemi Colore / Tema
+    - ❓ Altro
+    validations:
+      required: true
+- type: dropdown
+  id: frequency
+  attributes:
+    label: 📉 Con che frequenza accade?
+    options:
+    - 🔴 Sempre (100%)
+    - 🟠 Spesso (> 50%)
+    - 🟡 A volte (< 50%)
+    - 🟢 Raramente (Una o due volte in tutto)
+    validations:
+      required: true
+- type: textarea
+  id: reproduce-steps
+  attributes:
+    label: 🔄 Passaggi per riprodurre il bug
+    description: Descrivi in modo chiaro le azioni compiute per aiutarci a riprodurre e risolvere il problema!
+    placeholder: |
+      1. Apri l'app...
+      2. Aggiungi un blocco...
+      3. Fai clic su...
+    value: |
+      1.
+      2.
+      3.
+    validations:
+      required: true
+- type: textarea
+  id: expected-actual
+  attributes:
+    label: 🆚 Cosa dovrebbe succedere vs. Cosa succede
+    description: Qual era il comportamento atteso e cosa si è verificato invece.
+    placeholder: |
+      Aspettativa: Il flowchart viene eseguito correttamente.
+      Realtà: L'applicazione mostra un errore o si blocca.
+    validations:
+      required: true
+- type: markdown
+  attributes:
+    value: "---"
+- type: dropdown
+  id: os-ver
+  attributes:
+    label: 💻 Sistema Operativo / Ambiente di Esecuzione?
+    options:
+    - 🪟 Windows 11
+    - 🪟 Windows 10
+    - 🍎 macOS
+    - 🐧 Linux
+    - 🌐 Web (Browser / GitHub Pages)
+    validations:
+      required: true
+- type: input
+  id: app-version
+  attributes:
+    label: 📦 Versione App
+    placeholder: es. BETA 2.1.0 (Controlla la barra del titolo)
+    validations:
+      required: true
+- type: textarea
+  id: logs
+  attributes:
+    label: 📄 Log / Screenshot
+    description: Incolla log o messaggi d'errore, oppure trascina qui uno screenshot del problema.
+    render: shell

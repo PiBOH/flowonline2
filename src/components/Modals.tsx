@@ -212,7 +212,7 @@ export const Modals: React.FC = () => {
                   value={variableName}
                   onChange={(e) => setVariableName(e.target.value)}
                   className="w-full text-xs font-mono p-2 border border-slate-200 rounded focus:border-blue-500 focus:outline-none"
-                  placeholder="es. x, y, somma"
+                  placeholder={t.modals.declarePlaceholder}
                   autoFocus
                 />
               </div>
@@ -274,7 +274,7 @@ export const Modals: React.FC = () => {
                   value={variableName}
                   onChange={(e) => setVariableName(e.target.value)}
                   className="w-full text-xs font-mono p-2 border border-slate-200 rounded focus:border-blue-500 focus:outline-none"
-                  placeholder="es. somma, vettore[i]"
+                  placeholder={t.modals.assignPlaceholder}
                   autoFocus
                 />
               </div>
@@ -303,8 +303,7 @@ export const Modals: React.FC = () => {
                 type="text"
                 value={variableName}
                 onChange={(e) => setVariableName(e.target.value)}
-                className="w-full text-xs font-mono p-2 border border-slate-200 rounded focus:border-blue-500 focus:outline-none"
-                placeholder="es. x, vettore[idx]"
+                className="w-full text-xs font-mono p-2 border border-slate-200 rounded focus:border-blue-500 focus:outline-none"                  placeholder={t.modals.inputPlaceholder}
                 autoFocus
               />
             </div>
@@ -321,7 +320,7 @@ export const Modals: React.FC = () => {
                   value={expression}
                   onChange={(e) => setExpression(e.target.value)}
                   className="w-full text-xs font-mono p-2 border border-slate-200 rounded focus:border-blue-500 focus:outline-none"
-                  placeholder='es. "Risultato: " & somma'
+                  placeholder={t.modals.outputPlaceholder}
                   autoFocus
                 />
               </div>
@@ -457,7 +456,7 @@ export const Modals: React.FC = () => {
                   value={functionName}
                   onChange={(e) => setFunctionName(e.target.value)}
                   className="w-full text-xs font-mono p-2 border border-slate-200 rounded focus:border-blue-500 focus:outline-none"
-                  placeholder="es. MiaFunzione"
+                  placeholder={t.modals.callFuncPlaceholder}
                   autoFocus
                 />
               </div>
@@ -486,7 +485,7 @@ export const Modals: React.FC = () => {
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 className="w-full text-xs font-mono p-2 border border-slate-200 rounded focus:border-blue-500 focus:outline-none h-24 resize-none"
-                placeholder="Scrivi qui le annotazioni..."
+                placeholder={t.modals.commentPlaceholder}
                 autoFocus
               />
             </div>
@@ -496,14 +495,14 @@ export const Modals: React.FC = () => {
           {editingBlock.type !== 'comment' && (
             <div className="pt-3 border-t border-slate-100">
               <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                Nota/Commento del Blocco (Opzionale)
+                {t.modals.blockCommentLabel}
               </label>
               <input
                 type="text"
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 className="w-full text-xs font-mono p-1.5 border border-slate-150 rounded bg-slate-50 focus:bg-white focus:outline-none"
-                placeholder="es. Controlla che eta sia maggiore di 18"
+                placeholder={t.modals.blockCommentPlaceholder}
               />
             </div>
           )}

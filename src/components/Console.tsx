@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useFlow } from '../context/FlowContext';
+import { translations } from '../utils/translations';
 import { CornerDownLeft } from 'lucide-react';
 
 export const Console: React.FC = () => {
@@ -10,8 +11,11 @@ export const Console: React.FC = () => {
     clearConsole,
     layout,
     setLayout,
-    colorScheme
+    colorScheme,
+    language
   } = useFlow();
+
+  const t = translations[language];
 
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -64,16 +68,16 @@ export const Console: React.FC = () => {
       >
         <div className="flex items-center gap-1.5">
           <span className="text-[11px] font-bold tracking-wide">
-            💬 Console di Esecuzione - Flowonline2
+            {t.console.title}
           </span>
         </div>
         <div className="flex items-center gap-1">
           <button 
             onClick={clearConsole}
             className={`text-[9px] font-bold px-1 rounded transition ${isDark ? 'bg-zinc-700 hover:bg-zinc-600 text-zinc-200' : 'bg-white/10 hover:bg-white/20 text-white'}`}
-            title="Svuota Console"
+            title={t.console.clearBtn}
           >
-            Svuota
+            {t.console.clearBtn}
           </button>
           <button 
             onClick={() => {
@@ -81,7 +85,7 @@ export const Console: React.FC = () => {
               else setLayout('flowchart_only');
             }}
             className="w-[14px] h-[14px] bg-[#E81123]/80 hover:bg-[#E81123] rounded-sm flex items-center justify-center text-[10px] text-white font-bold"
-            title="Chiudi Finestra"
+            title={t.console.closeTooltip}
           >
             ×
           </button>
@@ -96,7 +100,7 @@ export const Console: React.FC = () => {
       >
         {consoleMessages.length === 0 && (
           <div className="flex-1 flex items-center justify-center text-xs text-purple-400 font-mono italic select-none">
-            Console vuota. Premi "Esegui" per avviare l'algoritmo.
+            {t.console.emptyMessage}
           </div>
         )}
 
@@ -147,7 +151,7 @@ export const Console: React.FC = () => {
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Digitare valore e premere invio..."
+            placeholder={t.console.inputPlaceholder}
             className={`flex-1 text-xs font-mono py-1 px-2.5 rounded border shadow-inner focus:outline-none ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-white focus:border-blue-500 placeholder-zinc-500' 
@@ -163,14 +167,14 @@ export const Console: React.FC = () => {
                 : 'bg-[#D5EAFA] border-[#5B8DC4] hover:bg-[#C9DEF5] text-slate-700'
             }`}
           >
-            <span>Invia</span>
+            <span>{t.console.submitBtn}</span>
             <CornerDownLeft size={11} />
           </button>
         </form>
       ) : (
         <div className={`h-4 border-t px-2 flex items-center justify-between text-[10px] font-mono shrink-0 select-none ${isDark ? 'bg-zinc-800 border-zinc-700 text-zinc-500' : 'bg-[#F0F0F0] border-slate-300 text-slate-400'}`}>
-          <span>Pronto</span>
-          <span>Log: {consoleMessages.length} righe</span>
+          <span>{t.console.readyStatus}</span>
+          <span>{t.console.logCount.replace('{0}', String(consoleMessages.length))}</span>
         </div>
       )}
     </div>

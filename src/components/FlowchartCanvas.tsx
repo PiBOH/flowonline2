@@ -539,7 +539,7 @@ export const FlowchartCanvas: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="col-span-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1 flex items-center justify-between">
-              <span>Seleziona Blocco</span>
+              <span>{t.canvas.selectBlock}</span>
               <button
                 className="text-slate-400 hover:text-slate-600 font-bold"
                 onClick={() => setActiveInserter(null)}
