@@ -2,6 +2,7 @@
   "name": "flowonline2",
   "private": true,
   "version": "1.0.0",
+  "license": "GPL-3.0-only",
   "type": "module",
   "scripts": {
     "dev": "vite",

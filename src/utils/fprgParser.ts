@@ -237,7 +237,7 @@ export class FprgParser {
     xml += `    <attributes>\n`;
     xml += `        <attribute name="name" value="${this.escapeXml(title)}"/>\n`;
     xml += `        <attribute name="authors" value="${this.escapeXml(author)}"/>\n`;
-    xml += `        <attribute name="about" value="Created with Flowonline2 - PiBOH under MIT License"/>\n`;
+    xml += `        <attribute name="about" value="Created with Flowonline2 - PiBOH under GNU GPL v3"/>\n`;
     xml += `    </attributes>\n`;
     xml += `    <function name="Main" type="None" variable="">\n`;
     xml += `        <parameters/>\n`;

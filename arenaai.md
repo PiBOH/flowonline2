@@ -1,6 +1,6 @@
 # arenaai.md - Flowonline2 Development, Maintenance and Change Log
 
-This file acts as the primary operational instruction manual for AI models maintaining or extending **Flowonline2**, a pixel-perfect, fully-functional web clone of Flowgorithm developed by PiBOH under the MIT license.
+This file acts as the primary operational instruction manual for AI models maintaining or extending **Flowonline2**, a pixel-perfect, fully-functional web clone of Flowgorithm developed by PiBOH under the GNU General Public License v3.
 
 ---
 
@@ -78,7 +78,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 2.  **Verify State Contract:** Check `src/types/flow.ts` and `src/context/FlowContext.tsx` to align your logic with the existing tree structure and current execution step-manager.
 3.  **Never Start from Scratch:** Refactor or extend existing modules step-by-step rather than recreating the whole file tree from scratch. Keep changes backwards compatible.
 4.  **Preserve DOM-Based XML Parsing:** Ensure that bidirectional `.fprg` parsing remains purely client-side using the native browser `DOMParser` and `XMLSerializer` to maintain ZERO-dependency portability.
-5.  **Maintain PiBOH License Notice:** Always preserve the PiBOH and MIT license credits in the header/footer of the main viewport.
+5.  **Maintain PiBOH License Notice:** Always preserve the PiBOH and GNU GPL v3 license credits in the header/footer of the main viewport.
 
 ---
 

@@ -14,7 +14,7 @@
 
 ---
 
-**Flowonline2** is a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart editor and interpreter **Flowgorithm (Windows version 4.5)**. Developed by **PiBOH** under the MIT License, it compiles entirely to static client-side files, offering a zero-config, highly-responsive programming playground directly in your web browser.
+**Flowonline2** is a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart editor and interpreter **Flowgorithm (Windows version 4.5)**. Developed by **PiBOH** under the GNU General Public License v3, it compiles entirely to static client-side files, offering a zero-config, highly-responsive programming playground directly in your web browser.
 
 > 🔗 **Launch the App:** [piboh.github.io/flowonline2](https://piboh.github.io/flowonline2/)  
 > 📦 **Legacy Repository:** [github.com/PiBOH/flowonline](https://github.com/PiBOH/flowonline)
@@ -86,6 +86,6 @@ npm run build
 
 ## 📄 License & Credits
 
-Flowonline2 is developed by **PiBOH** and is licensed under the **MIT License**. For complete license terms, please read the [**LICENSE**](LICENSE) file.
+Flowonline2 is developed by **PiBOH** and is licensed under the **GNU General Public License v3**. For complete license terms, please read the [**LICENSE**](LICENSE) file.
 
 *Flowgorithm is a registered trademark of its respective authors. Flowonline2 is an independent open-source educational clone.*
