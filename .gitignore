@@ -1,13 +1,32 @@
-.assetsai/
-.assetsai/*
-/.assetsai
-/.assetsai/
-/.assetsai/*
-.logo-images
-.logo-images/
-.logo-images/*
-/.logo-images
-/.logo-images/
-/.logo-images/*
--e
-arenaai.md
+# Node
+node_modules/
+/node_modules/
+*/node_modules/*
+npm-debug.log*
+
+# Build output
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local assets & AI-generated content
+.ignore/
+/node_modules
