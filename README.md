@@ -86,6 +86,6 @@ npm run build
 
 ## 📄 License & Credits
 
-Flowonline2 is developed by **PiBOH** and is licensed under the **GNU General Public License v3**. For complete license terms, please read the [**LICENSE**](LICENSE) file.
+Flowonline2 is developed by **PiBOH** and is licensed under the **GNU General Public License v3.0**. For complete license terms, please read the [**LICENSE**](LICENSE) file.
 
 *Flowgorithm is a registered trademark of its respective authors. Flowonline2 is an independent open-source educational clone.*
