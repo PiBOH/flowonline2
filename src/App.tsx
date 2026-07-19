@@ -9,21 +9,44 @@ import { Modals } from './components/Modals';
 const MainLayout: React.FC = () => {
   const { layout } = useFlow();
 
-  // Dynamic tab title: show JS heap memory usage (Chrome only)
+  // Dynamic tab title: show estimated CPU usage & JS heap RAM
   useEffect(() => {
-    const updateTitle = () => {
-      let heapInfo = '';
-      const mem = (performance as any).memory;
-      if (mem) {
-        const usedMB = Math.round(mem.usedJSHeapSize / 1048576);
-        const totalMB = Math.round(mem.jsHeapSizeLimit / 1048576);
-        heapInfo = ` | Heap: ${usedMB}/${totalMB} MB`;
+    let lastFrame = performance.now();
+    let frameDeltas: number[] = [];
+    let lastTitleUpdate = 0;
+    const TARGET_FRAME = 1000 / 60;
+    let running = true;
+
+    const measureCPU = () => {
+      if (!running) return;
+      const now = performance.now();
+      const delta = now - lastFrame;
+      lastFrame = now;
+
+      frameDeltas.push(Math.min(delta, 100));
+      if (frameDeltas.length > 30) frameDeltas.shift();
+
+      // Throttle title update to once per second
+      if (now - lastTitleUpdate > 1000) {
+        lastTitleUpdate = now;
+        const avgDelta = frameDeltas.reduce((a, b) => a + b, 0) / frameDeltas.length;
+        const cpuPct = Math.min(100, Math.max(0, ((avgDelta - TARGET_FRAME) / TARGET_FRAME) * 100));
+
+        let ramStr = '';
+        const mem = (performance as any).memory;
+        if (mem) {
+          const ramMB = Math.round(mem.usedJSHeapSize / 1048576);
+          ramStr = ` | RAM ${ramMB}MB`;
+        }
+
+        document.title = `Flowonline2 | CPU ${cpuPct.toFixed(1)}%${ramStr}`;
       }
-      document.title = `Flowonline2${heapInfo}`;
+
+      requestAnimationFrame(measureCPU);
     };
-    updateTitle();
-    const interval = setInterval(updateTitle, 5000);
-    return () => clearInterval(interval);
+
+    requestAnimationFrame(measureCPU);
+    return () => { running = false; };
   }, []);
 
   return (
