@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.14] - 2026-07-20
+
+### Removed
+- **sharp devDependency:** Removed `sharp` (~25MB) from devDependencies now that `favicon.ico` is already generated.
+- **Temporary files:** Cleaned up `/tmp/icon_*.png`, `/tmp/generate_ico.js`, `/tmp/refactor_persist.py`.
+
+---
+
 ## [BETA 2.3.13] - 2026-07-20
 
 ### Added
