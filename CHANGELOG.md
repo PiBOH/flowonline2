@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.5] - 2026-07-19
+
+### Fixed
+- **License Textarea Size:** Changed from `flex-1` to explicit `h-[300px]` and removed `overflow-hidden` from container to restore full visibility of the license text in the About modal.
+- **Freeze/Memory Leaks:**
+  - Minimum execution delay at max speed raised from 1ms to 16ms (60 FPS cap) to prevent UI lockup.
+  - Added `clearInterval` cleanup before `setInterval` in both `startRun` and `submitInput` to prevent interval leaks.
+  - `addConsoleMessage` capped at 1000 items to prevent memory exhaustion from infinite output loops.
+  - `pushHistory` undo stack capped at 50 states to prevent unbounded memory growth.
+
+### Changed
+- **Hardcoded Logo SVG:** Replaced `logo_crop.png` references in title bar and About modal with the full inline SVG from `logo.svg` (Flowgorithm 4-box colored logo with gradients and glow effects).
+
+---
+
 ## [BETA 2.3.3] - 2026-07-19
 
 ### Added

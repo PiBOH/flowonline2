@@ -332,7 +332,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Push history state helper
   const pushHistory = (newStmts: Statement[], newTitle = programTitle, newAuthor = programAuthor) => {
-    setUndoStack((prev) => [...prev, { statements, title: programTitle, author: programAuthor }]);
+    setUndoStack((prev) => [...prev.slice(-49), { statements, title: programTitle, author: programAuthor }]);
     setRedoStack([]); // clear redo
     setStatements(newStmts);
     setProgramTitleState(newTitle);
@@ -1001,9 +1001,9 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     if (intervalIdRef.current) window.clearInterval(intervalIdRef.current);
 
-    // Speed=100 is maximum speed. We use delay=1ms to yield thread but execute at light-speed.
-    const delay = speed === 100 ? 1 : Math.max(15, (101 - speed) * 10);
-
+    // Speed=100 is maximum speed. We use delay=16ms to prevent UI freeze at light-speed.
+    const delay = speed === 100 ? 16 : Math.max(16, (101 - speed) * 10);
+    if (intervalIdRef.current) { window.clearInterval(intervalIdRef.current); intervalIdRef.current = null; }
     intervalIdRef.current = window.setInterval(() => {
       const activeStep = executeStep();
       if (!activeStep && intervalIdRef.current) {
@@ -1127,8 +1127,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setVariables({ ...variablesRef.current });
 
       setExecutionStatus('running');
-      const delay = speed === 100 ? 1 : Math.max(15, (101 - speed) * 10);
-
+      const delay = speed === 100 ? 16 : Math.max(16, (101 - speed) * 10);
+      if (intervalIdRef.current) { window.clearInterval(intervalIdRef.current); intervalIdRef.current = null; }
       intervalIdRef.current = window.setInterval(() => {
         const activeStep = executeStep();
         if (!activeStep && intervalIdRef.current) {
@@ -1144,7 +1144,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const addConsoleMessage = (type: ConsoleMessage['type'], text: string) => {
     setConsoleMessages((prev) => [
-      ...prev,
+      ...prev.slice(-999),
       { id: generateId(), type, text, timestamp: new Date() }
     ]);
   };

@@ -1928,7 +1928,87 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       >
         <div className="flex items-center gap-[6px]">
           {/* Flowgorithm 4-box Colored Logo */}
-<img src="logo_crop.png" alt="Flowonline2" className="w-[16px] h-[16px] object-contain" />
+<svg className="w-[16px] h-[16px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" >
+  <defs>
+    <linearGradient id="grad-yellow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff568"/>
+      <stop offset="20%" stop-color="#ffdd00"/>
+      <stop offset="100%" stop-color="#cca100"/>
+    </linearGradient>
+    <linearGradient id="grad-red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b8b"/>
+      <stop offset="30%" stop-color="#ff1a40"/>
+      <stop offset="100%" stop-color="#b30022"/>
+    </linearGradient>
+    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6bebff"/>
+      <stop offset="30%" stop-color="#00aaff"/>
+      <stop offset="100%" stop-color="#0066cc"/>
+    </linearGradient>
+    <linearGradient id="grad-green" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8eff70"/>
+      <stop offset="20%" stop-color="#26e600"/>
+      <stop offset="100%" stop-color="#178a00"/>
+    </linearGradient>
+
+    <linearGradient id="grad-ring-top" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4ae034"/>
+      <stop offset="50%" stop-color="#e6dc38"/>
+      <stop offset="100%" stop-color="#e63838"/>
+    </linearGradient>
+    <linearGradient id="grad-ring-bottom" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#e63838"/>
+      <stop offset="50%" stop-color="#2660e6"/>
+      <stop offset="100%" stop-color="#4ae034"/>
+    </linearGradient>
+
+    <linearGradient id="gloss-white" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <g stroke="#777" stroke-width="1.2" fill="none" opacity="0.5" stroke-linecap="round">
+    <path d="M 330 90 A 185 185 0 0 1 405 155" />
+    <path d="M 405 345 A 185 185 0 0 1 350 395" />
+    <path d="M 160 405 A 185 185 0 0 1 105 365" />
+    <path d="M 90 170 A 185 185 0 0 1 145 105" />
+    <path d="M 210 160 A 90 90 0 0 1 290 160" />
+    <path d="M 285 330 A 90 90 0 0 1 240 345" />
+  </g>
+
+  <path d="M 90 250 A 160 160 0 0 1 410 250" fill="none" stroke="url(#grad-ring-top)" stroke-width="24" opacity="0.9"/>
+  <path d="M 410 250 A 160 160 0 0 1 90 250" fill="none" stroke="url(#grad-ring-bottom)" stroke-width="24" opacity="0.9"/>
+
+  <g transform="translate(40, 210)" filter="url(#glow)">
+    <rect x="0" y="0" width="120" height="80" rx="5" fill="none" stroke="#63ff42" stroke-width="1.5" opacity="0.7"/>
+    <rect x="1" y="1" width="118" height="78" rx="4" fill="url(#grad-green)"/>
+    <path d="M 1 1 L 119 1 L 119 45 L 1 15 Z" fill="url(#gloss-white)"/>
+  </g>
+
+  <g transform="translate(190, 45)" filter="url(#glow)">
+    <rect x="0" y="0" width="120" height="80" rx="5" fill="none" stroke="#fff152" stroke-width="1.5" opacity="0.7"/>
+    <rect x="1" y="1" width="118" height="78" rx="4" fill="url(#grad-yellow)"/>
+    <path d="M 1 1 L 119 1 L 119 35 L 1 50 Z" fill="url(#gloss-white)"/>
+  </g>
+
+  <g transform="translate(315, 215)" filter="url(#glow)">
+    <path d="M 35 0 L 145 0 L 110 75 L 0 75 Z" fill="none" stroke="#ff4d6a" stroke-width="1.5" opacity="0.7"/>
+    <path d="M 35 1 L 144 1 L 109 74 L 1 74 Z" fill="url(#grad-red)"/>
+    <path d="M 35 1 L 144 1 L 126 38 L 18 38 Z" fill="url(#gloss-white)"/>
+  </g>
+
+  <g transform="translate(180, 360)" filter="url(#glow)">
+    <path d="M 30 0 L 140 0 L 110 75 L 0 75 Z" fill="none" stroke="#46cfff" stroke-width="1.5" opacity="0.7"/>
+    <path d="M 30 1 L 139 1 L 109 74 L 1 74 Z" fill="url(#grad-blue)"/>
+    <path d="M 30 1 L 139 1 L 124 35 L 15 35 Z" fill="url(#gloss-white)"/>
+  </g>
+</svg>
           <span className="text-[11px] font-semibold text-white font-sans tracking-wide">
             Flowonline2 {appVersion} - {programTitle || 'Untitled'}.fprg
           </span>
@@ -2458,7 +2538,87 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             <div className="flex items-start gap-4">
               {/* Logo - using logo_crop.png */}
               <div className="w-16 h-16 bg-white rounded border border-slate-300 shadow-inner flex items-center justify-center shrink-0">
-                <img src="logo_crop.png" alt="Flowonline2" className="w-9 h-9 object-contain" />
+                <svg className="w-9 h-9" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" >
+  <defs>
+    <linearGradient id="grad-yellow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff568"/>
+      <stop offset="20%" stop-color="#ffdd00"/>
+      <stop offset="100%" stop-color="#cca100"/>
+    </linearGradient>
+    <linearGradient id="grad-red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b8b"/>
+      <stop offset="30%" stop-color="#ff1a40"/>
+      <stop offset="100%" stop-color="#b30022"/>
+    </linearGradient>
+    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6bebff"/>
+      <stop offset="30%" stop-color="#00aaff"/>
+      <stop offset="100%" stop-color="#0066cc"/>
+    </linearGradient>
+    <linearGradient id="grad-green" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8eff70"/>
+      <stop offset="20%" stop-color="#26e600"/>
+      <stop offset="100%" stop-color="#178a00"/>
+    </linearGradient>
+
+    <linearGradient id="grad-ring-top" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4ae034"/>
+      <stop offset="50%" stop-color="#e6dc38"/>
+      <stop offset="100%" stop-color="#e63838"/>
+    </linearGradient>
+    <linearGradient id="grad-ring-bottom" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#e63838"/>
+      <stop offset="50%" stop-color="#2660e6"/>
+      <stop offset="100%" stop-color="#4ae034"/>
+    </linearGradient>
+
+    <linearGradient id="gloss-white" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <g stroke="#777" stroke-width="1.2" fill="none" opacity="0.5" stroke-linecap="round">
+    <path d="M 330 90 A 185 185 0 0 1 405 155" />
+    <path d="M 405 345 A 185 185 0 0 1 350 395" />
+    <path d="M 160 405 A 185 185 0 0 1 105 365" />
+    <path d="M 90 170 A 185 185 0 0 1 145 105" />
+    <path d="M 210 160 A 90 90 0 0 1 290 160" />
+    <path d="M 285 330 A 90 90 0 0 1 240 345" />
+  </g>
+
+  <path d="M 90 250 A 160 160 0 0 1 410 250" fill="none" stroke="url(#grad-ring-top)" stroke-width="24" opacity="0.9"/>
+  <path d="M 410 250 A 160 160 0 0 1 90 250" fill="none" stroke="url(#grad-ring-bottom)" stroke-width="24" opacity="0.9"/>
+
+  <g transform="translate(40, 210)" filter="url(#glow)">
+    <rect x="0" y="0" width="120" height="80" rx="5" fill="none" stroke="#63ff42" stroke-width="1.5" opacity="0.7"/>
+    <rect x="1" y="1" width="118" height="78" rx="4" fill="url(#grad-green)"/>
+    <path d="M 1 1 L 119 1 L 119 45 L 1 15 Z" fill="url(#gloss-white)"/>
+  </g>
+
+  <g transform="translate(190, 45)" filter="url(#glow)">
+    <rect x="0" y="0" width="120" height="80" rx="5" fill="none" stroke="#fff152" stroke-width="1.5" opacity="0.7"/>
+    <rect x="1" y="1" width="118" height="78" rx="4" fill="url(#grad-yellow)"/>
+    <path d="M 1 1 L 119 1 L 119 35 L 1 50 Z" fill="url(#gloss-white)"/>
+  </g>
+
+  <g transform="translate(315, 215)" filter="url(#glow)">
+    <path d="M 35 0 L 145 0 L 110 75 L 0 75 Z" fill="none" stroke="#ff4d6a" stroke-width="1.5" opacity="0.7"/>
+    <path d="M 35 1 L 144 1 L 109 74 L 1 74 Z" fill="url(#grad-red)"/>
+    <path d="M 35 1 L 144 1 L 126 38 L 18 38 Z" fill="url(#gloss-white)"/>
+  </g>
+
+  <g transform="translate(180, 360)" filter="url(#glow)">
+    <path d="M 30 0 L 140 0 L 110 75 L 0 75 Z" fill="none" stroke="#46cfff" stroke-width="1.5" opacity="0.7"/>
+    <path d="M 30 1 L 139 1 L 109 74 L 1 74 Z" fill="url(#grad-blue)"/>
+    <path d="M 30 1 L 139 1 L 124 35 L 15 35 Z" fill="url(#gloss-white)"/>
+  </g>
+</svg>
               </div>
 
               <div className="flex flex-col gap-0.5 leading-tight text-[12px] font-sans">
@@ -2482,7 +2642,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             </div>
 
             {/* License text box (original layout) */}
-            <div className="flex-1 flex flex-col space-y-1.5 my-1 overflow-hidden">
+            <div className="flex-1 flex flex-col space-y-1.5 my-1">
               <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide shrink-0">
                 <span>{mt.aboutLicense}</span>
                 <span className={`px-2.5 py-0.5 rounded-full font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
@@ -2492,7 +2652,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               <textarea
                 readOnly
                 value={licenseText}
-                className="w-full flex-1 border border-slate-300 rounded p-3 font-mono text-[11px] bg-white text-slate-600 focus:outline-none resize-none overflow-auto leading-relaxed shadow-inner select-text"
+                className="w-full h-[300px] border border-slate-300 rounded p-3 font-mono text-[11px] bg-white text-slate-600 focus:outline-none resize-none overflow-auto leading-relaxed shadow-inner select-text"
               />
             </div>
           </div>
