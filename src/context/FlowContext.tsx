@@ -304,6 +304,18 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Editor states
   const [editingBlock, setEditingBlock] = useState<Statement | null>(null);
 
+  // DRY helper: persist current state to localStorage
+  const persistToStorage = (s: Statement[], t: string, a: string) => {
+    if (typeof window === 'undefined') return;
+    try {
+      const data: SavedProgram = { statements: s, programTitle: t, programAuthor: a, version: STORAGE_VERSION };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if (a) window.localStorage.setItem(AUTHOR_KEY, a);
+    } catch (e) {
+      console.warn('Failed to save flowchart to localStorage:', e);
+    }
+  };
+
   // Debounced localStorage persistence (prevents UI freeze from synchronous writes on every keystroke)
   const latestSaveRef = useRef({ statements, programTitle, programAuthor });
   latestSaveRef.current = { statements, programTitle, programAuthor };
@@ -312,15 +324,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
     saveTimeoutRef.current = window.setTimeout(() => {
-      try {
-        if (typeof window === 'undefined') return;
-        const { statements: s, programTitle: t, programAuthor: a } = latestSaveRef.current;
-        const data: SavedProgram = { statements: s, programTitle: t, programAuthor: a, version: STORAGE_VERSION };
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        if (a) window.localStorage.setItem(AUTHOR_KEY, a);
-      } catch (e) {
-        console.warn('Failed to save flowchart to localStorage:', e);
-      }
+      const { statements: s, programTitle: t, programAuthor: a } = latestSaveRef.current;
+      persistToStorage(s, t, a);
     }, 500);
     return () => {
       if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
@@ -330,13 +335,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Save immediately on unmount using latest ref (avoids stale closure)
   useEffect(() => {
     return () => {
-      try {
-        if (typeof window === 'undefined') return;
-        const { statements: s, programTitle: t, programAuthor: a } = latestSaveRef.current;
-        const data: SavedProgram = { statements: s, programTitle: t, programAuthor: a, version: STORAGE_VERSION };
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        if (a) window.localStorage.setItem(AUTHOR_KEY, a);
-      } catch (e) { /* ignore */ }
+      const { statements: s, programTitle: t, programAuthor: a } = latestSaveRef.current;
+      persistToStorage(s, t, a);
     };
   }, []);
 
