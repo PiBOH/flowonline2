@@ -3,6 +3,7 @@ import { useFlow, AppLayout } from '../context/FlowContext';
 import { translations } from '../utils/translations';
 import { FprgParser } from '../utils/fprgParser';
 import { exportToPNG, exportToPDF } from '../utils/exportUtils';
+import { WinUIDialog } from './WinUIDialog';
 import { Language } from '../types/flow';
 
 export const Header: React.FC = () => {
@@ -72,6 +73,14 @@ export const Header: React.FC = () => {
   const [changelogSource, setChangelogSource] = useState<'repo' | 'fallback'>('repo');
   const changelogTextFallback = '# Flowonline2 Changelog\n\n> Fallback changelog not available.';
 
+  // WinUI Dialog state (replace browser alerts/confirms)
+  const [winUIDialog, setWinUIDialog] = useState<{ isOpen: boolean; title: string; message: string; type: 'info' | 'warning' | 'error' | 'confirm'; onOk?: () => void }>({ isOpen: false, title: '', message: '', type: 'info' });
+
+  // Helper to show WinUI dialog from synchronous code
+  const showDialog = (title: string, message: string, type: 'info' | 'warning' | 'error' | 'confirm' = 'info', onOk?: () => void) => {
+    setWinUIDialog({ isOpen: true, title, message, type, onOk });
+  };
+
   // Hardcoded fallback license text (GNU GPL v3)
   const gplLicenseTextFallback = `GNU GENERAL PUBLIC LICENSE
 Version 3, 29 June 2007
@@ -113,7 +122,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     file: string;
     edit: string;
     program: string;
-    styleMenu: string; // Dynamic Chart Style & Color menu title!
+    styleMenu: string;
     help: string;
     new: string;
     open: string;
@@ -132,7 +141,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     stop: string;
     about: string;
     aboutTitle: string;
-    aboutVersion: string; // Unified property name!
+    aboutVersion: string;
     aboutAuthor: string;
     aboutWebsite: string;
     aboutRepo: string;
@@ -149,7 +158,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     versionRepoLoaded: string;
     versionFallbackLoaded: string;
     warningModalTitle: string;
-    manualMenuOption: string; // Help submenu option!
+    manualMenuOption: string;
     manualTitle: string;
     manualRepoLoaded: string;
     manualFallbackLoaded: string;
@@ -211,7 +220,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       file: "File",
       edit: "Edit",
       program: "Program",
-      styleMenu: "Chart Style & Color",
+      styleMenu: "Chart Style & Colour",
       help: "Help",
       new: "New",
       open: "Open...",
@@ -233,16 +242,16 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       aboutAuthor: "Author",
       aboutWebsite: "Website",
       aboutRepo: "Repository",
-      aboutLicense: "Program License:",
-      colorSchemeLabel: "Color Scheme:",
-      decorativeWindowAlert: "Flowonline2 is a web-based replica of Flowgorithm for Windows. These window control buttons (Minimize, Maximize, and Close) are purely decorative and have no functional purpose other than displaying this informational warning.",
+      aboutLicense: "Programme Licence:",
+      colorSchemeLabel: "Colour Scheme:",
+      decorativeWindowAlert: "Flowonline2 is a web-based replica of Flowgorithm for Windows. These window control buttons (Minimise, Maximise, and Close) are purely decorative and have no functional purpose other than displaying this informational warning.",
       languageLabel: "Language",
       layoutLabel: "Disposal",
       zoomInLabel: "Zoom In",
       zoomOutLabel: "Zoom Out",
       zoomResetLabel: "Reset Zoom",
-      licenseRepoLoaded: "License dynamically loaded from GitHub",
-      licenseFallbackLoaded: "License loaded from hardcoded fallback compilation code",
+      licenseRepoLoaded: "Licence dynamically loaded from GitHub",
+      licenseFallbackLoaded: "Licence loaded from hardcoded fallback compilation code",
       versionRepoLoaded: "Version dynamically loaded from GitHub",
       versionFallbackLoaded: "Version loaded from hardcoded fallback compilation code",
       warningModalTitle: "Windows System Information",
@@ -284,7 +293,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       aboutRepo: "Repository",
       aboutLicense: "Licenza del Programma:",
       colorSchemeLabel: "Schema Colori:",
-      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna função pratica se non quella di aprire questa finestra informativa di avviso.",
+      decorativeWindowAlert: "Flowonline2 è una replica web di Flowgorithm per Windows. Questi tasti di controllo (Riduci a icona, Ingrandisci, Chiudi) sono presenti solo a scopo estetico e non hanno alcuna funzione pratica se non quella di aprire questa finestra informativa di avviso.",
       languageLabel: "Lingua",
       layoutLabel: "Disposizione",
       zoomInLabel: "Aumenta Zoom",
@@ -339,19 +348,19 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       zoomInLabel: "Vergrößern",
       zoomOutLabel: "Verkleinern",
       zoomResetLabel: "Zoom zurücksetzen",
-      licenseRepoLoaded: "Licence loaded from GitHub",
-      licenseFallbackLoaded: "Licence loaded from fallback",
-      versionRepoLoaded: "Version loaded from GitHub",
-      versionFallbackLoaded: "Version loaded from fallback",
+      licenseRepoLoaded: "Lizenz dynamisch von GitHub geladen",
+      licenseFallbackLoaded: "Lizenz aus Fallback-Code geladen",
+      versionRepoLoaded: "Version dynamisch von GitHub geladen",
+      versionFallbackLoaded: "Version aus Fallback-Code geladen",
       warningModalTitle: "Windows Systeminformationen",
       manualMenuOption: "Benutzerhandbuch (MANUAL.md)...",
       manualTitle: "Flowonline2 Benutzerhandbuch - MANUAL.md",
-      manualRepoLoaded: "Handbuch geladen aus GitHub",
-      manualFallbackLoaded: "Handbuch geladen aus Fallback",
+      manualRepoLoaded: "Handbuch dynamisch von GitHub geladen",
+      manualFallbackLoaded: "Handbuch aus Fallback geladen",
       changelogMenuOption: "Changelog...",
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
-      changelogRepoLoaded: "Changelog geladen aus GitHub",
-      changelogFallbackLoaded: "Changelog geladen aus Fallback",
+      changelogRepoLoaded: "Changelog dynamisch von GitHub geladen",
+      changelogFallbackLoaded: "Changelog aus Fallback geladen",
       tools: "Werkzeuge"
     },
     fr: {
@@ -388,9 +397,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       zoomInLabel: "Zoom avant",
       zoomOutLabel: "Zoom arrière",
       zoomResetLabel: "Réinitialiser",
-      licenseRepoLoaded: "Licence chargée dynamiquement à partir de GitHub",
+      licenseRepoLoaded: "Licence chargée dynamiquement depuis GitHub",
       licenseFallbackLoaded: "Licence de secours chargée",
-      versionRepoLoaded: "Version chargée dynamiquement à partir de GitHub",
+      versionRepoLoaded: "Version chargée dynamiquement depuis GitHub",
       versionFallbackLoaded: "Version de secours chargée",
       warningModalTitle: "Informations Système Windows",
       manualMenuOption: "Manuel d'utilisation (MANUAL.md)...",
@@ -425,7 +434,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       stop: "Detener",
       about: "Acerca de Flowonline2...",
       aboutTitle: "Acerca de Flowonline2",
-      aboutVersion: "Version",
+      aboutVersion: "Versión",
       aboutAuthor: "Autor",
       aboutWebsite: "Sitio Web",
       aboutRepo: "Repositorio",
@@ -451,6 +460,839 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogRepoLoaded: "Changelog cargado desde GitHub",
       changelogFallbackLoaded: "Changelog de reserva cargado",
       tools: "Herramientas"
+    },
+    zh: {
+      file: "文件",
+      edit: "编辑",
+      program: "程序",
+      styleMenu: "图表样式与颜色",
+      help: "帮助",
+      new: "新建",
+      open: "打开...",
+      save: "保存 (.fprg)",
+      backup: "备份 JSON",
+      exportSvg: "导出 SVG 图像",
+      exportPng: "导出 PNG 图像",
+      exportPdf: "导出 PDF 文档",
+      clearStorage: "清除本地存储",
+      undo: "撤销",
+      redo: "重做",
+      run: "运行",
+      step: "单步",
+      pause: "暂停",
+      stop: "停止",
+      about: "关于 Flowonline2...",
+      aboutTitle: "关于 Flowonline2",
+      aboutVersion: "版本",
+      aboutAuthor: "作者",
+      aboutWebsite: "网站",
+      aboutRepo: "仓库",
+      aboutLicense: "程序许可证:",
+      colorSchemeLabel: "配色方案:",
+      decorativeWindowAlert: "Flowonline2 是 Flowgorithm Windows 版的在线复刻。这些窗口控制按钮（最小化、最大化、关闭）仅作装饰，除了显示此信息警告外无实际功能。",
+      languageLabel: "语言",
+      layoutLabel: "布局",
+      zoomInLabel: "放大",
+      zoomOutLabel: "缩小",
+      zoomResetLabel: "重置缩放",
+      licenseRepoLoaded: "许可证已从 GitHub 动态加载",
+      licenseFallbackLoaded: "许可证已从硬编码回退代码加载",
+      versionRepoLoaded: "版本已从 GitHub 动态加载",
+      versionFallbackLoaded: "版本已从硬编码回退代码加载",
+      warningModalTitle: "Windows 系统信息",
+      manualMenuOption: "用户手册 (MANUAL.md)...",
+      manualTitle: "Flowonline2 用户手册 - MANUAL.md",
+      manualRepoLoaded: "手册已从 GitHub 动态加载",
+      manualFallbackLoaded: "手册已从硬编码回退代码加载",
+      changelogMenuOption: "更新日志...",
+      changelogTitle: "Flowonline2 更新日志 - CHANGELOG.md",
+      changelogRepoLoaded: "更新日志已从 GitHub 动态加载",
+      changelogFallbackLoaded: "更新日志已从硬编码回退代码加载",
+      tools: "工具"
+    },
+    nl: {
+      file: "Bestand",
+      edit: "Bewerken",
+      program: "Programma",
+      styleMenu: "Diagramstijl & Kleur",
+      help: "Help",
+      new: "Nieuw",
+      open: "Openen...",
+      save: "Opslaan (.fprg)",
+      backup: "Backup JSON",
+      exportSvg: "SVG-afbeelding exporteren",
+      exportPng: "PNG-afbeelding exporteren",
+      exportPdf: "PDF-document exporteren",
+      clearStorage: "Lokale opslag wissen",
+      undo: "Ongedaan",
+      redo: "Opnieuw",
+      run: "Uitvoeren",
+      step: "Stap",
+      pause: "Pauze",
+      stop: "Stop",
+      about: "Over Flowonline2...",
+      aboutTitle: "Over Flowonline2",
+      aboutVersion: "Versie",
+      aboutAuthor: "Auteur",
+      aboutWebsite: "Website",
+      aboutRepo: "Repository",
+      aboutLicense: "Programmalicentie:",
+      colorSchemeLabel: "Kleurenschema:",
+      decorativeWindowAlert: "Flowonline2 is een webgebaseerde replica van Flowgorithm voor Windows. Deze venstercontroleknoppen (Minimaliseren, Maximaliseren en Sluiten) zijn puur decoratief en hebben geen praktische functie behalve dit informatieve waarschuwingsvenster weergeven.",
+      languageLabel: "Taal",
+      layoutLabel: "Indeling",
+      zoomInLabel: "Inzoomen",
+      zoomOutLabel: "Uitzoomen",
+      zoomResetLabel: "Zoom resetten",
+      licenseRepoLoaded: "Licentie dynamisch geladen van GitHub",
+      licenseFallbackLoaded: "Licentie geladen van fallback-code",
+      versionRepoLoaded: "Versie dynamisch geladen van GitHub",
+      versionFallbackLoaded: "Versie geladen van fallback-code",
+      warningModalTitle: "Windows Systeeminformatie",
+      manualMenuOption: "Gebruikershandleiding (MANUAL.md)...",
+      manualTitle: "Flowonline2 Gebruikershandleiding - MANUAL.md",
+      manualRepoLoaded: "Handleiding dynamisch geladen van GitHub",
+      manualFallbackLoaded: "Handleiding geladen van fallback",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog dynamisch geladen van GitHub",
+      changelogFallbackLoaded: "Changelog geladen van fallback",
+      tools: "Tools"
+    },
+    pt: {
+      file: "Ficheiro",
+      edit: "Editar",
+      program: "Programa",
+      styleMenu: "Estilo & Cor",
+      help: "Ajuda",
+      new: "Novo",
+      open: "Abrir...",
+      save: "Guardar (.fprg)",
+      backup: "Backup JSON",
+      exportSvg: "Exportar Imagem SVG",
+      exportPng: "Exportar Imagem PNG",
+      exportPdf: "Exportar Documento PDF",
+      clearStorage: "Limpar armazenamento local",
+      undo: "Desfazer",
+      redo: "Refazer",
+      run: "Executar",
+      step: "Passo a passo",
+      pause: "Pausa",
+      stop: "Parar",
+      about: "Sobre o Flowonline2...",
+      aboutTitle: "Sobre o Flowonline2",
+      aboutVersion: "Versão",
+      aboutAuthor: "Autor",
+      aboutWebsite: "Website",
+      aboutRepo: "Repositório",
+      aboutLicense: "Licença:",
+      colorSchemeLabel: "Esquema de cores:",
+      decorativeWindowAlert: "Flowonline2 é uma réplica web do Flowgorithm para Windows. Estes botões de controlo da janela (Minimizar, Maximizar e Fechar) são puramente decorativos e não têm qualquer função prática além de mostrar este aviso informativo.",
+      languageLabel: "Idioma",
+      layoutLabel: "Disposição",
+      zoomInLabel: "Aumentar zoom",
+      zoomOutLabel: "Diminuir zoom",
+      zoomResetLabel: "Repor zoom",
+      licenseRepoLoaded: "Licença carregada dinamicamente do GitHub",
+      licenseFallbackLoaded: "Licença carregada do código de fallback",
+      versionRepoLoaded: "Versão carregada dinamicamente do GitHub",
+      versionFallbackLoaded: "Versão carregada do código de fallback",
+      warningModalTitle: "Informação do Sistema Windows",
+      manualMenuOption: "Manual do utilizador (MANUAL.md)...",
+      manualTitle: "Manual do Utilizador Flowonline2 - MANUAL.md",
+      manualRepoLoaded: "Manual carregado dinamicamente do GitHub",
+      manualFallbackLoaded: "Manual de fallback carregado",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog carregado dinamicamente do GitHub",
+      changelogFallbackLoaded: "Changelog de fallback carregado",
+      tools: "Ferramentas"
+    },
+    gl: {
+      file: "Ficheiro",
+      edit: "Editar",
+      program: "Programa",
+      styleMenu: "Estilo & Cor",
+      help: "Axuda",
+      new: "Novo",
+      open: "Abrir...",
+      save: "Gardar (.fprg)",
+      backup: "Copia JSON",
+      exportSvg: "Exportar Imaxe SVG",
+      exportPng: "Exportar Imaxe PNG",
+      exportPdf: "Exportar Documento PDF",
+      clearStorage: "Limpar almacenamento local",
+      undo: "Desfacer",
+      redo: "Refacer",
+      run: "Executar",
+      step: "Paso a paso",
+      pause: "Pausa",
+      stop: "Deter",
+      about: "Sobre Flowonline2...",
+      aboutTitle: "Sobre Flowonline2",
+      aboutVersion: "Versión",
+      aboutAuthor: "Autor",
+      aboutWebsite: "Website",
+      aboutRepo: "Repositorio",
+      aboutLicense: "Licenza:",
+      colorSchemeLabel: "Esquema de cores:",
+      decorativeWindowAlert: "Flowonline2 é unha réplica web de Flowgorithm para Windows. Estes botóns de control da ventá (Minimizar, Maximizar e Pechar) son puramente decorativos e non teñen ningunha función práctica máis que mostrar este aviso informativo.",
+      languageLabel: "Idioma",
+      layoutLabel: "Disposición",
+      zoomInLabel: "Achegar",
+      zoomOutLabel: "Afastar",
+      zoomResetLabel: "Restablecer zoom",
+      licenseRepoLoaded: "Licenza cargada dinamicamente de GitHub",
+      licenseFallbackLoaded: "Licenza cargada do código de fallback",
+      versionRepoLoaded: "Versión cargada dinamicamente de GitHub",
+      versionFallbackLoaded: "Versión cargada do código de fallback",
+      warningModalTitle: "Información do Sistema Windows",
+      manualMenuOption: "Manual do usuario (MANUAL.md)...",
+      manualTitle: "Manual do Usuario Flowonline2 - MANUAL.md",
+      manualRepoLoaded: "Manual cargado dinamicamente de GitHub",
+      manualFallbackLoaded: "Manual de fallback cargado",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog cargado dinamicamente de GitHub",
+      changelogFallbackLoaded: "Changelog de fallback cargado",
+      tools: "Ferramentas"
+    },
+    ru: {
+      file: "Файл",
+      edit: "Правка",
+      program: "Программа",
+      styleMenu: "Стиль и цвет",
+      help: "Помощь",
+      new: "Новый",
+      open: "Открыть...",
+      save: "Сохранить (.fprg)",
+      backup: "Резерв JSON",
+      exportSvg: "Экспорт SVG",
+      exportPng: "Экспорт PNG",
+      exportPdf: "Экспорт PDF",
+      clearStorage: "Очистить локальное хранилище",
+      undo: "Отменить",
+      redo: "Повторить",
+      run: "Запуск",
+      step: "Шаг",
+      pause: "Пауза",
+      stop: "Стоп",
+      about: "О Flowonline2...",
+      aboutTitle: "О Flowonline2",
+      aboutVersion: "Версия",
+      aboutAuthor: "Автор",
+      aboutWebsite: "Сайт",
+      aboutRepo: "Репозиторий",
+      aboutLicense: "Лицензия:",
+      colorSchemeLabel: "Цветовая схема:",
+      decorativeWindowAlert: "Flowonline2 — веб-реплика Flowgorithm для Windows. Эти кнопки управления окном (свернуть, развернуть, закрыть) являются чисто декоративными и не имеют практической функции, кроме отображения этого информационного предупреждения.",
+      languageLabel: "Язык",
+      layoutLabel: "Расположение",
+      zoomInLabel: "Увеличить",
+      zoomOutLabel: "Уменьшить",
+      zoomResetLabel: "Сбросить масштаб",
+      licenseRepoLoaded: "Лицензия динамически загружена из GitHub",
+      licenseFallbackLoaded: "Лицензия загружена из резервного кода",
+      versionRepoLoaded: "Версия динамически загружена из GitHub",
+      versionFallbackLoaded: "Версия загружена из резервного кода",
+      warningModalTitle: "Информация о системе Windows",
+      manualMenuOption: "Руководство пользователя (MANUAL.md)...",
+      manualTitle: "Руководство пользователя Flowonline2 - MANUAL.md",
+      manualRepoLoaded: "Руководство динамически загружено из GitHub",
+      manualFallbackLoaded: "Руководство загружено из резервного кода",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog динамически загружен из GitHub",
+      changelogFallbackLoaded: "Changelog загружен из резервного кода",
+      tools: "Инструменты"
+    },
+    uk: {
+      file: "Файл",
+      edit: "Редагування",
+      program: "Програма",
+      styleMenu: "Стиль і колір",
+      help: "Допомога",
+      new: "Новий",
+      open: "Відкрити...",
+      save: "Зберегти (.fprg)",
+      backup: "Резерв JSON",
+      exportSvg: "Експорт SVG",
+      exportPng: "Експорт PNG",
+      exportPdf: "Експорт PDF",
+      clearStorage: "Очистити локальне сховище",
+      undo: "Скасувати",
+      redo: "Повторити",
+      run: "Запуск",
+      step: "Крок",
+      pause: "Пауза",
+      stop: "Стоп",
+      about: "Про Flowonline2...",
+      aboutTitle: "Про Flowonline2",
+      aboutVersion: "Версія",
+      aboutAuthor: "Автор",
+      aboutWebsite: "Сайт",
+      aboutRepo: "Репозиторій",
+      aboutLicense: "Ліцензія:",
+      colorSchemeLabel: "Колірна схема:",
+      decorativeWindowAlert: "Flowonline2 — веб-репліка Flowgorithm для Windows. Ці кнопки керування вікном (згорнути, розгорнути, закрити) є чисто декоративними і не мають практичної функції, окрім відображення цього інформаційного попередження.",
+      languageLabel: "Мова",
+      layoutLabel: "Розташування",
+      zoomInLabel: "Збільшити",
+      zoomOutLabel: "Зменшити",
+      zoomResetLabel: "Скинути масштаб",
+      licenseRepoLoaded: "Ліцензія динамічно завантажена з GitHub",
+      licenseFallbackLoaded: "Ліцензія завантажена з резервного коду",
+      versionRepoLoaded: "Версія динамічно завантажена з GitHub",
+      versionFallbackLoaded: "Версія завантажена з резервного коду",
+      warningModalTitle: "Інформація про систему Windows",
+      manualMenuOption: "Посібник користувача (MANUAL.md)...",
+      manualTitle: "Посібник користувача Flowonline2 - MANUAL.md",
+      manualRepoLoaded: "Посібник динамічно завантажений з GitHub",
+      manualFallbackLoaded: "Посібник завантажений з резервного коду",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog динамічно завантажений з GitHub",
+      changelogFallbackLoaded: "Changelog завантажений з резервного коду",
+      tools: "Інструменти"
+    },
+    cs: {
+      file: "Soubor",
+      edit: "Upravit",
+      program: "Program",
+      styleMenu: "Styl a barva",
+      help: "Nápověda",
+      new: "Nový",
+      open: "Otevřít...",
+      save: "Uložit (.fprg)",
+      backup: "Záloha JSON",
+      exportSvg: "Exportovat SVG",
+      exportPng: "Exportovat PNG",
+      exportPdf: "Exportovat PDF",
+      clearStorage: "Vymazat lokální úložiště",
+      undo: "Zpět",
+      redo: "Znovu",
+      run: "Spustit",
+      step: "Krok",
+      pause: "Pauza",
+      stop: "Zastavit",
+      about: "O Flowonline2...",
+      aboutTitle: "O Flowonline2",
+      aboutVersion: "Verze",
+      aboutAuthor: "Autor",
+      aboutWebsite: "Web",
+      aboutRepo: "Repozitář",
+      aboutLicense: "Licence:",
+      colorSchemeLabel: "Barevné schéma:",
+      decorativeWindowAlert: "Flowonline2 je webová replika Flowgorithm pro Windows. Tato tlačítka ovládání okna (Minimalizovat, Maximalizovat a Zavřít) jsou čistě dekorativní a nemají žádnou praktickou funkci kromě zobrazení tohoto informačního upozornění.",
+      languageLabel: "Jazyk",
+      layoutLabel: "Rozvržení",
+      zoomInLabel: "Přiblížit",
+      zoomOutLabel: "Oddálit",
+      zoomResetLabel: "Resetovat zoom",
+      licenseRepoLoaded: "Licence dynamicky načtena z GitHub",
+      licenseFallbackLoaded: "Licence načtena z fallback kódu",
+      versionRepoLoaded: "Verze dynamicky načtena z GitHub",
+      versionFallbackLoaded: "Verze načtena z fallback kódu",
+      warningModalTitle: "Informace o systému Windows",
+      manualMenuOption: "Uživatelská příručka (MANUAL.md)...",
+      manualTitle: "Uživatelská příručka Flowonline2 - MANUAL.md",
+      manualRepoLoaded: "Příručka dynamicky načtena z GitHub",
+      manualFallbackLoaded: "Příručka načtena z fallbacku",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog dynamicky načten z GitHub",
+      changelogFallbackLoaded: "Changelog načten z fallbacku",
+      tools: "Nástroje"
+    },
+    pl: {
+      file: "Plik",
+      edit: "Edycja",
+      program: "Program",
+      styleMenu: "Styl i kolor",
+      help: "Pomoc",
+      new: "Nowy",
+      open: "Otwórz...",
+      save: "Zapisz (.fprg)",
+      backup: "Kopia JSON",
+      exportSvg: "Eksportuj SVG",
+      exportPng: "Eksportuj PNG",
+      exportPdf: "Eksportuj PDF",
+      clearStorage: "Wyczyść pamięć lokalną",
+      undo: "Cofnij",
+      redo: "Ponów",
+      run: "Uruchom",
+      step: "Krok",
+      pause: "Pauza",
+      stop: "Zatrzymaj",
+      about: "O Flowonline2...",
+      aboutTitle: "O Flowonline2",
+      aboutVersion: "Wersja",
+      aboutAuthor: "Autor",
+      aboutWebsite: "Strona",
+      aboutRepo: "Repozytorium",
+      aboutLicense: "Licencja:",
+      colorSchemeLabel: "Schemat kolorów:",
+      decorativeWindowAlert: "Flowonline2 to internetowa replika Flowgorithm dla Windows. Te przyciski sterowania oknem (Minimalizuj, Maksymalizuj i Zamknij) są czysto dekoracyjne i nie mają praktycznego zastosowania oprócz wyświetlenia tego ostrzeżenia informacyjnego.",
+      languageLabel: "Język",
+      layoutLabel: "Układ",
+      zoomInLabel: "Powiększ",
+      zoomOutLabel: "Pomniejsz",
+      zoomResetLabel: "Resetuj zoom",
+      licenseRepoLoaded: "Licencja dynamicznie załadowana z GitHub",
+      licenseFallbackLoaded: "Licencja załadowana z kodu fallback",
+      versionRepoLoaded: "Wersja dynamicznie załadowana z GitHub",
+      versionFallbackLoaded: "Wersja załadowana z kodu fallback",
+      warningModalTitle: "Informacje o systemie Windows",
+      manualMenuOption: "Podręcznik użytkownika (MANUAL.md)...",
+      manualTitle: "Podręcznik użytkownika Flowonline2 - MANUAL.md",
+      manualRepoLoaded: "Podręcznik dynamicznie załadowany z GitHub",
+      manualFallbackLoaded: "Podręcznik załadowany z fallbacku",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog dynamicznie załadowany z GitHub",
+      changelogFallbackLoaded: "Changelog załadowany z fallbacku",
+      tools: "Narzędzia"
+    },
+    hu: {
+      file: "Fájl",
+      edit: "Szerkesztés",
+      program: "Program",
+      styleMenu: "Stílus és szín",
+      help: "Súgó",
+      new: "Új",
+      open: "Megnyitás...",
+      save: "Mentés (.fprg)",
+      backup: "Biztonsági JSON",
+      exportSvg: "SVG exportálása",
+      exportPng: "PNG exportálása",
+      exportPdf: "PDF exportálása",
+      clearStorage: "Helyi tároló törlése",
+      undo: "Visszavonás",
+      redo: "Mégis",
+      run: "Futtatás",
+      step: "Lépés",
+      pause: "Szünet",
+      stop: "Leállítás",
+      about: "A Flowonline2-ről...",
+      aboutTitle: "A Flowonline2-ről",
+      aboutVersion: "Verzió",
+      aboutAuthor: "Szerző",
+      aboutWebsite: "Weboldal",
+      aboutRepo: "Repository",
+      aboutLicense: "Licenc:",
+      colorSchemeLabel: "Színséma:",
+      decorativeWindowAlert: "A Flowonline2 egy webalapú Flowgorithm-replika Windowsra. Ezek az ablakvezérlő gombok (Minimalizálás, Maximalizálás és Bezárás) csak dekoratívak, és nincs gyakorlati funkciójuk azon kívül, hogy megjelenítik ezt az információs figyelmeztetést.",
+      languageLabel: "Nyelv",
+      layoutLabel: "Elrendezés",
+      zoomInLabel: "Nagyítás",
+      zoomOutLabel: "Kicsinyítés",
+      zoomResetLabel: "Zoom visszaállítása",
+      licenseRepoLoaded: "Licenc dinamikusan betöltve a GitHub-ról",
+      licenseFallbackLoaded: "Licenc betöltve a fallback kódból",
+      versionRepoLoaded: "Verzió dinamikusan betöltve a GitHub-ról",
+      versionFallbackLoaded: "Verzió betöltve a fallback kódból",
+      warningModalTitle: "Windows Rendszerinformáció",
+      manualMenuOption: "Felhasználói kézikönyv (MANUAL.md)...",
+      manualTitle: "Flowonline2 Felhasználói kézikönyv - MANUAL.md",
+      manualRepoLoaded: "Kézikönyv dinamikusan betöltve a GitHub-ról",
+      manualFallbackLoaded: "Kézikönyv betöltve a fallbackből",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog dinamikusan betöltve a GitHub-ról",
+      changelogFallbackLoaded: "Changelog betöltve a fallbackből",
+      tools: "Eszközök"
+    },
+    sl: {
+      file: "Datoteka",
+      edit: "Uredi",
+      program: "Program",
+      styleMenu: "Slog in barva",
+      help: "Pomoč",
+      new: "Novo",
+      open: "Odpri...",
+      save: "Shrani (.fprg)",
+      backup: "Varnostna JSON",
+      exportSvg: "Izvozi SVG",
+      exportPng: "Izvozi PNG",
+      exportPdf: "Izvozi PDF",
+      clearStorage: "Počisti lokalno shrambo",
+      undo: "Razveljavi",
+      redo: "Uveljavi",
+      run: "Zaženi",
+      step: "Korak",
+      pause: "Premor",
+      stop: "Ustavi",
+      about: "O Flowonline2...",
+      aboutTitle: "O Flowonline2",
+      aboutVersion: "Različica",
+      aboutAuthor: "Avtor",
+      aboutWebsite: "Spletna stran",
+      aboutRepo: "Repozitorij",
+      aboutLicense: "Licenca:",
+      colorSchemeLabel: "Barvna shema:",
+      decorativeWindowAlert: "Flowonline2 je spletna replika Flowgorithm za Windows. Ti gumbi za upravljanje okna (Minimiraj, Maksimiraj in Zapri) so čisto dekorativni in nimajo praktične funkcije razen prikaza tega informativnega opozorila.",
+      languageLabel: "Jezik",
+      layoutLabel: "Razporeditev",
+      zoomInLabel: "Povečaj",
+      zoomOutLabel: "Pomanjšaj",
+      zoomResetLabel: "Ponastavi zoom",
+      licenseRepoLoaded: "Licenca dinamično naložena iz GitHub",
+      licenseFallbackLoaded: "Licenca naložena iz fallback kode",
+      versionRepoLoaded: "Različica dinamično naložena iz GitHub",
+      versionFallbackLoaded: "Različica naložena iz fallback kode",
+      warningModalTitle: "Informacije o sistemu Windows",
+      manualMenuOption: "Uporabniški priročnik (MANUAL.md)...",
+      manualTitle: "Flowonline2 Uporabniški priročnik - MANUAL.md",
+      manualRepoLoaded: "Priročnik dinamično naložen iz GitHub",
+      manualFallbackLoaded: "Priročnik naložen iz fallbacka",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog dinamično naložen iz GitHub",
+      changelogFallbackLoaded: "Changelog naložen iz fallbacka",
+      tools: "Orodja"
+    },
+    ja: {
+      file: "ファイル",
+      edit: "編集",
+      program: "プログラム",
+      styleMenu: "スタイルと色",
+      help: "ヘルプ",
+      new: "新規",
+      open: "開く...",
+      save: "保存 (.fprg)",
+      backup: "JSON バックアップ",
+      exportSvg: "SVG としてエクスポート",
+      exportPng: "PNG としてエクスポート",
+      exportPdf: "PDF としてエクスポート",
+      clearStorage: "ローカルストレージをクリア",
+      undo: "元に戻す",
+      redo: "やり直し",
+      run: "実行",
+      step: "ステップ",
+      pause: "一時停止",
+      stop: "停止",
+      about: "Flowonline2 について...",
+      aboutTitle: "Flowonline2 について",
+      aboutVersion: "バージョン",
+      aboutAuthor: "作者",
+      aboutWebsite: "ウェブサイト",
+      aboutRepo: "リポジトリ",
+      aboutLicense: "ライセンス:",
+      colorSchemeLabel: "カラースキーム:",
+      decorativeWindowAlert: "Flowonline2 は Windows 用 Flowgorithm の Web ベースの複製です。これらのウィンドウ制御ボタン（最小化、最大化、閉じる）は純粋に装飾的なものであり、この情報警告を表示すること以外に実用的な目的はありません。",
+      languageLabel: "言語",
+      layoutLabel: "レイアウト",
+      zoomInLabel: "拡大",
+      zoomOutLabel: "縮小",
+      zoomResetLabel: "ズームをリセット",
+      licenseRepoLoaded: "ライセンスは GitHub から動的に読み込まれました",
+      licenseFallbackLoaded: "ライセンスはハードコードされたフォールバックコードから読み込まれました",
+      versionRepoLoaded: "バージョンは GitHub から動的に読み込まれました",
+      versionFallbackLoaded: "バージョンはハードコードされたフォールバックコードから読み込まれました",
+      warningModalTitle: "Windows システム情報",
+      manualMenuOption: "ユーザーマニュアル (MANUAL.md)...",
+      manualTitle: "Flowonline2 ユーザーマニュアル - MANUAL.md",
+      manualRepoLoaded: "マニュアルは GitHub から動的に読み込まれました",
+      manualFallbackLoaded: "マニュアルはハードコードされたフォールバックコードから読み込まれました",
+      changelogMenuOption: "更新ログ...",
+      changelogTitle: "Flowonline2 更新ログ - CHANGELOG.md",
+      changelogRepoLoaded: "更新ログは GitHub から動的に読み込まれました",
+      changelogFallbackLoaded: "更新ログはハードコードされたフォールバックコードから読み込まれました",
+      tools: "ツール"
+    },
+    th: {
+      file: "ไฟล์",
+      edit: "แก้ไข",
+      program: "โปรแกรม",
+      styleMenu: "สไตล์และสี",
+      help: "ช่วยเหลือ",
+      new: "ใหม่",
+      open: "เปิด...",
+      save: "บันทึก (.fprg)",
+      backup: "สำรอง JSON",
+      exportSvg: "ส่งออก SVG",
+      exportPng: "ส่งออก PNG",
+      exportPdf: "ส่งออก PDF",
+      clearStorage: "ล้างที่จัดเก็บข้อมูลในเครื่อง",
+      undo: "เลิกทำ",
+      redo: "ทำซ้ำ",
+      run: "เริ่ม",
+      step: "ทีละขั้น",
+      pause: "หยุดชั่วคราว",
+      stop: "หยุด",
+      about: "เกี่ยวกับ Flowonline2...",
+      aboutTitle: "เกี่ยวกับ Flowonline2",
+      aboutVersion: "เวอร์ชัน",
+      aboutAuthor: "ผู้เขียน",
+      aboutWebsite: "เว็บไซต์",
+      aboutRepo: "Repository",
+      aboutLicense: "ใบอนุญาต:",
+      colorSchemeLabel: "ธีมสี:",
+      decorativeWindowAlert: "Flowonline2 เป็นรีปลิกาของ Flowgorithm สำหรับ Windows บนเว็บ ปุ่มควบคุมหน้าต่างเหล่านี้ (ย่อ, ขยาย, ปิด) เป็นเพียงการตกแต่งและไม่มีฟังก์ชันจริง นอกจากแสดงคำเตือนข้อมูลนี้",
+      languageLabel: "ภาษา",
+      layoutLabel: "เค้าโครง",
+      zoomInLabel: "ขยาย",
+      zoomOutLabel: "ย่อ",
+      zoomResetLabel: "รีเซ็ตซูม",
+      licenseRepoLoaded: "โหลดใบอนุญาตจาก GitHub แบบไดนามิก",
+      licenseFallbackLoaded: "โหลดใบอนุญาตจากโค้ด fallback ที่ฝังไว้",
+      versionRepoLoaded: "โหลดเวอร์ชันจาก GitHub แบบไดนามิก",
+      versionFallbackLoaded: "โหลดเวอร์ชันจากโค้ด fallback ที่ฝังไว้",
+      warningModalTitle: "ข้อมูลระบบ Windows",
+      manualMenuOption: "คู่มือผู้ใช้ (MANUAL.md)...",
+      manualTitle: "Flowonline2 คู่มือผู้ใช้ - MANUAL.md",
+      manualRepoLoaded: "โหลดคู่มือจาก GitHub แบบไดนามิก",
+      manualFallbackLoaded: "โหลดคู่มือจากโค้ด fallback ที่ฝังไว้",
+      changelogMenuOption: "บันทึกการเปลี่ยนแปลง...",
+      changelogTitle: "Flowonline2 บันทึกการเปลี่ยนแปลง - CHANGELOG.md",
+      changelogRepoLoaded: "โหลดบันทึกการเปลี่ยนแปลงจาก GitHub แบบไดนามิก",
+      changelogFallbackLoaded: "โหลดบันทึกการเปลี่ยนแปลงจากโค้ด fallback ที่ฝังไว้",
+      tools: "เครื่องมือ"
+    },
+    id: {
+      file: "Berkas",
+      edit: "Edit",
+      program: "Program",
+      styleMenu: "Gaya & Warna",
+      help: "Bantuan",
+      new: "Baru",
+      open: "Buka...",
+      save: "Simpan (.fprg)",
+      backup: "Cadangan JSON",
+      exportSvg: "Ekspor SVG",
+      exportPng: "Ekspor PNG",
+      exportPdf: "Ekspor PDF",
+      clearStorage: "Hapus Penyimpanan Lokal",
+      undo: "Urungkan",
+      redo: "Ulangi",
+      run: "Jalankan",
+      step: "Langkah",
+      pause: "Jeda",
+      stop: "Berhenti",
+      about: "Tentang Flowonline2...",
+      aboutTitle: "Tentang Flowonline2",
+      aboutVersion: "Versi",
+      aboutAuthor: "Penulis",
+      aboutWebsite: "Situs Web",
+      aboutRepo: "Repositori",
+      aboutLicense: "Lisensi:",
+      colorSchemeLabel: "Skema Warna:",
+      decorativeWindowAlert: "Flowonline2 adalah replika berbasis web dari Flowgorithm untuk Windows. Tombol kontrol jendela ini (Minimalkan, Maksimalkan, dan Tutup) hanya bersifat dekoratif dan tidak memiliki fungsi praktis selain menampilkan peringatan informasi ini.",
+      languageLabel: "Bahasa",
+      layoutLabel: "Tata Letak",
+      zoomInLabel: "Perbesar",
+      zoomOutLabel: "Perkecil",
+      zoomResetLabel: "Reset Zoom",
+      licenseRepoLoaded: "Lisensi dimuat secara dinamis dari GitHub",
+      licenseFallbackLoaded: "Lisensi dimuat dari kode fallback",
+      versionRepoLoaded: "Versi dimuat secara dinamis dari GitHub",
+      versionFallbackLoaded: "Versi dimuat dari kode fallback",
+      warningModalTitle: "Informasi Sistem Windows",
+      manualMenuOption: "Manual Pengguna (MANUAL.md)...",
+      manualTitle: "Flowonline2 Manual Pengguna - MANUAL.md",
+      manualRepoLoaded: "Manual dimuat secara dinamis dari GitHub",
+      manualFallbackLoaded: "Manual dimuat dari fallback",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog dimuat secara dinamis dari GitHub",
+      changelogFallbackLoaded: "Changelog dimuat dari fallback",
+      tools: "Alat"
+    },
+    mn: {
+      file: "Файл",
+      edit: "Засах",
+      program: "Програм",
+      styleMenu: "Стиль & Өнгө",
+      help: "Тусламж",
+      new: "Шинэ",
+      open: "Нээх...",
+      save: "Хадгалах (.fprg)",
+      backup: "JSON Нөөц",
+      exportSvg: "SVG экспорт",
+      exportPng: "PNG экспорт",
+      exportPdf: "PDF экспорт",
+      clearStorage: "Локал хадгалалтыг цэвэрлэх",
+      undo: "Буцаах",
+      redo: "Дахих",
+      run: "Ажиллуулах",
+      step: "Алхам",
+      pause: "Түр зогсоох",
+      stop: "Зогсоох",
+      about: "Flowonline2-ийн тухай...",
+      aboutTitle: "Flowonline2-ийн тухай",
+      aboutVersion: "Хувилбар",
+      aboutAuthor: "Зохиогч",
+      aboutWebsite: "Вэбсайт",
+      aboutRepo: "Репозиторий",
+      aboutLicense: "Лиценз:",
+      colorSchemeLabel: "Өнгийн схем:",
+      decorativeWindowAlert: "Flowonline2 бол Windows-ийн Flowgorithm-ийн вэб суурилсан хуулбар юм. Эдгээр цонхны удирдлагын товчлуурууд (Багасгах, Дэлгэц дүүрэн, Хаах) зөвхөн чимэглэлийн зориулалттай бөгөөд энэ мэдээллийн анхааруулгыг харуулахээс өөр практик үүрэггүй.",
+      languageLabel: "Хэл",
+      layoutLabel: "Зохион байгуулалт",
+      zoomInLabel: "Томруулах",
+      zoomOutLabel: "Багасгах",
+      zoomResetLabel: "Zoom-г reset хийх",
+      licenseRepoLoaded: "Лиценз GitHub-ээс динамикаар ачаалагдсан",
+      licenseFallbackLoaded: "Лиценз fallback кодоос ачаалагдсан",
+      versionRepoLoaded: "Хувилбар GitHub-ээс динамикаар ачаалагдсан",
+      versionFallbackLoaded: "Хувилбар fallback кодоос ачаалагдсан",
+      warningModalTitle: "Windows Системийн Мэдээлэл",
+      manualMenuOption: "Хэрэглэгчийн гарын авлага (MANUAL.md)...",
+      manualTitle: "Flowonline2 Хэрэглэгчийн гарын авлага - MANUAL.md",
+      manualRepoLoaded: "Гарын авлага GitHub-ээс динамикаар ачаалагдсан",
+      manualFallbackLoaded: "Гарын авлага fallback-ээс ачаалагдсан",
+      changelogMenuOption: "Changelog...",
+      changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
+      changelogRepoLoaded: "Changelog GitHub-ээс динамикаар ачаалагдсан",
+      changelogFallbackLoaded: "Changelog fallback-ээс ачаалагдсан",
+      tools: "Багаж"
+    },
+    ar: {
+      file: "ملف",
+      edit: "تحرير",
+      program: "برنامج",
+      styleMenu: "النمط واللون",
+      help: "مساعدة",
+      new: "جديد",
+      open: "فتح...",
+      save: "حفظ (.fprg)",
+      backup: "نسخ JSON احتياطي",
+      exportSvg: "تصدير SVG",
+      exportPng: "تصدير PNG",
+      exportPdf: "تصدير PDF",
+      clearStorage: "مسح التخزين المحلي",
+      undo: "تراجع",
+      redo: "إعادة",
+      run: "تشغيل",
+      step: "خطوة",
+      pause: "إيقاف مؤقت",
+      stop: "إيقاف",
+      about: "حول Flowonline2...",
+      aboutTitle: "حول Flowonline2",
+      aboutVersion: "الإصدار",
+      aboutAuthor: "المؤلف",
+      aboutWebsite: "الموقع",
+      aboutRepo: "المستودع",
+      aboutLicense: "الترخيص:",
+      colorSchemeLabel: "نظام الألوان:",
+      decorativeWindowAlert: "Flowonline2 هو نسخة ويب من Flowgorithm لنظام Windows. أزرار التحكم في النافذة (تصغير، تكبير، إغلاق) زخرفية فقط وليس لها أي وظيفة عملية بخلاف عرض هذا التحذير الإعلامي.",
+      languageLabel: "اللغة",
+      layoutLabel: "التخطيط",
+      zoomInLabel: "تكبير",
+      zoomOutLabel: "تصغير",
+      zoomResetLabel: "إعادة تعيين التكبير",
+      licenseRepoLoaded: "تم تحميل الترخيص ديناميكيًا من GitHub",
+      licenseFallbackLoaded: "تم تحميل الترخيص من كود fallback",
+      versionRepoLoaded: "تم تحميل الإصدار ديناميكيًا من GitHub",
+      versionFallbackLoaded: "تم تحميل الإصدار من كود fallback",
+      warningModalTitle: "معلومات نظام Windows",
+      manualMenuOption: "دليل المستخدم (MANUAL.md)...",
+      manualTitle: "Flowonline2 دليل المستخدم - MANUAL.md",
+      manualRepoLoaded: "تم تحميل الدليل ديناميكيًا من GitHub",
+      manualFallbackLoaded: "تم تحميل الدليل من كود fallback",
+      changelogMenuOption: "سجل التغييرات...",
+      changelogTitle: "Flowonline2 سجل التغييرات - CHANGELOG.md",
+      changelogRepoLoaded: "تم تحميل سجل التغييرات ديناميكيًا من GitHub",
+      changelogFallbackLoaded: "تم تحميل سجل التغييرات من كود fallback",
+      tools: "أدوات"
+    },
+    he: {
+      file: "קובץ",
+      edit: "עריכה",
+      program: "תוכנית",
+      styleMenu: "סגנון וצבע",
+      help: "עזרה",
+      new: "חדש",
+      open: "פתח...",
+      save: "שמור (.fprg)",
+      backup: "גיבוי JSON",
+      exportSvg: "ייצוא SVG",
+      exportPng: "ייצוא PNG",
+      exportPdf: "ייצוא PDF",
+      clearStorage: "נקה אחסון מקומי",
+      undo: "בטל",
+      redo: "בצע שוב",
+      run: "הפעל",
+      step: "צעד",
+      pause: "השהה",
+      stop: "עצור",
+      about: "אודות Flowonline2...",
+      aboutTitle: "אודות Flowonline2",
+      aboutVersion: "גרסה",
+      aboutAuthor: "מחבר",
+      aboutWebsite: "אתר",
+      aboutRepo: "מאגר",
+      aboutLicense: "רישיון:",
+      colorSchemeLabel: "ערכת צבעים:",
+      decorativeWindowAlert: "Flowonline2 הוא רפליקה מבוססת אינטרנט של Flowgorithm עבור Windows. כפתורי הבקרה של החלון (מזעור, הגדלה וסגירה) הם דקורטיביים בלבד ואין להם כל תפקוד מעשי מלבד הצגת אזהרה מידע זו.",
+      languageLabel: "שפה",
+      layoutLabel: "פריסה",
+      zoomInLabel: "הגדל",
+      zoomOutLabel: "הקטן",
+      zoomResetLabel: "אפס זום",
+      licenseRepoLoaded: "רישיון נטען דינמית מ-GitHub",
+      licenseFallbackLoaded: "רישיון נטען מקוד fallback",
+      versionRepoLoaded: "גרסה נטענת דינמית מ-GitHub",
+      versionFallbackLoaded: "גרסה נטענת מקוד fallback",
+      warningModalTitle: "מידע על מערכת Windows",
+      manualMenuOption: "מדריך משתמש (MANUAL.md)...",
+      manualTitle: "Flowonline2 מדריך משתמש - MANUAL.md",
+      manualRepoLoaded: "מדריך נטען דינמית מ-GitHub",
+      manualFallbackLoaded: "מדריך נטען מקוד fallback",
+      changelogMenuOption: "יומן שינויים...",
+      changelogTitle: "Flowonline2 יומן שינויים - CHANGELOG.md",
+      changelogRepoLoaded: "יומן שינויים נטען דינמית מ-GitHub",
+      changelogFallbackLoaded: "יומן שינויים נטען מקוד fallback",
+      tools: "כלים"
+    },
+    fa: {
+      file: "فایل",
+      edit: "ویرایش",
+      program: "برنامه",
+      styleMenu: "سبک و رنگ",
+      help: "راهنما",
+      new: "جدید",
+      open: "باز کردن...",
+      save: "ذخیره (.fprg)",
+      backup: "پشتیبان JSON",
+      exportSvg: "صادرات SVG",
+      exportPng: "صادرات PNG",
+      exportPdf: "صادرات PDF",
+      clearStorage: "پاک کردن ذخیره‌سازی محلی",
+      undo: "واگرد",
+      redo: "انجام دوباره",
+      run: "اجرا",
+      step: "گام",
+      pause: "مکث",
+      stop: "توقف",
+      about: "درباره Flowonline2...",
+      aboutTitle: "درباره Flowonline2",
+      aboutVersion: "نسخه",
+      aboutAuthor: "نویسنده",
+      aboutWebsite: "وب‌سایت",
+      aboutRepo: "مخزن",
+      aboutLicense: "مجوز:",
+      colorSchemeLabel: "طرح رنگ:",
+      decorativeWindowAlert: "Flowonline2 یک نسخه وب‌محور از Flowgorithm برای ویندوز است. این دکمه‌های کنترل پنجره (حداقل کردن، حداکثر کردن و بستن) صرفاً تزئینی هستند و هیچ هدف عملی جز نمایش این هشدار اطلاعاتی ندارند.",
+      languageLabel: "زبان",
+      layoutLabel: "چیدمان",
+      zoomInLabel: "بزرگنمایی",
+      zoomOutLabel: "کوچک‌نمایی",
+      zoomResetLabel: "بازنشانی بزرگنمایی",
+      licenseRepoLoaded: "مجوز به صورت پویا از GitHub بارگیری شد",
+      licenseFallbackLoaded: "مجوز از کد fallback بارگیری شد",
+      versionRepoLoaded: "نسخه به صورت پویا از GitHub بارگیری شد",
+      versionFallbackLoaded: "نسخه از کد fallback بارگیری شد",
+      warningModalTitle: "اطلاعات سیستم Windows",
+      manualMenuOption: "راهنمای کاربر (MANUAL.md)...",
+      manualTitle: "Flowonline2 راهنمای کاربر - MANUAL.md",
+      manualRepoLoaded: "راهنمای کاربر به صورت پویا از GitHub بارگیری شد",
+      manualFallbackLoaded: "راهنمای کاربر از کد fallback بارگیری شد",
+      changelogMenuOption: "تغییرات...",
+      changelogTitle: "Flowonline2 تغییرات - CHANGELOG.md",
+      changelogRepoLoaded: "تغییرات به صورت پویا از GitHub بارگیری شد",
+      changelogFallbackLoaded: "تغییرات از کد fallback بارگیری شد",
+      tools: "ابزار"
     }
   };
 
@@ -631,9 +1473,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         }
       } catch (err: any) {
         if (file.name.toLowerCase().endsWith('.json')) {
-          alert(`Error opening .json file: ${err.message}`);
+          showDialog('Open Error', `Error opening .json file: ${err.message}`, 'error');
         } else {
-          alert(`Error opening .fprg file: ${err.message}`);
+          showDialog('Open Error', `Error opening .fprg file: ${err.message}`, 'error');
         }
       }
     };
@@ -653,7 +1495,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       link.click();
       URL.revokeObjectURL(url);
     } catch (err: any) {
-      alert(`Error saving file: ${err.message}`);
+      showDialog('Save Error', `Error saving file: ${err.message}`, 'error');
     }
     setActiveDropdown(null);
   };
@@ -677,7 +1519,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
   const handleExportSvg = () => {
     const svgEl = document.getElementById('flowchart-svg-export-target');
     if (!svgEl) {
-      alert('Unable to find SVG flowchart elements for export.');
+      showDialog('Export Error', 'Unable to find SVG flowchart elements for export.', 'error');
       return;
     }
     const svgClone = svgEl.cloneNode(true) as SVGElement;
@@ -693,14 +1535,26 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     setActiveDropdown(null);
   };
 
-  const handleExportPng = () => {
-    exportToPNG(programTitle || 'diagram');
+  const handleExportPng = async () => {
     setActiveDropdown(null);
+    const result = await exportToPNG(programTitle || 'diagram');
+    setWinUIDialog({
+      isOpen: true,
+      title: result.success ? 'Export PNG' : 'Export Error',
+      message: result.message,
+      type: result.success ? 'info' : 'error',
+    });
   };
 
-  const handleExportPdf = () => {
-    exportToPDF(programTitle || 'diagram');
+  const handleExportPdf = async () => {
     setActiveDropdown(null);
+    const result = await exportToPDF(programTitle || 'diagram');
+    setWinUIDialog({
+      isOpen: true,
+      title: result.success ? 'Export PDF' : 'Export Error',
+      message: result.message,
+      type: result.success ? 'info' : 'error',
+    });
   };
 
   const toggleDropdown = (menu: string) => {
@@ -1029,13 +1883,28 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                 <span>🖼️ {mt.exportSvg}</span>
               </button>
               <button onClick={handleExportPng} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>🖼️ {mt.exportPng}</span>
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="#4B9DDC" strokeWidth="2" fill="#E8F4FD"/>
+                    <path d="M3 15L8 10L12 14L17 9L21 13V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V15Z" fill="#4B9DDC"/>
+                    <circle cx="7" cy="7" r="2" fill="#F2A93B"/>
+                  </svg>
+                  {mt.exportPng}
+                </span>
               </button>
               <button onClick={handleExportPdf} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>📕 {mt.exportPdf}</span>
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="#E14C4C" strokeWidth="2" fill="#FDEBEB"/>
+                    <path d="M14 2V8H20" stroke="#E14C4C" strokeWidth="2"/>
+                    <rect x="7" y="13" width="10" height="6" rx="1" fill="#E14C4C"/>
+                    <text x="8.5" y="17.5" fill="white" fontSize="5" fontWeight="bold" fontFamily="sans-serif">PDF</text>
+                  </svg>
+                  {mt.exportPdf}
+                </span>
               </button>
               <div className="h-[1px] bg-slate-300 my-1"></div>
-              <button onClick={() => { if (window.confirm('Clear saved flowchart from local storage? Your current canvas will not be affected.')) { clearLocalStorage(); } setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#FFF0F0] flex items-center text-rose-700">
+              <button onClick={() => { setWinUIDialog({ isOpen: true, title: mt.clearStorage, message: 'Clear saved flowchart from local storage? Your current canvas will not be affected.', type: 'confirm', onOk: () => clearLocalStorage() }); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#FFF0F0] flex items-center text-rose-700">
                 <span>🗑️ {mt.clearStorage}</span>
               </button>
             </div>
@@ -1156,10 +2025,25 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                 <span>🖼️ {mt.exportSvg}</span>
               </button>
               <button onClick={handleExportPng} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>🖼️ {mt.exportPng}</span>
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="#4B9DDC" strokeWidth="2" fill="#E8F4FD"/>
+                    <path d="M3 15L8 10L12 14L17 9L21 13V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V15Z" fill="#4B9DDC"/>
+                    <circle cx="7" cy="7" r="2" fill="#F2A93B"/>
+                  </svg>
+                  {mt.exportPng}
+                </span>
               </button>
               <button onClick={handleExportPdf} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>📕 {mt.exportPdf}</span>
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="#E14C4C" strokeWidth="2" fill="#FDEBEB"/>
+                    <path d="M14 2V8H20" stroke="#E14C4C" strokeWidth="2"/>
+                    <rect x="7" y="13" width="10" height="6" rx="1" fill="#E14C4C"/>
+                    <text x="8.5" y="17.5" fill="white" fontSize="5" fontWeight="bold" fontFamily="sans-serif">PDF</text>
+                  </svg>
+                  {mt.exportPdf}
+                </span>
               </button>
             </div>
           )}
@@ -1697,10 +2581,22 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         ref={fileInputRef} 
         onChange={handleFileChange} 
         accept=".fprg,.json"
-        className="hidden" 
-      />
+        className="hidden"      />
 
+      {/* WinUI Dialog for alerts/confirms */}
+      <WinUIDialog
+        isOpen={winUIDialog.isOpen}
+        onClose={() => setWinUIDialog(prev => ({ ...prev, isOpen: false }))}
+        title={winUIDialog.title}
+        message={winUIDialog.message}
+        type={winUIDialog.type}
+        onOk={() => { winUIDialog.onOk?.(); setWinUIDialog(prev => ({ ...prev, isOpen: false })); }}
+        onCancel={() => setWinUIDialog(prev => ({ ...prev, isOpen: false }))}
+        okLabel={t.modals.ok}
+        cancelLabel={t.modals.cancel}
+      />
     </div>
   );
 };
+
 export default Header;

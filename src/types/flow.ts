@@ -1,4 +1,4 @@
-export type Language = 'en' | 'en_GB' | 'de' | 'fr' | 'es' | 'it';
+export type Language = 'en' | 'en_GB' | 'de' | 'fr' | 'es' | 'it' | 'zh' | 'nl' | 'pt' | 'gl' | 'ru' | 'uk' | 'cs' | 'pl' | 'hu' | 'sl' | 'ja' | 'th' | 'id' | 'mn' | 'ar' | 'he' | 'fa';
 
 export type VariableType = 'Integer' | 'Real' | 'String' | 'Boolean';
 

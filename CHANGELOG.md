@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.0] - 2026-07-19
+
+### Added
+- **22 Language Menu Translations:** Header menu labels and messages are now fully localized for all 22 supported languages (EN, EN_GB, IT, DE, FR, ES, ZH, NL, PT, GL, RU, UK, CS, PL, HU, SL, JA, TH, ID, MN, AR, HE, FA).
+- **Custom Export Icons:** PNG and PDF menu items now display inline SVG icons instead of generic emojis.
+- **WinUI Export Feedback:** PNG/PDF export success and error messages are now shown in draggable, resizable WinUI dialogs instead of browser alerts.
+
+### Changed
+- **exportUtils.ts:** `exportToPNG` and `exportToPDF` now return `Promise<ExportResult>` so callers can display WinUI dialogs.
+- **Header.tsx:** Export handlers updated to await export results and show WinUI dialogs.
+- **Version:** Bumped to BETA 2.3.0.
+
+---
+
 ## [BETA 2.2.0] - 2026-07-19
 
 ### Added
