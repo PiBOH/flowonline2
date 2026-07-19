@@ -6,6 +6,16 @@ import { exportToPNG, exportToPDF } from '../utils/exportUtils';
 import { WinUIDialog } from './WinUIDialog';
 import { Language } from '../types/flow';
 
+// Shared language display names (module scope, used by button text and language picker grid)
+const LANGUAGE_NAMES: Record<Language, string> = {
+  en: 'English (US)', en_GB: 'English (UK)', it: 'Italiano', de: 'Deutsch',
+  fr: 'Français', es: 'Español', zh: '中文', nl: 'Nederlands',
+  pt: 'Português', gl: 'Galego', ru: 'Русский', uk: 'Українська',
+  cs: 'Čeština', pl: 'Polski', hu: 'Magyar', sl: 'Slovenščina',
+  ja: '日本語', th: 'ไทย', id: 'Bahasa Indonesia', mn: 'Монгол',
+  ar: 'العربية', he: 'עברית', fa: 'فارسی'
+};
+
 export const Header: React.FC = () => {
   const {
     programTitle,
@@ -76,6 +86,9 @@ export const Header: React.FC = () => {
   // WinUI Dialog state (replace browser alerts/confirms)
   const [winUIDialog, setWinUIDialog] = useState<{ isOpen: boolean; title: string; message: string; type: 'info' | 'warning' | 'error' | 'confirm'; onOk?: () => void }>({ isOpen: false, title: '', message: '', type: 'info' });
 
+  // Language picker state
+  const [showLanguagePicker, setShowLanguagePicker] = useState(false);
+
   // Helper to show WinUI dialog from synchronous code
   const showDialog = (title: string, message: string, type: 'info' | 'warning' | 'error' | 'confirm' = 'info', onOk?: () => void) => {
     setWinUIDialog({ isOpen: true, title, message, type, onOk });
@@ -133,6 +146,10 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     exportPdf: string;
     clearStorage: string;
     tools: string;
+    bugReport: string;
+    featureRequest: string;
+    forkContribute: string;
+    selectLanguage: string;
     undo: string;
     redo: string;
     run: string;
@@ -214,7 +231,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dynamically loaded from GitHub",
       changelogFallbackLoaded: "Changelog loaded from hardcoded fallback compilation code",
-      tools: "Tools"
+      tools: "Tools",
+      bugReport: "Report a Bug",
+      featureRequest: "Request a Feature",
+      forkContribute: "Fork & Contribute",
+      selectLanguage: "Select Language"
     },
     en_GB: {
       file: "File",
@@ -263,7 +284,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dynamically loaded from GitHub",
       changelogFallbackLoaded: "Changelog loaded from hardcoded fallback compilation code",
-      tools: "Tools"
+      tools: "Tools",
+      bugReport: "Report a Bug",
+      featureRequest: "Request a Feature",
+      forkContribute: "Fork & Contribute",
+      selectLanguage: "Select Language"
     },
     it: {
       file: "File",
@@ -312,7 +337,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog caricato dinamicamente da GitHub",
       changelogFallbackLoaded: "Changelog caricato dal codice compilato di fallback",
-      tools: "Strumenti"
+      tools: "Strumenti",
+      bugReport: "Segnala un Bug",
+      featureRequest: "Richiedi una Funzionalità",
+      forkContribute: "Fork & Contribuisci",
+      selectLanguage: "Seleziona Lingua"
     },
     de: {
       file: "Datei",
@@ -361,7 +390,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dynamisch von GitHub geladen",
       changelogFallbackLoaded: "Changelog aus Fallback geladen",
-      tools: "Werkzeuge"
+      tools: "Werkzeuge",
+      bugReport: "Fehler melden",
+      featureRequest: "Funktion vorschlagen",
+      forkContribute: "Fork & Mitwirken",
+      selectLanguage: "Sprache auswählen"
     },
     fr: {
       file: "Fichier",
@@ -410,7 +443,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog chargé de GitHub",
       changelogFallbackLoaded: "Changelog de secours chargé",
-      tools: "Outils"
+      tools: "Outils",
+      bugReport: "Signaler un bug",
+      featureRequest: "Demander une fonctionnalité",
+      forkContribute: "Fork & Contribuer",
+      selectLanguage: "Sélectionner la langue"
     },
     es: {
       file: "Archivo",
@@ -459,7 +496,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog cargado desde GitHub",
       changelogFallbackLoaded: "Changelog de reserva cargado",
-      tools: "Herramientas"
+      tools: "Herramientas",
+      bugReport: "Reportar un error",
+      featureRequest: "Solicitar una función",
+      forkContribute: "Fork & Contribuir",
+      selectLanguage: "Seleccionar idioma"
     },
     zh: {
       file: "文件",
@@ -508,7 +549,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 更新日志 - CHANGELOG.md",
       changelogRepoLoaded: "更新日志已从 GitHub 动态加载",
       changelogFallbackLoaded: "更新日志已从硬编码回退代码加载",
-      tools: "工具"
+      tools: "工具",
+      bugReport: "报告Bug",
+      featureRequest: "请求功能",
+      forkContribute: "Fork 并贡献",
+      selectLanguage: "选择语言"
     },
     nl: {
       file: "Bestand",
@@ -557,7 +602,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dynamisch geladen van GitHub",
       changelogFallbackLoaded: "Changelog geladen van fallback",
-      tools: "Tools"
+      tools: "Tools",
+      bugReport: "Bug melden",
+      featureRequest: "Functie aanvragen",
+      forkContribute: "Fork & Bijdragen",
+      selectLanguage: "Taal selecteren"
     },
     pt: {
       file: "Ficheiro",
@@ -606,7 +655,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog carregado dinamicamente do GitHub",
       changelogFallbackLoaded: "Changelog de fallback carregado",
-      tools: "Ferramentas"
+      tools: "Ferramentas",
+      bugReport: "Reportar um Bug",
+      featureRequest: "Solicitar uma Funcionalidade",
+      forkContribute: "Fork & Contribuir",
+      selectLanguage: "Selecionar Idioma"
     },
     gl: {
       file: "Ficheiro",
@@ -655,7 +708,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog cargado dinamicamente de GitHub",
       changelogFallbackLoaded: "Changelog de fallback cargado",
-      tools: "Ferramentas"
+      tools: "Ferramentas",
+      bugReport: "Informar dun erro",
+      featureRequest: "Solicitar unha función",
+      forkContribute: "Fork & Contribuír",
+      selectLanguage: "Seleccionar idioma"
     },
     ru: {
       file: "Файл",
@@ -704,7 +761,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog динамически загружен из GitHub",
       changelogFallbackLoaded: "Changelog загружен из резервного кода",
-      tools: "Инструменты"
+      tools: "Инструменты",
+      bugReport: "Сообщить об ошибке",
+      featureRequest: "Запросить функцию",
+      forkContribute: "Форк и участие",
+      selectLanguage: "Выбрать язык"
     },
     uk: {
       file: "Файл",
@@ -753,7 +814,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog динамічно завантажений з GitHub",
       changelogFallbackLoaded: "Changelog завантажений з резервного коду",
-      tools: "Інструменти"
+      tools: "Інструменти",
+      bugReport: "Повідомити про помилку",
+      featureRequest: "Запросити функцію",
+      forkContribute: "Форк і внесок",
+      selectLanguage: "Вибрати мову"
     },
     cs: {
       file: "Soubor",
@@ -802,7 +867,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dynamicky načten z GitHub",
       changelogFallbackLoaded: "Changelog načten z fallbacku",
-      tools: "Nástroje"
+      tools: "Nástroje",
+      bugReport: "Nahlásit chybu",
+      featureRequest: "Požádat o funkci",
+      forkContribute: "Fork & Přispět",
+      selectLanguage: "Vybrat jazyk"
     },
     pl: {
       file: "Plik",
@@ -851,7 +920,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dynamicznie załadowany z GitHub",
       changelogFallbackLoaded: "Changelog załadowany z fallbacku",
-      tools: "Narzędzia"
+      tools: "Narzędzia",
+      bugReport: "Zgłoś błąd",
+      featureRequest: "Zaproponuj funkcję",
+      forkContribute: "Fork i współpraca",
+      selectLanguage: "Wybierz język"
     },
     hu: {
       file: "Fájl",
@@ -900,7 +973,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dinamikusan betöltve a GitHub-ról",
       changelogFallbackLoaded: "Changelog betöltve a fallbackből",
-      tools: "Eszközök"
+      tools: "Eszközök",
+      bugReport: "Hiba bejelentése",
+      featureRequest: "Funkció kérése",
+      forkContribute: "Fork & Közreműködés",
+      selectLanguage: "Nyelv kiválasztása"
     },
     sl: {
       file: "Datoteka",
@@ -949,7 +1026,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dinamično naložen iz GitHub",
       changelogFallbackLoaded: "Changelog naložen iz fallbacka",
-      tools: "Orodja"
+      tools: "Orodja",
+      bugReport: "Prijavi napako",
+      featureRequest: "Zahtevaj funkcijo",
+      forkContribute: "Fork & Prispevaj",
+      selectLanguage: "Izberi jezik"
     },
     ja: {
       file: "ファイル",
@@ -998,7 +1079,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 更新ログ - CHANGELOG.md",
       changelogRepoLoaded: "更新ログは GitHub から動的に読み込まれました",
       changelogFallbackLoaded: "更新ログはハードコードされたフォールバックコードから読み込まれました",
-      tools: "ツール"
+      tools: "ツール",
+      bugReport: "バグを報告",
+      featureRequest: "機能をリクエスト",
+      forkContribute: "フォークして貢献",
+      selectLanguage: "言語を選択"
     },
     th: {
       file: "ไฟล์",
@@ -1047,7 +1132,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 บันทึกการเปลี่ยนแปลง - CHANGELOG.md",
       changelogRepoLoaded: "โหลดบันทึกการเปลี่ยนแปลงจาก GitHub แบบไดนามิก",
       changelogFallbackLoaded: "โหลดบันทึกการเปลี่ยนแปลงจากโค้ด fallback ที่ฝังไว้",
-      tools: "เครื่องมือ"
+      tools: "เครื่องมือ",
+      bugReport: "รายงานข้อผิดพลาด",
+      featureRequest: "ขอคุณสมบัติใหม่",
+      forkContribute: "Fork & มีส่วนร่วม",
+      selectLanguage: "เลือกภาษา"
     },
     id: {
       file: "Berkas",
@@ -1096,7 +1185,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dimuat secara dinamis dari GitHub",
       changelogFallbackLoaded: "Changelog dimuat dari fallback",
-      tools: "Alat"
+      tools: "Alat",
+      bugReport: "Laporkan Bug",
+      featureRequest: "Minta Fitur",
+      forkContribute: "Fork & Berkontribusi",
+      selectLanguage: "Pilih Bahasa"
     },
     mn: {
       file: "Файл",
@@ -1145,7 +1238,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog GitHub-ээс динамикаар ачаалагдсан",
       changelogFallbackLoaded: "Changelog fallback-ээс ачаалагдсан",
-      tools: "Багаж"
+      tools: "Багаж",
+      bugReport: "Алдаа мэдээлэх",
+      featureRequest: "Функц хүсэх",
+      forkContribute: "Форк & Хувь нэмэр",
+      selectLanguage: "Хэл сонгох"
     },
     ar: {
       file: "ملف",
@@ -1194,7 +1291,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 سجل التغييرات - CHANGELOG.md",
       changelogRepoLoaded: "تم تحميل سجل التغييرات ديناميكيًا من GitHub",
       changelogFallbackLoaded: "تم تحميل سجل التغييرات من كود fallback",
-      tools: "أدوات"
+      tools: "أدوات",
+      bugReport: "الإبلاغ عن خطأ",
+      featureRequest: "طلب ميزة",
+      forkContribute: "شوكة ومساهمة",
+      selectLanguage: "اختر اللغة"
     },
     he: {
       file: "קובץ",
@@ -1243,7 +1344,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 יומן שינויים - CHANGELOG.md",
       changelogRepoLoaded: "יומן שינויים נטען דינמית מ-GitHub",
       changelogFallbackLoaded: "יומן שינויים נטען מקוד fallback",
-      tools: "כלים"
+      tools: "כלים",
+      bugReport: "דווח על באג",
+      featureRequest: "בקש תכונה",
+      forkContribute: "מזלג ותרומה",
+      selectLanguage: "בחר שפה"
     },
     fa: {
       file: "فایل",
@@ -1292,7 +1397,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogTitle: "Flowonline2 تغییرات - CHANGELOG.md",
       changelogRepoLoaded: "تغییرات به صورت پویا از GitHub بارگیری شد",
       changelogFallbackLoaded: "تغییرات از کد fallback بارگیری شد",
-      tools: "ابزار"
+      tools: "ابزار",
+      bugReport: "گزارش باگ",
+      featureRequest: "درخواست ویژگی",
+      forkContribute: "فورک و مشارکت",
+      selectLanguage: "انتخاب زبان"
     }
   };
 
@@ -2127,6 +2236,16 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               <button onClick={() => { setShowAbout(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span>ℹ️ {mt.about}</span>
               </button>
+              <div className="border-t border-[#DDD] my-0.5"></div>
+              <a href="https://github.com/PiBOH/flowonline2/issues/new/choose" target="_blank" rel="noopener noreferrer" onClick={() => setActiveDropdown(null)} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 no-underline">
+                <span>🐛 {mt.bugReport}</span>
+              </a>
+              <a href="https://github.com/PiBOH/flowonline2/issues/new/choose" target="_blank" rel="noopener noreferrer" onClick={() => setActiveDropdown(null)} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 no-underline">
+                <span>💡 {mt.featureRequest}</span>
+              </a>
+              <a href="https://github.com/PiBOH/flowonline2/fork" target="_blank" rel="noopener noreferrer" onClick={() => setActiveDropdown(null)} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 no-underline">
+                <span>🔀 {mt.forkContribute}</span>
+              </a>
             </div>
           )}
         </div>
@@ -2134,18 +2253,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         {/* GLOBE LANGUAGE SWITCHER */}
         <div className="relative ml-auto mr-2 flex items-center gap-1.5 text-slate-600 text-[11px] font-semibold">
           <span>🌐 {mt.languageLabel}:</span>
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value as any)}
-            className="border border-[#B0B0B0] bg-white rounded-md py-0.5 px-1.5 text-slate-700 font-bold focus:outline-none cursor-pointer"
+          <button
+            onClick={() => setShowLanguagePicker(true)}
+            className="border border-[#B0B0B0] bg-white rounded-md py-0.5 px-2 text-slate-700 font-bold hover:bg-[#C9DEF5] focus:outline-none cursor-pointer transition"
           >
-            <option value="en">English (US)</option>
-            <option value="en_GB">English (UK)</option>
-            <option value="it">Italiano</option>
-            <option value="de">Deutsch</option>
-            <option value="fr">Français</option>
-            <option value="es">Español</option>
-          </select>
+            {LANGUAGE_NAMES[language] || language}
+          </button>
         </div>
       </div>
 
@@ -2435,7 +2548,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             </div>
 
             {/* Warning Body */}
-            <div className="p-4 flex flex-col space-y-4 bg-[#F0F0F0] text-slate-800">
+            <div className="p-4 flex flex-col space-y-4 bg-[#F0F0F0] text-slate-800 select-text">
               <div className="flex items-start gap-3.5">
                 {/* Yellow Win32 Warning Shield Icon */}
                 <div className="w-10 h-10 bg-amber-400 border border-amber-600 rounded-full flex items-center justify-center shrink-0 shadow-md">
@@ -2553,7 +2666,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             
             {/* Changelog Content */}
             <div 
-              className="flex-1 overflow-y-auto p-4 bg-white text-[11px] leading-relaxed font-sans"
+              className="flex-1 overflow-y-auto select-text p-4 bg-white text-[11px] leading-relaxed font-sans"
               style={{
                 fontFamily: '"Segoe UI", "SF Pro", Arial, sans-serif',
                 lineHeight: '1.6'
@@ -2595,6 +2708,36 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         okLabel={t.modals.ok}
         cancelLabel={t.modals.cancel}
       />
+
+      {/* Language Picker WinUI Dialog */}
+      {showLanguagePicker && (
+        <WinUIDialog
+          isOpen={showLanguagePicker}
+          onClose={() => setShowLanguagePicker(false)}
+          title={mt.selectLanguage}
+          message=""
+          type="info"
+          okLabel={t.modals.ok}
+          cancelLabel={t.modals.cancel}
+          onOk={() => setShowLanguagePicker(false)}
+        >
+          <div className="grid grid-cols-3 gap-2">
+            {(Object.keys(LANGUAGE_NAMES) as Language[]).map((code) => (
+              <button
+                key={code}
+                onClick={() => { setLanguage(code); setShowLanguagePicker(false); }}
+                className={`px-3 py-2 rounded-md text-[11px] font-semibold transition border ${
+                  language === code
+                    ? 'bg-[#5B8DC4] text-white border-[#3E6FA8]'
+                    : 'bg-white text-slate-700 border-[#C0C0C0] hover:bg-[#C9DEF5]'
+                }`}
+              >
+                {LANGUAGE_NAMES[code]}
+              </button>
+            ))}
+          </div>
+        </WinUIDialog>
+      )}
     </div>
   );
 };

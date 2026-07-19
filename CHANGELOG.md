@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.1] - 2026-07-19
+
+### Added
+- **Language Picker WinUI:** Replaced the small HTML `<select>` dropdown with a full WinUI dialog showing all 22 supported languages in a grid with current-language highlighting.
+- **Help Menu Links:** Added "Report a Bug", "Request a Feature", and "Fork & Contribute" entries to the Help dropdown (open GitHub issues/fork pages in new tab).
+- **Selectable Modal Text:** All text in Warning, Manual, and Changelog modals is now user-selectable via the `select-text` CSS class.
+- **WinUIDialog Children:** Extended `WinUIDialog` component with an optional `children` prop for custom dialog content.
+
+### Changed
+- **Language Selector:** Now a styled button opening a WinUI dialog instead of a cramped `<select>` element.
+- **Menu Translations:** Added `bugReport`, `featureRequest`, `forkContribute`, and `selectLanguage` keys to all 22 languages.
+- **Version:** Bumped to BETA 2.3.1.
+
+---
+
 ## [BETA 2.3.0] - 2026-07-19
 
 ### Added

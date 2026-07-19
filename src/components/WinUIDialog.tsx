@@ -5,6 +5,7 @@ export interface WinUIDialogProps {
   onClose: () => void;
   title: string;
   message: string;
+  children?: React.ReactNode;
   type?: 'info' | 'warning' | 'error' | 'confirm';
   onOk?: () => void;
   onCancel?: () => void;
@@ -17,6 +18,7 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
   onClose,
   title,
   message,
+  children,
   type = 'info',
   onOk,
   onCancel,
@@ -132,7 +134,7 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
 
         {/* Body */}
         <div className="flex-1 p-4 bg-[#F0F0F0] text-slate-800 text-[12px] font-sans leading-relaxed select-text overflow-auto">
-          {message}
+          {children || message}
         </div>
 
         {/* Buttons */}
