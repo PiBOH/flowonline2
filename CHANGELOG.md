@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.3] - 2026-07-19
+
+### Added
+- **Language Picker Flags:** Each language in the picker now shows its national flag emoji (🇺🇸 🇬🇧 🇮🇹 etc.) next to the name.
+- **Translation Disclaimer:** A notice below the language picker warns that translations may not be 100% accurate.
+
+### Changed
+- **logo_crop.png:** Replaced inline SVG logo in title bar and About modal with `logo_crop.png` image file.
+
+### Fixed
+- **Manual Resize Only:** WinUIDialog now uses `height` instead of `minHeight` to prevent auto-growth; windows stay at fixed size with scrollbars and can only be resized by dragging the corner.
+
+---
+
 ## [BETA 2.3.2] - 2026-07-19
 
 ### Changed

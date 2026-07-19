@@ -116,7 +116,7 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
           left: position.x,
           top: position.y,
           width: size.w,
-          minHeight: size.h,
+          height: size.h,
         }}
       >
         {/* Title bar */}

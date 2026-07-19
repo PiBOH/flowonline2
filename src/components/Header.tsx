@@ -15,6 +15,16 @@ const LANGUAGE_NAMES: Record<Language, string> = {
   ja: '日本語', th: 'ไทย', id: 'Bahasa Indonesia', mn: 'Монгол',
   ar: 'العربية', he: 'עברית', fa: 'فارسی'
 };
+// Flag emojis for each language (used in language picker)
+const FLAGS_EMOJI: Record<Language, string> = {
+  en: '🇺🇸', en_GB: '🇬🇧', it: '🇮🇹', de: '🇩🇪',
+  fr: '🇫🇷', es: '🇪🇸', zh: '🇨🇳', nl: '🇳🇱',
+  pt: '🇵🇹', gl: '🇪🇸', ru: '🇷🇺', uk: '🇺🇦',
+  cs: '🇨🇿', pl: '🇵🇱', hu: '🇭🇺', sl: '🇸🇮',
+  ja: '🇯🇵', th: '🇹🇭', id: '🇮🇩', mn: '🇲🇳',
+  ar: '🇸🇦', he: '🇮🇱', fa: '🇮🇷'
+};
+
 
 export const Header: React.FC = () => {
   const {
@@ -1918,12 +1928,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       >
         <div className="flex items-center gap-[6px]">
           {/* Flowgorithm 4-box Colored Logo */}
-          <svg className="w-[16px] h-[16px]" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <rect x="4" y="4" width="10" height="8" fill="#84C44C" stroke="#333" strokeWidth="1.5" />
-            <rect x="18" y="4" width="10" height="8" fill="#F2A93B" stroke="#333" strokeWidth="1.5" />
-            <polygon points="4,18 14,18 12,26 6,26" fill="#E14C4C" stroke="#333" strokeWidth="1.5" />
-            <polygon points="18,18 28,18 26,26 20,26" fill="#4B9DDC" stroke="#333" strokeWidth="1.5" />
-          </svg>
+<img src="logo_crop.png" alt="Flowonline2" className="w-[16px] h-[16px] object-contain" />
           <span className="text-[11px] font-semibold text-white font-sans tracking-wide">
             Flowonline2 {appVersion} - {programTitle || 'Untitled'}.fprg
           </span>
@@ -2448,46 +2453,50 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           okLabel={t.modals.ok}
           onOk={() => setShowAbout(false)}
         >
-          <div className="flex flex-col gap-3 select-text">
-            {/* BEAUTIFUL FLOWGORITHM-STYLE LOGO */}
-            <div className="w-full flex justify-center mb-1">
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="4" y="8" width="56" height="48" rx="4" fill="#E8F0FE" stroke="#5B8DC4" strokeWidth="2"/>
-                <rect x="12" y="16" width="16" height="12" rx="2" fill="#5B8DC4"/>
-                <rect x="36" y="16" width="16" height="12" rx="2" fill="#3E6FA8"/>
-                <rect x="12" y="36" width="40" height="8" rx="2" fill="#7AAFE0"/>
-              </svg>
+          <div className="flex flex-col gap-4 select-text">
+            {/* App Name and Logo */}
+            <div className="flex items-center gap-4">
+              <img src="logo_crop.png" alt="Flowonline2 Logo" className="w-[80px] h-[80px] object-contain" />
+              <div className="flex flex-col">
+                <span className="font-bold text-[16px] text-slate-700">Flowonline2</span>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-[11px] font-semibold text-slate-600">{mt.aboutVersion}: <span className="font-mono text-[#5B8DC4]">{appVersion}</span></span>
+                  <span className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${versionSource === 'repo' ? 'bg-emerald-200 text-emerald-800' : 'bg-yellow-200 text-yellow-800'}`}>
+                    {versionSource === 'repo' ? mt.versionRepoLoaded : mt.versionFallbackLoaded}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* App name */}
-            <div className="text-center font-bold text-[14px] text-slate-700">Flowonline2</div>
-
-            {/* Version + source badge */}
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-[11px] font-bold text-slate-600">{mt.aboutVersion}: {appVersion}</span>
-              <span className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${versionSource === 'repo' ? 'bg-emerald-200 text-emerald-800' : 'bg-yellow-200 text-yellow-800'}`}>
-                {versionSource === 'repo' ? mt.versionRepoLoaded : mt.versionFallbackLoaded}
-              </span>
+            {/* Author & Links */}
+            <div className="text-[11px] text-slate-600 bg-white border border-[#C0C0C0] rounded p-3 space-y-1.5">
+              <div className="flex gap-2">
+                <span className="font-bold min-w-[80px] text-slate-500">{mt.aboutAuthor}:</span>
+                <span>PiBOH</span>
+              </div>
+              <div className="flex gap-2">
+                <span className="font-bold min-w-[80px] text-slate-500">{mt.aboutWebsite}:</span>
+                <a href="https://piboh.github.io/flowonline2" target="_blank" rel="noopener noreferrer" className="text-[#5B8DC4] hover:underline">https://piboh.github.io/flowonline2</a>
+              </div>
+              <div className="flex gap-2">
+                <span className="font-bold min-w-[80px] text-slate-500">{mt.aboutRepo}:</span>
+                <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer" className="text-[#5B8DC4] hover:underline">https://github.com/PiBOH/flowonline2</a>
+              </div>
             </div>
 
-            {/* Author info */}
-            <div className="flex flex-col gap-1 text-[11px] text-slate-600 bg-white border border-[#C0C0C0] rounded p-2">
-              <div><span className="font-bold">{mt.aboutAuthor}:</span> PiBOH</div>
-              <div><span className="font-bold">{mt.aboutWebsite}:</span> <a href="https://piboh.github.io/flowonline2" target="_blank" rel="noopener noreferrer" className="text-[#5B8DC4] hover:underline">piboh.github.io/flowonline2</a></div>
-              <div><span className="font-bold">{mt.aboutRepo}:</span> <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer" className="text-[#5B8DC4] hover:underline">github.com/PiBOH/flowonline2</a></div>
-            </div>
-
-            {/* License box */}
+            {/* License Box */}
             <div className="flex-1">
-              <div className="text-[11px] font-bold text-slate-600 mb-1">{mt.aboutLicense}</div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[11px] font-bold text-slate-600">{mt.aboutLicense}</span>
+                <span className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${licenseSource === 'repo' ? 'bg-emerald-200 text-emerald-800' : 'bg-yellow-200 text-yellow-800'}`}>
+                  {licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
+                </span>
+              </div>
               <textarea
                 readOnly
                 value={licenseText}
-                className="w-full h-[200px] bg-white border border-[#A0A0A0] rounded-[3px] p-2 text-[10px] font-mono text-slate-700 resize-none select-text"
+                className="w-full h-[250px] bg-white border border-[#A0A0A0] rounded-[3px] p-2 text-[10px] font-mono text-slate-700 resize-none select-text"
               />
-              <div className={`text-[9px] mt-1 font-semibold text-right ${licenseSource === 'repo' ? 'text-emerald-700' : 'text-yellow-700'}`}>
-                {licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
-              </div>
             </div>
           </div>
         </WinUIDialog>
@@ -2643,9 +2652,13 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                     : 'bg-white text-slate-700 border-[#C0C0C0] hover:bg-[#C9DEF5]'
                 }`}
               >
-                {LANGUAGE_NAMES[code]}
+                {FLAGS_EMOJI[code]} {LANGUAGE_NAMES[code]}
               </button>
             ))}
+            {/* Translation Disclaimer */}
+            <div className="mt-3 pt-2 border-t border-[#D0D0D0] text-[9px] text-amber-600 italic text-center px-4">
+              ⚠️ Notice: The translations of Flowonline2 and all other local project files might not be 100% accurate.
+            </div>
           </div>
         </WinUIDialog>
       )}
