@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FlowProvider, useFlow } from './context/FlowContext';
 import { Header } from './components/Header';
 import { FlowchartCanvas } from './components/FlowchartCanvas';
@@ -8,6 +8,23 @@ import { Modals } from './components/Modals';
 
 const MainLayout: React.FC = () => {
   const { layout } = useFlow();
+
+  // Dynamic tab title: show JS heap memory usage (Chrome only)
+  useEffect(() => {
+    const updateTitle = () => {
+      let heapInfo = '';
+      const mem = (performance as any).memory;
+      if (mem) {
+        const usedMB = Math.round(mem.usedJSHeapSize / 1048576);
+        const totalMB = Math.round(mem.jsHeapSizeLimit / 1048576);
+        heapInfo = ` | Heap: ${usedMB}/${totalMB} MB`;
+      }
+      document.title = `Flowonline2${heapInfo}`;
+    };
+    updateTitle();
+    const interval = setInterval(updateTitle, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#F0F0F0] font-sans antialiased text-slate-800">

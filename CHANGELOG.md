@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.6] - 2026-07-19
+
+### Added
+- **Dynamic Tab Title:** Browser tab now shows JS heap memory usage (e.g., `Flowonline2 | Heap: 45/2048 MB`) via Chrome's `performance.memory` API, refreshed every 5 seconds.
+- **Favicon from logo.svg:** Tab icon now uses the Flowgorithm 4-box logo SVG file instead of a generic green rectangle.
+
+### Changed
+- **Menu Clarity:** Removed the `(MANUAL.md)` suffix from all 22 language translations of the User Manual menu entry (e.g., "User Manual..." instead of "User Manual (MANUAL.md)...").
+
+---
+
 ## [BETA 2.3.5] - 2026-07-19
 
 ### Fixed
