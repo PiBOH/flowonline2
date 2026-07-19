@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [BETA 2.2.0] - 2026-07-19
+
+### Added
+- **Tools Menu:** New dedicated "Tools" dropdown in the menu bar with Export SVG, Export PNG, and Export PDF.
+- **Export PNG Engine:** High-resolution PNG export via offscreen Canvas rendering with HiDPI/Retina support and interactive element cleanup.
+- **Export PDF Engine:** PDF export via jsPDF with automatic orientation detection (landscape/portrait) and print-quality 2x rendering.
+- **Author Auto-Detection:** Author name is now persisted independently in localStorage and restored on next visit, even after clearing the flowchart.
+
+### Changed
+- **File Menu:** Added Export PNG and Export PDF entries alongside the existing Export SVG.
+- **Version:** Bumped to BETA 2.2.0 (minor release for export engines + Tools menu).
+
+### Fixed
+- **Issue Templates:** Fixed `validations` YAML key being incorrectly nested inside `attributes` in all 4 GitHub issue form templates (bug_report-en.yml, bug_report-it.yml, feature_request-en.yml, feature_request-it.yml).
+- **Clear Local Storage:** Added confirmation dialog before clearing saved flowchart backup.
+
+---
+
 ## [BETA 2.1.0] - 2026-07-17
 
 ### Added

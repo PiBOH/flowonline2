@@ -32,8 +32,8 @@ body:
     - 🖼️ Export (SVG / PNG)
     - 🎨 Schemi Colore / Tema
     - ❓ Altro
-    validations:
-      required: true
+  validations:
+    required: true
 - type: dropdown
   id: frequency
   attributes:
@@ -43,8 +43,8 @@ body:
     - 🟠 Spesso (> 50%)
     - 🟡 A volte (< 50%)
     - 🟢 Raramente (Una o due volte in tutto)
-    validations:
-      required: true
+  validations:
+    required: true
 - type: textarea
   id: reproduce-steps
   attributes:
@@ -58,8 +58,8 @@ body:
       1.
       2.
       3.
-    validations:
-      required: true
+  validations:
+    required: true
 - type: textarea
   id: expected-actual
   attributes:
@@ -68,8 +68,8 @@ body:
     placeholder: |
       Aspettativa: Il flowchart viene eseguito correttamente.
       Realtà: L'applicazione mostra un errore o si blocca.
-    validations:
-      required: true
+  validations:
+    required: true
 - type: markdown
   attributes:
     value: "---"
@@ -83,15 +83,15 @@ body:
     - 🍎 macOS
     - 🐧 Linux
     - 🌐 Web (Browser / GitHub Pages)
-    validations:
-      required: true
+  validations:
+    required: true
 - type: input
   id: app-version
   attributes:
     label: 📦 Versione App
     placeholder: es. BETA 2.1.0 (Controlla la barra del titolo)
-    validations:
-      required: true
+  validations:
+    required: true
 - type: textarea
   id: logs
   attributes:

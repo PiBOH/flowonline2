@@ -19,24 +19,24 @@ body:
     - 🌐 Traduzione / Nuova Lingua
     - 🖼️ Export / Import Enhancement
     - 🔧 Altro
-    validations:
-      required: true
+  validations:
+    required: true
 - type: textarea
   id: description
   attributes:
     label: 📝 Cosa vorresti?
     description: Descrivi in maniera dettagliata la tua idea. Come dovrebbe funzionare?
     placeholder: "Mi piacerebbe vedere una funzione che consenta di..."
-    validations:
-      required: true
+  validations:
+    required: true
 - type: textarea
   id: problem
   attributes:
     label: 🤝 Cosa dovrebbe risolvere o migliorare?
     description: Perché questa feature è necessaria? Cosa renderebbe più facile o veloce?
     placeholder: "Attualmente è difficile o macchinoso fare..."
-    validations:
-      required: true
+  validations:
+    required: true
 - type: textarea
   id: context
   attributes:

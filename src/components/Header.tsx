@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useFlow, AppLayout } from '../context/FlowContext';
 import { translations } from '../utils/translations';
 import { FprgParser } from '../utils/fprgParser';
+import { exportToPNG, exportToPDF } from '../utils/exportUtils';
 import { Language } from '../types/flow';
 
 export const Header: React.FC = () => {
@@ -32,6 +33,7 @@ export const Header: React.FC = () => {
     statements,
     loadProgram,
     clearAll,
+    clearLocalStorage,
     // BLOCK SELECTION, COPY & PASTE (Version 2.0.13!)
     selectedBlockId,
     copiedBlock,
@@ -118,6 +120,10 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     save: string;
     backup: string;
     exportSvg: string;
+    exportPng: string;
+    exportPdf: string;
+    clearStorage: string;
+    tools: string;
     undo: string;
     redo: string;
     run: string;
@@ -163,6 +169,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       save: "Save (.fprg)",
       backup: "Backup JSON",
       exportSvg: "Export SVG Image",
+      exportPng: "Export PNG Image",
+      exportPdf: "Export PDF Document",
+      clearStorage: "Clear Local Storage",
       undo: "Undo",
       redo: "Redo",
       run: "Run",
@@ -195,7 +204,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogMenuOption: "Changelog...",
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dynamically loaded from GitHub",
-      changelogFallbackLoaded: "Changelog loaded from hardcoded fallback compilation code"
+      changelogFallbackLoaded: "Changelog loaded from hardcoded fallback compilation code",
+      tools: "Tools"
     },
     en_GB: {
       file: "File",
@@ -208,6 +218,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       save: "Save (.fprg)",
       backup: "Backup JSON",
       exportSvg: "Export SVG Image",
+      exportPng: "Export PNG Image",
+      exportPdf: "Export PDF Document",
+      clearStorage: "Clear Local Storage",
       undo: "Undo",
       redo: "Redo",
       run: "Run",
@@ -240,7 +253,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogMenuOption: "Changelog...",
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog dynamically loaded from GitHub",
-      changelogFallbackLoaded: "Changelog loaded from hardcoded fallback compilation code"
+      changelogFallbackLoaded: "Changelog loaded from hardcoded fallback compilation code",
+      tools: "Tools"
     },
     it: {
       file: "File",
@@ -253,6 +267,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       save: "Salva (.fprg)",
       backup: "Backup JSON",
       exportSvg: "Esporta Immagine SVG",
+      exportPng: "Esporta Immagine PNG",
+      exportPdf: "Esporta Documento PDF",
+      clearStorage: "Pulisci Storage Locale",
       undo: "Annulla (Undo)",
       redo: "Ripristina (Redo)",
       run: "Esegui (Run)",
@@ -285,7 +302,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogMenuOption: "Changelog...",
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog caricato dinamicamente da GitHub",
-      changelogFallbackLoaded: "Changelog caricato dal codice compilato di fallback"
+      changelogFallbackLoaded: "Changelog caricato dal codice compilato di fallback",
+      tools: "Strumenti"
     },
     de: {
       file: "Datei",
@@ -298,6 +316,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       save: "Speichern (.fprg)",
       backup: "Backup JSON",
       exportSvg: "SVG-Bild exportieren",
+      exportPng: "PNG-Bild exportieren",
+      exportPdf: "PDF-Dokument exportieren",
+      clearStorage: "Lokalen Speicher leeren",
       undo: "Rückgängig",
       redo: "Wiederholen",
       run: "Ausführen",
@@ -330,7 +351,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogMenuOption: "Changelog...",
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog geladen aus GitHub",
-      changelogFallbackLoaded: "Changelog geladen aus Fallback"
+      changelogFallbackLoaded: "Changelog geladen aus Fallback",
+      tools: "Werkzeuge"
     },
     fr: {
       file: "Fichier",
@@ -343,6 +365,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       save: "Enregistrer (.fprg)",
       backup: "Sauvegarde JSON",
       exportSvg: "Exporter l'image SVG",
+      exportPng: "Exporter l'image PNG",
+      exportPdf: "Exporter le document PDF",
+      clearStorage: "Vider le stockage local",
       undo: "Annuler",
       redo: "Rétablir",
       run: "Exécuter",
@@ -375,7 +400,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogMenuOption: "Changelog...",
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog chargé de GitHub",
-      changelogFallbackLoaded: "Changelog de secours chargé"
+      changelogFallbackLoaded: "Changelog de secours chargé",
+      tools: "Outils"
     },
     es: {
       file: "Archivo",
@@ -388,6 +414,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       save: "Guardar (.fprg)",
       backup: "Copia JSON",
       exportSvg: "Exportar Imagen SVG",
+      exportPng: "Exportar Imagen PNG",
+      exportPdf: "Exportar Documento PDF",
+      clearStorage: "Limpiar almacenamiento local",
       undo: "Deshacer",
       redo: "Rehacer",
       run: "Ejecutar",
@@ -420,7 +449,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       changelogMenuOption: "Changelog...",
       changelogTitle: "Flowonline2 Changelog - CHANGELOG.md",
       changelogRepoLoaded: "Changelog cargado desde GitHub",
-      changelogFallbackLoaded: "Changelog de reserva cargado"
+      changelogFallbackLoaded: "Changelog de reserva cargado",
+      tools: "Herramientas"
     }
   };
 
@@ -660,6 +690,16 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     link.download = `${programTitle.toLowerCase().replace(/\s+/g, '_') || 'diagram'}.svg`;
     link.click();
     URL.revokeObjectURL(url);
+    setActiveDropdown(null);
+  };
+
+  const handleExportPng = () => {
+    exportToPNG(programTitle || 'diagram');
+    setActiveDropdown(null);
+  };
+
+  const handleExportPdf = () => {
+    exportToPDF(programTitle || 'diagram');
     setActiveDropdown(null);
   };
 
@@ -984,8 +1024,19 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               <button onClick={handleExportJson} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span>📦 {mt.backup}</span>
               </button>
+              <div className="h-[1px] bg-slate-300 my-1"></div>
               <button onClick={handleExportSvg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span>🖼️ {mt.exportSvg}</span>
+              </button>
+              <button onClick={handleExportPng} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>🖼️ {mt.exportPng}</span>
+              </button>
+              <button onClick={handleExportPdf} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>📕 {mt.exportPdf}</span>
+              </button>
+              <div className="h-[1px] bg-slate-300 my-1"></div>
+              <button onClick={() => { if (window.confirm('Clear saved flowchart from local storage? Your current canvas will not be affected.')) { clearLocalStorage(); } setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#FFF0F0] flex items-center text-rose-700">
+                <span>🗑️ {mt.clearStorage}</span>
               </button>
             </div>
           )}
@@ -1083,6 +1134,32 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               <button onClick={() => { setColorScheme('black_white'); setActiveDropdown(null); }} className="w-full text-left px-5 py-1.5 hover:bg-[#C9DEF5] text-slate-800 text-[11px] flex items-center justify-between">
                 <span>Black & White</span>
                 {colorScheme === 'black_white' && <span className="text-emerald-600 font-bold">✓</span>}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* TOOLS MENU (Export SVG / PNG / PDF) */}
+        <div className="relative ml-1">
+          <button
+            onClick={() => toggleDropdown('tools')}
+            onMouseEnter={() => handleMenuMouseEnter('tools')}
+            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+              activeDropdown === 'tools' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
+            }`}
+          >
+            🛠️ {mt.tools}
+          </button>
+          {activeDropdown === 'tools' && (
+            <div className="absolute left-0 top-full mt-[1px] min-w-[200px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
+              <button onClick={handleExportSvg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>🖼️ {mt.exportSvg}</span>
+              </button>
+              <button onClick={handleExportPng} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>🖼️ {mt.exportPng}</span>
+              </button>
+              <button onClick={handleExportPdf} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>📕 {mt.exportPdf}</span>
               </button>
             </div>
           )}
@@ -1619,7 +1696,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         type="file" 
         ref={fileInputRef} 
         onChange={handleFileChange} 
-        accept=".fprg,.json" // Now natively accepts BOTH .fprg and .json files!
+        accept=".fprg,.json"
         className="hidden" 
       />
 

@@ -16,6 +16,43 @@ import { ExpressionParser } from '../utils/parser';
 import { generateId } from '../utils/fprgParser';
 
 export type AppLayout = 'flowchart_only' | 'flow_console' | 'flow_variables' | 'triple_split' | 'flow_code';
+
+// LOCALSTORAGE PERSISTENCE CONFIGURATION
+const STORAGE_KEY = 'flowonline2_program';
+const AUTHOR_KEY = 'flowonline2_author';
+const STORAGE_VERSION = 1;
+
+interface SavedProgram {
+  statements: Statement[];
+  programTitle: string;
+  programAuthor: string;
+  version: number;
+}
+
+const isValidStatement = (value: unknown): value is Statement => {
+  if (value === null || typeof value !== 'object') return false;
+  const stmt = value as Partial<Statement>;
+  return typeof stmt.id === 'string' && typeof stmt.type === 'string';
+};
+
+const loadSavedProgram = (): SavedProgram | null => {
+  try {
+    if (typeof window === 'undefined') return null;
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as SavedProgram;
+    if (!Array.isArray(parsed.statements) || !parsed.statements.every(isValidStatement)) {
+      // Corrupted data: clear it so the app doesn't crash
+      window.localStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
+    if (typeof parsed.programTitle !== 'string') parsed.programTitle = 'Untitled Program';
+    if (typeof parsed.programAuthor !== 'string') parsed.programAuthor = '';
+    return parsed;
+  } catch {
+    return null;
+  }
+};
 export type ColorSchemeType = 'classic' | 'pastel' | 'vibrant' | 'retro' | 'twilight' | 'black_white';
 
 interface FlowContextType {
@@ -61,6 +98,7 @@ interface FlowContextType {
   deleteBlock: (id: string) => void;
   updateBlock: (id: string, updatedFields: Partial<Statement>) => void;
   clearAll: () => void;
+  clearLocalStorage: () => void;
   loadProgram: (statements: Statement[], title: string, author: string) => void;
   
   // Modal Editor state
@@ -206,74 +244,22 @@ export const insertIntoBranch = (list: Statement[], parentId: string, branchType
   return false;
 };
 
-// INITIAL DEFAULT SAMPLE PROGRAM
-const initialSample: Statement[] = [
-  {
-    id: 'block_decl_name',
-    type: 'declare',
-    variableName: 'username',
-    variableType: 'String',
-    isArray: false,
-    arraySize: ''
-  },
-  {
-    id: 'block_out_greet',
-    type: 'output',
-    expression: '"Welcome to Flowonline2! Please enter your name:"',
-    newline: true
-  },
-  {
-    id: 'block_inp_name',
-    type: 'input',
-    variableName: 'username'
-  },
-  {
-    id: 'block_decl_age',
-    type: 'declare',
-    variableName: 'age',
-    variableType: 'Integer',
-    isArray: false,
-    arraySize: ''
-  },
-  {
-    id: 'block_out_prompt_age',
-    type: 'output',
-    expression: '"Hello " & username & "! How old are you?"',
-    newline: true
-  },
-  {
-    id: 'block_inp_age',
-    type: 'input',
-    variableName: 'age'
-  },
-  {
-    id: 'block_if_age',
-    type: 'if',
-    condition: 'age >= 18',
-    thenBranch: [
-      {
-        id: 'block_out_adult',
-        type: 'output',
-        expression: 'username & ", you are an adult!"',
-        newline: true
-      }
-    ],
-    elseBranch: [
-      {
-        id: 'block_out_minor',
-        type: 'output',
-        expression: 'username & ", you are a minor. You have " & (18 - age) & " years left until adulthood!"',
-        newline: true
-      }
-    ]
-  }
-];
-
 export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Master diagram states
-  const [statements, setStatements] = useState<Statement[]>(initialSample);
-  const [programTitle, setProgramTitleState] = useState('Flowonline2 Program');
-  const [programAuthor, setProgramAuthorState] = useState('PiBOH');
+  // Detect persisted author name (survives flowchart clear)
+  const detectAuthor = (): string => {
+    try {
+      if (typeof window === 'undefined') return '';
+      return window.localStorage.getItem(AUTHOR_KEY) || '';
+    } catch {
+      return '';
+    }
+  };
+
+  // Master diagram states (loaded once from localStorage to avoid race conditions and extra renders)
+  const [savedData] = useState(() => loadSavedProgram());
+  const [statements, setStatements] = useState<Statement[]>(() => savedData?.statements ?? []);
+  const [programTitle, setProgramTitleState] = useState(() => savedData?.programTitle ?? 'Untitled Program');
+  const [programAuthor, setProgramAuthorState] = useState(() => savedData?.programAuthor || detectAuthor());
 
   // Win32 MDI Layout split state
   const [layout, setLayout] = useState<AppLayout>('triple_split');
@@ -317,6 +303,26 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Editor states
   const [editingBlock, setEditingBlock] = useState<Statement | null>(null);
+
+  // Persist program to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      if (typeof window === 'undefined') return;
+      const data: SavedProgram = {
+        statements,
+        programTitle,
+        programAuthor,
+        version: STORAGE_VERSION,
+      };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      // Also persist author name independently (survives clearAll)
+      if (programAuthor) {
+        window.localStorage.setItem(AUTHOR_KEY, programAuthor);
+      }
+    } catch (e) {
+      console.warn('Failed to save flowchart to localStorage:', e);
+    }
+  }, [statements, programTitle, programAuthor]);
 
   // VM Compiler execution references
   const instructionsRef = useRef<Instruction[]>([]);
@@ -375,6 +381,16 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     pushHistory(newStatements, title, author);
     setSelectedBlockIds([]);
     stopRun();
+  };
+
+  // CLEAR LOCAL STORAGE (remove saved flowchart history without clearing current work)
+  const clearLocalStorage = () => {
+    try {
+      if (typeof window === 'undefined') return;
+      window.localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.warn('Failed to clear localStorage:', e);
+    }
   };
 
   // FLOWCHART EDIT ACTIONS (INSERT / REMOVE / UPDATE)
@@ -1171,6 +1187,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         deleteBlock,
         updateBlock,
         clearAll,
+        clearLocalStorage,
         loadProgram,
         editingBlock,
         openEditor,
