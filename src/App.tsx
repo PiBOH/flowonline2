@@ -39,7 +39,7 @@ const MainLayout: React.FC = () => {
           ramStr = ` | RAM ${ramMB}MB`;
         }
 
-        document.title = `Flowonline2 | CPU ${cpuPct.toFixed(1)}%${ramStr}`;
+        document.title = `CPU ${cpuPct.toFixed(1)}%${ramStr}`;
       }
 
       requestAnimationFrame(measureCPU);
