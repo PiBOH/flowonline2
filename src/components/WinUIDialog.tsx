@@ -11,6 +11,8 @@ export interface WinUIDialogProps {
   onCancel?: () => void;
   okLabel?: string;
   cancelLabel?: string;
+  defaultWidth?: number;
+  defaultHeight?: number;
 }
 
 export const WinUIDialog: React.FC<WinUIDialogProps> = ({
@@ -24,24 +26,26 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
   onCancel,
   okLabel = 'OK',
   cancelLabel = 'Cancel',
+  defaultWidth = 420,
+  defaultHeight = 200,
 }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [size, setSize] = useState({ w: 420, h: 200 });
+  const [size, setSize] = useState({ w: defaultWidth, h: defaultHeight });
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(false);
   const dragRef = useRef<{ startX: number; startY: number; posX: number; posY: number }>({ startX: 0, startY: 0, posX: 0, posY: 0 });
-  const resizeRef = useRef<{ startX: number; startY: number; startW: number; startH: number }>({ startX: 0, startY: 0, startW: 420, startH: 200 });
+  const resizeRef = useRef<{ startX: number; startY: number; startW: number; startH: number }>({ startX: 0, startY: 0, startW: defaultWidth, startH: defaultHeight });
   const dialogRef = useRef<HTMLDivElement>(null);
 
-  // Center dialog on open
+  // Center dialog on open, reset to default size
   useEffect(() => {
     if (isOpen) {
       const ww = window.innerWidth;
       const wh = window.innerHeight;
-      setPosition({ x: Math.max(0, (ww - 420) / 2), y: Math.max(0, (wh - 200) / 2) });
-      setSize({ w: 420, h: 200 });
+      setPosition({ x: Math.max(0, (ww - defaultWidth) / 2), y: Math.max(0, (wh - defaultHeight) / 2) });
+      setSize({ w: defaultWidth, h: defaultHeight });
     }
-  }, [isOpen]);
+  }, [isOpen, defaultWidth, defaultHeight]);
 
   // Dragging handlers
   const onMouseDownTitle = useCallback((e: React.MouseEvent) => {

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.2] - 2026-07-19
+
+### Changed
+- **About/Manual/Changelog Modals → WinUI:** All three information dialogs are now fully draggable and resizable WinUIDialog windows that reset to their default size when reopened (700×525, 800×600, and 750×550 respectively).
+- **WinUIDialog Size Props:** Added optional `defaultWidth` and `defaultHeight` props for custom default dimensions and proper centering per dialog.
+
+### Fixed
+- **Language Picker Centering:** Increased default dimensions to 480×400 so the 22-language grid is properly centered on screen instead of appearing too low.
+
+---
+
 ## [BETA 2.3.1] - 2026-07-19
 
 ### Added

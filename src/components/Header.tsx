@@ -2435,94 +2435,62 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
 
       </div>
 
-      {/* ============ WIN32 ABOUT DIALOG MODAL (ENLARGED TO EXACTLY 700x525 PIXELS! BETA 2.0.12) ============ */}
+      {/* ============ WIN32 ABOUT DIALOG MODAL - WinUI (BETA 2.3.2) ============ */}
       {showAbout && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
-          <div 
-            className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl overflow-hidden flex flex-col font-sans select-none"
-            style={{ width: '700px', height: '525px' }} // EXPLICIT WIN32 SIZE SET TO 700 x 525!
-          >
-            {/* About Modal Title Bar */}
-            <div 
-              className="h-[24px] text-white flex items-center justify-between px-2 cursor-default shrink-0"
-              style={{
-                background: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)'
-              }}
-            >
-              <span className="text-[11px] font-bold text-white font-sans tracking-wide">
-                {mt.aboutTitle}
+        <WinUIDialog
+          isOpen={showAbout}
+          onClose={() => setShowAbout(false)}
+          title={mt.aboutTitle}
+          message=""
+          type="info"
+          defaultWidth={700}
+          defaultHeight={525}
+          okLabel={t.modals.ok}
+          onOk={() => setShowAbout(false)}
+        >
+          <div className="flex flex-col gap-3 select-text">
+            {/* BEAUTIFUL FLOWGORITHM-STYLE LOGO */}
+            <div className="w-full flex justify-center mb-1">
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="8" width="56" height="48" rx="4" fill="#E8F0FE" stroke="#5B8DC4" strokeWidth="2"/>
+                <rect x="12" y="16" width="16" height="12" rx="2" fill="#5B8DC4"/>
+                <rect x="36" y="16" width="16" height="12" rx="2" fill="#3E6FA8"/>
+                <rect x="12" y="36" width="40" height="8" rx="2" fill="#7AAFE0"/>
+              </svg>
+            </div>
+
+            {/* App name */}
+            <div className="text-center font-bold text-[14px] text-slate-700">Flowonline2</div>
+
+            {/* Version + source badge */}
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-[11px] font-bold text-slate-600">{mt.aboutVersion}: {appVersion}</span>
+              <span className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${versionSource === 'repo' ? 'bg-emerald-200 text-emerald-800' : 'bg-yellow-200 text-yellow-800'}`}>
+                {versionSource === 'repo' ? mt.versionRepoLoaded : mt.versionFallbackLoaded}
               </span>
-              <button 
-                onClick={() => setShowAbout(false)}
-                className="w-[14px] h-[14px] bg-[#E81123]/80 hover:bg-[#E81123] rounded-sm flex items-center justify-center text-[10px] text-white font-bold"
-              >
-                ×
-              </button>
             </div>
 
-            {/* About Modal Body (Win32 Dialog layout) */}
-            <div className="p-4 flex-1 flex flex-col justify-between bg-[#F0F0F0] text-slate-800 overflow-hidden">
-              
-              <div className="flex items-start gap-4">
-                {/* Large Flowgorithm Colored logo */}
-                <div className="w-16 h-16 bg-white rounded border border-slate-300 shadow-inner flex items-center justify-center shrink-0">
-                  <svg className="w-9 h-9" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="4" y="4" width="10" height="8" fill="#84C44C" stroke="#333" strokeWidth="1.5" />
-                    <rect x="18" y="4" width="10" height="8" fill="#F2A93B" stroke="#333" strokeWidth="1.5" />
-                    <polygon points="4,18 14,18 12,26 6,26" fill="#E14C4C" stroke="#333" strokeWidth="1.5" />
-                    <polygon points="18,18 28,18 26,26 20,26" fill="#4B9DDC" stroke="#333" strokeWidth="1.5" />
-                  </svg>
-                </div>
-
-                <div className="flex flex-col gap-0.5 leading-tight text-[12px] font-sans">
-                  <h4 className="font-extrabold text-[14px] text-slate-900 tracking-wide">Flowonline2</h4>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <p className="text-[12px] text-slate-500 font-semibold">{mt.aboutVersion} {appVersion}</p>
-                    <span className={`px-1.5 py-0.5 rounded font-mono text-[7px] font-black ${versionSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 animate-pulse' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
-                      {versionSource === 'repo' ? mt.versionRepoLoaded : mt.versionFallbackLoaded}
-                    </span>
-                  </div>
-                  <p className="text-[12px] text-slate-600 mt-2">
-                    {mt.aboutAuthor}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">PiBOH</a>
-                  </p>
-                  <p className="text-[12px] text-slate-500">
-                    {mt.aboutWebsite}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">piboh.github.io</a>
-                  </p>
-                  <p className="text-[12px] text-slate-500">
-                    {mt.aboutRepo}: <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">github.com/PiBOH/flowonline2</a>
-                  </p>
-                </div>
-              </div>
-
-              {/* License automatically loaded text box */}
-              <div className="flex-1 flex flex-col space-y-1.5 my-3 overflow-hidden">
-                <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide shrink-0">
-                  <span>{mt.aboutLicense}</span>
-                  <span className={`px-2.5 py-0.5 rounded-full font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
-                    {licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
-                  </span>
-                </div>
-                <textarea
-                  readOnly
-                  value={licenseText}
-                  className="w-full flex-1 border border-slate-300 rounded p-3 font-mono text-[11px] bg-white text-slate-600 focus:outline-none resize-none overflow-auto leading-relaxed shadow-inner"
-                />
-              </div>
-
-              {/* OK button to close dialog (Win32 styled) */}
-              <div className="flex items-center justify-end shrink-0">
-                <button
-                  onClick={() => setShowAbout(false)}
-                  className="px-8 py-1.5 bg-white hover:bg-slate-100 border border-slate-400 hover:border-slate-500 text-slate-800 text-[11px] font-bold rounded shadow-sm focus:outline-none transition active:scale-95"
-                >
-                  OK
-                </button>
-              </div>
-
+            {/* Author info */}
+            <div className="flex flex-col gap-1 text-[11px] text-slate-600 bg-white border border-[#C0C0C0] rounded p-2">
+              <div><span className="font-bold">{mt.aboutAuthor}:</span> PiBOH</div>
+              <div><span className="font-bold">{mt.aboutWebsite}:</span> <a href="https://piboh.github.io/flowonline2" target="_blank" rel="noopener noreferrer" className="text-[#5B8DC4] hover:underline">piboh.github.io/flowonline2</a></div>
+              <div><span className="font-bold">{mt.aboutRepo}:</span> <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer" className="text-[#5B8DC4] hover:underline">github.com/PiBOH/flowonline2</a></div>
             </div>
 
+            {/* License box */}
+            <div className="flex-1">
+              <div className="text-[11px] font-bold text-slate-600 mb-1">{mt.aboutLicense}</div>
+              <textarea
+                readOnly
+                value={licenseText}
+                className="w-full h-[200px] bg-white border border-[#A0A0A0] rounded-[3px] p-2 text-[10px] font-mono text-slate-700 resize-none select-text"
+              />
+              <div className={`text-[9px] mt-1 font-semibold text-right ${licenseSource === 'repo' ? 'text-emerald-700' : 'text-yellow-700'}`}>
+                {licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
+              </div>
+            </div>
           </div>
-        </div>
+        </WinUIDialog>
       )}
 
       {/* ============ WIN32 SYSTEM DIALOG MODAL FOR WINDOW CONTROLS (DECORATIVE NOTIFICATION) ============ */}
@@ -2573,119 +2541,60 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </div>
       )}
 
-      {/* ============ WIN32 MANUAL DIALOG MODAL (ENLARGED TO EXACTLY 800x600 PIXELS! WITH BEAUTIFUL MARKDOWN RENDER!) ============ */}
+      {/* ============ WIN32 MANUAL DIALOG MODAL - WinUI (BETA 2.3.2) ============ */}
       {showManual && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
-          <div 
-            className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl overflow-hidden flex flex-col font-sans select-none"
-            style={{ width: '800px', height: '600px' }} // EXPLICIT WIN32 SIZE SET TO EXACTLY 800 x 600!
-          >
-            {/* Manual Modal Title Bar */}
-            <div 
-              className="h-[24px] text-white flex items-center justify-between px-2 cursor-default shrink-0"
-              style={{
-                background: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)'
-              }}
-            >
-              <span className="text-[11px] font-bold text-white font-sans tracking-wide">
-                {mt.manualTitle}
-              </span>
-              <button 
-                onClick={() => setShowManual(false)}
-                className="w-[14px] h-[14px] bg-[#E81123]/80 hover:bg-[#E81123] rounded-sm flex items-center justify-center text-[10px] text-white font-bold"
-              >
-                ×
-              </button>
+        <WinUIDialog
+          isOpen={showManual}
+          onClose={() => setShowManual(false)}
+          title={mt.manualTitle}
+          message=""
+          type="info"
+          defaultWidth={800}
+          defaultHeight={600}
+          okLabel={t.modals.ok}
+          onOk={() => setShowManual(false)}
+        >
+          <div className="flex flex-col gap-2 select-text">
+            {/* Documentation source badge */}
+            <div className={`text-[9px] px-2 py-1 rounded font-semibold text-center ${manualSource === 'repo' ? 'bg-emerald-200 text-emerald-800' : 'bg-yellow-200 text-yellow-800'}`}>
+              {manualSource === 'repo' ? 'Documentation: ' + mt.manualRepoLoaded : mt.manualFallbackLoaded}
+              <span className="font-mono ml-2 text-slate-500">MANUAL.md</span>
             </div>
 
-            {/* Manual Modal Body */}
-            <div className="p-4 flex-1 flex flex-col justify-between bg-[#F0F0F0] text-slate-800 overflow-hidden">
-              <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide shrink-0 mb-1.5">
-                <span>Flowonline2 Documentation</span>
-                <span className={`px-2.5 py-0.5 rounded font-sans text-[7px] font-black ${manualSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 animate-pulse' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
-                  {manualSource === 'repo' ? mt.manualRepoLoaded : mt.manualFallbackLoaded}
-                </span>
-              </div>
-              
-              {/* BEAUTIFULLY STYLED MARKDOWN VIEWER PANEL (Zero-dependency, high performance parser) */}
-              <div
-                className="w-full flex-1 border border-slate-300 rounded p-4 bg-white text-slate-800 overflow-y-auto shadow-inner select-text leading-relaxed"
-                style={{ height: '480px' }}
-              >
-                {parseMarkdown(manualText)}
-              </div>
-
-              {/* OK button to close dialog (Win32 styled) */}
-              <div className="flex items-center justify-end shrink-0 mt-3">
-                <button
-                  onClick={() => setShowManual(false)}
-                  className="px-8 py-1.5 bg-white hover:bg-slate-100 border border-slate-400 hover:border-slate-500 text-slate-800 text-[11px] font-bold rounded shadow-sm focus:outline-none transition active:scale-95"
-                >
-                  OK
-                </button>
-              </div>
+            {/* BEAUTIFULLY STYLED MARKDOWN VIEWER PANEL */}
+            <div className="w-full flex-1 border border-slate-300 rounded p-4 bg-white text-slate-800 overflow-y-auto shadow-inner select-text leading-relaxed" style={{ height: '480px' }}>
+              {parseMarkdown(manualText)}
             </div>
           </div>
-        </div>
+        </WinUIDialog>
       )}
 
-      {/* ============ WIN32 CHANGELOG DIALOG MODAL ============ */}
+      {/* ============ WIN32 CHANGELOG DIALOG MODAL - WinUI (BETA 2.3.2) ============ */}
       {showChangelog && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-50 animate-in fade-in duration-100">
-          <div 
-            className="bg-[#F0F0F0] border-2 border-slate-400 rounded-sm shadow-2xl overflow-hidden flex flex-col font-sans select-none"
-            style={{ width: '750px', height: '550px' }}
-          >
-            {/* Changelog Modal Title Bar */}
-            <div 
-              className="h-[24px] text-white flex items-center justify-between px-2 cursor-default shrink-0"
-              style={{
-                background: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)'
-              }}
-            >
-              <span className="text-[11px] font-bold text-white font-sans tracking-wide">
-                {mt.changelogTitle}
-              </span>
-              <button 
-                onClick={() => setShowChangelog(false)}
-                className="w-[14px] h-[14px] bg-[#E81123]/80 hover:bg-[#E81123] rounded-sm flex items-center justify-center text-[10px] text-white font-bold"
-              >
-                ×
-              </button>
+        <WinUIDialog
+          isOpen={showChangelog}
+          onClose={() => setShowChangelog(false)}
+          title={mt.changelogTitle}
+          message=""
+          type="info"
+          defaultWidth={750}
+          defaultHeight={550}
+          okLabel={t.modals.ok}
+          onOk={() => setShowChangelog(false)}
+        >
+          <div className="flex flex-col gap-2 select-text">
+            {/* Changelog Source Badge */}
+            <div className={`text-[9px] px-2 py-1 rounded font-semibold text-center ${changelogSource === 'repo' ? 'bg-emerald-200 text-emerald-800' : 'bg-yellow-200 text-yellow-800'}`}>
+              {changelogSource === 'repo' ? mt.changelogRepoLoaded : mt.changelogFallbackLoaded}
+              <span className="font-mono ml-2 text-slate-500">CHANGELOG.md</span>
             </div>
 
-            {/* Changelog Source Badge */}
-            <div className="flex items-center gap-2 px-4 py-1.5 bg-[#E8E8E8] border-b border-slate-300 shrink-0">
-              <span className="text-[10px] font-bold text-slate-500 font-sans">
-                <span className="text-[10px] font-bold text-slate-700">CHANGELOG.md</span>
-              </span>
-              <span className={`px-2.5 py-0.5 rounded font-sans text-[7px] font-black ${changelogSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 animate-pulse' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
-                {changelogSource === 'repo' ? mt.changelogRepoLoaded : mt.changelogFallbackLoaded}
-              </span>
-            </div>
-            
-            {/* Changelog Content */}
-            <div 
-              className="flex-1 overflow-y-auto select-text p-4 bg-white text-[11px] leading-relaxed font-sans"
-              style={{
-                fontFamily: '"Segoe UI", "SF Pro", Arial, sans-serif',
-                lineHeight: '1.6'
-              }}
-            >
+            {/* Content Viewer */}
+            <div className="flex-1 overflow-y-auto select-text p-4 bg-white border border-[#C0C0C0] rounded text-[11px] leading-relaxed font-sans text-slate-800" style={{ minHeight: '400px' }}>
               {parseMarkdown(changelogText)}
             </div>
-
-            {/* OK button */}
-            <div className="flex items-center justify-end shrink-0 p-2 bg-[#F0F0F0] border-t border-slate-300">
-              <button
-                onClick={() => setShowChangelog(false)}
-                className="px-8 py-1.5 bg-white hover:bg-slate-100 border border-slate-400 hover:border-slate-500 text-slate-800 text-[11px] font-bold rounded shadow-sm focus:outline-none transition active:scale-95"
-              >
-                  OK
-                </button>
-              </div>
-            </div>
           </div>
+        </WinUIDialog>
       )}
 
       {/* CRITICAL FILE INPUT (Rendered outside conditional blocks so it's always in the DOM and available for toolbar click!) */}
@@ -2717,6 +2626,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           title={mt.selectLanguage}
           message=""
           type="info"
+          defaultWidth={480}
+          defaultHeight={400}
           okLabel={t.modals.ok}
           cancelLabel={t.modals.cancel}
           onOk={() => setShowLanguagePicker(false)}
