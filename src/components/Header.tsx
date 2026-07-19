@@ -2440,7 +2440,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
 
       </div>
 
-      {/* ============ WIN32 ABOUT DIALOG MODAL - WinUI (BETA 2.3.2) ============ */}
+      {/* ============ WIN32 ABOUT DIALOG MODAL - WinUI (original layout restored) ============ */}
       {showAbout && (
         <WinUIDialog
           isOpen={showAbout}
@@ -2453,49 +2453,46 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           okLabel={t.modals.ok}
           onOk={() => setShowAbout(false)}
         >
-          <div className="flex flex-col gap-4 select-text">
-            {/* App Name and Logo */}
-            <div className="flex items-center gap-4">
-              <img src="logo_crop.png" alt="Flowonline2 Logo" className="w-[80px] h-[80px] object-contain" />
-              <div className="flex flex-col">
-                <span className="font-bold text-[16px] text-slate-700">Flowonline2</span>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[11px] font-semibold text-slate-600">{mt.aboutVersion}: <span className="font-mono text-[#5B8DC4]">{appVersion}</span></span>
-                  <span className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${versionSource === 'repo' ? 'bg-emerald-200 text-emerald-800' : 'bg-yellow-200 text-yellow-800'}`}>
+          <div className="flex flex-col gap-3 select-text">
+            {/* Logo + App Info (original horizontal flex layout) */}
+            <div className="flex items-start gap-4">
+              {/* Logo - using logo_crop.png */}
+              <div className="w-16 h-16 bg-white rounded border border-slate-300 shadow-inner flex items-center justify-center shrink-0">
+                <img src="logo_crop.png" alt="Flowonline2" className="w-9 h-9 object-contain" />
+              </div>
+
+              <div className="flex flex-col gap-0.5 leading-tight text-[12px] font-sans">
+                <h4 className="font-extrabold text-[14px] text-slate-900 tracking-wide">Flowonline2</h4>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <p className="text-[12px] text-slate-500 font-semibold">{mt.aboutVersion} {appVersion}</p>
+                  <span className={`px-1.5 py-0.5 rounded font-mono text-[7px] font-black ${versionSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 animate-pulse' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
                     {versionSource === 'repo' ? mt.versionRepoLoaded : mt.versionFallbackLoaded}
                   </span>
                 </div>
+                <p className="text-[12px] text-slate-600 mt-2">
+                  {mt.aboutAuthor}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">PiBOH</a>
+                </p>
+                <p className="text-[12px] text-slate-500">
+                  {mt.aboutWebsite}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">piboh.github.io</a>
+                </p>
+                <p className="text-[12px] text-slate-500">
+                  {mt.aboutRepo}: <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">github.com/PiBOH/flowonline2</a>
+                </p>
               </div>
             </div>
 
-            {/* Author & Links */}
-            <div className="text-[11px] text-slate-600 bg-white border border-[#C0C0C0] rounded p-3 space-y-1.5">
-              <div className="flex gap-2">
-                <span className="font-bold min-w-[80px] text-slate-500">{mt.aboutAuthor}:</span>
-                <span>PiBOH</span>
-              </div>
-              <div className="flex gap-2">
-                <span className="font-bold min-w-[80px] text-slate-500">{mt.aboutWebsite}:</span>
-                <a href="https://piboh.github.io/flowonline2" target="_blank" rel="noopener noreferrer" className="text-[#5B8DC4] hover:underline">https://piboh.github.io/flowonline2</a>
-              </div>
-              <div className="flex gap-2">
-                <span className="font-bold min-w-[80px] text-slate-500">{mt.aboutRepo}:</span>
-                <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer" className="text-[#5B8DC4] hover:underline">https://github.com/PiBOH/flowonline2</a>
-              </div>
-            </div>
-
-            {/* License Box */}
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[11px] font-bold text-slate-600">{mt.aboutLicense}</span>
-                <span className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${licenseSource === 'repo' ? 'bg-emerald-200 text-emerald-800' : 'bg-yellow-200 text-yellow-800'}`}>
+            {/* License text box (original layout) */}
+            <div className="flex-1 flex flex-col space-y-1.5 my-1 overflow-hidden">
+              <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide shrink-0">
+                <span>{mt.aboutLicense}</span>
+                <span className={`px-2.5 py-0.5 rounded-full font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
                   {licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
                 </span>
               </div>
               <textarea
                 readOnly
                 value={licenseText}
-                className="w-full h-[250px] bg-white border border-[#A0A0A0] rounded-[3px] p-2 text-[10px] font-mono text-slate-700 resize-none select-text"
+                className="w-full flex-1 border border-slate-300 rounded p-3 font-mono text-[11px] bg-white text-slate-600 focus:outline-none resize-none overflow-auto leading-relaxed shadow-inner select-text"
               />
             </div>
           </div>
