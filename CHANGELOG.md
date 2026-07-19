@@ -7,6 +7,75 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.13] - 2026-07-20
+
+### Added
+- **Multi-Resolution favicon.ico:** Generated `favicon.ico` (16×16, 32×32, 48×48 px, 5.6KB) from `icon.png` via `sharp` for maximum cross-browser favicon compatibility.
+- **Sharp DevDependency:** Added `sharp` as devDependency for ICO generation.
+
+### Changed
+- **index.html:** `favicon.ico` now primary favicon (`image/x-icon`), with `icon.png` and `logo.svg` as fallbacks.
+
+### Fixed
+- Removed leftover `generate_ico.cjs` one-time script and duplicate root `logo.svg`.
+
+---
+
+## [BETA 2.3.12] - 2026-07-20
+
+### Fixed
+- **Favicon Deploy:** Moved `icon.png`, `logo.svg`, `logo.png` to `public/` directory so Vite copies them to `dist/`. Before this, assets in project root were excluded from build output, breaking favicon on GitHub Pages.
+
+---
+
+## [BETA 2.3.11] - 2026-07-20
+
+### Changed
+- **DRY Refactor:** Extracted duplicate localStorage save logic into `persistToStorage(s, t, a)` helper function. Debounce effect and unmount effect now single-line calls.
+- **Unmount Logging:** localStorage errors during unmount save now logged via `console.warn` (previously silently ignored).
+
+---
+
+## [BETA 2.3.10] - 2026-07-20
+
+### Added
+- **icon.png:** 500×500 transparent PNG favicon generated from `logo.svg` via `sharp-cli`.
+
+### Changed
+- **index.html:** `icon.png` now primary favicon, `logo.svg` as SVG fallback, `apple-touch-icon` uses `icon.png`.
+
+---
+
+## [BETA 2.3.9] - 2026-07-20
+
+### Fixed
+- **IDLE Freeze:** localStorage.setItem now debounced at 500ms (was synchronous on every state change, blocking main thread).
+- **Stale Closure:** Unmount save now uses `latestSaveRef` to prevent data loss on page close (was capturing initial values via empty dependency array).
+- **Save Cleanup:** `saveTimeoutRef` cleared on dependency changes to prevent stale saves.
+
+---
+
+## [BETA 2.3.8] - 2026-07-20
+
+### Changed
+- **Tab Title:** Now shows only `CPU X.X% | RAM XXXMB` (removed "Flowonline2" prefix).
+- **Cross-Browser Favicon:** Added `icon.png` fallback and `apple-touch-icon` for universal browser support (Firefox, Safari, Chrome). Kept SVG favicon for modern Chromium browsers.
+
+---
+
+## [BETA 2.3.7] - 2026-07-20
+
+### Added
+- **CPU/RAM Tab Title:** Tab title now shows estimated CPU usage (via `requestAnimationFrame` frame timing jitter) and JS heap RAM in MB (via Chrome `performance.memory` API). Format: `Flowonline2 | CPU 2.3% | RAM 234MB`.
+- RAM hidden on non-Chrome browsers (Firefox/Safari lack `performance.memory` API).
+
+### Fixed
+- Title throttled to update once per second (not every frame).
+- rAF loop properly stopped on unmount via `running` flag.
+- Frame deltas clamped to 100ms max to prevent tab-switch CPU spikes.
+
+---
+
 ## [BETA 2.3.6] - 2026-07-19
 
 ### Added
