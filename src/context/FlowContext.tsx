@@ -634,7 +634,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [selectedBlockIds, copiedBlocks, statements]);
+  }, [selectedBlockIds, copiedBlocks]);
 
   // MODAL EDITOR HANDLERS
   const openEditor = (block: Statement) => setEditingBlock(block);
