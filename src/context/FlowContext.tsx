@@ -304,25 +304,41 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Editor states
   const [editingBlock, setEditingBlock] = useState<Statement | null>(null);
 
-  // Persist program to localStorage whenever it changes
+  // Debounced localStorage persistence (prevents UI freeze from synchronous writes on every keystroke)
+  const latestSaveRef = useRef({ statements, programTitle, programAuthor });
+  latestSaveRef.current = { statements, programTitle, programAuthor };
+
+  const saveTimeoutRef = useRef<number | null>(null);
   useEffect(() => {
-    try {
-      if (typeof window === 'undefined') return;
-      const data: SavedProgram = {
-        statements,
-        programTitle,
-        programAuthor,
-        version: STORAGE_VERSION,
-      };
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      // Also persist author name independently (survives clearAll)
-      if (programAuthor) {
-        window.localStorage.setItem(AUTHOR_KEY, programAuthor);
+    if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
+    saveTimeoutRef.current = window.setTimeout(() => {
+      try {
+        if (typeof window === 'undefined') return;
+        const { statements: s, programTitle: t, programAuthor: a } = latestSaveRef.current;
+        const data: SavedProgram = { statements: s, programTitle: t, programAuthor: a, version: STORAGE_VERSION };
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        if (a) window.localStorage.setItem(AUTHOR_KEY, a);
+      } catch (e) {
+        console.warn('Failed to save flowchart to localStorage:', e);
       }
-    } catch (e) {
-      console.warn('Failed to save flowchart to localStorage:', e);
-    }
+    }, 500);
+    return () => {
+      if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
+    };
   }, [statements, programTitle, programAuthor]);
+
+  // Save immediately on unmount using latest ref (avoids stale closure)
+  useEffect(() => {
+    return () => {
+      try {
+        if (typeof window === 'undefined') return;
+        const { statements: s, programTitle: t, programAuthor: a } = latestSaveRef.current;
+        const data: SavedProgram = { statements: s, programTitle: t, programAuthor: a, version: STORAGE_VERSION };
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        if (a) window.localStorage.setItem(AUTHOR_KEY, a);
+      } catch (e) { /* ignore */ }
+    };
+  }, []);
 
   // VM Compiler execution references
   const instructionsRef = useRef<Instruction[]>([]);
