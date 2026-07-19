@@ -9,7 +9,7 @@
     <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fpiboh.github.io%2Fflowonline2%2F&label=Visitors&icon=stars&color=%23198754&style=for-the-badge&tz=UTC" alt="Visitor Badge" />
   </a>
   <img src="https://img.shields.io/github/license/PiBOH/flowonline2?style=for-the-badge&color=blue" alt="License Badge" />
-  <img src="https://img.shields.io/badge/version-BETA%202.0.13-orange?style=for-the-badge" alt="Version Badge" />
+  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/PiBOH/flowonline2?include_prereleases&display_name=release&style=for-the-badge&label=VERSION">
 </p>
 
 ---
