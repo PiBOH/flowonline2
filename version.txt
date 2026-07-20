@@ -1,1 +1,1 @@
-BETA 2.3.23-beta
+BETA 2.3.24-beta
