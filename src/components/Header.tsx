@@ -2359,8 +2359,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             {LANGUAGE_NAMES[language] || language}
           </button>
         </div>
-      </div>
         </div>
+      </div>
 
       {/* ============ TOOLBAR (Faithful Windows Desktop Style) ============ */}
       <div 
