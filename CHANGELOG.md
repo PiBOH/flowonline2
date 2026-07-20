@@ -19,6 +19,57 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.19] - 2026-07-20
+
+### Added
+- **Vitest Unit Test Suite (126 tests):** Installed `vitest` + `jsdom`. Comprehensive tests for `parser.ts` (79 tests: arithmetic, strings, booleans, logic, relational operators, variables, arrays, 22 built-in functions, edge cases), `codeGenerator.ts` (27 tests: all 5 languages, 10 block types, expression translation), and `fprgParser.ts` (20 tests: XML parsing, serialization, round-trip integrity). Added `npm test` and `npm run test:watch` scripts.
+- **vitest.config.ts:** jsdom environment, globals enabled.
+
+### Changed
+- **tsconfig.json:** Added `exclude` for `node_modules` and `dist`.
+
+---
+
+## [BETA 2.3.18] - 2026-07-20
+
+### Fixed
+- **pushHistory Stale Closure (Critical):** Undo entry now saves explicit params (`newStmts`, `newTitle`, `newAuthor`) instead of stale closure-captured state. Fixes undo corruption on title/author edits.
+- **JSON.parse/JSON.stringify → structuredClone:** Replaced 5 deep-clone sites with native `structuredClone()` — faster, handles edge cases (undefined, Date).
+- **Hardcoded IF Labels:** `VERO (True)`/`FALSO (False)` now use `t.canvas.trueBranch`/`t.canvas.falseBranch` with 23-language translations. Added keys to `TranslationCatalog` type in `flow.ts`.
+
+---
+
+## [BETA 2.3.17] - 2026-07-20
+
+### Fixed
+- **Keyboard Listener Memory Leak:** Removed `statements` from `useEffect` dependency array in `FlowContext.tsx`. `statements` is a new array reference on every mutation, causing `addEventListener`/`removeEventListener` re-registration on every keystroke/edit. `handleKeyDown` only uses stable callbacks.
+
+---
+
+## [BETA 2.3.16] - 2026-07-20
+
+### Changed
+- **logo.png Compression:** Compressed from 1,573,036 bytes (1.5 MB) to 18,069 bytes (18 KB) — 98.9% reduction. Settings: 550px, palette PNG 128 colors, compression level 9. Applied to both `public/logo.png` and root `logo.png`.
+
+### Removed
+- **Unused ESLint Plugins:** Removed `@typescript-eslint/eslint-plugin` and `@typescript-eslint/parser` (never used).
+- **package-lock.json:** Reduced by additional 1,552 lines.
+
+---
+
+## [BETA 2.3.15] - 2026-07-20
+
+### Changed
+- **README.md Version Badge:** Replaced static badge with dynamic shields.io GitHub Releases badge that auto-reads the latest release tag:
+  ```html
+  <img src="https://img.shields.io/github/v/release/PiBOH/flowonline2?include_prereleases&display_name=release&style=for-the-badge&label=VERSION">
+  ```
+
+### Added
+- **GitHub Release 2.3.15-beta:** First automated release created via API with tag `2.3.15`.
+
+---
+
 ## [BETA 2.3.14] - 2026-07-20
 
 ### Removed
