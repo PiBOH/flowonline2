@@ -7,14 +7,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.23] - 2026-07-20
+## [BETA 2.3.23-beta] - 2026-07-20
 
 ### Changed
 - **Colorful SVG icons:** All 26 EmojiIcons.tsx components now use fixed hex colors matching emoji appearance instead of monochrome `currentColor`.
 - **New media-control SVG icons:** `IconPlay` (green), `IconStep` (blue), `IconPause` (orange), `IconStop` (red), `IconMonitor` (dark+blue).
 - **23 country flag SVGs:** Replaced all flag emojis (`FLAGS_EMOJI` constant) with `FlagIcon` component using simplified SVG flag representations (horizontal/vertical tricolors, bicolors, circles, stars). Fallback uses `IconGlobe` SVG (no emoji).
 - **Remaining emoji cleanup:** Replaced ▶⏭⏸⏹ in toolbar/dropdown with media SVG icons. Replaced 🖥️ in layout buttons with `IconMonitor`. Czech flag differentiated from Poland with blue triangle.
-## [BETA 2.3.22] - 2026-07-20
+## [BETA 2.3.22-beta] - 2026-07-20
 
 ### Fixed
 - **Mobile hamburger menu:** Added slide-out panel with fully functional Run/Step/Pause/Stop, File/Edit/Tools/Help menus, wired to real handlers (`handleExportFprg`, `handleExportSvg`, `handleExportPng`, `undo`, `redo`).
@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 - **Desktop menu hidden on mobile:** Added `desktop-menu` CSS class to menu bar div so it hides at mobile breakpoints.
 - **Mobile overlay:** Locks body scroll when menu is open, closes on overlay click or any action.
 
-## [BETA 2.3.21] - 2026-07-20
+## [BETA 2.3.21-beta] - 2026-07-20
 
 ### Added
 - **GitHub Actions CI/CD Workflows:**
@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.20] - 2026-07-20
+## [BETA 2.3.20-beta] - 2026-07-20
 
 ### Changed
 - **Emoji → SVG Conversion:** Created `EmojiIcons.tsx` with 26 SVG icon components replacing all platform-dependent emoji across the app. Emoji render inconsistently on different OS (Windows monochrome, macOS colorful, Linux none) — SVG icons guarantee identical appearance everywhere.
@@ -43,7 +43,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.19] - 2026-07-20
+## [BETA 2.3.19-beta] - 2026-07-20
 
 ### Added
 - **Vitest Unit Test Suite (126 tests):** Installed `vitest` + `jsdom`. Comprehensive tests for `parser.ts` (79 tests: arithmetic, strings, booleans, logic, relational operators, variables, arrays, 22 built-in functions, edge cases), `codeGenerator.ts` (27 tests: all 5 languages, 10 block types, expression translation), and `fprgParser.ts` (20 tests: XML parsing, serialization, round-trip integrity). Added `npm test` and `npm run test:watch` scripts.
@@ -54,7 +54,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.18] - 2026-07-20
+## [BETA 2.3.18-beta] - 2026-07-20
 
 ### Fixed
 - **pushHistory Stale Closure (Critical):** Undo entry now saves explicit params (`newStmts`, `newTitle`, `newAuthor`) instead of stale closure-captured state. Fixes undo corruption on title/author edits.
@@ -63,14 +63,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.17] - 2026-07-20
+## [BETA 2.3.17-beta] - 2026-07-20
 
 ### Fixed
 - **Keyboard Listener Memory Leak:** Removed `statements` from `useEffect` dependency array in `FlowContext.tsx`. `statements` is a new array reference on every mutation, causing `addEventListener`/`removeEventListener` re-registration on every keystroke/edit. `handleKeyDown` only uses stable callbacks.
 
 ---
 
-## [BETA 2.3.16] - 2026-07-20
+## [BETA 2.3.16-beta] - 2026-07-20
 
 ### Changed
 - **logo.png Compression:** Compressed from 1,573,036 bytes (1.5 MB) to 18,069 bytes (18 KB) — 98.9% reduction. Settings: 550px, palette PNG 128 colors, compression level 9. Applied to both `public/logo.png` and root `logo.png`.
@@ -81,7 +81,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.15] - 2026-07-20
+## [BETA 2.3.15-beta] - 2026-07-20
 
 ### Changed
 - **README.md Version Badge:** Replaced static badge with dynamic shields.io GitHub Releases badge that auto-reads the latest release tag:
@@ -94,7 +94,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.14] - 2026-07-20
+## [BETA 2.3.14-beta] - 2026-07-20
 
 ### Removed
 - **sharp devDependency:** Removed `sharp` (~25MB) from devDependencies now that `favicon.ico` is already generated.
@@ -102,7 +102,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.13] - 2026-07-20
+## [BETA 2.3.13-beta] - 2026-07-20
 
 ### Added
 - **Multi-Resolution favicon.ico:** Generated `favicon.ico` (16×16, 32×32, 48×48 px, 5.6KB) from `icon.png` via `sharp` for maximum cross-browser favicon compatibility.
@@ -116,14 +116,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.12] - 2026-07-20
+## [BETA 2.3.12-beta] - 2026-07-20
 
 ### Fixed
 - **Favicon Deploy:** Moved `icon.png`, `logo.svg`, `logo.png` to `public/` directory so Vite copies them to `dist/`. Before this, assets in project root were excluded from build output, breaking favicon on GitHub Pages.
 
 ---
 
-## [BETA 2.3.11] - 2026-07-20
+## [BETA 2.3.11-beta] - 2026-07-20
 
 ### Changed
 - **DRY Refactor:** Extracted duplicate localStorage save logic into `persistToStorage(s, t, a)` helper function. Debounce effect and unmount effect now single-line calls.
@@ -131,7 +131,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.10] - 2026-07-20
+## [BETA 2.3.10-beta] - 2026-07-20
 
 ### Added
 - **icon.png:** 500×500 transparent PNG favicon generated from `logo.svg` via `sharp-cli`.
@@ -141,7 +141,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.9] - 2026-07-20
+## [BETA 2.3.9-beta] - 2026-07-20
 
 ### Fixed
 - **IDLE Freeze:** localStorage.setItem now debounced at 500ms (was synchronous on every state change, blocking main thread).
@@ -150,7 +150,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.8] - 2026-07-20
+## [BETA 2.3.8-beta] - 2026-07-20
 
 ### Changed
 - **Tab Title:** Now shows only `CPU X.X% | RAM XXXMB` (removed "Flowonline2" prefix).
@@ -158,7 +158,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.7] - 2026-07-20
+## [BETA 2.3.7-beta] - 2026-07-20
 
 ### Added
 - **CPU/RAM Tab Title:** Tab title now shows estimated CPU usage (via `requestAnimationFrame` frame timing jitter) and JS heap RAM in MB (via Chrome `performance.memory` API). Format: `Flowonline2 | CPU 2.3% | RAM 234MB`.
@@ -171,7 +171,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.6] - 2026-07-19
+## [BETA 2.3.6-beta] - 2026-07-19
 
 ### Added
 - **Dynamic Tab Title:** Browser tab now shows JS heap memory usage (e.g., `Flowonline2 | Heap: 45/2048 MB`) via Chrome's `performance.memory` API, refreshed every 5 seconds.
@@ -182,7 +182,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.5] - 2026-07-19
+## [BETA 2.3.5-beta] - 2026-07-19
 
 ### Fixed
 - **License Textarea Size:** Changed from `flex-1` to explicit `h-[300px]` and removed `overflow-hidden` from container to restore full visibility of the license text in the About modal.
@@ -197,7 +197,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.3] - 2026-07-19
+## [BETA 2.3.3-beta] - 2026-07-19
 
 ### Added
 - **Language Picker Flags:** Each language in the picker now shows its national flag emoji (🇺🇸 🇬🇧 🇮🇹 etc.) next to the name.
@@ -211,7 +211,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.2] - 2026-07-19
+## [BETA 2.3.2-beta] - 2026-07-19
 
 ### Changed
 - **About/Manual/Changelog Modals → WinUI:** All three information dialogs are now fully draggable and resizable WinUIDialog windows that reset to their default size when reopened (700×525, 800×600, and 750×550 respectively).
@@ -222,7 +222,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.1] - 2026-07-19
+## [BETA 2.3.1-beta] - 2026-07-19
 
 ### Added
 - **Language Picker WinUI:** Replaced the small HTML `<select>` dropdown with a full WinUI dialog showing all 22 supported languages in a grid with current-language highlighting.
@@ -237,7 +237,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.3.0] - 2026-07-19
+## [BETA 2.3.0-beta] - 2026-07-19
 
 ### Added
 - **22 Language Menu Translations:** Header menu labels and messages are now fully localized for all 22 supported languages (EN, EN_GB, IT, DE, FR, ES, ZH, NL, PT, GL, RU, UK, CS, PL, HU, SL, JA, TH, ID, MN, AR, HE, FA).
@@ -251,7 +251,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.2.0] - 2026-07-19
+## [BETA 2.2.0-beta] - 2026-07-19
 
 ### Added
 - **Tools Menu:** New dedicated "Tools" dropdown in the menu bar with Export SVG, Export PNG, and Export PDF.
@@ -269,7 +269,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.1.0] - 2026-07-17
+## [BETA 2.1.0-beta] - 2026-07-17
 
 ### Added
 - **Interactive Tutorial Onboarding:** 8-step interactive walkthrough (`Tutorial.tsx`) that auto-shows on first visit and can be opened from the Help menu. Includes keyboard navigation, progress indicator, and "Don't show again" persistence.
@@ -300,7 +300,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.0.13] - 2026-06-XX
+## [BETA 2.0.13-beta] - 2026-06-XX
 
 ### Added
 - Keyboard block selection with glowing blue dotted border.
@@ -314,7 +314,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.0.12] - 2026-06-XX
+## [BETA 2.0.12-beta] - 2026-06-XX
 
 ### Added
 - Auto-scrolling active executing block into viewport.
@@ -327,7 +327,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.0.10] - 2026-06-XX
+## [BETA 2.0.10-beta] - 2026-06-XX
 
 ### Added
 - Unquoted newline constant (`\n`) in string expressions.
@@ -335,7 +335,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.0.9] - 2026-06-XX
+## [BETA 2.0.9-beta] - 2026-06-XX
 
 ### Added
 - Win32 hover dropdown sliding (onMouseEnter handlers).
@@ -345,7 +345,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.0.8] - 2026-06-XX
+## [BETA 2.0.8-beta] - 2026-06-XX
 
 ### Fixed
 - Lexicographical string comparison (removed numeric forcing).
@@ -354,7 +354,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.0.7] - 2026-06-XX
+## [BETA 2.0.7-beta] - 2026-06-XX
 
 ### Added
 - Single `=` treated as equality comparison in conditions.
@@ -364,14 +364,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.0.6] - 2026-05-XX
+## [BETA 2.0.6-beta] - 2026-05-XX
 
 ### Fixed
 - Critical FPRG XML parsing: assignments now read `expression` attribute (not `value`).
 
 ---
 
-## [BETA 2.0.5] - 2026-05-XX
+## [BETA 2.0.5-beta] - 2026-05-XX
 
 ### Added
 - Declare tab SVG outline (folder tab shape).
@@ -380,7 +380,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.0.4] - 2026-05-XX
+## [BETA 2.0.4-beta] - 2026-05-XX
 
 ### Added
 - Character/string intrinsic functions: `Char()`, `ToCode()`, `ToChar()`.
@@ -389,7 +389,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [BETA 2.0.3] - 2026-05-XX
+## [BETA 2.0.3-beta] - 2026-05-XX
 
 ### Added
 - Initial release of Flowonline2.

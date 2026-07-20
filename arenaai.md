@@ -82,11 +82,11 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (BETA 2.3.21)
+## 5. Architectural Milestone Logs & Change History (BETA 2.3.21-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
-### Milestone 1: Windows MDI (Multiple Document Interface) Desktop Frame (BETA 2.0.3)
+### Milestone 1: Windows MDI (Multiple Document Interface) Desktop Frame (BETA 2.0.3-beta)
 *   **Aero Glass Gradient Header:** Redesigned the main app header with a dual gradient (`#5B8DC4` -> `#2F5A8C`), standard Windows system controls (`─`, `▢`, `✕`), and the Flowgorithm 4-box colored vector logo.
 *   **System Menu & Toolbar:** Added standard retro dropdown menus (`File`, `Modifica`, `Programma`) and a standard `32x32px` flat-button toolbar.
 *   **Workspace Splitting:** Introduced an MDI layout context parameter (`AppLayout`) with five switchable layouts (`flowchart_only`, `flow_variables`, `flow_console`, `triple_split`, `flow_code`), allowing the canvas, variable watch, and console windows to be docked or closed in real-time.
@@ -103,7 +103,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
     *   **Conversioni:** `ToInteger(s)`, `ToReal(s)`, `ToString(n)`.
     *   **Matematiche/Trigonometriche:** `Int(n)` (whole value trunc), `Sgn(n)` (sign function), `Arcsin`, `Arccos`, `Arctan`.
 
-### Milestone 4: Graphic Sfumature & Shape Outlines (BETA 2.0.5)
+### Milestone 4: Graphic Sfumature & Shape Outlines (BETA 2.0.5-beta)
 *   **Declare Tab:** Created an authentic SVG outline path for `DeclareBlock` rendering a folder tab on top, matching the visual cues of Flowgorithm.
 *   **Terminal & Shape Colors:** Mapped all blocks to the exact color scheme in PiBOH's `flowonline` stylesheet (`--cs-terminal`, `--cs-process`, `--cs-io`, `--cs-decision`, `--cs-loop`, `--cs-call`).
 *   **Blue Dot Inserters:** Styled connector hover states to draw the classic glowing 3D blue inserter circles that expand and show a golden drop-shadow when hovered.
@@ -122,13 +122,13 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **ToChar(13) Carriage Return Parsing:** Pre-wrap rendering collapses `\r` (carriage return, ASCII 13) into simple whitespaces on Webkit/Blink browsers. Resolved by adding a global regex replace in the console message renderer (`src/components/Console.tsx`) converting `\r` into Line Feeds `\n`. This successfully restored beautiful, multiline output layouts in standard dialogue balloons.
 *   **Toolbar "Open" (📂) Button Activation:** Fixed a React DOM reference bug where `<input type="file">` was nested inside the conditional drop-down. Moved it outside the dropdown, enabling the toolbar "Open" button to trigger file selections at all times.
 
-### Milestone 8: Hover Slide-To-Active Menus & Global Click Closures (BETA 2.0.9)
+### Milestone 8: Hover Slide-To-Active Menus & Global Click Closures (BETA 2.0.9-beta)
 *   **Win32 Hover Dropdown Sliding:** Added `onMouseEnter` handlers across all dropdown menu headers, allowing dropdowns to activate automatically on hover when a dropdown is already open.
 *   **Global Click closures:** Created a global document `mousedown` listener to close dropdowns when clicking outside, emulating standard desktop window menus.
 *   **DPI-Aware 600% Zoom Toolbar:** Added Zoom In (`🔍+`), Zoom Out (`🔍-`), zoom percentage, and Reset Zoom (`🔄`) controls on the upper-right side of the toolbar.
 *   **Win32 About Dialog Sizing:** Resized the Win32 About dialog to exactly `700px` width by `525px` height.
 
-### Milestone 9: Unquoted Newlines and XML Auto-Translation (BETA 2.0.10)
+### Milestone 9: Unquoted Newlines and XML Auto-Translation (BETA 2.0.10-beta)
 *   **Unquoted Newline Constant (\\n):** Modified the string tokenizer (`src/utils/parser.ts`) to intercept unquoted `\n` characters (e.g., `text & \n & min`) and parse them directly as first-class Line Feed (`\n`) string tokens.
 *   **FPRG Import/Export Normalization:** Extended `FprgParser.ts` to automatically translate all `ToChar(13)` expressions inside files loaded from the PC to unquoted `\n` constants inside the web application, and translate them back to standard `ToChar(13)` when saving/exporting.
 
@@ -153,7 +153,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Nested Branch Inserter Contexts:** Fixed the missing `parentContext` parameter inside recursive `renderLinesAndArrows` calls, allowing nested inserters to correctly propagate their target IDs (`branch_end:parentId:branchType`) instead of defaulting to `'main_end'`.
 *   **True/False Visual Alignment:** Corrected the inverted visual labeling of condition branches: the `thenBranch` on the left is now correctly labeled **VERO (True)** in vibrant green, and the `elseBranch` on the right is labeled **FALSO (False)** in standard contrast color, matching the standard desktop layout of Flowgorithm perfectly.
 
-### Milestone 13: Polish Release — Tutorial, Galleria Esempi, Export PNG & Bug Fixes (BETA 2.1.0)
+### Milestone 13: Polish Release — Tutorial, Galleria Esempi, Export PNG & Bug Fixes (BETA 2.1.0-beta)
 
 [//]: # (keepachangelog)
 
@@ -183,7 +183,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **SVG Export Cleanliness:** Removed inserter buttons, delete buttons, and interactive CSS classes from exported SVG/PNG images.
 
 
-### Milestone 14: Tools Menu, Export Engines, and Author Auto-Detection (BETA 2.2.0)
+### Milestone 14: Tools Menu, Export Engines, and Author Auto-Detection (BETA 2.2.0-beta)
 
 [//]: # (keepachangelog)
 
@@ -198,7 +198,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Issue Templates Validation:** Fixed `validations` YAML key being incorrectly nested inside `attributes` in all 4 GitHub issue form templates (`bug_report-en.yml`, `bug_report-it.yml`, `feature_request-en.yml`, `feature_request-it.yml`). Moved `validations.required` to top-level form schema.
 
 
-### Milestone 15: 22-Language Full Localization and WinUI Export Dialogs (BETA 2.3.0)
+### Milestone 15: 22-Language Full Localization and WinUI Export Dialogs (BETA 2.3.0-beta)
 
 [//]: # (keepachangelog)
 
@@ -212,7 +212,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Header.tsx:** Export handlers updated to `await` export results and show WinUI dialogs with appropriate messages.
 
 
-### Milestone 16: WinUI Language Picker, Help Menu Links, and Selectable Text (BETA 2.3.1)
+### Milestone 16: WinUI Language Picker, Help Menu Links, and Selectable Text (BETA 2.3.1-beta)
 
 [//]: # (keepachangelog)
 
@@ -227,7 +227,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Translations:** Added `bugReport`, `featureRequest`, `forkContribute`, and `selectLanguage` keys to all 22 supported languages.
 
 
-### Milestone 17: WinUI About/Manual/Changelog Dialogs (BETA 2.3.2)
+### Milestone 17: WinUI About/Manual/Changelog Dialogs (BETA 2.3.2-beta)
 
 [//]: # (keepachangelog)
 
@@ -241,7 +241,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Language Picker Centering:** Increased default dimensions to 480×400 px so the 22-language grid is properly centered on screen instead of appearing too low.
 
 
-### Milestone 18: Language Flags, Resize Behavior, and Logo Polish (BETA 2.3.3)
+### Milestone 18: Language Flags, Resize Behavior, and Logo Polish (BETA 2.3.3-beta)
 
 [//]: # (keepachangelog)
 
@@ -256,7 +256,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Manual Resize Only:** WinUIDialog now uses `height` instead of `minHeight` CSS property, preventing automatic content-driven expansion. Windows stay at user-set size with scrollbars and can only be resized by dragging the bottom-right corner handle.
 
 
-### Milestone 19: Freeze Prevention, Memory Safeguards, and Logo Hardcoding (BETA 2.3.5)
+### Milestone 19: Freeze Prevention, Memory Safeguards, and Logo Hardcoding (BETA 2.3.5-beta)
 
 [//]: # (keepachangelog)
 
@@ -271,7 +271,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Hardcoded Logo SVG:** Replaced `logo_crop.png` references in title bar and About modal with the full inline SVG from `logo.svg` (Flowgorithm 4-box colored logo with gradients and glow effects), ensuring consistent rendering across all browsers.
 
 
-### Milestone 20: Dynamic Tab Title, Favicon, and Menu Polish (BETA 2.3.6)
+### Milestone 20: Dynamic Tab Title, Favicon, and Menu Polish (BETA 2.3.6-beta)
 
 [//]: # (keepachangelog)
 
@@ -287,22 +287,22 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 
 [//]: # (keepachangelog)
 
-#### Added (BETA 2.3.7)
+#### Added (BETA 2.3.7-beta)
 *   **CPU Usage Estimation:** Tab title now shows estimated CPU usage percentage via `requestAnimationFrame` frame timing jitter analysis (delta from expected 16.67ms vs actual frame time).
 *   **RAM Display:** JS heap used memory shown in MB via Chrome `performance.memory.usedJSHeapSize` API.
 *   **Format:** `Flowonline2 | CPU 2.3% | RAM 234MB` — throttled to update once per second (not every frame) to avoid overhead.
 
-#### Fixed (BETA 2.3.7)
+#### Fixed (BETA 2.3.7-beta)
 *   rAF loop properly stopped on component unmount via `running` flag.
 *   Frame deltas clamped to 100ms max to prevent tab-switch CPU spikes.
 
-#### Changed (BETA 2.3.8)
+#### Changed (BETA 2.3.8-beta)
 *   **Tab Title Format:** Simplified to `CPU X.X% | RAM XXXMB` (removed "Flowonline2" prefix for cleaner look).
 *   **Cross-Browser Favicon:** Added `icon.png` fallback and `apple-touch-icon` for universal browser support (Firefox, Safari, Chrome). Kept SVG favicon for modern Chromium browsers.
 *   RAM hidden on non-Chrome browsers (Firefox/Safari lack `performance.memory` API).
 
 
-### Milestone 22: IDLE Freeze Fix and localStorage Optimization (BETA 2.3.9)
+### Milestone 22: IDLE Freeze Fix and localStorage Optimization (BETA 2.3.9-beta)
 
 [//]: # (keepachangelog)
 
@@ -316,11 +316,11 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 
 [//]: # (keepachangelog)
 
-#### Added (BETA 2.3.10)
+#### Added (BETA 2.3.10-beta)
 *   **icon.png:** 500×500 transparent PNG favicon generated from `logo.svg` via `sharp-cli` for universal browser tab icon support.
 *   **index.html:** `icon.png` as primary favicon, `logo.svg` as SVG fallback, `apple-touch-icon` using `icon.png`.
 
-#### Changed (BETA 2.3.11)
+#### Changed (BETA 2.3.11-beta)
 *   **DRY Refactor — persistToStorage:** Extracted duplicate localStorage save logic (previously copy-pasted in debounce effect and unmount effect) into a single `persistToStorage(s, t, a)` helper function.
 *   **Unmount Error Logging:** localStorage errors during unmount save now logged via `console.warn` (previously silently ignored with empty `.catch()`).
 
@@ -329,18 +329,18 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 
 [//]: # (keepachangelog)
 
-#### Fixed (BETA 2.3.12)
+#### Fixed (BETA 2.3.12-beta)
 *   **Favicon Deploy:** Moved `icon.png`, `logo.svg`, `logo.png` from project root to `public/` directory. Vite only copies files from `public/` into `dist/` — before this fix, favicon assets were excluded from build output, breaking the tab icon on GitHub Pages.
 
-#### Added (BETA 2.3.13)
+#### Added (BETA 2.3.13-beta)
 *   **Multi-Resolution favicon.ico:** Generated `favicon.ico` (16×16, 32×32, 48×48 px, 5.6KB) from `icon.png` via `sharp`. Multi-size ICO provides maximum cross-browser compatibility (legacy IE, all modern browsers).
 *   **index.html:** `favicon.ico` (`image/x-icon`) as primary favicon with `icon.png` and `logo.svg` as fallbacks.
 
-#### Removed (BETA 2.3.13)
+#### Removed (BETA 2.3.13-beta)
 *   One-time `generate_ico.cjs` script and duplicate root `logo.svg` cleaned up after generation.
 
 
-### Milestone 25: Dependency Cleanup (BETA 2.3.14)
+### Milestone 25: Dependency Cleanup (BETA 2.3.14-beta)
 
 [//]: # (keepachangelog)
 
@@ -350,7 +350,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **package-lock.json:** Reduced by 655 lines after removing all transitive sharp dependencies.
 
 
-### Milestone 26: Dynamic Version Badge and GitHub Release (BETA 2.3.15)
+### Milestone 26: Dynamic Version Badge and GitHub Release (BETA 2.3.15-beta)
 
 [//]: # (keepachangelog)
 
@@ -365,7 +365,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **GitHub Release 2.3.15-beta:** First automated release created via GitHub API with tag `2.3.15`, title `2.3.15-beta`, description "Code backup", and prerelease flag.
 
 
-### Milestone 27: Logo Compression and Unused Dependency Removal (BETA 2.3.16)
+### Milestone 27: Logo Compression and Unused Dependency Removal (BETA 2.3.16-beta)
 
 [//]: # (keepachangelog)
 
@@ -380,7 +380,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **GitHub Release 2.3.16-beta:** Created via API with tag `2.3.16`.
 
 
-### Milestone 28: Keyboard Listener Memory Leak Fix (BETA 2.3.17)
+### Milestone 28: Keyboard Listener Memory Leak Fix (BETA 2.3.17-beta)
 
 [//]: # (keepachangelog)
 
@@ -392,7 +392,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **GitHub Release 2.3.17-beta:** Created via API with tag `2.3.17`.
 
 
-### Milestone 29: Critical Bugfixes — Stale Closure, Deep Clone, and IF Labels (BETA 2.3.18)
+### Milestone 29: Critical Bugfixes — Stale Closure, Deep Clone, and IF Labels (BETA 2.3.18-beta)
 
 [//]: # (keepachangelog)
 
@@ -412,7 +412,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
     - (and 14 more languages)
 
 
-### Milestone 30: Unit Test Suite — Vitest, 126 Tests, 3 Critical Modules (BETA 2.3.19)
+### Milestone 30: Unit Test Suite — Vitest, 126 Tests, 3 Critical Modules (BETA 2.3.19-beta)
 
 [//]: # (keepachangelog)
 
@@ -427,7 +427,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **tsconfig.json:** Added `"exclude": ["node_modules", "dist"]` for cleaner compilation.
 
 
-### Milestone 31: Emoji → SVG Conversion for Cross-Platform Consistency (BETA 2.3.20)
+### Milestone 31: Emoji → SVG Conversion for Cross-Platform Consistency (BETA 2.3.20-beta)
 
 [//]: # (keepachangelog)
 
@@ -443,7 +443,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Cross-Platform Emoji Rendering:** Emoji characters render inconsistently across operating systems and browsers (Windows shows monochrome outlines, macOS shows colorful designs, Linux may show nothing). SVG icons guarantee pixel-identical appearance everywhere.
 
 
-### Milestone 32: GitHub Actions CI/CD — Auto Review, Test, and Release (BETA 2.3.21)
+### Milestone 32: GitHub Actions CI/CD — Auto Review, Test, and Release (BETA 2.3.21-beta)
 
 [//]: # (keepachangelog)
 
@@ -465,7 +465,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
     *   Uses `GITHUB_TOKEN` for authentication with `contents: write` permission.
 
 
-### Milestone 33: Commit Naming Convention for Releases (BETA 2.3.22)
+### Milestone 33: Commit Naming Convention for Releases (BETA 2.3.22-beta)
 
 [//]: # (keepachangelog)
 
