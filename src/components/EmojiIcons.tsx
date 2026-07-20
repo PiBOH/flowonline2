@@ -75,28 +75,25 @@ export const IconPlus: React.FC<IconProps> = (p) => (
   </SvgIcon>
 );
 
-// ── Close (✕) ──
+// ── Close (✕) — Windows 10/11 title bar style (red on hover) ──
 export const IconClose: React.FC<IconProps> = (p) => (
   <SvgIcon {...p}>
-    <circle cx="8" cy="8" r="7" fill="#EF5350" stroke="#B71C1C" strokeWidth="0.8"/>
-    <line x1="4.5" y1="4.5" x2="11.5" y2="11.5" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-    <line x1="11.5" y1="4.5" x2="4.5" y2="11.5" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+    <line x1="3" y1="3" x2="13" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <line x1="13" y1="3" x2="3" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </SvgIcon>
 );
 
-// ── Minimize (─) ──
+// ── Minimize (─) — Windows 10/11 title bar style ──
 export const IconMinimize: React.FC<IconProps> = (p) => (
   <SvgIcon {...p}>
-    <rect x="1" y="1" width="14" height="14" rx="2" fill="#E0E0E0" stroke="#9E9E9E" strokeWidth="0.8"/>
-    <line x1="3.5" y1="11.5" x2="12.5" y2="11.5" stroke="#424242" strokeWidth="2" strokeLinecap="round"/>
+    <line x1="3" y1="12" x2="13" y2="12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </SvgIcon>
 );
 
-// ── Maximize (▢) ──
+// ── Maximize (▢) — Windows 10/11 title bar style ──
 export const IconMaximize: React.FC<IconProps> = (p) => (
   <SvgIcon {...p}>
-    <rect x="1" y="1" width="14" height="14" rx="2" fill="#E0E0E0" stroke="#9E9E9E" strokeWidth="0.8"/>
-    <rect x="3" y="3" width="10" height="10" rx="1" fill="#BBDEFB" stroke="#1565C0" strokeWidth="0.7"/>
+    <rect x="2.5" y="2.5" width="11" height="11" rx="0.5" fill="none" stroke="currentColor" strokeWidth="1.5"/>
   </SvgIcon>
 );
 
