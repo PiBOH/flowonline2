@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.22] - 2026-07-20
+
+### Fixed
+- **Mobile hamburger menu:** Added slide-out panel with fully functional Run/Step/Pause/Stop, File/Edit/Tools/Help menus, wired to real handlers (`handleExportFprg`, `handleExportSvg`, `handleExportPng`, `undo`, `redo`).
+- **Block touch handling:** Removed broken `onTouchEnd` that hijacked tap-to-select on mobile. Mobile long-press now uses native `contextmenu` event via `onContextMenu`.
+- **Desktop menu hidden on mobile:** Added `desktop-menu` CSS class to menu bar div so it hides at mobile breakpoints.
+- **Mobile overlay:** Locks body scroll when menu is open, closes on overlay click or any action.
+
 ## [BETA 2.3.21] - 2026-07-20
 
 ### Added

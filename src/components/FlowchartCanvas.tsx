@@ -328,6 +328,7 @@ export const FlowchartCanvas: React.FC = () => {
           });
         }}
         // RIGHT-CLICK ON INSERTER PIN (Paste or Insert context choices!)
+        // Also supports long-press on mobile for context menu
         onContextMenu={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -337,6 +338,19 @@ export const FlowchartCanvas: React.FC = () => {
             index,
             x: e.clientX,
             y: e.clientY
+          });
+        }}
+        onTouchEnd={(e) => {
+          // Long-press detection for mobile context menu (touch devices)
+          const touch = e.changedTouches[0];
+          e.preventDefault();
+          e.stopPropagation();
+          setContextMenu({
+            type: 'inserter',
+            parentId,
+            index,
+            x: touch.clientX,
+            y: touch.clientY
           });
         }}
       >
@@ -401,7 +415,8 @@ export const FlowchartCanvas: React.FC = () => {
               setSelectedBlockIds([node.id]);
             }
           }}
-          // RIGHT-CLICK TO OPEN CUSTOM WINDOWS CONTEXT MENU! (SUPPORT MULTI-SELECTIONS!)
+          // RIGHT-CLICK / LONG-PRESS TO OPEN CONTEXT MENU (SUPPORT MULTI-SELECTIONS!)
+          // Note: onContextMenu also fires on mobile long-press, no separate onTouchEnd needed
           onContextMenu={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -457,7 +472,7 @@ export const FlowchartCanvas: React.FC = () => {
       
       {/* SVG Canvas Workspace with Engineering Graph-Paper Grid Background */}
       <div 
-        className="flex-1 overflow-auto p-8 flex items-start justify-center relative"
+        className="flex-1 overflow-auto p-2 md:p-8 flex items-start justify-center relative flowchart-canvas-container"
         style={{
           background: isDark
             ? 'linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px), #1e1e1e'
