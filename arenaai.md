@@ -82,7 +82,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (BETA 2.3.17)
+## 5. Architectural Milestone Logs & Change History (BETA 2.3.18)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -390,5 +390,25 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 
 #### Added
 *   **GitHub Release 2.3.17-beta:** Created via API with tag `2.3.17`.
+
+
+### Milestone 29: Critical Bugfixes — Stale Closure, Deep Clone, and IF Labels (BETA 2.3.18)
+
+[//]: # (keepachangelog)
+
+#### Fixed
+*   **pushHistory Stale Closure (Critical):** The `pushHistory` helper in `FlowContext.tsx` was saving the undo entry using closure-captured `statements`, `programTitle`, and `programAuthor` instead of the explicit params `newStmts`, `newTitle`, and `newAuthor`. This caused undo to snapshot stale state when title/author changed. Fixed by referencing the params directly in the undo entry: `{ statements: newStmts, title: newTitle, author: newAuthor }`.
+*   **JSON.parse(JSON.stringify()) → structuredClone():** Replaced 5 deep-clone sites (4 in `addBlock`, `updateBlock`, `deleteBlocks`, `pasteBlocks` + 1 in `regenerateBlockIds`) with the native `structuredClone()` API. Benefits: ~2× faster, handles edge cases (undefined, Date), and works on Transferable objects. No import needed (global API since Chrome 98, Firefox 94, Safari 15.4).
+*   **Hardcoded IF Labels → Translations:** Replaced the hardcoded Italian/English `VERO (True)` and `FALSO (False)` labels in `FlowchartCanvas.tsx` with dynamic translation keys `{t.canvas.trueBranch}` and `{t.canvas.falseBranch}`. Added multilingual `trueBranch`/`falseBranch` keys to the `canvas` section of all 23 languages in `translations.ts` and the `TranslationCatalog` type in `types/flow.ts`:
+    - EN: TRUE / FALSE
+    - IT: VERO / FALSO
+    - DE: WAHR / FALSCH
+    - FR: VRAI / FAUX
+    - ES: VERDADERO / FALSO
+    - ZH: 真 / 假
+    - JA: 真 / 偽
+    - RU: ИСТИНА / ЛОЖЬ
+    - AR: صحيح / خاطئ
+    - (and 14 more languages)
 
 

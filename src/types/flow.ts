@@ -223,6 +223,8 @@ export interface TranslationCatalog {
   };
   canvas: {
     selectBlock: string;
+    trueBranch: string;
+    falseBranch: string;
   };
   errors: {
     executionError: string;

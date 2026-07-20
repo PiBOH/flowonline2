@@ -228,7 +228,7 @@ export const FlowchartCanvas: React.FC = () => {
           <g key={`if-then-${node.id}`}>
             {/* Horizontal line out to left (True) */}
             <line x1={centerX} y1={diamondCenterY} x2={leftX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
-            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill="green" className="font-sans text-[10px] font-bold select-none">VERO (True)</text>
+            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill="green" className="font-sans text-[10px] font-bold select-none">{t.canvas.trueBranch}</text>
             
             {/* Draw child then branch statements recursively on the LEFT side passing the parent context! */}
             {renderLinesAndArrows(node.thenLayout, leftX, diamondCenterY, branchEndY, { id: node.id, branch: 'then' })}
@@ -244,7 +244,7 @@ export const FlowchartCanvas: React.FC = () => {
           <g key={`if-else-${node.id}`}>
             {/* Horizontal line out to right (False) */}
             <line x1={centerX} y1={diamondCenterY} x2={rightX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
-            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill={sc.textColor} fillOpacity="0.7" className="font-sans text-[10px] font-bold select-none">FALSO (False)</text>
+            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill={sc.textColor} fillOpacity="0.7" className="font-sans text-[10px] font-bold select-none">{t.canvas.falseBranch}</text>
             
             {/* Draw child else branch statements recursively on the RIGHT side passing the parent context! */}
             {renderLinesAndArrows(node.elseLayout, rightX, diamondCenterY, branchEndY, { id: node.id, branch: 'else' })}

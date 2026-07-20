@@ -146,7 +146,7 @@ export const getVariableSymbol = (name: string, env: Record<string, VariableSymb
 
 // RECURSIVE DEEP COPY BLOCK ID GENERATOR (PREVENTS ID COLLISION CONFLICTS ON PASTE!)
 export function regenerateBlockIds(stmt: Statement): Statement {
-  const copy = JSON.parse(JSON.stringify(stmt)) as Statement;
+  const copy = structuredClone(stmt);
   
   const recurse = (s: Statement) => {
     s.id = generateId();
@@ -348,7 +348,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Push history state helper
   const pushHistory = (newStmts: Statement[], newTitle = programTitle, newAuthor = programAuthor) => {
-    setUndoStack((prev) => [...prev.slice(-49), { statements, title: programTitle, author: programAuthor }]);
+    setUndoStack((prev) => [...prev.slice(-49), { statements: newStmts, title: newTitle, author: newAuthor }]);
     setRedoStack([]); // clear redo
     setStatements(newStmts);
     setProgramTitleState(newTitle);
@@ -447,7 +447,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         break;
     }
 
-    const copy = JSON.parse(JSON.stringify(statements)) as Statement[];
+    const copy = structuredClone(statements);
 
     if (targetId === 'main_start') {
       copy.unshift(newBlock);
@@ -480,7 +480,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateBlock = (id: string, updatedFields: Partial<Statement>) => {
-    const copy = JSON.parse(JSON.stringify(statements)) as Statement[];
+    const copy = structuredClone(statements);
     const updated = recursiveUpdate(copy, id, updatedFields);
     if (updated) {
       pushHistory(copy);
@@ -547,7 +547,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const deleteBlocks = (ids: string[]) => {
-    const copy = JSON.parse(JSON.stringify(statements)) as Statement[];
+    const copy = structuredClone(statements);
     let anyDeleted = false;
     for (const id of ids) {
       if (recursiveDelete(copy, id)) {
@@ -567,7 +567,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Default to pasting after the last selected block if any, or main_end
     const resolvedTargetId = targetId || (selectedBlockIds.length > 0 ? selectedBlockIds[selectedBlockIds.length - 1] : 'main_end');
 
-    const copy = JSON.parse(JSON.stringify(statements)) as Statement[];
+    const copy = structuredClone(statements);
     const pastedIds: string[] = [];
 
     let activeTargetId = resolvedTargetId;
