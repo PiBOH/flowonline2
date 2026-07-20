@@ -28,12 +28,23 @@ export const IconFolderOpen: React.FC<IconProps> = (p) => (
   </SvgIcon>
 );
 
-// ── Books (📚) ──
+// ── Books / Manual (📚) — Three stacked manuals (blue, pink, green) ──
 export const IconBooks: React.FC<IconProps> = (p) => (
   <SvgIcon {...p}>
-    <rect x="4" y="1" width="6" height="12" rx="1" fill="#42A5F5" stroke="#1565C0" strokeWidth="0.8"/>
-    <rect x="3" y="2" width="6" height="10" rx="1" fill="#EF5350" stroke="#B71C1C" strokeWidth="0.7"/>
-    <rect x="5" y="3" width="6" height="9" rx="1" fill="#66BB6A" stroke="#1B5E20" strokeWidth="0.7"/>
+    <rect x="1" y="2" width="5" height="11" rx="0.5" fill="#56D1F3" stroke="#39ADF1" strokeWidth="0.6"/>
+    <rect x="5.5" y="1" width="5" height="11" rx="0.5" fill="#E13074" stroke="#E0334C" strokeWidth="0.6"/>
+    <rect x="10" y="3" width="5" height="10" rx="0.5" fill="#A6E051" stroke="#74D891" strokeWidth="0.6"/>
+  </SvgIcon>
+);
+
+// ── Changelog (📋) — Brown/orange document with text lines ──
+export const IconChangelog: React.FC<IconProps> = (p) => (
+  <SvgIcon {...p}>
+    <path d="M2 2h9l3 3v9a1 1 0 01-1 1H2a1 1 0 01-1-1V3a1 1 0 011-1z" fill="#FFD8A3" stroke="#D37E48" strokeWidth="0.6"/>
+    <path d="M11 2v3h3" fill="#FFBF82" stroke="#D37E48" strokeWidth="0.4"/>
+    <rect x="3.5" y="7" width="8" height="1" rx="0.3" fill="#D37E48"/>
+    <rect x="3.5" y="9" width="8" height="1" rx="0.3" fill="#D37E48"/>
+    <rect x="3.5" y="11" width="5" height="1" rx="0.3" fill="#D37E48"/>
   </SvgIcon>
 );
 
@@ -125,35 +136,36 @@ export const IconClipboard: React.FC<IconProps> = (p) => (
   </SvgIcon>
 );
 
-// ── Trash (🗑️) ──
+// ── Trash / Clear Storage (🗑️) — Gray storage with red accent ──
 export const IconTrash: React.FC<IconProps> = (p) => (
   <SvgIcon {...p}>
-    <rect x="3" y="1.5" width="10" height="2" rx="0.5" fill="#BDBDBD" stroke="#757575" strokeWidth="0.5"/>
-    <path d="M5 4v9a1 1 0 001 1h4a1 1 0 001-1V4" fill="#EF5350" stroke="#B71C1C" strokeWidth="0.7"/>
-    <line x1="7" y1="6.5" x2="7" y2="11" stroke="white" strokeWidth="1.2" strokeLinecap="round"/>
-    <line x1="9" y1="6.5" x2="9" y2="11" stroke="white" strokeWidth="1.2" strokeLinecap="round"/>
+    <rect x="1" y="4" width="14" height="10" rx="1" fill="#BEBEBE" stroke="#9B9B9B" strokeWidth="0.6"/>
+    <rect x="3" y="6" width="8" height="1" rx="0.3" fill="#9B9B9B"/>
+    <rect x="3" y="8" width="6" height="1" rx="0.3" fill="#9B9B9B"/>
+    <rect x="3" y="10" width="7" height="1" rx="0.3" fill="#9B9B9B"/>
+    <rect x="4.5" y="1.5" width="7" height="2.5" rx="0.5" fill="#BEBEBE" stroke="#9B9B9B" strokeWidth="0.5"/>
+    <path d="M6 1.5l1.5-1 1.5 1" fill="none" stroke="#F44336" strokeWidth="1" strokeLinecap="round"/>
   </SvgIcon>
 );
 
-// ── Save (💾) — Font Awesome floppy disk style ──
+// ── Save (💾) — Purple floppy disk style ──
 export const IconSave: React.FC<IconProps> = (p) => (
-  <SvgIcon {...p} viewBox="0 0 16 16">
-    <path d="M4 2.5C3.1 2.5 2.4 3.2 2.4 4v8c0 .9.7 1.6 1.6 1.6h8c.9 0 1.6-.7 1.6-1.6V5.9c0-.42-.17-.83-.47-1.13L11.2 2.97C10.9 2.67 10.5 2.5 10.1 2.5H4zM4.8 4.8c0-.44.36-.8.8-.8h4c.44 0 .8.36.8.8v1.6c0 .44-.36.8-.8.8H5.6c-.44 0-.8-.36-.8-.8V4.8zm3.2 4c.88 0 1.6.72 1.6 1.6s-.72 1.6-1.6 1.6-1.6-.72-1.6-1.6.72-1.6 1.6-1.6z" fill="#64798A" stroke="#3A556A" strokeWidth="0.3"/>
+  <SvgIcon {...p}>
+    <path d="M3 1h7l3 3v10a1 1 0 01-1 1H3a1 1 0 01-1-1V2a1 1 0 011-1z" fill="#635994" stroke="#321B41" strokeWidth="0.5"/>
+    <path d="M10 1v3h3" fill="#321B41" stroke="#321B41" strokeWidth="0.3"/>
+    <rect x="3" y="6.5" width="8" height="6.5" rx="0.5" fill="#E6E6E6"/>
+    <rect x="3" y="6" width="8" height="1" fill="#F8312F"/>
   </SvgIcon>
 );
 
-// ── Document / New File (📄) ──
+// ── Document / New File (📄) — Purple document with text lines ──
 export const IconDocument: React.FC<IconProps> = (p) => (
   <SvgIcon {...p}>
-    {/* Document body — cyan fill, black outline, folded to the left */}
-    <path d="M7 2.5 3.5 6v11a1 1 0 001 1h7a1 1 0 001-1V3.5a1 1 0 00-1-1z" fill="#2ca9bc" stroke="#000" strokeWidth="0.6"/>
-    {/* Folded corner triangle */}
-    <path d="M7 2.5v3.5h3.5" fill="#a0dbe3" stroke="#000" strokeWidth="0.5"/>
-    {/* Plus sign */}
-    <line x1="5.5" y1="9.5" x2="10.5" y2="9.5" stroke="#000" strokeWidth="1" strokeLinecap="round"/>
-    <line x1="8" y1="7" x2="8" y2="12" stroke="#000" strokeWidth="1" strokeLinecap="round"/>
-    {/* Dash/minus */}
-    <line x1="9" y1="10.5" x2="11" y2="10.5" stroke="#000" strokeWidth="0.8" strokeLinecap="round"/>
+    <path d="M5 1h6l3 3v10a1 1 0 01-1 1H5a1 1 0 01-1-1V2a1 1 0 011-1z" fill="#F3EEF8" stroke="#B4ACBC" strokeWidth="0.6"/>
+    <path d="M11 1v3h3" fill="#CDC4D6" stroke="#B4ACBC" strokeWidth="0.4"/>
+    <line x1="5.5" y1="8" x2="12.5" y2="8" stroke="#998EA4" strokeWidth="0.8" strokeLinecap="round"/>
+    <line x1="5.5" y1="10" x2="12.5" y2="10" stroke="#998EA4" strokeWidth="0.8" strokeLinecap="round"/>
+    <line x1="5.5" y1="12" x2="9.5" y2="12" stroke="#998EA4" strokeWidth="0.8" strokeLinecap="round"/>
   </SvgIcon>
 );
 
@@ -208,6 +220,18 @@ export const IdeaLightbulb: React.FC<IconProps> = (p) => (
 export const IconWrench: React.FC<IconProps> = (p) => (
   <SvgIcon {...p}>
     <path d="M13.5 13.5L10 10M4 7a3 3 0 015-2.2L7 7l1.2 1.2L11 6a3 3 0 01-4 4" fill="#BDBDBD" stroke="#424242" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+  </SvgIcon>
+);
+
+// ── Tools (🔧) — Gear and wrench combo ──
+export const IconTools: React.FC<IconProps> = (p) => (
+  <SvgIcon {...p}>
+    <circle cx="9" cy="6" r="3" fill="#ADA9B9" stroke="#635994" strokeWidth="0.7"/>
+    <g transform="rotate(45 12.5 5)">
+      <rect x="10.5" y="3.5" width="4" height="2.5" rx="0.5" fill="#CAC3DA" stroke="#635994" strokeWidth="0.5"/>
+    </g>
+    <circle cx="9" cy="6" r="1.3" fill="#635994"/>
+    <circle cx="9" cy="6" r="0.5" fill="#CAC3DA"/>
   </SvgIcon>
 );
 
