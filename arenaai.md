@@ -465,3 +465,23 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
     *   Uses `GITHUB_TOKEN` for authentication with `contents: write` permission.
 
 
+### Milestone 33: Commit Naming Convention for Releases (BETA 2.3.22)
+
+[//]: # (keepachangelog)
+
+#### Added
+*   **Release commit naming rule:** All commits that should trigger the auto-release workflow MUST start with lowercase `v`. The `auto-release.yml` job condition uses `startsWith(github.event.head_commit.message, 'v')` — commits without the `v` prefix are silently skipped.
+
+#### Convention
+| Prefix | Example | Release? |
+|---|---|---|
+| `v` | `v2.3.23: Release BETA` | ✅ Triggered |
+| No `v` | `BETA 2.3.23: Fix bug` | ❌ Skipped |
+| No `v` | `Fix CI pipeline` | ❌ Skipped |
+
+**Rule for AI agents:** When bumping the version (updating `version.txt` + `CHANGELOG.md` + `arenaai.md`), always use a commit message starting with `v` followed by the version number. Example:
+```
+v2.3.23: Summary of changes
+```
+
+
