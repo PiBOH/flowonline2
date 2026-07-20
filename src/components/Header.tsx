@@ -2044,7 +2044,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       {/* ============ MENU BAR (Faithful Windows Desktop Style with hover sliding) ============ */}
       <div 
         ref={menuBarRef}
-        className="h-[24px] bg-[#F0F0F0] border-b border-[#C8C8C8] flex items-center px-[4px] relative z-40 text-slate-800 text-[12px] font-sans desktop-menu"
+        className="h-[24px] bg-[#F0F0F0] border-b border-[#C8C8C8] flex items-center px-[4px] relative z-40 text-slate-800 text-[12px] font-sans"
       >
         {/* HAMBURGER BUTTON — visible only on mobile */}
         <button
@@ -2059,6 +2059,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           </svg>
         </button>
 
+        {/* DESKTOP MENU ITEMS (hidden on mobile via CSS) */}
+        <div className="desktop-menu flex items-center">
         {/* FILE MENU */}
         <div className="relative">
           <button
@@ -2358,6 +2360,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           </button>
         </div>
       </div>
+        </div>
 
       {/* ============ TOOLBAR (Faithful Windows Desktop Style) ============ */}
       <div 
