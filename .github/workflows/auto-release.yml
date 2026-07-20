@@ -34,13 +34,14 @@ jobs:
           VERSION=$(cat version.txt | tr -d '\r\n' | xargs)
           echo "Full version: $VERSION"
 
-          # Extract tag: strip "BETA " prefix if present, keep suffix (e.g., "2.3.20-beta")
-          TAG=$(echo "$VERSION" | sed -E 's/^(BETA|ALPHA|RC|STABLE)\s+//i')
+          # Tag = full version.txt content + _[bot], spaces replaced with underscores
+          # Example: "BETA 2.3.22-beta" → "BETA_2.3.22-beta_[bot]"
+          TAG=$(echo "${VERSION}_[bot]" | sed 's/ /_/g')
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "full=$VERSION" >> $GITHUB_OUTPUT
 
           # Determine prerelease flag
-          if echo "$TAG" | grep -qiE 'alpha|beta|rc[0-9]*'; then
+          if echo "$VERSION" | grep -qiE 'alpha|beta|rc[0-9]*'; then
             echo "prerelease=true" >> $GITHUB_OUTPUT
           else
             echo "prerelease=false" >> $GITHUB_OUTPUT
@@ -55,7 +56,7 @@ jobs:
           # Try to extract the relevant changelog section
           CHANGELOG_SECTION=""
           if [ -f CHANGELOG.md ]; then
-            # Strip suffix (-alpha, -beta, -rc*) to match CHANGELOG headers like "## [BETA 2.3.20]"
+            # Strip suffix (-alpha, -beta, -rc*) to match CHANGELOG headers like "## [BETA 2.3.22]"
             CHANGELOG_SEARCH=$(echo "$VERSION_FULL" | sed -E 's/-(alpha|beta|rc[0-9]*)$//i')
             # Extract section between this version header and the next one
             CHANGELOG_SECTION=$(awk "/## \[${CHANGELOG_SEARCH}\]/{flag=1; next} /## \[/{flag=0} flag" CHANGELOG.md | head -30)
