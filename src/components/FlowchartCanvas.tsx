@@ -146,14 +146,14 @@ export const FlowchartCanvas: React.FC = () => {
       node.y = currentY + (node.type === 'if' ? IF_H / 2 : node.type === 'while' || node.type === 'for' || node.type === 'do' ? LOOP_H / 2 : NODE_H / 2);
 
       if (node.type === 'if' && node.thenLayout && node.elseLayout) {
-        // center then on left, else on right
+        // TRUE on right (Flowgorithm layout), FALSE on left
         const totalW = node.thenLayout.width + node.elseLayout.width + H_GAP;
-        const leftX = centerX - totalW / 2 + node.thenLayout.width / 2;
-        const rightX = centerX + totalW / 2 - node.elseLayout.width / 2;
+        const leftX = centerX - totalW / 2 + node.elseLayout.width / 2;
+        const rightX = centerX + totalW / 2 - node.thenLayout.width / 2;
         
         const branchStartY = currentY + IF_H + V_GAP / 2;
-        alignCoordinates(node.thenLayout, leftX, branchStartY);
-        alignCoordinates(node.elseLayout, rightX, branchStartY);
+        alignCoordinates(node.elseLayout, leftX, branchStartY);
+        alignCoordinates(node.thenLayout, rightX, branchStartY);
       } else if ((node.type === 'while' || node.type === 'for' || node.type === 'do') && node.bodyLayout) {
         const bodyX = centerX + H_GAP / 2;
         const branchStartY = currentY + LOOP_H + V_GAP / 2;
@@ -221,36 +221,30 @@ export const FlowchartCanvas: React.FC = () => {
         const diamondCenterY = node.y;
         const branchEndY = diamondCenterY - IF_H / 2 + node.height;
 
-        const leftX = node.thenLayout.nodes.length > 0 ? node.thenLayout.nodes[0].x : centerX - (node.thenLayout.width + node.elseLayout.width + H_GAP) / 2 + node.thenLayout.width / 2;
-        const rightX = node.elseLayout.nodes.length > 0 ? node.elseLayout.nodes[0].x : centerX + (node.thenLayout.width + node.elseLayout.width + H_GAP) / 2 - node.elseLayout.width / 2;
+        const leftX = node.elseLayout.nodes.length > 0 ? node.elseLayout.nodes[0].x : centerX - (node.thenLayout.width + node.elseLayout.width + H_GAP) / 2 + node.elseLayout.width / 2;
+        const rightX = node.thenLayout.nodes.length > 0 ? node.thenLayout.nodes[0].x : centerX + (node.thenLayout.width + node.elseLayout.width + H_GAP) / 2 - node.thenLayout.width / 2;
 
-        // TRUE branch on the left (thenBranch is TRUE in original Flowonline layout!)
+        // FALSE branch on the left (elseBranch) — Flowgorithm layout
         elements.push(
-          <g key={`if-then-${node.id}`}>
-            {/* Horizontal line out to left (True) */}
+          <g key={`if-else-${node.id}`}>
             <line x1={centerX} y1={diamondCenterY} x2={leftX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
-            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill="green" className="font-sans text-[10px] font-bold select-none">{t.canvas.trueBranch}</text>
+            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill={sc.textColor} fillOpacity="0.7" className="font-sans text-[10px] font-bold select-none">{t.canvas.falseBranch}</text>
             
-            {/* Draw child then branch statements recursively on the LEFT side passing the parent context! */}
-            {renderLinesAndArrows(node.thenLayout, leftX, diamondCenterY, branchEndY, { id: node.id, branch: 'then' })}
+            {renderLinesAndArrows(node.elseLayout, leftX, diamondCenterY, branchEndY, { id: node.id, branch: 'else' })}
             
-            {/* Return from left branch back to main path */}
             <line x1={leftX} y1={branchEndY} x2={leftX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
             <line x1={leftX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
           </g>
         );
 
-        // FALSE branch on the right (elseBranch is FALSE in original Flowonline layout!)
+        // TRUE branch on the right (thenBranch) — Flowgorithm layout
         elements.push(
-          <g key={`if-else-${node.id}`}>
-            {/* Horizontal line out to right (False) */}
+          <g key={`if-then-${node.id}`}>
             <line x1={centerX} y1={diamondCenterY} x2={rightX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
-            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill={sc.textColor} fillOpacity="0.7" className="font-sans text-[10px] font-bold select-none">{t.canvas.falseBranch}</text>
+            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill="green" className="font-sans text-[10px] font-bold select-none">{t.canvas.trueBranch}</text>
             
-            {/* Draw child else branch statements recursively on the RIGHT side passing the parent context! */}
-            {renderLinesAndArrows(node.elseLayout, rightX, diamondCenterY, branchEndY, { id: node.id, branch: 'else' })}
+            {renderLinesAndArrows(node.thenLayout, rightX, diamondCenterY, branchEndY, { id: node.id, branch: 'then' })}
             
-            {/* Return from right branch back to main path */}
             <line x1={rightX} y1={branchEndY} x2={rightX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
             <line x1={rightX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
           </g>
