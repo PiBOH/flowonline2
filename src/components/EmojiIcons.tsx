@@ -147,13 +147,18 @@ export const IconSave: React.FC<IconProps> = (p) => (
   </SvgIcon>
 );
 
-// ── Document (📄) ──
+// ── Document / New File (📄) ──
 export const IconDocument: React.FC<IconProps> = (p) => (
   <SvgIcon {...p}>
-    <path d="M4 0.5h6l4 4v10a1 1 0 01-1 1H4a1 1 0 01-1-1V1.5a1 1 0 011-1z" fill="#FAFAFA" stroke="#616161" strokeWidth="0.8"/>
-    <path d="M10 0.5v4h4" fill="#BBDEFB" stroke="#1565C0" strokeWidth="0.6"/>
-    <line x1="5" y1="8" x2="11" y2="8" stroke="#9E9E9E" strokeWidth="1" strokeLinecap="round"/>
-    <line x1="5" y1="10.5" x2="9" y2="10.5" stroke="#9E9E9E" strokeWidth="1" strokeLinecap="round"/>
+    {/* Document body — cyan fill, black outline, folded to the left */}
+    <path d="M7 2.5 3.5 6v11a1 1 0 001 1h7a1 1 0 001-1V3.5a1 1 0 00-1-1z" fill="#2ca9bc" stroke="#000" strokeWidth="0.6"/>
+    {/* Folded corner triangle */}
+    <path d="M7 2.5v3.5h3.5" fill="#a0dbe3" stroke="#000" strokeWidth="0.5"/>
+    {/* Plus sign */}
+    <line x1="5.5" y1="9.5" x2="10.5" y2="9.5" stroke="#000" strokeWidth="1" strokeLinecap="round"/>
+    <line x1="8" y1="7" x2="8" y2="12" stroke="#000" strokeWidth="1" strokeLinecap="round"/>
+    {/* Dash/minus */}
+    <line x1="9" y1="10.5" x2="11" y2="10.5" stroke="#000" strokeWidth="0.8" strokeLinecap="round"/>
   </SvgIcon>
 );
 
