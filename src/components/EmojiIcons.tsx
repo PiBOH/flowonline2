@@ -135,12 +135,15 @@ export const IconTrash: React.FC<IconProps> = (p) => (
   </SvgIcon>
 );
 
-// ── Save (💾) ──
+// ── Save / Floppy Disk (💾) ──
 export const IconSave: React.FC<IconProps> = (p) => (
-  <SvgIcon {...p}>
-    <rect x="2" y="1" width="12" height="14" rx="1.5" fill="#42A5F5" stroke="#0D47A1" strokeWidth="0.8"/>
-    <rect x="3" y="1" width="7" height="4" rx="0.5" fill="#90CAF9"/>
-    <rect x="5" y="9" width="6" height="5" rx="1" fill="#E3F2FD" stroke="#1565C0" strokeWidth="0.6"/>
+  <SvgIcon {...p} viewBox="0 0 16 16">
+    <path d="M14.5 2.5L13.5 1.5H3v4.5h7V2l2.5 2.5V13H3V1.5" fill="#64798A" stroke="#3A556A" strokeWidth="0.5"/>
+    <rect x="2" y="7" width="12" height="7" rx="0.5" fill="white" stroke="#64798A" strokeWidth="0.3"/>
+    <rect x="3.5" y="8.5" width="9" height="1" rx="0.3" fill="#EBF0F3"/>
+    <rect x="3.5" y="10" width="9" height="1" rx="0.3" fill="#EBF0F3"/>
+    <rect x="3.5" y="11.5" width="9" height="1" rx="0.3" fill="#EBF0F3"/>
+    <rect x="10" y="2" width="2" height="3" rx="0.2" fill="#3A556A"/>
   </SvgIcon>
 );
 
