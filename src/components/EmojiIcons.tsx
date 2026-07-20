@@ -135,15 +135,10 @@ export const IconTrash: React.FC<IconProps> = (p) => (
   </SvgIcon>
 );
 
-// ── Save / Floppy Disk (💾) ──
+// ── Save (💾) — Font Awesome floppy disk style ──
 export const IconSave: React.FC<IconProps> = (p) => (
   <SvgIcon {...p} viewBox="0 0 16 16">
-    <path d="M14.5 2.5L13.5 1.5H3v4.5h7V2l2.5 2.5V13H3V1.5" fill="#64798A" stroke="#3A556A" strokeWidth="0.5"/>
-    <rect x="2" y="7" width="12" height="7" rx="0.5" fill="white" stroke="#64798A" strokeWidth="0.3"/>
-    <rect x="3.5" y="8.5" width="9" height="1" rx="0.3" fill="#EBF0F3"/>
-    <rect x="3.5" y="10" width="9" height="1" rx="0.3" fill="#EBF0F3"/>
-    <rect x="3.5" y="11.5" width="9" height="1" rx="0.3" fill="#EBF0F3"/>
-    <rect x="10" y="2" width="2" height="3" rx="0.2" fill="#3A556A"/>
+    <path d="M4 2.5C3.1 2.5 2.4 3.2 2.4 4v8c0 .9.7 1.6 1.6 1.6h8c.9 0 1.6-.7 1.6-1.6V5.9c0-.42-.17-.83-.47-1.13L11.2 2.97C10.9 2.67 10.5 2.5 10.1 2.5H4zM4.8 4.8c0-.44.36-.8.8-.8h4c.44 0 .8.36.8.8v1.6c0 .44-.36.8-.8.8H5.6c-.44 0-.8-.36-.8-.8V4.8zm3.2 4c.88 0 1.6.72 1.6 1.6s-.72 1.6-1.6 1.6-1.6-.72-1.6-1.6.72-1.6 1.6-1.6z" fill="#64798A" stroke="#3A556A" strokeWidth="0.3"/>
   </SvgIcon>
 );
 
