@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.21] - 2026-07-20
+
+### Added
+- **GitHub Actions CI/CD Workflows:**
+  - **code-review-and-test.yml:** CI pipeline running lint (ESLint), typecheck (tsc --noEmit), build (vite build), and test (Vitest 126 tests) on every push/PR to main. Failure artifacts uploaded.
+  - **auto-release.yml:** CD pipeline triggered on version.txt changes or manual dispatch. Reads version, parses tag, extracts changelog section, and creates a GitHub Release via `softprops/action-gh-release@v2` with `[bot]` suffix and automated description.
+
+---
+
 ## [BETA 2.3.20] - 2026-07-20
 
 ### Changed

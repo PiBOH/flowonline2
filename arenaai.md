@@ -82,7 +82,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (BETA 2.3.20)
+## 5. Architectural Milestone Logs & Change History (BETA 2.3.21)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -441,5 +441,27 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 
 #### Fixed
 *   **Cross-Platform Emoji Rendering:** Emoji characters render inconsistently across operating systems and browsers (Windows shows monochrome outlines, macOS shows colorful designs, Linux may show nothing). SVG icons guarantee pixel-identical appearance everywhere.
+
+
+### Milestone 32: GitHub Actions CI/CD — Auto Review, Test, and Release (BETA 2.3.21)
+
+[//]: # (keepachangelog)
+
+#### Added
+*   **code-review-and-test.yml (CI):** GitHub Actions workflow triggered on push/PR to `main` and manual `workflow_dispatch`. Four sequential jobs:
+    *   `lint`: Runs ESLint (`npm run lint`) with tolerant warning threshold.
+    *   `typecheck`: Runs `tsc --noEmit` for strict TypeScript validation.
+    *   `build`: Runs `npm run build` (depends on typecheck) and verifies `dist/` output exists.
+    *   `test`: Runs `npm test` (Vitest 126 tests, depends on typecheck). Uploads failure logs as artifacts on failure.
+    All jobs use Node 20, npm caching, ubuntu-latest.
+*   **auto-release.yml (CD):** GitHub Actions workflow triggered on push to `main` when `version.txt` changes, or manual `workflow_dispatch` (supports draft mode).
+    *   Reads `version.txt` and strips `BETA`/`ALPHA`/`RC`/`STABLE` prefix to extract the release tag (e.g., `BETA 2.3.21-beta` → tag `2.3.21-beta`).
+    *   Detects prerelease flag from suffix (`alpha`/`beta`/`rc` → `prerelease: true`).
+    *   Extracts the relevant section from `CHANGELOG.md` (strips suffix to match header format).
+    *   Creates a GitHub Release via `softprops/action-gh-release@v2` with:
+        *   **Tag:** version number with suffix (e.g., `2.3.21-beta`)
+        *   **Title:** `BETA 2.3.21-beta [bot]`
+        *   **Body:** Automated template with version, commit hash (linked), date, trigger info, actor, and changelog section.
+    *   Uses `GITHUB_TOKEN` for authentication with `contents: write` permission.
 
 
