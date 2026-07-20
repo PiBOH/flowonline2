@@ -6,7 +6,7 @@ import { exportToPNG, exportToPDF } from '../utils/exportUtils';
 import { WinUIDialog } from './WinUIDialog';
 import { Language } from '../types/flow';
 
-import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe } from './EmojiIcons';
+import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe, IconPlay, IconStep, IconPause, IconStop, IconMonitor, FlagIcon } from './EmojiIcons';
 const LANGUAGE_NAMES: Record<Language, string> = {
   en: 'English (US)', en_GB: 'English (UK)', it: 'Italiano', de: 'Deutsch',
   fr: 'Français', es: 'Español', zh: '中文', nl: 'Nederlands',
@@ -16,15 +16,6 @@ const LANGUAGE_NAMES: Record<Language, string> = {
   ar: 'العربية', he: 'עברית', fa: 'فارسی'
 };
 // Flag emojis for each language (used in language picker)
-const FLAGS_EMOJI: Record<Language, string> = {
-  en: '🇺🇸', en_GB: '🇬🇧', it: '🇮🇹', de: '🇩🇪',
-  fr: '🇫🇷', es: '🇪🇸', zh: '🇨🇳', nl: '🇳🇱',
-  pt: '🇵🇹', gl: '🇪🇸', ru: '🇷🇺', uk: '🇺🇦',
-  cs: '🇨🇿', pl: '🇵🇱', hu: '🇭🇺', sl: '🇸🇮',
-  ja: '🇯🇵', th: '🇹🇭', id: '🇮🇩', mn: '🇲🇳',
-  ar: '🇸🇦', he: '🇮🇱', fa: '🇮🇷'
-};
-
 
 export const Header: React.FC = () => {
   const {
@@ -1708,7 +1699,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
   const isStopped = executionStatus === 'stopped' || executionStatus === 'idle';
 
   const layoutButtons: Array<{ id: AppLayout; label: React.ReactNode; tooltip: string }> = [
-    { id: 'flowchart_only', label: '🖥️', tooltip: 'Flowchart Only' },
+    { id: 'flowchart_only', label: <IconMonitor size={15} />, tooltip: 'Flowchart Only' },
     { id: 'flow_variables', label: <IconChart size={15} />, tooltip: 'Flowchart & Watch' },
     { id: 'flow_console', label: <IconChatBubble size={15} />, tooltip: 'Flowchart & Console' },
     { id: 'triple_split', label: '🚀', tooltip: 'Triple Split View' },
@@ -2279,16 +2270,16 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           {activeDropdown === 'program' && (
             <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
               <button onClick={() => { startRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>▶ {mt.run}</span>
+                <span><IconPlay size={14} /> {mt.run}</span>
               </button>
               <button onClick={() => { stepRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>⏭ {mt.step}</span>
+                <span><IconStep size={14} /> {mt.step}</span>
               </button>
               <button onClick={() => { pauseRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>⏸ {mt.pause}</span>
+                <span><IconPause size={14} /> {mt.pause}</span>
               </button>
               <button onClick={() => { stopRun(); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>⏹ {mt.stop}</span>
+                <span><IconStop size={14} /> {mt.stop}</span>
               </button>
             </div>
           )}
@@ -2416,7 +2407,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             className="w-[32px] h-[32px] hover:bg-[#D5EAFA] hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-emerald-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
             title={t.toolbar.run}
           >
-            ▶
+            <IconPlay size={13} />
           </button>
 
           {/* STEP BUTTON */}
@@ -2425,7 +2416,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             className="w-[32px] h-[32px] hover:bg-[#D5EAFA] hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-blue-600 font-bold active:scale-95 transition-all"
             title={t.toolbar.step}
           >
-            ⏭
+            <IconStep size={13} />
           </button>
 
           {/* PAUSE BUTTON */}
@@ -2435,7 +2426,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             className="w-[32px] h-[32px] hover:bg-[#FCD2E6] hover:border hover:border-[#B03F70] hover:shadow-sm rounded-[3px] flex items-center justify-center text-amber-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
             title={t.toolbar.pause}
           >
-            ⏸
+            <IconPause size={13} />
           </button>
 
           {/* STOP BUTTON */}
@@ -2445,7 +2436,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             className="w-[32px] h-[32px] hover:bg-rose-100 hover:border hover:border-red-400 hover:shadow-sm rounded-[3px] flex items-center justify-center text-red-600 font-bold active:scale-95 transition-all disabled:opacity-30 disabled:pointer-events-none"
             title={t.toolbar.stop}
           >
-            ⏹
+            <IconStop size={13} />
           </button>
 
           <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
@@ -2830,7 +2821,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                     : 'bg-white text-slate-700 border-[#C0C0C0] hover:bg-[#C9DEF5]'
                 }`}
               >
-                {FLAGS_EMOJI[code]} {LANGUAGE_NAMES[code]}
+                <FlagIcon code={code} size={14} /> {LANGUAGE_NAMES[code]}
               </button>
             ))}
             {/* Translation Disclaimer */}

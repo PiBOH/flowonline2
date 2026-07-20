@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.23] - 2026-07-20
+
+### Changed
+- **Colorful SVG icons:** All 26 EmojiIcons.tsx components now use fixed hex colors matching emoji appearance instead of monochrome `currentColor`.
+- **New media-control SVG icons:** `IconPlay` (green), `IconStep` (blue), `IconPause` (orange), `IconStop` (red), `IconMonitor` (dark+blue).
+- **23 country flag SVGs:** Replaced all flag emojis (`FLAGS_EMOJI` constant) with `FlagIcon` component using simplified SVG flag representations (horizontal/vertical tricolors, bicolors, circles, stars). Fallback uses `IconGlobe` SVG (no emoji).
+- **Remaining emoji cleanup:** Replaced ▶⏭⏸⏹ in toolbar/dropdown with media SVG icons. Replaced 🖥️ in layout buttons with `IconMonitor`. Czech flag differentiated from Poland with blue triangle.
 ## [BETA 2.3.22] - 2026-07-20
 
 ### Fixed
