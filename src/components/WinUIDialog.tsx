@@ -118,12 +118,13 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
           top: position.y,
           width: size.w,
           height: size.h,
+          maxWidth: 'calc(100vw - 16px)',
+          maxHeight: 'calc(100dvh - 16px)',
         }}
       >
-        {/* Title bar */}
-        <div
-          className="h-[28px] text-white flex items-center justify-between px-[8px] shrink-0 cursor-default select-none"
-          style={{ background: tc.gradient }}
+        {/* Title bar */}          <div
+            className="h-[28px] text-white flex items-center justify-between px-[8px] shrink-0 cursor-default select-none touch-target"
+            style={{ background: tc.gradient }}
           onMouseDown={onMouseDownTitle}
         >
           <span className="text-[11px] font-semibold font-sans tracking-wide flex items-center gap-1.5">

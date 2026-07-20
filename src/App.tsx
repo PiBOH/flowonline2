@@ -56,22 +56,22 @@ const MainLayout: React.FC = () => {
       <Header />
 
       {/* Content workspace area (Classic Gray Win32 System Workspace Background) */}
-      <div className="flex-1 flex flex-row overflow-hidden p-1 bg-[#D4D0C8] gap-1 relative">
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden p-0.5 md:p-1 bg-[#D4D0C8] gap-0.5 md:gap-1 relative safe-bottom">
         
         {/* 1. FLOWCHART ONLY LAYOUT */}
         {layout === 'flowchart_only' && (
-          <div className="flex-1 flex h-full overflow-hidden border-2 border-slate-300 rounded bg-white m-0.5 shadow">
+          <div className="flex-1 flex h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 md:m-0.5 shadow">
             <FlowchartCanvas />
           </div>
         )}
 
         {/* 2. FLOWCHART & CONSOLE SPLIT */}
         {layout === 'flow_console' && (
-          <div className="flex-1 flex flex-row h-full overflow-hidden gap-1">
-            <div className="flex-1 h-full overflow-hidden border-2 border-slate-300 rounded bg-white m-0.5 shadow">
+          <div className="flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0.5 md:gap-1">
+            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 md:m-0.5 shadow min-h-0">
               <FlowchartCanvas />
             </div>
-            <div className="w-[360px] h-full flex flex-col">
+            <div className="md:w-[360px] h-[40%] md:h-full flex flex-col min-h-0">
               <Console />
             </div>
           </div>
@@ -79,11 +79,11 @@ const MainLayout: React.FC = () => {
 
         {/* 3. FLOWCHART & VARIABLES SPLIT */}
         {layout === 'flow_variables' && (
-          <div className="flex-1 flex flex-row h-full overflow-hidden gap-1">
-            <div className="flex-1 h-full overflow-hidden border-2 border-slate-300 rounded bg-white m-0.5 shadow">
+          <div className="flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0.5 md:gap-1">
+            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 md:m-0.5 shadow min-h-0">
               <FlowchartCanvas />
             </div>
-            <div className="w-[300px] h-full flex flex-col">
+            <div className="md:w-[300px] h-[35%] md:h-full flex flex-col min-h-0">
               <Sidebar />
             </div>
           </div>
@@ -91,26 +91,26 @@ const MainLayout: React.FC = () => {
 
         {/* 4. FLOWCHART & SOURCE CODE SPLIT */}
         {layout === 'flow_code' && (
-          <div className="flex-1 flex flex-row h-full overflow-hidden gap-1">
-            <div className="flex-1 h-full overflow-hidden border-2 border-slate-300 rounded bg-white m-0.5 shadow">
+          <div className="flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0.5 md:gap-1">
+            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 md:m-0.5 shadow min-h-0">
               <FlowchartCanvas />
             </div>
-            <div className="w-[320px] h-full flex flex-col">
+            <div className="md:w-[320px] h-[40%] md:h-full flex flex-col min-h-0">
               <Sidebar />
             </div>
           </div>
         )}
 
-        {/* 5. FLOWGORITHM TRIPLE DOCK SPLIT (Flowchart Left, Variables top-right, Console bottom-right) */}
+        {/* 5. FLOWGORITHM TRIPLE DOCK SPLIT — mobile: stacked vertically; desktop: flowchart left, variables+console right */}
         {layout === 'triple_split' && (
-          <div className="flex-1 flex flex-row h-full overflow-hidden gap-1">
+          <div className="flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0.5 md:gap-1">
             {/* Flowchart Canvas Window */}
-            <div className="flex-1 h-full overflow-hidden border-2 border-slate-300 rounded bg-white m-0.5 shadow">
+            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 md:m-0.5 shadow min-h-0">
               <FlowchartCanvas />
             </div>
             
-            {/* Split stack on the right */}
-            <div className="w-[320px] h-full flex flex-col gap-1.5 p-0.5">
+            {/* Right-side stack: desktop side-by-side, mobile full-width stacked */}
+            <div className="md:w-[320px] h-[45%] md:h-full flex flex-col gap-0.5 md:gap-1.5 p-0 md:p-0.5 min-h-0">
               <div className="flex-1 min-h-[45%] flex flex-col">
                 <Sidebar />
               </div>
