@@ -82,7 +82,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (BETA 2.3.18)
+## 5. Architectural Milestone Logs & Change History (BETA 2.3.19)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -410,5 +410,20 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
     - RU: ИСТИНА / ЛОЖЬ
     - AR: صحيح / خاطئ
     - (and 14 more languages)
+
+
+### Milestone 30: Unit Test Suite — Vitest, 126 Tests, 3 Critical Modules (BETA 2.3.19)
+
+[//]: # (keepachangelog)
+
+#### Added
+*   **Vitest Testing Framework:** Installed `vitest` and `jsdom` as devDependencies. Configured `vitest.config.ts` with jsdom environment, globals enabled, targeting `src/**/*.test.ts`.
+*   **parser.test.ts (79 tests):** Comprehensive coverage of `ExpressionParser` — arithmetic operators (+, -, *, /, %, ^), precedence and parentheses, string concatenation (& and +), unquoted `\n` token, escape sequences, boolean literals (`true`/`false`), logical operators (`&&`, `||`, `!` + `and`/`or`/`not` keywords), relational operators (=, `==`, `!=`, `<>`, `<`, `>`, `<=`, `>=`), alphabet string comparison, variable resolution (scalar + array, case-insensitive), built-in PI constant, array indexing with bounds checking, error cases (division by zero, undefined variable, out of bounds, scalar/array misuse), and all built-in functions: `abs`, `sin`, `cos`, `tan`, `sqrt`, `log`, `log10`, `ln`, `len`/`size`, `toFixed`, `random`, `Char`, `ToCode`, `ToChar`, `ToInteger`, `ToReal`, `ToString`, `Int`, `Sgn`, `Arcsin`, `Arccos`, `Arctan`.
+*   **codeGenerator.test.ts (27 tests):** Coverage of all 5 target languages (Python, JavaScript, C++, Java, C#) and all 10 block types (declare, assign, input, output, if-else, while, for, do, call, comment). Includes expression translation tests (&& → `and`, pi → `M_PI`/`Math.PI`, abs → `Math.Abs`), for-loop directions, do-while simulation in Python, multi-block programs, and edge cases (empty program, no-newline output).
+*   **fprgParser.test.ts (20 tests):** `generateId` uniqueness, XML parsing for all 10 block types (including nested if direct-child isolation, `expression`/`value` attribute fallback, `ToChar(13)` → `\n` normalization), serialization (all block types, `\n` → `ToChar(13)` denormalization, XML special character escaping), and round-trip integrity (parse → serialize → parse).
+*   **npm scripts:** Added `test` (`vitest run`) and `test:watch` (`vitest`) to `package.json`.
+
+#### Changed
+*   **tsconfig.json:** Added `"exclude": ["node_modules", "dist"]` for cleaner compilation.
 
 
