@@ -3,6 +3,7 @@ import { useFlow, findBlockById } from '../context/FlowContext';
 import { Statement, BlockType } from '../types/flow';
 import { BlockNode, colorSchemes } from './BlockNode';
 import { translations } from '../utils/translations';
+import { IconPencil, IconScissors, IconClipboard, IconInbox, IconError, IconPlus } from './EmojiIcons';
 
 interface LayoutNode {
   id: string;
@@ -650,7 +651,7 @@ export const FlowchartCanvas: React.FC = () => {
                   }}
                   className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between transition-colors"
                 >
-                  <span>📝 {language === 'it' ? 'Modifica...' : 'Edit...'}</span>
+                  <span><IconPencil size={13} /> {language === 'it' ? 'Modifica...' : 'Edit...'}</span>
                 </button>
                 <div className="h-[1px] bg-slate-300 my-1"></div>
                 <button
@@ -660,7 +661,7 @@ export const FlowchartCanvas: React.FC = () => {
                   }}
                   className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between transition-colors"
                 >
-                  <span>✂️ {language === 'it' ? 'Taglia' : 'Cut'} ({selectedBlockIds.length})</span>
+                  <span><IconScissors size={13} /> {language === 'it' ? 'Taglia' : 'Cut'} ({selectedBlockIds.length})</span>
                   <span className="text-[9px] text-slate-400 font-mono font-bold">Ctrl+X</span>
                 </button>
                 <button
@@ -670,7 +671,7 @@ export const FlowchartCanvas: React.FC = () => {
                   }}
                   className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between transition-colors"
                 >
-                  <span>📋 {language === 'it' ? 'Copia' : 'Copy'} ({selectedBlockIds.length})</span>
+                  <span><IconClipboard size={13} /> {language === 'it' ? 'Copia' : 'Copy'} ({selectedBlockIds.length})</span>
                   <span className="text-[9px] text-slate-400 font-mono font-bold">Ctrl+C</span>
                 </button>
                 <button
@@ -681,7 +682,7 @@ export const FlowchartCanvas: React.FC = () => {
                   disabled={copiedBlocks.length === 0}
                   className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between disabled:opacity-30 disabled:pointer-events-none transition-colors"
                 >
-                  <span>📥 {language === 'it' ? 'Incolla dopo' : 'Paste After'}</span>
+                  <span><IconInbox size={13} /> {language === 'it' ? 'Incolla dopo' : 'Paste After'}</span>
                   <span className="text-[9px] text-slate-400 font-mono font-bold">Ctrl+V</span>
                 </button>
                 <div className="h-[1px] bg-slate-300 my-1"></div>
@@ -692,7 +693,7 @@ export const FlowchartCanvas: React.FC = () => {
                   }}
                   className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] text-red-600 font-bold flex items-center justify-between transition-colors"
                 >
-                  <span>❌ {language === 'it' ? 'Elimina' : 'Delete'} ({selectedBlockIds.length})</span>
+                  <span><IconError size={13} /> {language === 'it' ? 'Elimina' : 'Delete'} ({selectedBlockIds.length})</span>
                   <span className="text-[9px] text-slate-400 font-mono font-bold">Del</span>
                 </button>
               </>
@@ -706,7 +707,7 @@ export const FlowchartCanvas: React.FC = () => {
                   disabled={copiedBlocks.length === 0}
                   className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between disabled:opacity-30 disabled:pointer-events-none transition-colors"
                 >
-                  <span>📋 {language === 'it' ? 'Incolla Blocco' : 'Paste Block'}</span>
+                  <span><IconClipboard size={13} /> {language === 'it' ? 'Incolla Blocco' : 'Paste Block'}</span>
                 </button>
                 <div className="h-[1px] bg-slate-300 my-1"></div>
                 <button
@@ -721,7 +722,7 @@ export const FlowchartCanvas: React.FC = () => {
                   }}
                   className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between font-bold transition-colors"
                 >
-                  <span>➕ {language === 'it' ? 'Inserisci Blocco...' : 'Insert Block...'}</span>
+                  <span><IconPlus size={13} /> {language === 'it' ? 'Inserisci Blocco...' : 'Insert Block...'}</span>
                 </button>
               </>
             )}

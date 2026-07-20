@@ -82,7 +82,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (BETA 2.3.19)
+## 5. Architectural Milestone Logs & Change History (BETA 2.3.20)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -425,5 +425,21 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 
 #### Changed
 *   **tsconfig.json:** Added `"exclude": ["node_modules", "dist"]` for cleaner compilation.
+
+
+### Milestone 31: Emoji → SVG Conversion for Cross-Platform Consistency (BETA 2.3.20)
+
+[//]: # (keepachangelog)
+
+#### Changed
+*   **EmojiIcons.tsx (NEW):** Created 26 SVG icon components replacing all platform-dependent emoji across the application. Each icon is a 16×16 viewBox inline SVG with `currentColor` stroke and configurable `size`/`className` props. Icons: ChatBubble, FolderOpen, Books, Palette, Refresh, Magnifier, Plus, Close, Minimize, Maximize, Warning, Error, Clipboard, Trash, Save, Document, Globe, Info, Question, Chart, Lightbulb, Wrench, Scissors, Inbox, Pencil, Code.
+*   **WinUIDialog.tsx:** Replaced string emojis (ℹ️, ⚠️, ❌, ❓, ✕) in `typeColors.icon` with React SVG components. Changed `icon` type from `string` to `React.ReactNode`.
+*   **Console.tsx:** Replaced 💬 emoji in header with `<IconChatBubble>`, ❌ in error messages with `<IconError>`. Console title now renders SVG icon alongside clean text.
+*   **FlowchartCanvas.tsx:** Replaced all context menu emojis (📝, ✂️, 📋, ❌, 📥, ➕) with SVG components (IconPencil, IconScissors, IconClipboard, IconError, IconInbox, IconPlus).
+*   **Header.tsx:** Replaced ALL 25+ emoji across menu bar, toolbar, layout buttons, and dropdown menus with SVG components. Includes window controls (─ → IconMinimize, ▢ → IconMaximize, ✕ → IconClose), file menu (📄📂💾🗑️), edit menu (✂️📋📥), view menu (🔍🔄), style menu (🎨), help menu (📋📚ℹ️💡), language selector (🌐), layout buttons (📊💬📝 → IconChart, IconChatBubble, IconCode), toolbar (📄📂💾🔍-🔍+🔄), and disclaimer (⚠️ → IconWarning). Fixed `layoutButtons` label type from `string` to `React.ReactNode`.
+*   **translations.ts:** Removed legacy 💬 emoji prefix from all 23 `console.title` translations — now rendered via `<IconChatBubble>` component in Console.tsx.
+
+#### Fixed
+*   **Cross-Platform Emoji Rendering:** Emoji characters render inconsistently across operating systems and browsers (Windows shows monochrome outlines, macOS shows colorful designs, Linux may show nothing). SVG icons guarantee pixel-identical appearance everywhere.
 
 

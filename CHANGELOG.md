@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.20] - 2026-07-20
+
+### Changed
+- **Emoji → SVG Conversion:** Created `EmojiIcons.tsx` with 26 SVG icon components replacing all platform-dependent emoji across the app. Emoji render inconsistently on different OS (Windows monochrome, macOS colorful, Linux none) — SVG icons guarantee identical appearance everywhere.
+- **WinUIDialog.tsx:** Replaced string emojis with SVG React components; changed `icon` type from `string` to `React.ReactNode`.
+- **Console.tsx:** Replaced 💬 emoji header with `<IconChatBubble>` SVG, ❌ error emoji with `<IconError>` SVG.
+- **FlowchartCanvas.tsx:** Replaced all context menu emojis (📝✂️📋❌📥➕) with SVG components.
+- **Header.tsx:** Replaced ALL 25+ emoji across menus, toolbar, layout buttons, dropdowns with SVG components. Fixed `layoutButtons` label type.
+- **translations.ts:** Removed legacy 💬 emoji prefix from all 23 console.title translations.
+
+---
+
 ## [BETA 2.3.14] - 2026-07-20
 
 ### Removed

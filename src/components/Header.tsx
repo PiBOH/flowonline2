@@ -6,7 +6,7 @@ import { exportToPNG, exportToPDF } from '../utils/exportUtils';
 import { WinUIDialog } from './WinUIDialog';
 import { Language } from '../types/flow';
 
-// Shared language display names (module scope, used by button text and language picker grid)
+import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe } from './EmojiIcons';
 const LANGUAGE_NAMES: Record<Language, string> = {
   en: 'English (US)', en_GB: 'English (UK)', it: 'Italiano', de: 'Deutsch',
   fr: 'Français', es: 'Español', zh: '中文', nl: 'Nederlands',
@@ -1694,12 +1694,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
   const isRunning = executionStatus === 'running';
   const isStopped = executionStatus === 'stopped' || executionStatus === 'idle';
 
-  const layoutButtons: Array<{ id: AppLayout; label: string; tooltip: string }> = [
+  const layoutButtons: Array<{ id: AppLayout; label: React.ReactNode; tooltip: string }> = [
     { id: 'flowchart_only', label: '🖥️', tooltip: 'Flowchart Only' },
-    { id: 'flow_variables', label: '📊', tooltip: 'Flowchart & Watch' },
-    { id: 'flow_console', label: '💬', tooltip: 'Flowchart & Console' },
+    { id: 'flow_variables', label: <IconChart size={15} />, tooltip: 'Flowchart & Watch' },
+    { id: 'flow_console', label: <IconChatBubble size={15} />, tooltip: 'Flowchart & Console' },
     { id: 'triple_split', label: '🚀', tooltip: 'Triple Split View' },
-    { id: 'flow_code', label: '📝', tooltip: 'Flowchart & Source Code' }
+    { id: 'flow_code', label: <IconCode size={15} />, tooltip: 'Flowchart & Source Code' }
   ];
 
   const handleDecorativeButtonClick = () => {
@@ -2020,19 +2020,19 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             onClick={handleDecorativeButtonClick}
             className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition"
           >
-            ─
+            <IconMinimize size={10} />
           </button>
           <button 
             onClick={handleDecorativeButtonClick}
             className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition"
           >
-            ▢
+            <IconMaximize size={10} />
           </button>
           <button 
             onClick={handleDecorativeButtonClick}
             className="w-[44px] h-[28px] hover:bg-red-600 text-white font-sans text-[11px] transition"
           >
-            ✕
+            <IconClose size={10} />
           </button>
         </div>
       </div>
@@ -2057,16 +2057,16 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           {activeDropdown === 'file' && (
             <div className="absolute left-0 top-full mt-[1px] min-w-[200px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
               <button onClick={handleNew} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
-                <span>📄 {mt.new}</span>
+                <span><IconDocument size={14} /> {mt.new}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+N</span>
               </button>
               <button onClick={() => { fileInputRef.current?.click(); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
-                <span>📂 {mt.open}</span>
+                <span><IconFolderOpen size={14} /> {mt.open}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+O</span>
               </button>
               <div className="h-[1px] bg-slate-300 my-1"></div>
               <button onClick={handleExportFprg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
-                <span>💾 {mt.save}</span>
+                <span><IconSave size={14} /> {mt.save}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+S</span>
               </button>
               <button onClick={handleExportJson} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
@@ -2099,7 +2099,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               </button>
               <div className="h-[1px] bg-slate-300 my-1"></div>
               <button onClick={() => { setWinUIDialog({ isOpen: true, title: mt.clearStorage, message: 'Clear saved flowchart from local storage? Your current canvas will not be affected.', type: 'confirm', onOk: () => clearLocalStorage() }); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#FFF0F0] flex items-center text-rose-700">
-                <span>🗑️ {mt.clearStorage}</span>
+                <span><IconTrash size={14} /> {mt.clearStorage}</span>
               </button>
             </div>
           )}
@@ -2130,16 +2130,13 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               <div className="h-[1px] bg-slate-300 my-1"></div>
 
               {/* INTEGRATED BLOCK CLIPBOARD CONTROLS IN DROP-DOWN MENU (FLOWGORTHM WIN32 FIDELITY!) */}
-              <button onClick={() => { if (selectedBlockId) cutBlock(selectedBlockId); setActiveDropdown(null); }} disabled={!selectedBlockId} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-30 text-slate-800">
-                <span>✂️ {language === 'it' ? 'Taglia' : 'Cut'}</span>
+              <button onClick={() => { if (selectedBlockId) cutBlock(selectedBlockId); setActiveDropdown(null); }} disabled={!selectedBlockId} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-30 text-slate-800">                  <span><IconScissors size={13} /> {language === 'it' ? 'Taglia' : 'Cut'}</span>
                 <span className="text-[10px] text-slate-400 font-mono">Ctrl+X</span>
               </button>
-              <button onClick={() => { if (selectedBlockId) copyBlock(selectedBlockId); setActiveDropdown(null); }} disabled={!selectedBlockId} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-30 text-slate-800">
-                <span>📋 {language === 'it' ? 'Copia' : 'Copy'}</span>
+              <button onClick={() => { if (selectedBlockId) copyBlock(selectedBlockId); setActiveDropdown(null); }} disabled={!selectedBlockId} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-30 text-slate-800">                  <span><IconClipboard size={13} /> {language === 'it' ? 'Copia' : 'Copy'}</span>
                 <span className="text-[10px] text-slate-400 font-mono">Ctrl+C</span>
               </button>
-              <button onClick={() => { pasteBlock(); setActiveDropdown(null); }} disabled={!copiedBlock} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-30 text-slate-800">
-                <span>📥 {language === 'it' ? 'Incolla' : 'Paste'}</span>
+              <button onClick={() => { pasteBlock(); setActiveDropdown(null); }} disabled={!copiedBlock} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between disabled:opacity-30 text-slate-800">                  <span><IconInbox size={13} /> {language === 'it' ? 'Incolla' : 'Paste'}</span>
                 <span className="text-[10px] text-slate-400 font-mono">Ctrl+V</span>
               </button>
               
@@ -2147,13 +2144,13 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               
               {/* Zoom options inside menu */}
               <button onClick={() => setZoom((prev) => Math.min(6.0, prev + 0.1))} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] text-slate-800 flex items-center gap-1.5">
-                <span>🔍 {mt.zoomInLabel}</span>
+                <span><IconMagnifier size={14} /> {mt.zoomInLabel}</span>
               </button>
               <button onClick={() => setZoom((prev) => Math.max(0.4, prev - 0.1))} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] text-slate-800 flex items-center gap-1.5">
-                <span>🔍 {mt.zoomOutLabel}</span>
+                <span><IconMagnifier size={14} /> {mt.zoomOutLabel}</span>
               </button>
               <button onClick={() => setZoom(1.0)} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] text-slate-800 flex items-center gap-1.5">
-                <span>🔄 {mt.zoomResetLabel}</span>
+                <span><IconRefresh size={14} /> {mt.zoomResetLabel}</span>
               </button>
             </div>
           )}
@@ -2168,7 +2165,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               activeDropdown === 'styleMenu' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
-            🎨 {mt.styleMenu}
+            <IconPalette size={14} /> {mt.styleMenu}
           </button>
           {activeDropdown === 'styleMenu' && (
             <div className="absolute left-0 top-full mt-[1px] min-w-[200px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
@@ -2313,20 +2310,19 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           {activeDropdown === 'help' && (
             <div className="absolute left-0 top-full mt-[1px] min-w-[180px] bg-[#F5F5F5] border border-[#999] shadow-lg py-[2px] z-50 rounded-[1px]">
               <button onClick={() => { setShowChangelog(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 font-bold">
-                <span>📋 {mt.changelogMenuOption}</span>
+                <span><IconClipboard size={14} /> {mt.changelogMenuOption}</span>
               </button>
               <button onClick={() => { setShowManual(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 font-bold">
-                <span>📚 {mt.manualMenuOption}</span>
+                <span><IconBooks size={14} /> {mt.manualMenuOption}</span>
               </button>
               <button onClick={() => { setShowAbout(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>ℹ️ {mt.about}</span>
+                <span><IconInfo size={14} /> {mt.about}</span>
               </button>
               <div className="border-t border-[#DDD] my-0.5"></div>
               <a href="https://github.com/PiBOH/flowonline2/issues/new/choose" target="_blank" rel="noopener noreferrer" onClick={() => setActiveDropdown(null)} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 no-underline">
                 <span>🐛 {mt.bugReport}</span>
               </a>
-              <a href="https://github.com/PiBOH/flowonline2/issues/new/choose" target="_blank" rel="noopener noreferrer" onClick={() => setActiveDropdown(null)} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 no-underline">
-                <span>💡 {mt.featureRequest}</span>
+              <a href="https://github.com/PiBOH/flowonline2/issues/new/choose" target="_blank" rel="noopener noreferrer" onClick={() => setActiveDropdown(null)} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 no-underline">                  <span><IdeaLightbulb size={14} /> {mt.featureRequest}</span>
               </a>
               <a href="https://github.com/PiBOH/flowonline2/fork" target="_blank" rel="noopener noreferrer" onClick={() => setActiveDropdown(null)} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 no-underline">
                 <span>🔀 {mt.forkContribute}</span>
@@ -2337,7 +2333,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
 
         {/* GLOBE LANGUAGE SWITCHER */}
         <div className="relative ml-auto mr-2 flex items-center gap-1.5 text-slate-600 text-[11px] font-semibold">
-          <span>🌐 {mt.languageLabel}:</span>
+          <span>            <IconGlobe size={14} /> {mt.languageLabel}:</span>
           <button
             onClick={() => setShowLanguagePicker(true)}
             className="border border-[#B0B0B0] bg-white rounded-md py-0.5 px-2 text-slate-700 font-bold hover:bg-[#C9DEF5] focus:outline-none cursor-pointer transition"
@@ -2361,7 +2357,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
             title="Nuovo (Ctrl+N)"
           >
-            📄
+              <IconDocument size={16} />
           </button>
 
           {/* OPEN BUTTON */}
@@ -2374,7 +2370,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
             title="Apri (Ctrl+O)"
           >
-            📂
+              <IconFolderOpen size={16} />
           </button>
 
           {/* SAVE BUTTON */}
@@ -2383,7 +2379,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
             title="Salva (Ctrl+S)"
           >
-            💾
+              <IconSave size={16} />
           </button>
 
           <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
@@ -2497,7 +2493,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             className="w-[24px] h-[24px] hover:bg-slate-200/50 rounded flex items-center justify-center text-slate-600 active:scale-95 transition"
             title={mt.zoomOutLabel}
           >
-            🔍-
+              <IconMagnifier size={13} />-
           </button>
           <span className="text-[10px] font-bold text-slate-500 w-[42px] text-center font-mono select-none">
             {Math.round(zoom * 100)}%
@@ -2507,14 +2503,14 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             className="w-[24px] h-[24px] hover:bg-slate-200/50 rounded flex items-center justify-center text-slate-600 active:scale-95 transition"
             title={mt.zoomInLabel}
           >
-            🔍+
+              <IconMagnifier size={13} />+
           </button>
           <button
             onClick={() => setZoom(1.0)}
             className="w-[20px] h-[20px] hover:bg-slate-200/50 rounded flex items-center justify-center text-slate-400 hover:text-slate-600 active:scale-95 transition text-[11px]"
             title={mt.zoomResetLabel}
           >
-            🔄
+              <IconRefresh size={13} />
           </button>
         </div>
 
@@ -2814,7 +2810,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             ))}
             {/* Translation Disclaimer */}
             <div className="mt-3 pt-2 border-t border-[#D0D0D0] text-[9px] text-amber-600 italic text-center px-4">
-              ⚠️ Notice: The translations of Flowonline2 and all other local project files might not be 100% accurate.
+              <IconWarning size={14} /> Notice: The translations of Flowonline2 and all other local project files might not be 100% accurate.
             </div>
           </div>
         </WinUIDialog>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useFlow } from '../context/FlowContext';
 import { translations } from '../utils/translations';
 import { CornerDownLeft } from 'lucide-react';
+import { IconChatBubble, IconError } from './EmojiIcons';
 
 export const Console: React.FC = () => {
   const {
@@ -67,6 +68,7 @@ export const Console: React.FC = () => {
         className={`h-[24px] flex items-center justify-between px-2 cursor-default shrink-0 text-white font-sans ${headerBg}`}
       >
         <div className="flex items-center gap-1.5">
+          <IconChatBubble size={14} />
           <span className="text-[11px] font-bold tracking-wide">
             {t.console.title}
           </span>
@@ -115,8 +117,8 @@ export const Console: React.FC = () => {
 
           if (msg.type === 'error') {
             return (
-              <div key={msg.id} className="self-center bg-red-100 border border-red-300 text-red-700 p-2 rounded text-xs font-mono max-w-[90%] shadow-sm select-text">
-                ❌ {msg.text}
+              <div key={msg.id} className="self-center bg-red-100 border border-red-300 text-red-700 p-2 rounded text-xs font-mono max-w-[90%] shadow-sm select-text flex items-center gap-1">
+                <IconError size={12} /> {msg.text}
               </div>
             );
           }

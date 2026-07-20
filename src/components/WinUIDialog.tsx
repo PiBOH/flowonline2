@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { IconInfo, IconWarning, IconError, IconQuestion, IconClose } from './EmojiIcons';
 
 export interface WinUIDialogProps {
   isOpen: boolean;
@@ -98,11 +99,11 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
 
   if (!isOpen) return null;
 
-  const typeColors: Record<string, { gradient: string; icon: string }> = {
-    info: { gradient: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)', icon: 'ℹ️' },
-    warning: { gradient: 'linear-gradient(to bottom, #E8A838 0%, #D49420 50%, #B87818 100%)', icon: '⚠️' },
-    error: { gradient: 'linear-gradient(to bottom, #D04444 0%, #B83030 50%, #982020 100%)', icon: '❌' },
-    confirm: { gradient: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)', icon: '❓' },
+  const typeColors: Record<string, { gradient: string; icon: React.ReactNode }> = {
+    info: { gradient: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)', icon: <IconInfo size={14} /> },
+    warning: { gradient: 'linear-gradient(to bottom, #E8A838 0%, #D49420 50%, #B87818 100%)', icon: <IconWarning size={14} /> },
+    error: { gradient: 'linear-gradient(to bottom, #D04444 0%, #B83030 50%, #982020 100%)', icon: <IconError size={14} /> },
+    confirm: { gradient: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)', icon: <IconQuestion size={14} /> },
   };
 
   const tc = typeColors[type];
@@ -132,7 +133,7 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
             onClick={onClose}
             className="w-[24px] h-[20px] hover:bg-red-600 text-white font-sans text-[11px] flex items-center justify-center rounded-sm transition"
           >
-            ✕
+            <IconClose size={10} />
           </button>
         </div>
 
