@@ -82,7 +82,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (BETA 2.1.0)
+## 5. Architectural Milestone Logs & Change History (BETA 2.3.17)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -181,5 +181,214 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Browser `process.stdout.write`:** Replaced with `console.log` in `codeGenerator.ts` for browser compatibility.
 *   **Interval Leak in `submitInput`:** Added cleanup of existing interval before creating a new one.
 *   **SVG Export Cleanliness:** Removed inserter buttons, delete buttons, and interactive CSS classes from exported SVG/PNG images.
+
+
+### Milestone 14: Tools Menu, Export Engines, and Author Auto-Detection (BETA 2.2.0)
+
+[//]: # (keepachangelog)
+
+#### Added
+*   **Tools Menu:** New dedicated "Tools" dropdown in the menu bar (between Style and Program) with Export SVG, Export PNG, and Export PDF options. Export entries also duplicated in the File menu.
+*   **Export PNG Engine:** High-resolution PNG export (`src/utils/exportUtils.ts`) via offscreen Canvas rendering with `devicePixelRatio` HiDPI/Retina support, interactive element cleanup (removes inserter buttons and CSS classes), white background padding, and preservation of all 6 color schemes.
+*   **Export PDF Engine:** PDF export via jsPDF with automatic orientation detection (landscape for wide diagrams, portrait for tall), print-quality 2x rendering, and clean formatting.
+*   **Author Auto-Detection:** Author name field now persisted independently in `localStorage` (key: `flowonline_author`) and restored on next visit even after clearing the flowchart, allowing the user's name to persist across sessions.
+*   **Clear LocalStorage Confirmation:** Added WinUI-styled confirmation dialog before clearing saved flowchart backup from localStorage.
+
+#### Fixed
+*   **Issue Templates Validation:** Fixed `validations` YAML key being incorrectly nested inside `attributes` in all 4 GitHub issue form templates (`bug_report-en.yml`, `bug_report-it.yml`, `feature_request-en.yml`, `feature_request-it.yml`). Moved `validations.required` to top-level form schema.
+
+
+### Milestone 15: 22-Language Full Localization and WinUI Export Dialogs (BETA 2.3.0)
+
+[//]: # (keepachangelog)
+
+#### Added
+*   **22 Language Menu Translations:** Full localization of all header menu labels, toolbar tooltips, export messages, and system dialogs for 22 languages: English, English (GB), Italian, German, French, Spanish, Chinese, Dutch, Portuguese, Galician, Russian, Ukrainian, Czech, Polish, Hungarian, Slovenian, Japanese, Thai, Indonesian, Mongolian, Arabic, Hebrew, and Persian.
+*   **Custom Export Icons:** PNG and PDF menu items display inline SVG icons (from Icons8) instead of generic emojis for professional appearance.
+
+#### Changed
+*   **WinUI Export Feedback:** PNG/PDF export success and error messages now shown in draggable, resizable WinUI dialogs (`WinUIDialog.tsx`) instead of native browser `alert()` popups.
+*   **exportUtils.ts:** `exportToPNG` and `exportToPDF` now return `Promise<ExportResult>` objects so callers can display WinUI dialogs with success/error details.
+*   **Header.tsx:** Export handlers updated to `await` export results and show WinUI dialogs with appropriate messages.
+
+
+### Milestone 16: WinUI Language Picker, Help Menu Links, and Selectable Text (BETA 2.3.1)
+
+[//]: # (keepachangelog)
+
+#### Added
+*   **Language Picker WinUI Dialog:** Replaced the cramped HTML `<select>` dropdown with a full WinUI dialog (`WinUIDialog.tsx`) showing all 22 supported languages in a responsive grid with current-language highlighting.
+*   **Help Menu Links:** Added "Report a Bug" (→ GitHub Issues), "Request a Feature" (→ GitHub Issues), and "Fork & Contribute" (→ GitHub Fork) entries to the Help dropdown menu, all opening in new browser tabs.
+*   **Selectable Modal Text:** All text in Warning, Manual, About, and Changelog modals is now user-selectable via the `select-text` CSS utility class.
+*   **WinUIDialog Custom Content:** Extended `WinUIDialog` component with an optional `children` prop for rendering fully custom dialog content (used by language picker, about, manual, changelog).
+
+#### Changed
+*   **Language Selector UI:** Now a styled button in the header bar opening a WinUI dialog, replacing the unstyled `<select>` element.
+*   **Translations:** Added `bugReport`, `featureRequest`, `forkContribute`, and `selectLanguage` keys to all 22 supported languages.
+
+
+### Milestone 17: WinUI About/Manual/Changelog Dialogs (BETA 2.3.2)
+
+[//]: # (keepachangelog)
+
+#### Changed
+*   **About Modal → WinUIDialog:** Converted from inline JSX modal to draggable/resizable WinUI dialog (700×525 px default, resets on close).
+*   **User Manual → WinUIDialog:** Converted the 800×600 px Markdown-rendered manual viewer to a draggable/resizable WinUI dialog.
+*   **Changelog → WinUIDialog:** Converted the changelog viewer to a draggable/resizable WinUI dialog (750×550 px default).
+*   **WinUIDialog Size Props:** Added optional `defaultWidth` and `defaultHeight` props to WinUIDialog for per-dialog custom default dimensions and proper centering.
+
+#### Fixed
+*   **Language Picker Centering:** Increased default dimensions to 480×400 px so the 22-language grid is properly centered on screen instead of appearing too low.
+
+
+### Milestone 18: Language Flags, Resize Behavior, and Logo Polish (BETA 2.3.3)
+
+[//]: # (keepachangelog)
+
+#### Added
+*   **Language Picker Flags:** Each language in the WinUI picker now displays its national flag emoji (🇺🇸 🇬🇧 🇮🇹 🇩🇪 🇫🇷 🇪🇸 🇨🇳 🇳🇱 🇵🇹 🇬🇱 🇷🇺 🇺🇦 🇨🇿 🇵🇱 🇭🇺 🇸🇮 🇯🇵 🇹🇭 🇮🇩 🇲🇳 🇦🇪 🇮🇱 🇮🇷) next to the language name for quick visual identification.
+*   **Translation Disclaimer:** A notice below the language picker grid warns: "⚠️ Translations may not be 100% accurate. Some text is machine-translated."
+
+#### Changed
+*   **logo_crop.png:** Title bar and About modal now display the cropped logo image (`logo_crop.png`) instead of inline SVG for more reliable rendering.
+
+#### Fixed
+*   **Manual Resize Only:** WinUIDialog now uses `height` instead of `minHeight` CSS property, preventing automatic content-driven expansion. Windows stay at user-set size with scrollbars and can only be resized by dragging the bottom-right corner handle.
+
+
+### Milestone 19: Freeze Prevention, Memory Safeguards, and Logo Hardcoding (BETA 2.3.5)
+
+[//]: # (keepachangelog)
+
+#### Fixed
+*   **License Textarea Size:** Changed from `flex-1` to explicit `h-[300px]` with proper overflow to restore full visibility of GPL v3 license text in the About dialog.
+*   **Execution Speed Cap:** Minimum execution delay at max speed raised from 1ms to 16ms (60 FPS cap) to prevent UI thread lockup during continuous execution.
+*   **Interval Leak:** Added `clearInterval` cleanup before `setInterval` in both `startRun` and `submitInput` to prevent multiple concurrent execution timers.
+*   **Console Memory Cap:** `addConsoleMessage` capped at 1000 items (FIFO removal) to prevent memory exhaustion from infinite output loops.
+*   **Undo Stack Cap:** `pushHistory` undo stack capped at 50 states to prevent unbounded memory growth on large diagrams.
+
+#### Changed
+*   **Hardcoded Logo SVG:** Replaced `logo_crop.png` references in title bar and About modal with the full inline SVG from `logo.svg` (Flowgorithm 4-box colored logo with gradients and glow effects), ensuring consistent rendering across all browsers.
+
+
+### Milestone 20: Dynamic Tab Title, Favicon, and Menu Polish (BETA 2.3.6)
+
+[//]: # (keepachangelog)
+
+#### Added
+*   **Dynamic Tab Title with Memory:** Browser tab now shows JS heap memory usage (e.g., `Flowonline2 | Heap: 45/2048 MB`) via Chrome's `performance.memory` API, refreshed every 5 seconds with cleanup on unmount.
+*   **Favicon from logo.svg:** Tab icon now uses the Flowgorithm 4-box logo SVG file instead of a generic green rectangle, providing proper branding in browser tabs.
+
+#### Changed
+*   **Menu Clarity:** Removed the `(MANUAL.md)` suffix from all 22 language translations of the User Manual menu entry (e.g., "User Manual..." instead of "User Manual (MANUAL.md)...") for cleaner appearance.
+
+
+### Milestone 21: CPU/RAM Real-Time Tab Title (BETA 2.3.7–2.3.8)
+
+[//]: # (keepachangelog)
+
+#### Added (BETA 2.3.7)
+*   **CPU Usage Estimation:** Tab title now shows estimated CPU usage percentage via `requestAnimationFrame` frame timing jitter analysis (delta from expected 16.67ms vs actual frame time).
+*   **RAM Display:** JS heap used memory shown in MB via Chrome `performance.memory.usedJSHeapSize` API.
+*   **Format:** `Flowonline2 | CPU 2.3% | RAM 234MB` — throttled to update once per second (not every frame) to avoid overhead.
+
+#### Fixed (BETA 2.3.7)
+*   rAF loop properly stopped on component unmount via `running` flag.
+*   Frame deltas clamped to 100ms max to prevent tab-switch CPU spikes.
+
+#### Changed (BETA 2.3.8)
+*   **Tab Title Format:** Simplified to `CPU X.X% | RAM XXXMB` (removed "Flowonline2" prefix for cleaner look).
+*   **Cross-Browser Favicon:** Added `icon.png` fallback and `apple-touch-icon` for universal browser support (Firefox, Safari, Chrome). Kept SVG favicon for modern Chromium browsers.
+*   RAM hidden on non-Chrome browsers (Firefox/Safari lack `performance.memory` API).
+
+
+### Milestone 22: IDLE Freeze Fix and localStorage Optimization (BETA 2.3.9)
+
+[//]: # (keepachangelog)
+
+#### Fixed
+*   **IDLE Freeze:** `localStorage.setItem` was being called synchronously on every state change, blocking the main thread. Now debounced at 500ms via `saveTimeoutRef`.
+*   **Stale Closure on Unmount:** Page-close save now uses `latestSaveRef` (a `useRef` tracking the latest state) to prevent data loss — previously captured initial values via empty dependency array `[]`.
+*   **Save Race Condition:** `saveTimeoutRef` now properly cleared on dependency changes to prevent stale saves overwriting newer state.
+
+
+### Milestone 23: Favicon PNG and DRY Refactor (BETA 2.3.10–2.3.11)
+
+[//]: # (keepachangelog)
+
+#### Added (BETA 2.3.10)
+*   **icon.png:** 500×500 transparent PNG favicon generated from `logo.svg` via `sharp-cli` for universal browser tab icon support.
+*   **index.html:** `icon.png` as primary favicon, `logo.svg` as SVG fallback, `apple-touch-icon` using `icon.png`.
+
+#### Changed (BETA 2.3.11)
+*   **DRY Refactor — persistToStorage:** Extracted duplicate localStorage save logic (previously copy-pasted in debounce effect and unmount effect) into a single `persistToStorage(s, t, a)` helper function.
+*   **Unmount Error Logging:** localStorage errors during unmount save now logged via `console.warn` (previously silently ignored with empty `.catch()`).
+
+
+### Milestone 24: Assets in public/ and Multi-Resolution favicon.ico (BETA 2.3.12–2.3.13)
+
+[//]: # (keepachangelog)
+
+#### Fixed (BETA 2.3.12)
+*   **Favicon Deploy:** Moved `icon.png`, `logo.svg`, `logo.png` from project root to `public/` directory. Vite only copies files from `public/` into `dist/` — before this fix, favicon assets were excluded from build output, breaking the tab icon on GitHub Pages.
+
+#### Added (BETA 2.3.13)
+*   **Multi-Resolution favicon.ico:** Generated `favicon.ico` (16×16, 32×32, 48×48 px, 5.6KB) from `icon.png` via `sharp`. Multi-size ICO provides maximum cross-browser compatibility (legacy IE, all modern browsers).
+*   **index.html:** `favicon.ico` (`image/x-icon`) as primary favicon with `icon.png` and `logo.svg` as fallbacks.
+
+#### Removed (BETA 2.3.13)
+*   One-time `generate_ico.cjs` script and duplicate root `logo.svg` cleaned up after generation.
+
+
+### Milestone 25: Dependency Cleanup (BETA 2.3.14)
+
+[//]: # (keepachangelog)
+
+#### Removed
+*   **sharp DevDependency:** Uninstalled `sharp` (~25MB) — `favicon.ico` already generated permanently, no longer needed.
+*   **Temporary Files:** Cleaned up `/tmp/icon_*.png`, `/tmp/generate_ico.js`, `/tmp/refactor_persist.py`.
+*   **package-lock.json:** Reduced by 655 lines after removing all transitive sharp dependencies.
+
+
+### Milestone 26: Dynamic Version Badge and GitHub Release (BETA 2.3.15)
+
+[//]: # (keepachangelog)
+
+#### Changed
+*   **README.md Version Badge:** Replaced static hardcoded badge (`version-BETA 2.0.13-orange`) with dynamic shields.io GitHub Releases badge that auto-reads the latest release tag:
+    ```html
+    <img src="https://img.shields.io/github/v/release/PiBOH/flowonline2?include_prereleases&display_name=release&style=for-the-badge&label=VERSION">
+    ```
+    Now always shows the live version without manual updates.
+
+#### Added
+*   **GitHub Release 2.3.15-beta:** First automated release created via GitHub API with tag `2.3.15`, title `2.3.15-beta`, description "Code backup", and prerelease flag.
+
+
+### Milestone 27: Logo Compression and Unused Dependency Removal (BETA 2.3.16)
+
+[//]: # (keepachangelog)
+
+#### Changed
+*   **logo.png Compression:** Compressed from 1,573,036 bytes (1.5 MB) to 18,069 bytes (18 KB) — a 98.9% reduction. Applied to both `public/logo.png` (web app) and root `logo.png` (GitHub README). Settings: 550px width, palette PNG with 128 colors, compression level 9, quality 80, transparent background preserved. Generated via `sharp` one-time script, then cleaned up.
+
+#### Removed
+*   **Unused ESLint Plugins:** Removed `@typescript-eslint/eslint-plugin` and `@typescript-eslint/parser` (never used in the project, no ESLint config exists).
+*   **package-lock.json:** Reduced by additional 1,552 lines.
+
+#### Added
+*   **GitHub Release 2.3.16-beta:** Created via API with tag `2.3.16`.
+
+
+### Milestone 28: Keyboard Listener Memory Leak Fix (BETA 2.3.17)
+
+[//]: # (keepachangelog)
+
+#### Fixed
+*   **Keyboard Listener Memory Leak:** The `useEffect` managing `keydown` event listener in `FlowContext.tsx` had `statements` in its dependency array. Since `statements` is a new array reference on every mutation (via `JSON.parse(JSON.stringify(...))` in every edit action: add, delete, paste, update), this caused `addEventListener`/`removeEventListener` to re-register on every single keystroke and diagram edit — generating continuous garbage collection.
+*   **Fix:** Removed `statements` from the dependency array. `handleKeyDown` only uses stable callbacks (`deleteBlocks`, `copyBlocks`, `cutBlocks`, `pasteBlocks`) that internally close over the latest state via React's state updater functions. The listener now only re-registers when `selectedBlockIds` or `copiedBlocks` change.
+
+#### Added
+*   **GitHub Release 2.3.17-beta:** Created via API with tag `2.3.17`.
 
 
