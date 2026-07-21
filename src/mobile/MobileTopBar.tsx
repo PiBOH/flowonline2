@@ -12,7 +12,7 @@ export interface MobileTopBarProps {
  * Sticky, 56px tall, safe-area top inset.
  */
 export const MobileTopBar: React.FC<MobileTopBarProps> = ({ view }) => {
-  const { programTitle, executionStatus, speed, loadProgram, statements } = useFlow() as any;
+  const { programTitle, executionStatus, statements } = useFlow() as any;
 
   const VIEW_TITLES: Record<MobileTabId, string> = {
     canvas: 'Flowonline2',

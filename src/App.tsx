@@ -135,11 +135,35 @@ const MainLayout: React.FC = () => {
 
 // Pure-additive view-router. Picks MobileApp on <=767px, falls back to the
 // existing MainLayout on desktop. MainLayout itself is untouched.
+const MobileLoading: React.FC = () => (
+  // Mobile-shaped splash so users on <=767px never see a flash of the
+  // desktop layout while the lazy chunk is downloaded.
+  <div
+    className="mobile-app-root"
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100dvh',
+      width: '100vw',
+      background: '#f8fafc',
+      color: '#475569',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+      fontSize: 14,
+      fontWeight: 600,
+      letterSpacing: '0.02em',
+    }}
+    aria-label="Loading Flowonline2 mobile interface"
+  >
+    <span>Loading Flowonline2…</span>
+  </div>
+);
+
 const AppShell: React.FC = () => {
   const { isMobile } = useViewport();
   if (isMobile) {
     return (
-      <Suspense fallback={<MainLayout />}>
+      <Suspense fallback={<MobileLoading />}>
         <MobileApp />
       </Suspense>
     );
