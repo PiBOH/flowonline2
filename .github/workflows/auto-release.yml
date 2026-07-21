@@ -1,10 +1,11 @@
 name: Auto Release
 
+# Trigger on any push to main or manual dispatch. The inline `if:` below
+# filters push events to v-prefixed commits; the previous `paths: ['version.txt']`
+# filter (removed) unnecessarily blocked empty v-commits that test the pipeline.
 on:
   push:
     branches: [main]
-    paths:
-      - 'version.txt'
   workflow_dispatch:
     inputs:
       draft:
