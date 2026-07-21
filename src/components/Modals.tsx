@@ -153,8 +153,8 @@ export const Modals: React.FC = () => {
       }
 
       saveBlockFields(fields as Partial<Statement>);
-    } catch (err: any) {
-      setValidationError(err.message);
+    } catch (err: unknown) {
+      setValidationError(err instanceof Error ? err.message : String(err));
     }
   };
 

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.29-beta] - 2026-07-21
+
+### Fixed
+- **P0 Memory leaks** — Three critical leaks closed:
+  - `Sidebar.tsx`: `setTimeout` in `handleCopy` now stored in `copyTimeoutRef`, cleared on next copy and on unmount via dedicated `useEffect` cleanup.
+  - `FlowContext.tsx`: keyboard listener no longer re-registers on every selection change. Switched to ref pattern (`selectedBlockIdsRef`, `copiedBlocksRef`) with `[]` deps, so the listener registers once and reads latest state via refs.
+  - `vite-env.d.ts` (new file) added `/// <reference types="vite/client" />` so `import.meta.env.DEV` is properly typed.
+
+### Changed
+- **Language selector on desktop:** The desktop-menu wrapper className is now `flex items-center flex-1` so the Globe pill (which already has `ml-auto`) is anchored to the right edge of the menu bar instead of the right edge of the wrapper.
+- **TypeScript Safety:** 5 `catch (err: any)` clauses replaced with `catch (err: unknown)` + `err instanceof Error ? err.message : String(err)` extraction in FlowContext.tsx (×2), Header.tsx (×2), Modals.tsx.
+
 ## [BETA 2.3.28-beta] - 2026-07-21
 
 ### Fixed

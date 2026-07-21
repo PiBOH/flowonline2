@@ -1594,12 +1594,13 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           const parsed = FprgParser.parse(content);
           loadProgram(parsed.statements, parsed.title, parsed.author);
         }
-      } catch (err: any) {
-        if (file.name.toLowerCase().endsWith('.json')) {
-          showDialog('Open Error', `Error opening .json file: ${err.message}`, 'error');
-        } else {
-          showDialog('Open Error', `Error opening .fprg file: ${err.message}`, 'error');
-        }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (file.name.toLowerCase().endsWith('.json')) {
+        showDialog('Open Error', `Error opening .json file: ${msg}`, 'error');
+      } else {
+        showDialog('Open Error', `Error opening .fprg file: ${msg}`, 'error');
+      }
       }
     };
     reader.readAsText(file);
@@ -1617,8 +1618,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       link.download = `${programTitle.toLowerCase().replace(/\s+/g, '_') || 'diagram'}.fprg`;
       link.click();
       URL.revokeObjectURL(url);
-    } catch (err: any) {
-      showDialog('Save Error', `Error saving file: ${err.message}`, 'error');
+    } catch (err: unknown) {
+      showDialog('Save Error', `Error saving file: ${err instanceof Error ? err.message : String(err)}`, 'error');
     }
     setActiveDropdown(null);
   };
@@ -2060,7 +2061,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </button>
 
         {/* DESKTOP MENU ITEMS (hidden on mobile via CSS) */}
-        <div className="desktop-menu flex items-center">
+        <div className="desktop-menu flex items-center flex-1">
         {/* FILE MENU */}
         <div className="relative">
           <button

@@ -602,22 +602,29 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // KEYBOARD DELETION & CLIPBOARD COMMANDS EMULATION (SUPPORT MULTI-SELECTION BATCHES!)
+  // Refs for stable keydown listener (avoids re-registration on every selection change)
+  const selectedBlockIdsRef = useRef<string[]>(selectedBlockIds);
+  const copiedBlocksRef = useRef<Statement[]>(copiedBlocks);
+  selectedBlockIdsRef.current = selectedBlockIds;
+  copiedBlocksRef.current = copiedBlocks;
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Ignore if inside an active form/input/textarea/select
       const tag = document.activeElement?.tagName.toLowerCase();
       if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
 
-      if (selectedBlockIds.length > 0) {
+      const ids = selectedBlockIdsRef.current;
+      if (ids.length > 0) {
         if (e.key === 'Delete' || e.key === 'Backspace') {
           e.preventDefault();
-          deleteBlocks(selectedBlockIds);
+          deleteBlocks(ids);
         } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c') {
           e.preventDefault();
-          copyBlocks(selectedBlockIds);
+          copyBlocks(ids);
         } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'x') {
           e.preventDefault();
-          cutBlocks(selectedBlockIds);
+          cutBlocks(ids);
         }
       }
 
@@ -634,7 +641,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [selectedBlockIds, copiedBlocks]);
+  }, []);
 
   // MODAL EDITOR HANDLERS
   const openEditor = (block: Statement) => setEditingBlock(block);
@@ -983,9 +990,9 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           break;
         }
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       setExecutionStatus('error');
-      addConsoleMessage('error', `Error block: ${e.message}`);
+      addConsoleMessage('error', `Error block: ${e instanceof Error ? e.message : String(e)}`);
       setCurrentBlockId(inst.blockId);
       if (intervalIdRef.current) {
         window.clearInterval(intervalIdRef.current);
@@ -1152,8 +1159,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
           intervalIdRef.current = null;
         }
       }, delay);
-    } catch (e: any) {
-      addConsoleMessage('error', `Validation error: ${e.message}`);
+    } catch (e: unknown) {
+      addConsoleMessage('error', `Validation error: ${e instanceof Error ? e.message : String(e)}`);
       addConsoleMessage('system', `Please enter a value for ${name}:`);
     }
   };

@@ -500,3 +500,19 @@ v2.3.23: Summary of changes
 ```
 
 
+
+### Milestone 35: P0 Memory Leak Fixes + Language Selector on Right + err:unknown (BETA 2.3.29-beta)
+
+**Closed P0 leaks:**
+- `Sidebar.tsx`: `copyTimeoutRef = useRef<number | null>(null)` + dedicated `useEffect(() => () => window.clearTimeout(...))` unmount cleanup. `handleCopy` now clears existing ref before scheduling a new one.
+- `FlowContext.tsx`: Keyboard listener converted from `[selectedBlockIds, copiedBlocks]` deps → `[]` deps + `selectedBlockIdsRef`/`copiedBlocksRef` synced each render. Listener registers ONCE on mount. Handler reads refs via `.current`, avoiding stale closures on rapid selection changes.
+- `vite-env.d.ts` (new): `/// <reference types="vite/client" />\` reference so `import.meta.env?.DEV` type-checks correctly.
+
+**UX fix:**
+- `Header.tsx`: desktop-menu wrapper className `flex items-center` → `flex items-center flex-1`. Combined with `ml-auto mr-2` on the Globe pill, this anchors Globe at the right edge of the menu bar (instead of the right edge of the wrapper).
+- 5 `catch (err: any)` clauses changed to `catch (err: unknown)` + `err instanceof Error ? err.message : String(err)` extraction (Header ×2, FlowContext ×2, Modals ×1).
+
+**Known followup (NOT in this commit):**
+- `Header.tsx` 4 fetch useEffects (version/LICENSE/MANUAL/CHANGELOG) lack `AbortController`. They still leak on unmount. Suggested fix: extract a `useRepoFile(url, fallback?)` custom hook so `controller` is in a single-useEffect closure (avoiding past TS scope errors when controller was inside `if (!showX)` branches).
+- 6+ `console.warn` calls in Header.tsx + 4 in FlowContext.tsx remain un-gated with `import.meta.env?.DEV`. P2 production noise fix.
+- Refactor opportunity: `selectedBlockIdsRef.current = selectedBlockIds;` runs on every render — could be moved into `useEffect(() => { ref.current = state }, [state])` for clarity.

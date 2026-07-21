@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useFlow } from '../context/FlowContext';
 import { CodeGenerator } from '../utils/codeGenerator';
 import { translations } from '../utils/translations';
@@ -16,11 +16,27 @@ export const Sidebar: React.FC = () => {
     return CodeGenerator.generate(statements, targetLang);
   }, [statements, targetLang]);
 
+  // P0 fix: cleanup the setTimeout on unmount or next copy to avoid state-update-on-unmounted-component warnings
+  const copyTimeoutRef = useRef<number | null>(null);
   const handleCopy = () => {
     navigator.clipboard.writeText(generatedCode);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (copyTimeoutRef.current !== null) {
+      window.clearTimeout(copyTimeoutRef.current);
+    }
+    copyTimeoutRef.current = window.setTimeout(() => {
+      setCopied(false);
+      copyTimeoutRef.current = null;
+    }, 2000);
   };
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current !== null) {
+        window.clearTimeout(copyTimeoutRef.current);
+        copyTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   const variableList = Object.values(variables);
 
