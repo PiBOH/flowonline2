@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { FlowProvider, useFlow } from './context/FlowContext';
 import { Header } from './components/Header';
 import { FlowchartCanvas } from './components/FlowchartCanvas';
 import { Console } from './components/Console';
 import { Sidebar } from './components/Sidebar';
 import { Modals } from './components/Modals';
+import { useViewport } from './mobile/useViewport';
+
+// Lazily load the mobile bundle so desktop users never pay the cost.
+const MobileApp = React.lazy(() => import('./mobile/MobileApp'));
 
 const MainLayout: React.FC = () => {
   const { layout } = useFlow();
@@ -129,10 +133,24 @@ const MainLayout: React.FC = () => {
   );
 };
 
+// Pure-additive view-router. Picks MobileApp on <=767px, falls back to the
+// existing MainLayout on desktop. MainLayout itself is untouched.
+const AppShell: React.FC = () => {
+  const { isMobile } = useViewport();
+  if (isMobile) {
+    return (
+      <Suspense fallback={<MainLayout />}>
+        <MobileApp />
+      </Suspense>
+    );
+  }
+  return <MainLayout />;
+};
+
 function App() {
   return (
     <FlowProvider>
-      <MainLayout />
+      <AppShell />
     </FlowProvider>
   );
 }

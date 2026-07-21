@@ -580,3 +580,25 @@ v2.3.23: Summary of changes
 - `MobileActionMenu.tsx` → `MobileBottomSheet.tsx`
 - `MobileLanguageSheet.tsx` → `MobileBottomSheet.tsx` + `useFlow` + `FlagIcon`
 - Nothing else imports these files yet. **Phase 2** will add `MobileApp.tsx` orchestrator + 5 view components (`MobileCanvasView`, `MobileEditView`, `MobileRunView`, `MobileConsoleView`, `MobileToolsView`) + `MobileTopBar`. **Phase 3** will wire viewport routing into `App.tsx` (additive — MainLayout remains unchanged).
+
+### Milestone 39: Mobile Bundle Phase 2 + 3 — Views + Orchestrator + App Routing (BETA 2.3.35-beta)
+
+[//]: # (keepachangelog)
+
+#### Added (Phase 2: views)
+*   **`src/mobile/MobileTopBar.tsx`** — Sticky top bar (56px + safe-top inset). Brand + view title + dynamic status pill (idle/running/paused/done) + Save-as-JSON button. No desktop impact.
+*   **`src/mobile/MobileCanvasView.tsx`** — Wraps the existing `<FlowchartCanvas>` in a touch-friendly container with a small overlay (statement count + zoom controls). Phase 2.5 will add long-press-to-action-menu detection.
+*   **`src/mobile/MobileEditView.tsx`** — Selection status row + Copy / Cut / Paste / Undo / Redo / Clear-canvas rows. Reactive to `useFlow()` for `selectedBlockId`, `copiedBlock`, `canUndo`, `canRedo`.
+*   **`src/mobile/MobileRunView.tsx`** — Big touch-friendly Run / Step / Pause / Stop action grid + speed slider (1–600%) + status pill. All actions disabled-with-tooltip when state doesn't allow.
+*   **`src/mobile/MobileConsoleView.tsx`** — Wraps existing `<Console>` in a mobile-safe container.
+*   **`src/mobile/MobileToolsView.tsx`** — Settings list: program title + author inputs (live), language picker (opens `<MobileLanguageSheet>`), color-scheme select, layout select, export menu (SVG / PNG / PDF via existing engine), About+License / User Manual / Changelog (fetched + opened in `<WinUIDialog>`), Bug-report/Fork links (open in new tab), Clear-localStorage with confirm.
+
+#### Added (Phase 3: orchestrator + routing)
+*   **`src/mobile/MobileApp.tsx`** — Orchestrator: localStorage-backed view router (`flowonline2_mobile_view`), top-bar + active-view + tab-bar layout, long-press detection on the canvas container (500ms threshold + 8px movement cancel) opening the pre-existing `<MobileActionMenu>`.
+*   **`src/App.tsx`** — Pure-additive directory upgrade. Imports `Suspense`, the new `useViewport` hook, and lazy-loads `./mobile/MobileApp`. Adds `AppShell` component that asks `useViewport()` and renders `<MobileApp>` on ≤767px or `<MainLayout>` on ≥768px. `MainLayout`'s existing code is byte-for-byte preserved (header imports + lazy import + AppShell added ABOVE the existing code; `<MainLayout />` reference inside `App()` swapped for `<AppShell />`).
+
+#### Architecture invariants (still held)
+- **Desktop files byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
+- **State reuse**: every mobile component pulls from `useFlow()` — no duplication of state.
+- **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*`.
+- **Bundle isolation**: `MobileApp` is `React.lazy()`-loaded inside `AppShell`. Desktop users never download `mobile.css` or any mobile component.

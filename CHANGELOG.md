@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.3.35-beta] - 2026-07-21
+
+### Added
+- **Mobile Bundle Phase 2 + 3 — Views, Orchestrator, App Routing.** Completes the parallel mobile UI bundle scaffolding:
+  - **Phase 2 views**: `MobileTopBar` (sticky 56px + status pill + Save-as-JSON button), `MobileCanvasView` (wraps the desktop `FlowchartCanvas` with a zoom/zoom-count overlay), `MobileEditView` (Clipboard + History rows reactive to `useFlow()`), `MobileRunView` (big Run/Step/Pause/Stop grid + speed slider + status pill), `MobileConsoleView` (wraps the existing `<Console>`), `MobileToolsView` (program title/author inputs, language sheet, color scheme + layout selects, export menu — SVG/PNG/PDF, About + License + Manual + Changelog dialogs, Bug/Fork links, Clear-localStorage with confirm).
+  - **Phase 3 orchestrator (`MobileApp.tsx`)**: localStorage-backed view router (`flowonline2_mobile_view`), top-bar + active view + tab-bar layout, 500 ms long-press detection on the canvas container that opens the pre-existing `MobileActionMenu`.
+  - **Phase 3 routing (`src/App.tsx`)**: pure-additive. New `AppShell` component + `React.lazy(() => import('./mobile/MobileApp'))` + `useViewport()` hook. Renders `<MobileApp>` on ≤767px with `<MainLayout />` as the Suspense fallback, otherwise renders the existing `<MainLayout />` unchanged.
+- **Architecture invariants still hold**:
+  - Desktop files byte-for-byte unchanged: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — zero edits.
+  - State is reused from the existing `FlowContext` via `useFlow()` — no duplication.
+  - CSS strictly scoped under `.mobile-app-root` / `.m-*` — zero desktop bleed.
+- **Phase 2.5 followups**: long-press handler that *actually* selects a block + deletes it (current Phase 2 fires the menu but always reports `hasSelection={false}`).
+
 ## [2.3.33-beta] - 2026-07-21
 
 ### Added
