@@ -45,11 +45,13 @@ jobs:
           echo "name=$NAME" >> $GITHUB_OUTPUT
           echo "full=$VERSION" >> $GITHUB_OUTPUT
 
-          # Determine prerelease flag
-          if echo "$VERSION" | grep -qiE 'alpha|beta|rc[0-9]*'; then
-            echo "prerelease=true" >> $GITHUB_OUTPUT
-          else
+          # Determine prerelease flag.
+          # Stable release (prerelease=false) ONLY if version ENDS with "-stable".
+          # Anything else (BETA, ALPHA, RC, plain numbers, etc.) → pre-release (prerelease=true).
+          if echo "$VERSION" | grep -qiE '\-stable$'; then
             echo "prerelease=false" >> $GITHUB_OUTPUT
+          else
+            echo "prerelease=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Generate release notes
