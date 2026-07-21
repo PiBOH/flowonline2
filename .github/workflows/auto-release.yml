@@ -63,10 +63,35 @@ jobs:
           # Try to extract the relevant changelog section
           CHANGELOG_SECTION=""
           if [ -f CHANGELOG.md ]; then
-            # Strip suffix (-alpha, -beta, -rc*) to match CHANGELOG headers like "## [BETA 2.3.22]"
-            CHANGELOG_SEARCH=$(echo "$VERSION_FULL" | sed -E 's/-(alpha|beta|rc[0-9]*)$//i')
-            # Extract section between this version header and the next one
-            CHANGELOG_SECTION=$(awk "/## \[${CHANGELOG_SEARCH}\]/{flag=1; next} /## \[/{flag=0} flag" CHANGELOG.md | head -30)
+            # Strip ONLY the lifecycle prefix (BETA/ALPHA/RC/STABLE), KEEP the suffix.
+            # CHANGELOG.md headers are now formatted as "## [2.3.33-beta]" (no BETA prefix).
+            CHANGELOG_SEARCH=$(echo "$VERSION_FULL" | sed -E 's/^(BETA|ALPHA|RC|STABLE)\s+//i')
+            # Extract section between this version header and the next one.
+            # Use string ops + a regex without bracket chars (avoids awk's [ ] conflation).
+            CHANGELOG_SECTION=$(awk -v search="${CHANGELOG_SEARCH}" '
+              BEGIN { flag=0; searchlen = length(search) }
+              {
+                line = $0
+                # Detect header lines via string prefix (no regex brackets)
+                if (substr(line, 1, 4) == "## [") {
+                  # Find closing "]"
+                  ridx = length(line)
+                  while (ridx > 0 && substr(line, ridx, 1) != "]") ridx--
+                  if (ridx > 4) {
+                    content = substr(line, 5, ridx - 5)
+                    if (content == search) { flag = 1; print; next }
+                    # tolerate -beta/alpha/rc[N] suffix
+                    if (length(content) > searchlen) {
+                      suf = substr(content, searchlen + 1)
+                      if (suf == "-beta" || suf == "-alpha" || suf ~ "^-rc[0-9]+$") { flag = 1; next }
+                    }
+                  }
+                  flag = 0
+                  next
+                }
+                if (flag) print
+              }
+            ' CHANGELOG.md | head -30)
           fi
 
           # Build release body
