@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.31-stable] - 2026-07-21
+
+### Changed
+- **Auto-release pipeline:** Releases now produce a clean GitHub release tagged without the `BETA`/`ALPHA`/`RC`/`STABLE` lifecycle prefix (e.g. `2.3.31-stable_bot` instead of `BETA_2.3.31-stable_bot`).
+- **Stable release channel:** Versions ending in `-stable` are now published as **Stable** releases on GitHub. Any other lifecycle suffix (`-beta`, `-alpha`, `-rc1`, or no suffix) lands as a **Pre-release**. So `BETA 2.3.31-stable` ships as a full stable release rather than a pre-release badge.
+
 ## [BETA 2.3.30-beta] - 2026-07-21
 
 ### Changed

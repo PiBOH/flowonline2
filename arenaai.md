@@ -516,3 +516,25 @@ v2.3.23: Summary of changes
 - `Header.tsx` 4 fetch useEffects (version/LICENSE/MANUAL/CHANGELOG) lack `AbortController`. They still leak on unmount. Suggested fix: extract a `useRepoFile(url, fallback?)` custom hook so `controller` is in a single-useEffect closure (avoiding past TS scope errors when controller was inside `if (!showX)` branches).
 - 6+ `console.warn` calls in Header.tsx + 4 in FlowContext.tsx remain un-gated with `import.meta.env?.DEV`. P2 production noise fix.
 - Refactor opportunity: `selectedBlockIdsRef.current = selectedBlockIds;` runs on every render — could be moved into `useEffect(() => { ref.current = state }, [state])` for clarity.
+
+### Milestone 36: Auto-Release Pipeline Polish — Tag Prefix Strip + Stable Channel (BETA 2.3.30-beta → BETA 2.3.31-stable)
+
+[//]: # (keepachangelog)
+
+#### Changed (BETA 2.3.30-beta)
+*   **Tag prefix removal:** `.github/workflows/auto-release.yml` derives the GitHub release tag from the *already-stripped* `NAME` rather than from the raw `version.txt`. Eliminates the `BETA_2.3.28` / `STABLE_2.3.28` prefixes in tag names.
+*   **NAME derivation unchanged:** `NAME = sed -E 's/^(BETA|ALPHA|RC|STABLE)\s+//i'($VERSION) + ' [bot]'`.
+*   **TAG derivation updated:** `TAG = sed 's/ \[bot\]$//' | sed 's/ /_/g'($NAME) + '_bot'`.
+
+#### Changed (BETA 2.3.31-stable)
+*   **Prerelease rule inverted:** Auto-release now sets `prerelease=false` **only** when `version.txt` *ends* with `-stable`. All other lifecycles (BETA, ALPHA, RC*, or no suffix) default to `prerelease=true` as a safe fall-back.
+*   **`BETA 2.3.31-stable` lands as a Stable release** (no pre-release badge).
+
+#### Operational cheat sheet (post-2.3.31)
+| `version.txt` content   | Channel    | Tag                       | Name                       |
+|-------------------------|------------|---------------------------|----------------------------|
+| `BETA 2.3.x-beta`       | Pre-release| `2.3.x-beta_bot`          | `2.3.x-beta [bot]`         |
+| `BETA 2.3.x-alpha`      | Pre-release| `2.3.x-alpha_bot`         | `2.3.x-alpha [bot]`        |
+| `2.3.x-rc1`             | Pre-release| `2.3.x-rc1_bot`           | `2.3.x-rc1 [bot]`          |
+| `BETA 2.3.x-stable`     | **Stable** | `2.3.x-stable_bot`        | `2.3.x-stable [bot]`       |
+| `2.3.x`                 | Pre-release| `2.3.x_bot`               | `2.3.x [bot]`              |
