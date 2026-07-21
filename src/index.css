@@ -85,7 +85,22 @@ input[type="range"]::-webkit-slider-thumb {
 
   /* Hide desktop menu bar and toolbar on mobile */
   .desktop-menu { display: none; }
-  .desktop-toolbar { display: none; }
+  /* Keep desktop toolbar visible on mobile, sized for touch + horizontally scrollable if needed */
+  .desktop-toolbar {
+    height: 44px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 4px !important;
+    gap: 2px !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .desktop-toolbar > button,
+  .desktop-toolbar > div {
+    min-width: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
+  }
+  .desktop-toolbar::-webkit-scrollbar { height: 3px; }
   .mobile-only { display: flex; }
 
   /* Show hamburger menu on mobile */

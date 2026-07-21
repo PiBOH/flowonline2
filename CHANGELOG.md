@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.28-beta] - 2026-07-21
+
+### Fixed
+- **Mobile UI** — Hamburger button + toolbar now visible on mobile (≤767px):
+  - Menu bar height: `h-[24px]` → `h-[44px] md:h-[24px]` so the 40px hamburger button fits cleanly.
+  - Removed `.desktop-toolbar { display: none }` on mobile; replaced with touch-friendly `height: 44px`, `overflow-x: auto`, `min-width/min-height: 44px` for buttons, and iOS momentum scrolling.
+
 ## [BETA 2.3.23-beta] - 2026-07-20
 
 ### Changed

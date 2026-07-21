@@ -465,6 +465,21 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
     *   Uses `GITHUB_TOKEN` for authentication with `contents: write` permission.
 
 
+### Milestone 34: Mobile UI Hamburger + Toolbar Visibility Fix (BETA 2.3.23-beta → BETA 2.3.28-beta)
+
+**Problem (persistent across multiple commits):** The header hamburger button and the desktop toolbar were both invisible on mobile (≤767px):
+- The menu bar parent had `h-[24px]` (24px fixed), but the hamburger button is `height: 40px` from the `.hamburger-btn` CSS — button visibly overflowed the parent and was effectively hidden.
+- The toolbar was hidden entirely via `@media (max-width: 767px) { .desktop-toolbar { display: none; } }`.
+
+**Fix:**
+1. `src/components/Header.tsx` (line ~2047) — Menu bar className: `h-[24px]` → `h-[44px] md:h-[24px]`. The 40px hamburger now fits cleanly inside the 44px menu bar on mobile, while desktop stays at the original 24px.
+2. `src/index.css` — Removed the `.desktop-toolbar { display: none; }` rule inside the mobile media query. Replaced with mobile-friendly sizing:
+   - `height: 44px; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;`
+   - Buttons/child divs: `min-width: 44px; min-height: 44px; flex-shrink: 0;`
+   - Custom 3px scrollbar inside the toolbar.
+
+**Result:** Hamburger button AND all toolbar actions (New, Open, Save, Run, Step, Pause, Stop, Undo, Redo, Color scheme, Zoom) are now reachable on mobile. The toolbar stays at 44px tall, scrolls horizontally if too wide for the screen.
+
 ### Milestone 33: Commit Naming Convention for Releases (BETA 2.3.22-beta)
 
 [//]: # (keepachangelog)
