@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.32-beta] - 2026-07-21
+
+### Changed
+- **Mobile header restored to BETA-classic Windows-MDI layout.** On screens ≤767px the header now shows in two stacked rows matching the desktop Flowgorithm style:
+  - **Row 1**: window title bar with “Flowonline2” brand + minimize / maximize / close controls.
+  - **Row 2**: classic horizontal menu bar with **File, Edit, Style, Tools, Program, Help** + Globe language picker — all visible inline (no more hamburger-only gating on small screens).
+  - **Row 3**: action toolbar (Run / Step / Pause / Stop + undo / redo + zoom + file operations) — unchanged.
+- The previously-only-mobile hamburger button and slide-out panel are now hidden on mobile, since the desktop-style menu bar is reachable directly. Touch-friendly sizing (≥44px tall buttons, horizontal scroll if menus don’t fit).
+
 ## [BETA 2.3.31-stable] - 2026-07-21
 
 ### Changed

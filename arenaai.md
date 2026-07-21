@@ -538,3 +538,23 @@ v2.3.23: Summary of changes
 | `2.3.x-rc1`             | Pre-release| `2.3.x-rc1_bot`           | `2.3.x-rc1 [bot]`          |
 | `BETA 2.3.x-stable`     | **Stable** | `2.3.x-stable_bot`        | `2.3.x-stable [bot]`       |
 | `2.3.x`                 | Pre-release| `2.3.x_bot`               | `2.3.x [bot]`              |
+
+### Milestone 37: BETA-Classic Two-Row Mobile Header (BETA 2.3.32-beta)
+
+[//]: # (keepachangelog)
+
+#### Changed
+*   **`src/index.css`:** replaced the `@media (max-width: 767px) { .desktop-menu { display: none } }` rule that previously hid the classic menu bar on mobile. New behavior:
+    *   `.desktop-menu` is now visible on mobile as a 44px-tall horizontally-scrollable row inside the existing menu bar (the fledgling hamburger-only fallback is now obsolete).
+    *   Direct children (`.desktop-menu > div`) are kept flex-shrink: 0 with `min-height: 44px` so each menu label stays tappable (Apple/Material 44pt minimum).
+    *   Inner buttons get `min-width: 44px`, `padding: 0 12px`, and `white-space: nowrap` so labels never wrap.
+*   **Hamburger / slide-out hidden on mobile:** `.hamburger-btn`, `.mobile-only`, `.mobile-menu-panel`, `.mobile-menu-overlay` are now `display: none !important` at the mobile breakpoint — the menus reachable inline.
+*   **No Header.tsx structural changes** required. Existing JSX already renders the desktop menus in `.desktop-menu`; flipping visibility via CSS brings them onto mobile row 2.
+
+#### Net effect on mobile (≤767px)
+| Row | What renders                                    |
+|-----|-------------------------------------------------|
+| 1   | Window title (Flowonline2 + version + Untitled) + minimize / maximize / close |
+| 2   | File · Edit · Style · Tools · Program · Help · Globe (horizontally scrollable) |
+| 3   | Run · Step · Pause · Stop · undo · redo · zoom · file ops (existing desktop-toolbar, unchanged) |
+| –   | Hamburger slide-out panel → hidden              |

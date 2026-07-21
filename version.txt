@@ -1,1 +1,1 @@
-BETA 2.3.31-stable
+BETA 2.3.32-beta
