@@ -39,7 +39,16 @@ export const MobileActionMenu: React.FC<MobileActionMenuProps> = ({
   // by the larger App-level translations catalog (we only need 5 strings).
   const t = (en: string, it: string) => (language === 'it' ? it : en);
 
-  const ACTIONS = [
+  interface ActionDef {
+    key: string;
+    label: string;
+    icon: string;
+    disabled: boolean;
+    danger?: boolean;
+    onClick: () => void;
+  }
+
+  const ACTIONS: ActionDef[] = [
     {
       key: 'edit',
       label: t('Edit', 'Modifica'),
@@ -73,10 +82,10 @@ export const MobileActionMenu: React.FC<MobileActionMenuProps> = ({
       label: t('Delete', 'Elimina'),
       icon: '🗑',
       disabled: !hasSelection,
-      onClick: () => { onDelete(); onClose(); },
       danger: true,
+      onClick: () => { onDelete(); onClose(); },
     },
-  ] as const;
+  ];
 
   return (
     <MobileBottomSheet

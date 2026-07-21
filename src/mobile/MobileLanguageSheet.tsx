@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { MobileBottomSheet } from './MobileBottomSheet';
 import { useFlow } from '../context/FlowContext';
 import type { Language } from '../types/flow';
-import { FlagIcon } from './EmojiIcons';
+import { FlagIcon } from '../components/EmojiIcons';
 
 /**
  * Mobile-language picker as a bottom sheet.
