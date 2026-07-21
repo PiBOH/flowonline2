@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.30-beta] - 2026-07-21
+
+### Changed
+- **Bump + auto-release workflow test:** verision bumped to `BETA 2.3.30-beta` to validate end-to-end auto-release behavior.
+  - Tag derivative logic in `.github/workflows/auto-release.yml` now strips `BETA/ALPHA/RC/STABLE` prefix → expected tag `2.3.30-beta_bot` and name `2.3.30-beta [bot]`.
+  - Prerelease regex `\-stable$` keeps this version marked as `prerelease=true` (pre-release channel), consistent with `2.3.29-beta`.
+
 ## [BETA 2.3.29-beta] - 2026-07-21
 
 ### Fixed
