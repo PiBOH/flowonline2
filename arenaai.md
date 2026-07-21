@@ -558,3 +558,25 @@ v2.3.23: Summary of changes
 | 2   | File · Edit · Style · Tools · Program · Help · Globe (horizontally scrollable) |
 | 3   | Run · Step · Pause · Stop · undo · redo · zoom · file ops (existing desktop-toolbar, unchanged) |
 | –   | Hamburger slide-out panel → hidden              |
+
+### Milestone 38: Mobile Bundle Phase 1 — Foundation + Reusable Components (BETA 2.3.33-beta)
+
+[//]: # (keepachangelog)
+
+#### Added
+*   **`src/mobile/useViewport.ts`** — Reactive hook returning `{ isMobile, width }` driven by `window.matchMedia('(max-width: 767px)')` with Safari < 14 fallback and safe resize listener cleanup.
+*   **`src/mobile/mobile.css`** — All mobile-only CSS, strictly scoped under a `.mobile-app-root` class so desktop bundle is never affected.
+*   **`src/mobile/MobileBottomSheet.tsx`** — Headless iOS / Material 3-style bottom sheet: snap points, swipe-down-to-dismiss, backdrop tap-to-close, body-scroll lock while open, Escape-to-close, portaled to document.body so it sits above TopBar (z-30) and TabBar (z-40).
+*   **`src/mobile/MobileActionMenu.tsx`** — Block context menu as a bottom sheet (Edit / Copy / Cut / Paste / Delete). Replaces the desktop Win32 right-click.
+*   **`src/mobile/MobileLanguageSheet.tsx`** — 23-language picker as a bottom sheet (with `FlagIcon` SVG flags; reuses existing component from desktop bundle — no extra dependency).
+*   **`src/mobile/MobileTabBar.tsx`** — 5-tab bottom navigation (Canvas, Edit, Run, Console, Tools): 64px tall + safe-bottom inset, Material-3 active color (`#2563eb`), `role="tab"` semantics.
+
+#### Architecture invariants (preserved)
+*   **Desktop is byte-for-byte untouched.** `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, and existing MainLayout in `App.tsx` were not modified in this commit.
+*   **No state duplication.** Mobile bundle will reuse the existing `FlowContext` hook (`useFlow`) for all state (undo/redo, copy/cut/paste, language, layout, run/step/pause/stop, etc.). Verification: only `useFlow()` is imported by the new mobile files (plus `FlagIcon` from `EmojiIcons` and `Language` from `types/flow`).
+*   **CSS scoping.** All new CSS selectors are prefixed with `.mobile-app-root` or `.m-` (mobile namespace) so there is zero bleed into the desktop bundle.
+
+#### Companion-only import graph at commit time
+- `MobileActionMenu.tsx` → `MobileBottomSheet.tsx`
+- `MobileLanguageSheet.tsx` → `MobileBottomSheet.tsx` + `useFlow` + `FlagIcon`
+- Nothing else imports these files yet. **Phase 2** will add `MobileApp.tsx` orchestrator + 5 view components (`MobileCanvasView`, `MobileEditView`, `MobileRunView`, `MobileConsoleView`, `MobileToolsView`) + `MobileTopBar`. **Phase 3** will wire viewport routing into `App.tsx` (additive — MainLayout remains unchanged).

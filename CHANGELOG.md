@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [BETA 2.3.33-beta] - 2026-07-21
+
+### Added
+- **Mobile Bundle Phase 1 — Foundation.** A new parallel mobile UI bundle is now scaffolded under `src/mobile/`, strictly scoped so the desktop layout is untouched. This commit ships the foundation only; future work will add view components and viewport-based routing.
+  * **Viewport hook (`useViewport.ts`)** detects screens ≤767px via `matchMedia` and reacts to live resizes.
+  * **`mobile.css`** carries all mobile-only styles, gated behind a `.mobile-app-root` namespace so no desktop rule is affected.
+  * **Reusable mobile components**: `MobileBottomSheet` (snap points + swipe-down dismiss + backdrop close + scroll lock), `MobileActionMenu` (block-context sheet: Cut / Copy / Paste / Delete), `MobileLanguageSheet` (the 23-language picker as a sheet with flag SVGs), `MobileTabBar` (Material-3 / iOS 17 bottom navigation with 5 tabs).
+  * **Architecture guarantees**: Desktop files (`Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `MainLayout` inside `App.tsx`) are byte-for-byte untouched. State is reused from the existing `FlowContext` — no duplication. CSS selectors are prefixed with `.mobile-app-root` or `.m-` so desktop styling is never affected.
+- **Upcoming (Phase 2–3, followup commits)**: `MobileApp` orchestrator + 5 view components (Canvas, Edit, Run, Console, Tools) + `MobileTopBar` + viewport-based conditional rendering in `App.tsx`.
+
 ## [BETA 2.3.32-beta] - 2026-07-21
 
 ### Changed

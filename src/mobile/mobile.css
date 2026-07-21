@@ -1,0 +1,320 @@
+/* ============================================
+   MOBILE BUNDLE — strictly scoped CSS.
+   Every selector below MUST be prefixed with .mobile-app-root
+   so the desktop bundle and any desktop-mounted flowgorithm UI
+   is never affected by these rules.
+   ============================================ */
+
+.mobile-app-root {
+  /* Reset tiny defaults so flex sizing works on iOS Safari */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-font-smoothing: antialiased;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif;
+  background: #f8fafc; /* slate-50 — material 3 surface */
+  color: #0f172a;     /* slate-900 */
+}
+
+/* ----- Safe Areas ----- */
+.mobile-app-root .m-safe-top    { padding-top:    env(safe-area-inset-top, 0px); }
+.mobile-app-root .m-safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.mobile-app-root .m-safe-left   { padding-left:   env(safe-area-inset-left, 0px); }
+.mobile-app-root .m-safe-right  { padding-right:  env(safe-area-inset-right, 0px); }
+
+/* ----- Top Bar ----- */
+.mobile-app-root .m-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  padding: 0 8px;
+}
+
+/* ----- Tab Bar ----- */
+.mobile-app-root .m-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.mobile-app-root .m-tabbar > button {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  color: #64748b; /* slate-500 */
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 120ms ease;
+  padding: 8px 4px;
+}
+.mobile-app-root .m-tabbar > button.active {
+  color: #2563eb; /* blue-600 */
+}
+.mobile-app-root .m-tabbar > button:active {
+  background: rgba(15, 23, 42, 0.05);
+}
+
+/* ----- Bottom Sheet ----- */
+.mobile-app-root .m-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.42);
+  z-index: 80;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+.mobile-app-root .m-sheet-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-app-root .m-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.18);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  transition: transform 220ms cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+  touch-action: none;
+}
+.mobile-app-root .m-sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(15, 23, 42, 0.18);
+  border-radius: 999px;
+  margin: 8px auto 0;
+  flex-shrink: 0;
+}
+.mobile-app-root .m-sheet-header {
+  padding: 12px 16px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  flex-shrink: 0;
+}
+.mobile-app-root .m-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 0 env(safe-area-inset-bottom, 0px);
+}
+.mobile-app-root .m-sheet-body.padded {
+  padding: 8px 16px 16px;
+}
+
+/* ----- List rows inside sheet (or as scroll Views) ----- */
+.mobile-app-root .m-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  text-align: left;
+  font-size: 15px;
+  color: #0f172a;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mobile-app-root .m-row:active { background: rgba(15, 23, 42, 0.05); }
+.mobile-app-root .m-row:last-child { border-bottom: none; }
+.mobile-app-root .m-row.subtitle {
+  font-size: 13px;
+  color: #64748b;
+}
+.mobile-app-root .m-row.danger { color: #dc2626; }
+
+/* ----- View container (one of the 5) ----- */
+.mobile-app-root .m-view {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  right: 0;
+  bottom: 64px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+/* ----- Big action button block (mobile Run controls) ----- */
+.mobile-app-root .m-action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px;
+  background: #f1f5f9;
+}
+.mobile-app-root .m-action {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  padding: 18px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mobile-app-root .m-action:disabled { opacity: 0.35; cursor: not-allowed; }
+.mobile-app-root .m-action.run    { background: #2563eb; color: #ffffff; border-color: #1d4ed8; }
+.mobile-app-root .m-action.run:disabled    { background: #93c5fd; border-color: #93c5fd; color: #ffffff; opacity: 0.6; }
+.mobile-app-root .m-action.step   { background: #14b8a6; color: #ffffff; border-color: #0d9488; }
+.mobile-app-root .m-action.step:disabled   { background: #5eead4; border-color: #5eead4; color: #ffffff; opacity: 0.6; }
+.mobile-app-root .m-action.pause  { background: #f59e0b; color: #ffffff; border-color: #d97706; }
+.mobile-app-root .m-action.pause:disabled  { background: #fcd34d; border-color: #fcd34d; color: #ffffff; opacity: 0.6; }
+.mobile-app-root .m-action.stop   { background: #ef4444; color: #ffffff; border-color: #dc2626; }
+.mobile-app-root .m-action.stop:disabled   { background: #fca5a5; border-color: #fca5a5; color: #ffffff; opacity: 0.6; }
+
+/* ----- Status pill (Running / Paused indicator) ----- */
+.mobile-app-root .m-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+}
+.mobile-app-root .m-pill.dot::before {
+  content: "";
+  width: 6px; height: 6px; border-radius: 999px;
+  background: #94a3b8;
+}
+.mobile-app-root .m-pill.dot.running::before  { background: #22c55e; }
+.mobile-app-root .m-pill.dot.paused::before   { background: #f59e0b; }
+.mobile-app-root .m-pill.dot.done::before     { background: #3b82f6; }
+.mobile-app-root .m-pill.running  { background: rgba(34, 197, 94, 0.14);  color: #15803d; }
+.mobile-app-root .m-pill.paused   { background: rgba(245, 158, 11, 0.16); color: #b45309; }
+.mobile-app-root .m-pill.done     { background: rgba(59, 130, 246, 0.16);color: #1d4ed8; }
+
+/* ----- Speed slider ----- */
+.mobile-app-root .m-speed {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+.mobile-app-root .m-speed input[type="range"] {
+  flex: 1;
+}
+
+/* ----- Misc helpers ----- */
+.mobile-app-root .m-section-title {
+  padding: 14px 16px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+.mobile-app-root .m-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.mobile-app-root .m-flex-1 { flex: 1 1 auto; min-height: 0; min-width: 0; }
+.mobile-app-root .m-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 13px;
+  padding: 32px;
+  text-align: center;
+}
+
+/* ----- Long-press active state ----- */
+.mobile-app-root .m-longpress-active {
+  outline: 3px solid rgba(37, 99, 235, 0.4);
+  outline-offset: 2px;
+  filter: brightness(0.95);
+}
+
+/* ----- Pinch-zoom canvas wrapper ----- */
+.mobile-app-root .m-canvas-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #ffffff;
+  touch-action: pinch-zoom;
+}
+.mobile-app-root .m-canvas-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.7);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 10;
+}
+.mobile-app-root .m-canvas-overlay button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-weight: 700;
+  pointer-events: auto;
+  padding: 0 4px;
+  cursor: pointer;
+}
