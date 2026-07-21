@@ -234,4 +234,10 @@ export interface TranslationCatalog {
     arrayIndexOutOfBounds: string;
     divideByZero: string;
   };
+  aboutTitle: string;
+  manualTitle: string;
+  changelogTitle: string;
+  gplLicenseTextFallback: string;
+  manualTextFallback: string;
+  changelogTextFallback: string;
 }

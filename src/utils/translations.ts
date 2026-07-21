@@ -10,7 +10,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Edit Block", cancel: "Cancel", ok: "OK", declareVar: "Variable Name(s)", type: "Type", isArray: "Array?", arraySize: "Array Size / Dimension", assignTo: "Variable Name", expression: "Expression", inputVar: "Variable Name", outputExpr: "Expression (use & for concatenation)", newline: "New Line?", condition: "Condition (Boolean expression)", forVar: "Loop Variable", start: "Start Value", end: "End Value", step: "Step (increment)", direction: "Direction", ascending: "Increasing (Up)", descending: "Decreasing (Down)", callFunc: "Function Name", arguments: "Arguments (comma separated)", commentText: "Comment Text", errorTypeMismatch: "Value does not match the variable type.", errorRequired: "This field is required.", callFuncPlaceholder: "e.g. MyFunction", commentPlaceholder: "Write your annotations here...", blockCommentLabel: "Block Note/Comment (Optional)", blockCommentPlaceholder: "e.g. Check that age > 18", declarePlaceholder: "e.g. x, y, sum", assignPlaceholder: "e.g. sum, arr[i]", inputPlaceholder: "e.g. x, arr[idx]", outputPlaceholder: "e.g. \"Result: \" & sum" },
     errors: { executionError: "Execution Error", syntaxError: "Syntax Error in expression", varNotDefined: "Variable not defined", typeMismatch: "Type mismatch", arrayIndexOutOfBounds: "Array index out of bounds", divideByZero: "Division by zero" },
     console: { title: "Execution Console - Flowonline2", clearBtn: "Clear", closeTooltip: "Close Panel", emptyMessage: "Console empty. Press \"Run\" to start the algorithm.", inputPlaceholder: "Type value and press Enter...", submitBtn: "Submit", readyStatus: "Ready", logCount: "Log: {0} lines" },
-    canvas: { selectBlock: "Select Block", trueBranch: "TRUE", falseBranch: "FALSE" }
+    canvas: { selectBlock: "Select Block", trueBranch: "TRUE", falseBranch: "FALSE" },
+    aboutTitle: 'About Flowonline2',
+    manualTitle: 'Flowonline2 User Manual',
+    changelogTitle: 'Flowonline2 Changelog',
+    gplLicenseTextFallback: '# GNU GENERAL PUBLIC LICENSE\n# Version 3, 29 June 2007\n#\n# Copyright (C) 2026 Flowonline2 contributors\n# Full license text available at https://www.gnu.org/licenses/gpl-3.0.txt',
+    manualTextFallback: 'User Manual (MANUAL.md) could not be loaded from the repository.\n\nPlease refer to MANUAL.md in the repository for full documentation.',
+    changelogTextFallback: 'Changelog (CHANGELOG.md) could not be loaded from the repository.\n\nPlease refer to CHANGELOG.md in the repository for the full history.'
   },
   en_GB: {
     title: "Flowonline2",
@@ -21,7 +27,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Edit Block", cancel: "Cancel", ok: "OK", declareVar: "Variable Name(s)", type: "Type", isArray: "Array?", arraySize: "Array Size / Dimension", assignTo: "Variable Name", expression: "Expression", inputVar: "Variable Name", outputExpr: "Expression (use & for concatenation)", newline: "New Line?", condition: "Condition (Boolean expression)", forVar: "Loop Variable", start: "Start Value", end: "End Value", step: "Step (increment)", direction: "Direction", ascending: "Increasing (Up)", descending: "Decreasing (Down)", callFunc: "Function Name", arguments: "Arguments (comma separated)", commentText: "Comment Text", errorTypeMismatch: "Value does not match the variable type.", errorRequired: "This field is required.", callFuncPlaceholder: "e.g. MyFunction", commentPlaceholder: "Write your annotations here...", blockCommentLabel: "Block Note/Comment (Optional)", blockCommentPlaceholder: "e.g. Check that age > 18", declarePlaceholder: "e.g. x, y, sum", assignPlaceholder: "e.g. sum, arr[i]", inputPlaceholder: "e.g. x, arr[idx]", outputPlaceholder: "e.g. \"Result: \" & sum" },
     errors: { executionError: "Execution Error", syntaxError: "Syntax Error in expression", varNotDefined: "Variable not defined", typeMismatch: "Type mismatch", arrayIndexOutOfBounds: "Array index out of bounds", divideByZero: "Division by zero" },
     console: { title: "Execution Console - Flowonline2", clearBtn: "Clear", closeTooltip: "Close Panel", emptyMessage: "Console empty. Press \"Run\" to start the algorithm.", inputPlaceholder: "Type value and press Enter...", submitBtn: "Submit", readyStatus: "Ready", logCount: "Log: {0} lines" },
-    canvas: { selectBlock: "Select Block", trueBranch: "TRUE", falseBranch: "FALSE" }
+    canvas: { selectBlock: "Select Block", trueBranch: "TRUE", falseBranch: "FALSE" },
+    aboutTitle: 'About Flowonline2',
+    manualTitle: 'Flowonline2 User Manual',
+    changelogTitle: 'Flowonline2 Changelog',
+    gplLicenseTextFallback: '# GNU GENERAL PUBLIC LICENSE\n# Version 3, 29 June 2007\n#\n# Copyright (C) 2026 Flowonline2 contributors\n# Full license text available at https://www.gnu.org/licenses/gpl-3.0.txt',
+    manualTextFallback: 'User Manual (MANUAL.md) could not be loaded from the repository.\n\nPlease refer to MANUAL.md in the repository for full documentation.',
+    changelogTextFallback: 'Changelog (CHANGELOG.md) could not be loaded from the repository.\n\nPlease refer to CHANGELOG.md in the repository for the full history.'
   },
   it: {
     title: "Flowonline2", subtitle: "Replica Interattiva di Flowgorithm",
@@ -31,7 +43,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Modifica Blocco", cancel: "Annulla", ok: "OK", declareVar: "Nome Variabile/i", type: "Tipo", isArray: "Vettore (Array)?", arraySize: "Dimensione Vettore", assignTo: "Nome Variabile", expression: "Espressione", inputVar: "Nome Variabile", outputExpr: "Espressione (usa & per concatenare)", newline: "Nuova Linea?", condition: "Condizione (Espressione Booleana)", forVar: "Variabile Ciclo", start: "Valore Iniziale", end: "Valore Finale", step: "Passo (incremento)", direction: "Direzione", ascending: "Crescente (Su)", descending: "Decrescente (Giù)", callFunc: "Nome Funzione", arguments: "Argomenti (separati da virgola)", commentText: "Testo del Commento", errorTypeMismatch: "Il valore inserito non corrisponde al tipo di dato.", errorRequired: "Questo campo è obbligatorio.", callFuncPlaceholder: "es. MiaFunzione", commentPlaceholder: "Scrivi qui le annotazioni...", blockCommentLabel: "Nota/Commento del Blocco (Opzionale)", blockCommentPlaceholder: "es. Controlla che eta sia maggiore di 18", declarePlaceholder: "es. x, y, somma", assignPlaceholder: "es. somma, vettore[i]", inputPlaceholder: "es. x, vettore[idx]", outputPlaceholder: "es. \"Risultato: \" & somma" },
     errors: { executionError: "Errore di Esecuzione", syntaxError: "Errore di Sintassi nell'espressione", varNotDefined: "Variabile non definita", typeMismatch: "Incompatibilità di tipo", arrayIndexOutOfBounds: "Indice dell'array fuori dai limiti", divideByZero: "Divisione per zero" },
     console: { title: "Console di Esecuzione - Flowonline2", clearBtn: "Svuota", closeTooltip: "Chiudi Pannello", emptyMessage: "Console vuota. Premi \"Esegui\" per avviare l'algoritmo.", inputPlaceholder: "Digita valore e premi Invio...", submitBtn: "Invia", readyStatus: "Pronto", logCount: "Log: {0} righe" },
-    canvas: { selectBlock: "Seleziona Blocco", trueBranch: "VERO", falseBranch: "FALSO" }
+    canvas: { selectBlock: "Seleziona Blocco", trueBranch: "VERO", falseBranch: "FALSO" },
+    aboutTitle: 'Informazioni su Flowonline2',
+    manualTitle: 'Manuale Utente di Flowonline2',
+    changelogTitle: 'Changelog di Flowonline2',
+    gplLicenseTextFallback: 'Impossibile caricare il file di licenza (LICENSE).\n\nQuesto progetto è sotto GNU General Public License v3.\nConsulta LICENSE nel repository per il testo completo.',
+    manualTextFallback: 'Impossibile caricare il Manuale Utente (MANUAL.md).\n\nConsulta MANUAL.md nel repository per la documentazione completa.',
+    changelogTextFallback: 'Impossibile caricare il Changelog (CHANGELOG.md).\n\nConsulta CHANGELOG.md nel repository per la cronologia completa.'
   },
   de: {
     title: "Flowonline2", subtitle: "Interaktiver Flowgorithm-Klon",
@@ -41,7 +59,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Block bearbeiten", cancel: "Abbrechen", ok: "OK", declareVar: "Variablenname(n)", type: "Typ", isArray: "Array?", arraySize: "Array-Größe / Dimension", assignTo: "Variablenname", expression: "Ausdruck", inputVar: "Variablenname", outputExpr: "Ausdruck (& für Verkettung)", newline: "Neue Zeile?", condition: "Bedingung (Boolescher Ausdruck)", forVar: "Laufvariable", start: "Startwert", end: "Endwert", step: "Schrittweite", direction: "Richtung", ascending: "Aufsteigend", descending: "Absteigend", callFunc: "Funktionsname", arguments: "Argumente (Komma-separiert)", commentText: "Kommentartext", errorTypeMismatch: "Wert entspricht nicht dem Variablentyp.", errorRequired: "Dieses Feld ist erforderlich.", callFuncPlaceholder: "z.B. MeineFunktion", commentPlaceholder: "Schreiben Sie hier Ihre Anmerkungen...", blockCommentLabel: "Block-Notiz/Kommentar (Optional)", blockCommentPlaceholder: "z.B. Prüfen, ob Alter > 18 ist", declarePlaceholder: "z.B. x, y, summe", assignPlaceholder: "z.B. summe, arr[i]", inputPlaceholder: "z.B. x, arr[idx]", outputPlaceholder: "z.B. \"Ergebnis: \" & summe" },
     errors: { executionError: "Ausführungsfehler", syntaxError: "Syntaxfehler im Ausdruck", varNotDefined: "Variable nicht definiert", typeMismatch: "Typkonflikt", arrayIndexOutOfBounds: "Array-Index außerhalb der Grenzen", divideByZero: "Division durch Null" },
     console: { title: "Ausführungskonsole - Flowonline2", clearBtn: "Löschen", closeTooltip: "Panel schließen", emptyMessage: "Konsole leer. Drücken Sie \"Ausführen\" um den Algorithmus zu starten.", inputPlaceholder: "Wert eingeben und Enter drücken...", submitBtn: "Senden", readyStatus: "Bereit", logCount: "Log: {0} Zeilen" },
-    canvas: { selectBlock: "Block auswählen", trueBranch: "WAHR", falseBranch: "FALSCH" }
+    canvas: { selectBlock: "Block auswählen", trueBranch: "WAHR", falseBranch: "FALSCH" },
+    aboutTitle: 'Über Flowonline2',
+    manualTitle: 'Flowonline2 Benutzerhandbuch',
+    changelogTitle: 'Flowonline2 Änderungsverlauf',
+    gplLicenseTextFallback: 'Lizenzdatei (LICENSE) konnte nicht geladen werden.\n\nDieses Projekt ist unter GNU General Public License v3 lizenziert.\nSiehe LICENSE im Repository für den vollständigen Text.',
+    manualTextFallback: 'Benutzerhandbuch (MANUAL.md) konnte nicht geladen werden.\n\nSiehe MANUAL.md im Repository für die vollständige Dokumentation.',
+    changelogTextFallback: 'Änderungsverlauf (CHANGELOG.md) konnte nicht geladen werden.\n\nSiehe CHANGELOG.md im Repository für den vollständigen Verlauf.'
   },
   fr: {
     title: "Flowonline2", subtitle: "Clone Interactif de Flowgorithm",
@@ -51,7 +75,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Modifier le Bloc", cancel: "Annuler", ok: "OK", declareVar: "Nom de Variable", type: "Type", isArray: "Tableau?", arraySize: "Taille du tableau", assignTo: "Nom de Variable", expression: "Expression", inputVar: "Nom de Variable", outputExpr: "Expression (utilisez & pour concaténer)", newline: "Nouvelle ligne?", condition: "Condition (Expression booléenne)", forVar: "Variable de boucle", start: "Valeur de début", end: "Valeur de fin", step: "Pas (incrément)", direction: "Direction", ascending: "Croissant (Haut)", descending: "Décroissant (Bas)", callFunc: "Nom de la Fonction", arguments: "Arguments (séparés par des virgules)", commentText: "Texte du commentaire", errorTypeMismatch: "La valeur ne correspond pas au type de variable.", errorRequired: "Ce champ est requis.", callFuncPlaceholder: "ex. MaFonction", commentPlaceholder: "Écrivez vos annotations ici...", blockCommentLabel: "Note/Commentaire de bloc (Optionnel)", blockCommentPlaceholder: "ex. Vérifier que l'âge > 18", declarePlaceholder: "ex. x, y, somme", assignPlaceholder: "ex. somme, tab[i]", inputPlaceholder: "ex. x, tab[idx]", outputPlaceholder: "ex. \"Résultat : \" & somme" },
     errors: { executionError: "Erreur d'exécution", syntaxError: "Erreur de syntaxe", varNotDefined: "Variable non définie", typeMismatch: "Incompatibilité de type", arrayIndexOutOfBounds: "Index de tableau hors limites", divideByZero: "Division par zéro" },
     console: { title: "Console d'exécution - Flowonline2", clearBtn: "Effacer", closeTooltip: "Fermer le panneau", emptyMessage: "Console vide. Appuyez sur \"Exécuter\" pour lancer l'algorithme.", inputPlaceholder: "Saisissez une valeur et appuyez sur Entrée...", submitBtn: "Envoyer", readyStatus: "Prêt", logCount: "Log : {0} lignes" },
-    canvas: { selectBlock: "Sélectionner un bloc", trueBranch: "VRAI", falseBranch: "FAUX" }
+    canvas: { selectBlock: "Sélectionner un bloc", trueBranch: "VRAI", falseBranch: "FAUX" },
+    aboutTitle: 'À propos de Flowonline2',
+    manualTitle: 'Manuel Utilisateur Flowonline2',
+    changelogTitle: 'Journal des modifications Flowonline2',
+    gplLicenseTextFallback: 'Impossible de charger le fichier de licence (LICENSE).\n\nCe projet est sous licence GNU General Public License v3.\nConsultez LICENSE dans le dépôt pour le texte complet.',
+    manualTextFallback: 'Manuel Utilisateur (MANUAL.md) impossible à charger.\n\nConsultez MANUAL.md dans le dépôt pour la documentation complète.',
+    changelogTextFallback: "Journal des modifications (CHANGELOG.md) impossible à charger.\n\nConsultez CHANGELOG.md dans le dépôt pour l'historique complet."
   },
   es: {
     title: "Flowonline2", subtitle: "Clon Interactivo de Flowgorithm",
@@ -61,7 +91,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Editar Bloque", cancel: "Cancelar", ok: "Aceptar", declareVar: "Nombre de Variable", type: "Tipo", isArray: "¿Es Matriz/Array?", arraySize: "Tamaño de la Matriz", assignTo: "Nombre de Variable", expression: "Expresión", inputVar: "Nombre de Variable", outputExpr: "Expresión (use & para concatenar)", newline: "¿Nueva Línea?", condition: "Condición (Expresión Booleana)", forVar: "Variable de Bucle", start: "Valor Inicial", end: "Valor Final", step: "Paso (incremento)", direction: "Dirección", ascending: "Ascendente (Incremento)", descending: "Descendente (Decremento)", callFunc: "Nombre de Función", arguments: "Argumentos (separados por comas)", commentText: "Texto del Comentario", errorTypeMismatch: "El valor no coincide con el tipo de variable.", errorRequired: "Este campo es requerido.", callFuncPlaceholder: "ej. MiFunción", commentPlaceholder: "Escriba sus anotaciones aquí...", blockCommentLabel: "Nota/Commentario del Bloque (Opcional)", blockCommentPlaceholder: "ej. Verificar que edad > 18", declarePlaceholder: "ej. x, y, suma", assignPlaceholder: "ej. suma, arr[i]", inputPlaceholder: "ej. x, arr[idx]", outputPlaceholder: "ej. \"Resultado: \" & suma" },
     errors: { executionError: "Error de Ejecución", syntaxError: "Error de Sintaxis", varNotDefined: "Variable no definida", typeMismatch: "Incompatibilidad de tipos", arrayIndexOutOfBounds: "Índice fuera de rango", divideByZero: "División por cero" },
     console: { title: "Consola de Ejecución - Flowonline2", clearBtn: "Limpiar", closeTooltip: "Cerrar Panel", emptyMessage: "Consola vacía. Presione \"Ejecutar\" para iniciar el algoritmo.", inputPlaceholder: "Escriba un valor y presione Enter...", submitBtn: "Enviar", readyStatus: "Listo", logCount: "Log: {0} líneas" },
-    canvas: { selectBlock: "Seleccionar Bloque", trueBranch: "VERDADERO", falseBranch: "FALSO" }
+    canvas: { selectBlock: "Seleccionar Bloque", trueBranch: "VERDADERO", falseBranch: "FALSO" },
+    aboutTitle: 'Acerca de Flowonline2',
+    manualTitle: 'Manual de Usuario Flowonline2',
+    changelogTitle: 'Registro de cambios Flowonline2',
+    gplLicenseTextFallback: 'No se pudo cargar el archivo de licencia (LICENSE).\n\nEste proyecto está bajo GNU General Public License v3.\nConsulta LICENSE en el repositorio para el texto completo.',
+    manualTextFallback: 'No se pudo cargar el Manual de Usuario (MANUAL.md).\n\nConsulta MANUAL.md en el repositorio para la documentación completa.',
+    changelogTextFallback: 'No se pudo cargar el Registro de cambios (CHANGELOG.md).\n\nConsulta CHANGELOG.md en el repositorio para el historial completo.'
   },
   zh: {
     title: "Flowonline2", subtitle: "交互式 Flowgorithm 克隆",
@@ -71,7 +107,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "编辑块", cancel: "取消", ok: "确定", declareVar: "变量名", type: "类型", isArray: "数组?", arraySize: "数组大小/维度", assignTo: "变量名", expression: "表达式", inputVar: "变量名", outputExpr: "表达式 (使用 & 连接)", newline: "新行?", condition: "条件 (布尔表达式)", forVar: "循环变量", start: "起始值", end: "结束值", step: "步长", direction: "方向", ascending: "递增 (上)", descending: "递减 (下)", callFunc: "函数名", arguments: "参数 (逗号分隔)", commentText: "注释文本", errorTypeMismatch: "值与变量类型不匹配。", errorRequired: "此字段为必填。", callFuncPlaceholder: "例如: 我的函数", commentPlaceholder: "在此写下您的注释...", blockCommentLabel: "块注释 (可选)", blockCommentPlaceholder: "例如: 检查年龄 > 18", declarePlaceholder: "例如: x, y, sum", assignPlaceholder: "例如: sum, arr[i]", inputPlaceholder: "例如: x, arr[idx]", outputPlaceholder: "例如: \"结果: \" & sum" },
     errors: { executionError: "执行错误", syntaxError: "表达式语法错误", varNotDefined: "变量未定义", typeMismatch: "类型不匹配", arrayIndexOutOfBounds: "数组索引越界", divideByZero: "除以零" },
     console: { title: "执行控制台 - Flowonline2", clearBtn: "清除", closeTooltip: "关闭面板", emptyMessage: "控制台为空。按\"运行\"启动算法。", inputPlaceholder: "输入值并按回车...", submitBtn: "提交", readyStatus: "就绪", logCount: "日志: {0} 行" },
-    canvas: { selectBlock: "选择块", trueBranch: "真", falseBranch: "假" }
+    canvas: { selectBlock: "选择块", trueBranch: "真", falseBranch: "假" },
+    aboutTitle: '关于 Flowonline2',
+    manualTitle: 'Flowonline2 用户手册',
+    changelogTitle: 'Flowonline2 更新日志',
+    gplLicenseTextFallback: '无法加载许可证文件 (LICENSE)。\n\n本项目采用 GNU 通用公共许可证 v3。\n完整文本请参见仓库中的 LICENSE。',
+    manualTextFallback: '无法加载用户手册 (MANUAL.md)。\n\n完整文档请参见仓库中的 MANUAL.md。',
+    changelogTextFallback: '无法加载更新日志 (CHANGELOG.md)。\n\n完整历史请参见仓库中的 CHANGELOG.md。'
   },
   nl: {
     title: "Flowonline2", subtitle: "Interactieve Flowgorithm Kloon",
@@ -81,7 +123,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Blok Bewerken", cancel: "Annuleren", ok: "OK", declareVar: "Variabelenaam/namen", type: "Type", isArray: "Array?", arraySize: "Array-grootte / Dimensie", assignTo: "Variabelenaam", expression: "Expressie", inputVar: "Variabelenaam", outputExpr: "Expressie (gebruik & voor aaneenschakeling)", newline: "Nieuwe regel?", condition: "Voorwaarde (Booleaanse expressie)", forVar: "Lusvariabele", start: "Startwaarde", end: "Eindwaarde", step: "Stap (toename)", direction: "Richting", ascending: "Oplopend (Omhoog)", descending: "Aflopend (Omlaag)", callFunc: "Functienaam", arguments: "Argumenten (komma-gescheiden)", commentText: "Commentaartekst", errorTypeMismatch: "Waarde komt niet overeen met het variabeletype.", errorRequired: "Dit veld is verplicht.", callFuncPlaceholder: "bijv. MijnFunctie", commentPlaceholder: "Schrijf hier uw aantekeningen...", blockCommentLabel: "Bloknotitie/Commentaar (Optioneel)", blockCommentPlaceholder: "bijv. Controleer of leeftijd > 18", declarePlaceholder: "bijv. x, y, som", assignPlaceholder: "bijv. som, arr[i]", inputPlaceholder: "bijv. x, arr[idx]", outputPlaceholder: "bijv. \"Resultaat: \" & som" },
     errors: { executionError: "Uitvoeringsfout", syntaxError: "Syntaxisfout in expressie", varNotDefined: "Variabele niet gedefinieerd", typeMismatch: "Type komt niet overeen", arrayIndexOutOfBounds: "Array-index buiten bereik", divideByZero: "Deling door nul" },
     console: { title: "Uitvoeringsconsole - Flowonline2", clearBtn: "Wissen", closeTooltip: "Paneel sluiten", emptyMessage: "Console leeg. Druk op \"Uitvoeren\" om het algoritme te starten.", inputPlaceholder: "Typ waarde en druk op Enter...", submitBtn: "Verzenden", readyStatus: "Gereed", logCount: "Log: {0} regels" },
-    canvas: { selectBlock: "Blok selecteren", trueBranch: "WAAR", falseBranch: "ONWAAR" }
+    canvas: { selectBlock: "Blok selecteren", trueBranch: "WAAR", falseBranch: "ONWAAR" },
+    aboutTitle: 'Over Flowonline2',
+    manualTitle: 'Flowonline2 Gebruikershandleiding',
+    changelogTitle: 'Flowonline2 Wijzigingenlog',
+    gplLicenseTextFallback: 'Licentiebestand (LICENSE) kon niet worden geladen.\n\nDit project valt onder GNU General Public License v3.\nZie LICENSE in de repository voor de volledige tekst.',
+    manualTextFallback: 'Gebruikershandleiding (MANUAL.md) kon niet worden geladen.\n\nZie MANUAL.md in de repository voor volledige documentatie.',
+    changelogTextFallback: 'Wijzigingenlog (CHANGELOG.md) kon niet worden geladen.\n\nZie CHANGELOG.md in de repository voor de volledige geschiedenis.'
   },
   pt: {
     title: "Flowonline2", subtitle: "Clone Interativo do Flowgorithm",
@@ -91,7 +139,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Editar Bloco", cancel: "Cancelar", ok: "OK", declareVar: "Nome da(s) Variável(is)", type: "Tipo", isArray: "Matriz?", arraySize: "Tamanho da Matriz", assignTo: "Nome da Variável", expression: "Expressão", inputVar: "Nome da Variável", outputExpr: "Expressão (use & para concatenar)", newline: "Nova Linha?", condition: "Condição (Expressão Booleana)", forVar: "Variável do Laço", start: "Valor Inicial", end: "Valor Final", step: "Passo (incremento)", direction: "Direção", ascending: "Crescente (Sobe)", descending: "Decrescente (Desce)", callFunc: "Nome da Função", arguments: "Argumentos (separados por vírgula)", commentText: "Texto do Comentário", errorTypeMismatch: "Valor não corresponde ao tipo da variável.", errorRequired: "Este campo é obrigatório.", callFuncPlaceholder: "ex. MinhaFunção", commentPlaceholder: "Escreva suas anotações aqui...", blockCommentLabel: "Nota/Comentário do Bloco (Opcional)", blockCommentPlaceholder: "ex. Verificar se idade > 18", declarePlaceholder: "ex. x, y, soma", assignPlaceholder: "ex. soma, arr[i]", inputPlaceholder: "ex. x, arr[idx]", outputPlaceholder: "ex. \"Resultado: \" & soma" },
     errors: { executionError: "Erro de Execução", syntaxError: "Erro de Sintaxe na expressão", varNotDefined: "Variável não definida", typeMismatch: "Incompatibilidade de tipo", arrayIndexOutOfBounds: "Índice da matriz fora dos limites", divideByZero: "Divisão por zero" },
     console: { title: "Console de Execução - Flowonline2", clearBtn: "Limpar", closeTooltip: "Fechar Painel", emptyMessage: "Console vazio. Pressione \"Executar\" para iniciar o algoritmo.", inputPlaceholder: "Digite o valor e pressione Enter...", submitBtn: "Enviar", readyStatus: "Pronto", logCount: "Log: {0} linhas" },
-    canvas: { selectBlock: "Selecionar Bloco", trueBranch: "VERDADEIRO", falseBranch: "FALSO" }
+    canvas: { selectBlock: "Selecionar Bloco", trueBranch: "VERDADEIRO", falseBranch: "FALSO" },
+    aboutTitle: 'Sobre o Flowonline2',
+    manualTitle: 'Manual do Usuário Flowonline2',
+    changelogTitle: 'Registro de Alterações Flowonline2',
+    gplLicenseTextFallback: 'Não foi possível carregar o arquivo de licença (LICENSE).\n\nEste projeto está licenciado sob GNU General Public License v3.\nConsulte LICENSE no repositório para o texto completo.',
+    manualTextFallback: 'Não foi possível carregar o Manual do Usuário (MANUAL.md).\n\nConsulte MANUAL.md no repositório para a documentação completa.',
+    changelogTextFallback: 'Não foi possível carregar o Registro de Alterações (CHANGELOG.md).\n\nConsulte CHANGELOG.md no repositório para o histórico completo.'
   },
   gl: {
     title: "Flowonline2", subtitle: "Clon Interactivo de Flowgorithm",
@@ -101,7 +155,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Editar Bloque", cancel: "Cancelar", ok: "OK", declareVar: "Nome da Variable", type: "Tipo", isArray: "Matriz?", arraySize: "Tamaño da Matriz", assignTo: "Nome da Variable", expression: "Expresión", inputVar: "Nome da Variable", outputExpr: "Expresión (use & para concatenar)", newline: "Nova Liña?", condition: "Condición (Expresión Booleana)", forVar: "Variable do Bucle", start: "Valor Inicial", end: "Valor Final", step: "Paso (incremento)", direction: "Dirección", ascending: "Crecente (Arriba)", descending: "Decrecente (Abaixo)", callFunc: "Nome da Función", arguments: "Argumentos (separados por comas)", commentText: "Texto do Comentario", errorTypeMismatch: "O valor non coincide co tipo da variable.", errorRequired: "Este campo é obrigatorio.", callFuncPlaceholder: "ex. MiñaFunción", commentPlaceholder: "Escriba aquí as súas anotacións...", blockCommentLabel: "Nota/Comentario do Bloque (Opcional)", blockCommentPlaceholder: "ex. Comprobar que idade > 18", declarePlaceholder: "ex. x, y, suma", assignPlaceholder: "ex. suma, arr[i]", inputPlaceholder: "ex. x, arr[idx]", outputPlaceholder: "ex. \"Resultado: \" & suma" },
     errors: { executionError: "Erro de Execución", syntaxError: "Erro de Sintaxe na expresión", varNotDefined: "Variable non definida", typeMismatch: "Incompatibilidade de tipo", arrayIndexOutOfBounds: "Índice da matriz fóra dos límites", divideByZero: "División por cero" },
     console: { title: "Consola de Execución - Flowonline2", clearBtn: "Limpar", closeTooltip: "Pechar Panel", emptyMessage: "Consola baleira. Prema \"Executar\" para iniciar o algoritmo.", inputPlaceholder: "Escriba valor e prema Enter...", submitBtn: "Enviar", readyStatus: "Listo", logCount: "Log: {0} liñas" },
-    canvas: { selectBlock: "Seleccionar Bloque", trueBranch: "VERDADEIRO", falseBranch: "FALSO" }
+    canvas: { selectBlock: "Seleccionar Bloque", trueBranch: "VERDADEIRO", falseBranch: "FALSO" },
+    aboutTitle: 'Sobre Flowonline2',
+    manualTitle: 'Manual do Usuario Flowonline2',
+    changelogTitle: 'Rexistro de Cambios Flowonline2',
+    gplLicenseTextFallback: 'Non foi posible cargar o ficheiro de licenza (LICENSE).\n\nEste proxecto está baixo GNU General Public License v3.\nConsulta LICENSE no repositorio para o texto completo.',
+    manualTextFallback: 'Non foi posible cargar o Manual do Usuario (MANUAL.md).\n\nConsulta MANUAL.md no repositorio para a documentación completa.',
+    changelogTextFallback: 'Non foi posible cargar o Rexistro de Cambios (CHANGELOG.md).\n\nConsulta CHANGELOG.md no repositorio para o historial completo.'
   },
   ru: {
     title: "Flowonline2", subtitle: "Интерактивный клон Flowgorithm",
@@ -111,7 +171,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Редактировать блок", cancel: "Отмена", ok: "ОК", declareVar: "Имя переменной(ых)", type: "Тип", isArray: "Массив?", arraySize: "Размер массива", assignTo: "Имя переменной", expression: "Выражение", inputVar: "Имя переменной", outputExpr: "Выражение (используйте & для объединения)", newline: "Новая строка?", condition: "Условие (Булево выражение)", forVar: "Переменная цикла", start: "Начальное значение", end: "Конечное значение", step: "Шаг (приращение)", direction: "Направление", ascending: "По возрастанию (Вверх)", descending: "По убыванию (Вниз)", callFunc: "Имя функции", arguments: "Аргументы (через запятую)", commentText: "Текст комментария", errorTypeMismatch: "Значение не соответствует типу переменной.", errorRequired: "Это поле обязательно.", callFuncPlaceholder: "напр. МояФункция", commentPlaceholder: "Напишите здесь свои заметки...", blockCommentLabel: "Заметка/Комментарий блока (Необязательно)", blockCommentPlaceholder: "напр. Проверить, что возраст > 18", declarePlaceholder: "напр. x, y, сумма", assignPlaceholder: "напр. сумма, arr[i]", inputPlaceholder: "напр. x, arr[idx]", outputPlaceholder: "напр. \"Результат: \" & сумма" },
     errors: { executionError: "Ошибка выполнения", syntaxError: "Синтаксическая ошибка в выражении", varNotDefined: "Переменная не определена", typeMismatch: "Несоответствие типов", arrayIndexOutOfBounds: "Индекс массива вне диапазона", divideByZero: "Деление на ноль" },
     console: { title: "Консоль выполнения - Flowonline2", clearBtn: "Очистить", closeTooltip: "Закрыть панель", emptyMessage: "Консоль пуста. Нажмите \"Запуск\" чтобы начать алгоритм.", inputPlaceholder: "Введите значение и нажмите Enter...", submitBtn: "Отправить", readyStatus: "Готов", logCount: "Лог: {0} строк" },
-    canvas: { selectBlock: "Выбрать блок", trueBranch: "ИСТИНА", falseBranch: "ЛОЖЬ" }
+    canvas: { selectBlock: "Выбрать блок", trueBranch: "ИСТИНА", falseBranch: "ЛОЖЬ" },
+    aboutTitle: 'О Flowonline2',
+    manualTitle: 'Руководство пользователя Flowonline2',
+    changelogTitle: 'История изменений Flowonline2',
+    gplLicenseTextFallback: 'Не удалось загрузить файл лицензии (LICENSE).\n\nЭтот проект лицензирован под GNU General Public License v3.\nПолный текст см. в LICENSE в репозитории.',
+    manualTextFallback: 'Не удалось загрузить Руководство пользователя (MANUAL.md).\n\nПолную документацию см. в MANUAL.md в репозитории.',
+    changelogTextFallback: 'Не удалось загрузить Историю изменений (CHANGELOG.md).\n\nПолную историю см. в CHANGELOG.md в репозитории.'
   },
   uk: {
     title: "Flowonline2", subtitle: "Інтерактивний клон Flowgorithm",
@@ -121,7 +187,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Редагувати блок", cancel: "Скасувати", ok: "ОК", declareVar: "Ім'я змінної(их)", type: "Тип", isArray: "Масив?", arraySize: "Розмір масиву", assignTo: "Ім'я змінної", expression: "Вираз", inputVar: "Ім'я змінної", outputExpr: "Вираз (використовуйте & для об'єднання)", newline: "Новий рядок?", condition: "Умова (Булевий вираз)", forVar: "Змінна циклу", start: "Початкове значення", end: "Кінцеве значення", step: "Крок (приріст)", direction: "Напрямок", ascending: "За зростанням (Вгору)", descending: "За спаданням (Вниз)", callFunc: "Ім'я функції", arguments: "Аргументи (через кому)", commentText: "Текст коментаря", errorTypeMismatch: "Значення не відповідає типу змінної.", errorRequired: "Це поле обов'язкове.", callFuncPlaceholder: "напр. МояФункція", commentPlaceholder: "Напишіть тут свої нотатки...", blockCommentLabel: "Нотатка/Коментар блоку (Необов'язково)", blockCommentPlaceholder: "напр. Перевірити, що вік > 18", declarePlaceholder: "напр. x, y, сума", assignPlaceholder: "напр. сума, arr[i]", inputPlaceholder: "напр. x, arr[idx]", outputPlaceholder: "напр. \"Результат: \" & сума" },
     errors: { executionError: "Помилка виконання", syntaxError: "Синтаксична помилка у виразі", varNotDefined: "Змінна не визначена", typeMismatch: "Невідповідність типів", arrayIndexOutOfBounds: "Індекс масиву поза межами", divideByZero: "Ділення на нуль" },
     console: { title: "Консоль виконання - Flowonline2", clearBtn: "Очистити", closeTooltip: "Закрити панель", emptyMessage: "Консоль порожня. Натисніть \"Запуск\" щоб почати алгоритм.", inputPlaceholder: "Введіть значення і натисніть Enter...", submitBtn: "Надіслати", readyStatus: "Готово", logCount: "Лог: {0} рядків" },
-    canvas: { selectBlock: "Вибрати блок", trueBranch: "ІСТИНА", falseBranch: "ХИБНІСТЬ" }
+    canvas: { selectBlock: "Вибрати блок", trueBranch: "ІСТИНА", falseBranch: "ХИБНІСТЬ" },
+    aboutTitle: 'Про Flowonline2',
+    manualTitle: 'Посібник користувача Flowonline2',
+    changelogTitle: 'Історія змін Flowonline2',
+    gplLicenseTextFallback: 'Не вдалося завантажити файл ліцензії (LICENSE).\n\nЦей проєкт ліцензовано під GNU General Public License v3.\nПовний текст див. у LICENSE в репозиторії.',
+    manualTextFallback: 'Не вдалося завантажити Посібник користувача (MANUAL.md).\n\nПовну документацію див. у MANUAL.md в репозиторії.',
+    changelogTextFallback: 'Не вдалося завантажити Історію змін (CHANGELOG.md).\n\nПовну історію див. у CHANGELOG.md в репозиторії.'
   },
   cs: {
     title: "Flowonline2", subtitle: "Interaktivní klon Flowgorithm",
@@ -131,7 +203,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Upravit blok", cancel: "Zrušit", ok: "OK", declareVar: "Název proměnné(ných)", type: "Typ", isArray: "Pole?", arraySize: "Velikost pole / Dimenze", assignTo: "Název proměnné", expression: "Výraz", inputVar: "Název proměnné", outputExpr: "Výraz (použijte & pro spojení)", newline: "Nový řádek?", condition: "Podmínka (Booleovský výraz)", forVar: "Proměnná cyklu", start: "Počáteční hodnota", end: "Koncová hodnota", step: "Krok (přírůstek)", direction: "Směr", ascending: "Rostoucí (Nahoru)", descending: "Klesající (Dolů)", callFunc: "Název funkce", arguments: "Argumenty (oddělené čárkou)", commentText: "Text komentáře", errorTypeMismatch: "Hodnota neodpovídá typu proměnné.", errorRequired: "Toto pole je povinné.", callFuncPlaceholder: "např. MojeFunkce", commentPlaceholder: "Zde napište své poznámky...", blockCommentLabel: "Poznámka/Komentář bloku (Volitelné)", blockCommentPlaceholder: "např. Zkontrolujte, že věk > 18", declarePlaceholder: "např. x, y, součet", assignPlaceholder: "např. součet, arr[i]", inputPlaceholder: "např. x, arr[idx]", outputPlaceholder: "např. \"Výsledek: \" & součet" },
     errors: { executionError: "Chyba při provádění", syntaxError: "Syntaktická chyba ve výrazu", varNotDefined: "Proměnná není definována", typeMismatch: "Nesoulad typů", arrayIndexOutOfBounds: "Index pole mimo rozsah", divideByZero: "Dělení nulou" },
     console: { title: "Prováděcí konzole - Flowonline2", clearBtn: "Vymazat", closeTooltip: "Zavřít panel", emptyMessage: "Konzole je prázdná. Stiskněte \"Spustit\" pro spuštění algoritmu.", inputPlaceholder: "Zadejte hodnotu a stiskněte Enter...", submitBtn: "Odeslat", readyStatus: "Připraven", logCount: "Log: {0} řádků" },
-    canvas: { selectBlock: "Vybrat blok", trueBranch: "PRAVDA", falseBranch: "NEPRAVDA" }
+    canvas: { selectBlock: "Vybrat blok", trueBranch: "PRAVDA", falseBranch: "NEPRAVDA" },
+    aboutTitle: 'O Flowonline2',
+    manualTitle: 'Uživatelská příručka Flowonline2',
+    changelogTitle: 'Historie změn Flowonline2',
+    gplLicenseTextFallback: 'Soubor licence (LICENSE) se nepodařilo načíst.\n\nTento projekt je licencován pod GNU General Public License v3.\nÚplný text viz LICENSE v repozitáři.',
+    manualTextFallback: 'Uživatelskou příručku (MANUAL.md) se nepodařilo načíst.\n\nÚplnou dokumentaci viz MANUAL.md v repozitáři.',
+    changelogTextFallback: 'Historii změn (CHANGELOG.md) se nepodařilo načíst.\n\nÚplnou historii viz CHANGELOG.md v repozitáři.'
   },
   pl: {
     title: "Flowonline2", subtitle: "Interaktywny klon Flowgorithm",
@@ -141,7 +219,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Edytuj blok", cancel: "Anuluj", ok: "OK", declareVar: "Nazwa zmiennej(ych)", type: "Typ", isArray: "Tablica?", arraySize: "Rozmiar tablicy / Wymiar", assignTo: "Nazwa zmiennej", expression: "Wyrażenie", inputVar: "Nazwa zmiennej", outputExpr: "Wyrażenie (użyj & do łączenia)", newline: "Nowa linia?", condition: "Warunek (Wyrażenie logiczne)", forVar: "Zmienna pętli", start: "Wartość początkowa", end: "Wartość końcowa", step: "Krok (przyrost)", direction: "Kierunek", ascending: "Rosnący (W górę)", descending: "Malejący (W dół)", callFunc: "Nazwa funkcji", arguments: "Argumenty (oddzielone przecinkami)", commentText: "Tekst komentarza", errorTypeMismatch: "Wartość nie pasuje do typu zmiennej.", errorRequired: "To pole jest wymagane.", callFuncPlaceholder: "np. MojaFunkcja", commentPlaceholder: "Napisz tutaj swoje adnotacje...", blockCommentLabel: "Notatka/Komentarz bloku (Opcjonalnie)", blockCommentPlaceholder: "np. Sprawdź, czy wiek > 18", declarePlaceholder: "np. x, y, suma", assignPlaceholder: "np. suma, arr[i]", inputPlaceholder: "np. x, arr[idx]", outputPlaceholder: "np. \"Wynik: \" & suma" },
     errors: { executionError: "Błąd wykonania", syntaxError: "Błąd składni w wyrażeniu", varNotDefined: "Zmienna niezdefiniowana", typeMismatch: "Niezgodność typów", arrayIndexOutOfBounds: "Indeks tablicy poza zakresem", divideByZero: "Dzielenie przez zero" },
     console: { title: "Konsola wykonania - Flowonline2", clearBtn: "Wyczyść", closeTooltip: "Zamknij panel", emptyMessage: "Konsola pusta. Naciśnij \"Uruchom\" aby rozpocząć algorytm.", inputPlaceholder: "Wpisz wartość i naciśnij Enter...", submitBtn: "Wyślij", readyStatus: "Gotowy", logCount: "Log: {0} linii" },
-    canvas: { selectBlock: "Wybierz blok", trueBranch: "PRAWDA", falseBranch: "FAŁSZ" }
+    canvas: { selectBlock: "Wybierz blok", trueBranch: "PRAWDA", falseBranch: "FAŁSZ" },
+    aboutTitle: 'O Flowonline2',
+    manualTitle: 'Podręcznik użytkownika Flowonline2',
+    changelogTitle: 'Historia zmian Flowonline2',
+    gplLicenseTextFallback: 'Nie udało się załadować pliku licencji (LICENSE).\n\nTen projekt jest objęty licencją GNU General Public License v3.\nPełny tekst znajduje się w LICENSE w repozytorium.',
+    manualTextFallback: 'Nie udało się załadować Podręcznika użytkownika (MANUAL.md).\n\nPełna dokumentacja znajduje się w MANUAL.md w repozytorium.',
+    changelogTextFallback: 'Nie udało się załadować Historii zmian (CHANGELOG.md).\n\nPełna historia znajduje się w CHANGELOG.md w repozytorium.'
   },
   hu: {
     title: "Flowonline2", subtitle: "Interaktív Flowgorithm Klón",
@@ -151,7 +235,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Blokk szerkesztése", cancel: "Mégse", ok: "OK", declareVar: "Változó neve(k)", type: "Típus", isArray: "Tömb?", arraySize: "Tömb mérete / Dimenzió", assignTo: "Változó neve", expression: "Kifejezés", inputVar: "Változó neve", outputExpr: "Kifejezés (használjon &-et összefűzéshez)", newline: "Új sor?", condition: "Feltétel (Logikai kifejezés)", forVar: "Ciklusváltozó", start: "Kezdőérték", end: "Végérték", step: "Lépés (növekmény)", direction: "Irány", ascending: "Növekvő (Fel)", descending: "Csökkenő (Le)", callFunc: "Függvény neve", arguments: "Argumentumok (vesszővel elválasztva)", commentText: "Megjegyzés szövege", errorTypeMismatch: "Az érték nem egyezik a változó típusával.", errorRequired: "Ez a mező kötelező.", callFuncPlaceholder: "pl. SajátFüggvény", commentPlaceholder: "Ide írja megjegyzéseit...", blockCommentLabel: "Blokk megjegyzés (Opcionális)", blockCommentPlaceholder: "pl. Ellenőrizze, hogy életkor > 18", declarePlaceholder: "pl. x, y, összeg", assignPlaceholder: "pl. összeg, arr[i]", inputPlaceholder: "pl. x, arr[idx]", outputPlaceholder: "pl. \"Eredmény: \" & összeg" },
     errors: { executionError: "Végrehajtási hiba", syntaxError: "Szintaktikai hiba a kifejezésben", varNotDefined: "A változó nincs definiálva", typeMismatch: "Típuseltérés", arrayIndexOutOfBounds: "Tömb index túlcsordulás", divideByZero: "Nullával való osztás" },
     console: { title: "Végrehajtási konzol - Flowonline2", clearBtn: "Törlés", closeTooltip: "Panel bezárása", emptyMessage: "A konzol üres. Nyomja meg a \"Futtatás\" gombot az algoritmus indításához.", inputPlaceholder: "Írja be az értéket és nyomjon Entert...", submitBtn: "Küldés", readyStatus: "Kész", logCount: "Napló: {0} sor" },
-    canvas: { selectBlock: "Blokk kiválasztása", trueBranch: "IGAZ", falseBranch: "HAMIS" }
+    canvas: { selectBlock: "Blokk kiválasztása", trueBranch: "IGAZ", falseBranch: "HAMIS" },
+    aboutTitle: 'A Flowonline2-ről',
+    manualTitle: 'Flowonline2 Felhasználói kézikönyv',
+    changelogTitle: 'Flowonline2 Változásnapló',
+    gplLicenseTextFallback: 'A licencfájl (LICENSE) betöltése sikertelen.\n\nEz a projekt GNU General Public License v3 alatt van licencelve.\nA teljes szöveget lásd a LICENSE fájlban a tárolóban.',
+    manualTextFallback: 'A Felhasználói kézikönyv (MANUAL.md) betöltése sikertelen.\n\nA teljes dokumentációt lásd a MANUAL.md fájlban a tárolóban.',
+    changelogTextFallback: 'A Változásnapló (CHANGELOG.md) betöltése sikertelen.\n\nA teljes előzményt lásd a CHANGELOG.md fájlban a tárolóban.'
   },
   sl: {
     title: "Flowonline2", subtitle: "Interaktivni klon Flowgorithm",
@@ -161,7 +251,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Uredi blok", cancel: "Prekliči", ok: "V redu", declareVar: "Ime spremenljivke(k)", type: "Tip", isArray: "Tabela?", arraySize: "Velikost tabele / Dimenzija", assignTo: "Ime spremenljivke", expression: "Izraz", inputVar: "Ime spremenljivke", outputExpr: "Izraz (uporabite & za združevanje)", newline: "Nova vrstica?", condition: "Pogoj (Logični izraz)", forVar: "Spremenljivka zanke", start: "Začetna vrednost", end: "Končna vrednost", step: "Korak (prirastek)", direction: "Smer", ascending: "Naraščajoče (Gor)", descending: "Padajoče (Dol)", callFunc: "Ime funkcije", arguments: "Argumenti (ločeni z vejico)", commentText: "Besedilo komentarja", errorTypeMismatch: "Vrednost se ne ujema s tipom spremenljivke.", errorRequired: "To polje je obvezno.", callFuncPlaceholder: "npr. MojaFunkcija", commentPlaceholder: "Tukaj napišite svoje opombe...", blockCommentLabel: "Opomba/Komentar bloka (Neobvezno)", blockCommentPlaceholder: "npr. Preverite, da je starost > 18", declarePlaceholder: "npr. x, y, vsota", assignPlaceholder: "npr. vsota, arr[i]", inputPlaceholder: "npr. x, arr[idx]", outputPlaceholder: "npr. \"Rezultat: \" & vsota" },
     errors: { executionError: "Napaka pri izvajanju", syntaxError: "Skladenjska napaka v izrazu", varNotDefined: "Spremenljivka ni definirana", typeMismatch: "Neujemanje tipov", arrayIndexOutOfBounds: "Indeks tabele izven meja", divideByZero: "Deljenje z nič" },
     console: { title: "Izvajalna konzola - Flowonline2", clearBtn: "Počisti", closeTooltip: "Zapri ploščo", emptyMessage: "Konzola je prazna. Pritisnite \"Zaženi\" za zagon algoritma.", inputPlaceholder: "Vnesite vrednost in pritisnite Enter...", submitBtn: "Pošlji", readyStatus: "Pripravljen", logCount: "Dnevnik: {0} vrstic" },
-    canvas: { selectBlock: "Izberi blok", trueBranch: "RESNICA", falseBranch: "NERESNICA" }
+    canvas: { selectBlock: "Izberi blok", trueBranch: "RESNICA", falseBranch: "NERESNICA" },
+    aboutTitle: 'O Flowonline2',
+    manualTitle: 'Uporabniški priročnik Flowonline2',
+    changelogTitle: 'Dnevnik sprememb Flowonline2',
+    gplLicenseTextFallback: 'Datoteke licence (LICENSE) ni bilo mogoče naložiti.\n\nTa projekt je licenciran pod GNU General Public License v3.\nCelotno besedilo glejte LICENSE v repozitoriju.',
+    manualTextFallback: 'Uporabniškega priročnika (MANUAL.md) ni bilo mogoče naložiti.\n\nCelotno dokumentacijo glejte MANUAL.md v repozitoriju.',
+    changelogTextFallback: 'Dnevnika sprememb (CHANGELOG.md) ni bilo mogoče naložiti.\n\nCelotno zgodovino glejte CHANGELOG.md v repozitoriju.'
   },
   ja: {
     title: "Flowonline2", subtitle: "インタラクティブ Flowgorithm クローン",
@@ -171,7 +267,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "ブロックを編集", cancel: "キャンセル", ok: "OK", declareVar: "変数名", type: "型", isArray: "配列?", arraySize: "配列サイズ/次元", assignTo: "変数名", expression: "式", inputVar: "変数名", outputExpr: "式 (連結には & を使用)", newline: "改行?", condition: "条件 (ブール式)", forVar: "ループ変数", start: "開始値", end: "終了値", step: "ステップ (増分)", direction: "方向", ascending: "増加 (上)", descending: "減少 (下)", callFunc: "関数名", arguments: "引数 (カンマ区切り)", commentText: "コメントテキスト", errorTypeMismatch: "値が変数型と一致しません。", errorRequired: "このフィールドは必須です。", callFuncPlaceholder: "例: MyFunction", commentPlaceholder: "ここに注釈を書いてください...", blockCommentLabel: "ブロックノート/コメント (オプション)", blockCommentPlaceholder: "例: 年齢 > 18 をチェック", declarePlaceholder: "例: x, y, sum", assignPlaceholder: "例: sum, arr[i]", inputPlaceholder: "例: x, arr[idx]", outputPlaceholder: "例: \"結果: \" & sum" },
     errors: { executionError: "実行エラー", syntaxError: "式の構文エラー", varNotDefined: "変数が定義されていません", typeMismatch: "型の不一致", arrayIndexOutOfBounds: "配列インデックスが範囲外です", divideByZero: "ゼロ除算" },
     console: { title: "実行コンソール - Flowonline2", clearBtn: "クリア", closeTooltip: "パネルを閉じる", emptyMessage: "コンソールは空です。\"実行\" を押してアルゴリズムを開始してください。", inputPlaceholder: "値を入力して Enter を押してください...", submitBtn: "送信", readyStatus: "準備完了", logCount: "ログ: {0} 行" },
-    canvas: { selectBlock: "ブロックを選択", trueBranch: "真", falseBranch: "偽" }
+    canvas: { selectBlock: "ブロックを選択", trueBranch: "真", falseBranch: "偽" },
+    aboutTitle: 'Flowonline2 について',
+    manualTitle: 'Flowonline2 ユーザーマニュアル',
+    changelogTitle: 'Flowonline2 更新履歴',
+    gplLicenseTextFallback: 'ライセンスファイル (LICENSE) を読み込めれませんでした。\n\nこのプロジェクトは GNU General Public License v3 の下でライセンスされています。\n完全なテキストはリポジトリの LICENSE を参照してください。',
+    manualTextFallback: 'ユーザーマニュアル (MANUAL.md) を読み込めれませんでした。\n\n完全なドキュメントはリポジトリの MANUAL.md を参照してください。',
+    changelogTextFallback: '更新履歴 (CHANGELOG.md) を読み込めれませんでした。\n\n完全な履歴はリポジトリの CHANGELOG.md を参照してください。'
   },
   th: {
     title: "Flowonline2", subtitle: "โคลน Flowgorithm แบบโต้ตอบ",
@@ -181,7 +283,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "แก้ไขบล็อก", cancel: "ยกเลิก", ok: "ตกลง", declareVar: "ชื่อตัวแปร", type: "ชนิด", isArray: "อาร์เรย์?", arraySize: "ขนาดอาร์เรย์/มิติ", assignTo: "ชื่อตัวแปร", expression: "นิพจน์", inputVar: "ชื่อตัวแปร", outputExpr: "นิพจน์ (ใช้ & เพื่อต่อข้อความ)", newline: "ขึ้นบรรทัดใหม่?", condition: "เงื่อนไข (นิพจน์บูลีน)", forVar: "ตัวแปรลูป", start: "ค่าเริ่มต้น", end: "ค่าสิ้นสุด", step: "ขั้น (เพิ่มขึ้น)", direction: "ทิศทาง", ascending: "เพิ่มขึ้น (ขึ้น)", descending: "ลดลง (ลง)", callFunc: "ชื่อฟังก์ชัน", arguments: "อาร์กิวเมนต์ (คั่นด้วยจุลภาค)", commentText: "ข้อความหมายเหตุ", errorTypeMismatch: "ค่าไม่ตรงกับชนิดตัวแปร", errorRequired: "ฟิลด์นี้จำเป็น", callFuncPlaceholder: "เช่น MyFunction", commentPlaceholder: "เขียนคำอธิบายที่นี่...", blockCommentLabel: "บันทึก/หมายเหตุบล็อก (ไม่บังคับ)", blockCommentPlaceholder: "เช่น ตรวจสอบว่าอายุ > 18", declarePlaceholder: "เช่น x, y, sum", assignPlaceholder: "เช่น sum, arr[i]", inputPlaceholder: "เช่น x, arr[idx]", outputPlaceholder: "เช่น \"ผลลัพธ์: \" & sum" },
     errors: { executionError: "ข้อผิดพลาดในการดำเนินการ", syntaxError: "ข้อผิดพลาดทางไวยากรณ์ในนิพจน์", varNotDefined: "ไม่ได้กำหนดตัวแปร", typeMismatch: "ชนิดไม่ตรงกัน", arrayIndexOutOfBounds: "ดัชนีอาร์เรย์เกินขอบเขต", divideByZero: "หารด้วยศูนย์" },
     console: { title: "คอนโซลการดำเนินการ - Flowonline2", clearBtn: "ล้าง", closeTooltip: "ปิดแผง", emptyMessage: "คอนโซลว่างเปล่า กด \"เริ่ม\" เพื่อเริ่มอัลกอริทึม", inputPlaceholder: "พิมพ์ค่าแล้วกด Enter...", submitBtn: "ส่ง", readyStatus: "พร้อม", logCount: "บันทึก: {0} บรรทัด" },
-    canvas: { selectBlock: "เลือกบล็อก", trueBranch: "จริง", falseBranch: "เท็จ" }
+    canvas: { selectBlock: "เลือกบล็อก", trueBranch: "จริง", falseBranch: "เท็จ" },
+    aboutTitle: 'เกี่วกับ Flowonline2',
+    manualTitle: 'คู่มือผู้ใช้ Flowonline2',
+    changelogTitle: 'บันทึกการเปลี่ยนแปลง Flowonline2',
+    gplLicenseTextFallback: 'ไม่สามารถโหลดไฟล์ใบอนุญาต (LICENSE) ได้\n\nโปรเจ็กต์นี้ได้รับอนุญาตภายใต้ GNU General Public License v3\nดูข้อความฉบับเต็มได้ที่ LICENSE ในที่เก็บ',
+    manualTextFallback: 'ไม่สามารถโหลดคู่มือผู้ใช้ (MANUAL.md) ได้\n\nดูเอกสารฉบับเต็มได้ที่ MANUAL.md ในที่เก็บ',
+    changelogTextFallback: 'ไม่สามารถโหลดบันทึกการเปลี่ยนแปลง (CHANGELOG.md) ได้\n\nดูประวัติฉบับเต็มได้ที่ CHANGELOG.md ในที่เก็บ'
   },
   id: {
     title: "Flowonline2", subtitle: "Klon Flowgorithm Interaktif",
@@ -191,7 +299,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Edit Blok", cancel: "Batal", ok: "OK", declareVar: "Nama Variabel", type: "Tipe", isArray: "Array?", arraySize: "Ukuran Array / Dimensi", assignTo: "Nama Variabel", expression: "Ekspresi", inputVar: "Nama Variabel", outputExpr: "Ekspresi (gunakan & untuk penggabungan)", newline: "Baris Baru?", condition: "Kondisi (Ekspresi Boolean)", forVar: "Variabel Loop", start: "Nilai Awal", end: "Nilai Akhir", step: "Langkah (kenaikan)", direction: "Arah", ascending: "Menaik (Atas)", descending: "Menurun (Bawah)", callFunc: "Nama Fungsi", arguments: "Argumen (dipisahkan koma)", commentText: "Teks Komentar", errorTypeMismatch: "Nilai tidak cocok dengan tipe variabel.", errorRequired: "Bidang ini wajib diisi.", callFuncPlaceholder: "mis. FungsiSaya", commentPlaceholder: "Tulis anotasi Anda di sini...", blockCommentLabel: "Catatan/Komentar Blok (Opsional)", blockCommentPlaceholder: "mis. Periksa bahwa usia > 18", declarePlaceholder: "mis. x, y, jumlah", assignPlaceholder: "mis. jumlah, arr[i]", inputPlaceholder: "mis. x, arr[idx]", outputPlaceholder: "mis. \"Hasil: \" & jumlah" },
     errors: { executionError: "Kesalahan Eksekusi", syntaxError: "Kesalahan Sintaks dalam ekspresi", varNotDefined: "Variabel tidak didefinisikan", typeMismatch: "Ketidakcocokan tipe", arrayIndexOutOfBounds: "Indeks array di luar batas", divideByZero: "Pembagian dengan nol" },
     console: { title: "Konsol Eksekusi - Flowonline2", clearBtn: "Bersihkan", closeTooltip: "Tutup Panel", emptyMessage: "Konsol kosong. Tekan \"Jalankan\" untuk memulai algoritma.", inputPlaceholder: "Ketik nilai dan tekan Enter...", submitBtn: "Kirim", readyStatus: "Siap", logCount: "Log: {0} baris" },
-    canvas: { selectBlock: "Pilih Blok", trueBranch: "BENAR", falseBranch: "SALAH" }
+    canvas: { selectBlock: "Pilih Blok", trueBranch: "BENAR", falseBranch: "SALAH" },
+    aboutTitle: 'Tentang Flowonline2',
+    manualTitle: 'Panduan Pengguna Flowonline2',
+    changelogTitle: 'Catatan Perubahan Flowonline2',
+    gplLicenseTextFallback: 'File lisensi (LICENSE) tidak dapat dimuat.\n\nProyek ini dilisensikan di bawah GNU General Public License v3.\nLihat LICENSE di repositori untuk teks lengkap.',
+    manualTextFallback: 'Panduan Pengguna (MANUAL.md) tidak dapat dimuat.\n\nLihat MANUAL.md di repositori untuk dokumentasi lengkap.',
+    changelogTextFallback: 'Catatan Perubahan (CHANGELOG.md) tidak dapat dimuat.\n\nLihat CHANGELOG.md di repositori untuk riwayat lengkap.'
   },
   mn: {
     title: "Flowonline2", subtitle: "Интерактив Flowgorithm клон",
@@ -201,7 +315,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "Блок засварлах", cancel: "Цуцлах", ok: "OK", declareVar: "Хувьсагчийн нэр(нүүд)", type: "Төрөл", isArray: "Массив?", arraySize: "Массивын хэмжээ", assignTo: "Хувьсагчийн нэр", expression: "Илэрхийлэл", inputVar: "Хувьсагчийн нэр", outputExpr: "Илэрхийлэл (холбоход & ашиглах)", newline: "Шинэ мөр?", condition: "Нөхцөл (Булийн илэрхийлэл)", forVar: "Давталтын хувьсагч", start: "Эхлэх утга", end: "Төгсгөх утга", step: "Алхам (өсөлт)", direction: "Чиглэл", ascending: "Өсөх (Дээш)", descending: "Буурах (Доош)", callFunc: "Функцийн нэр", arguments: "Аргументууд (таслалаар тусгаарлах)", commentText: "Тайлбар текст", errorTypeMismatch: "Утга нь хувьсагчийн төрөлтэй тохирохгүй байна.", errorRequired: "Энэ талбар шаардлагатай.", callFuncPlaceholder: "жнь. МинийФункц", commentPlaceholder: "Тэмдэглэлээ энд бичнэ үү...", blockCommentLabel: "Блок тэмдэглэл/Тайлбар (Сонголттой)", blockCommentPlaceholder: "жнь. Нас > 18 эсэхийг шалгах", declarePlaceholder: "жнь. x, y, нийлбэр", assignPlaceholder: "жнь. нийлбэр, arr[i]", inputPlaceholder: "жнь. x, arr[idx]", outputPlaceholder: "жнь. \"Үр дүн: \" & нийлбэр" },
     errors: { executionError: "Гүйцэтгэлийн алдаа", syntaxError: "Илэрхийлэл дэх синтакс алдаа", varNotDefined: "Хувьсагч тодорхойлогдоогүй", typeMismatch: "Төрөл тохирохгүй", arrayIndexOutOfBounds: "Массивын индекс хязгаараас хэтэрсэн", divideByZero: "Тэгээр хуваах" },
     console: { title: "Гүйцэтгэлийн консол - Flowonline2", clearBtn: "Цэвэрлэх", closeTooltip: "Самбарыг хаах", emptyMessage: "Консол хоосон. Алгоритмыг эхлүүлэхийн тулд \"Ажиллуулах\" дээр дарна уу.", inputPlaceholder: "Утга оруулаад Enter дарна уу...", submitBtn: "Илгээх", readyStatus: "Бэлэн", logCount: "Лог: {0} мөр" },
-    canvas: { selectBlock: "Блок сонгох", trueBranch: "ҮНЭН", falseBranch: "ХУДАЛ" }
+    canvas: { selectBlock: "Блок сонгох", trueBranch: "ҮНЭН", falseBranch: "ХУДАЛ" },
+    aboutTitle: 'Flowonline2-ийн тухай',
+    manualTitle: 'Flowonline2 Хэрэглэгчийн гарын авлага',
+    changelogTitle: 'Flowonline2 Үүрчлөлтийн түүх',
+    gplLicenseTextFallback: 'Лицензийн файл (LICENSE) ачааллаж чадсангүй.\n\nЭнэ төсөл нь GNU General Public License v3-ын дагуу лицензтэй.\nБүрэн текстийг репозитор дахь LICENSE-ээс харна уу.',
+    manualTextFallback: 'Хэрэглэгчийн гарын авлага (MANUAL.md) ачааллаж чадсангүй.\n\nБүрэн баримжуулалтыг репозитор дахь MANUAL.md-аас харна уу.',
+    changelogTextFallback: 'Үүрчлөлтийн түүх (CHANGELOG.md) ачааллаж чадсангүй.\n\nБүрэн түүхийг репозитор дахь CHANGELOG.md-аас харна уу.'
   },
   ar: {
     title: "Flowonline2", subtitle: "نسخة تفاعلية من Flowgorithm",
@@ -211,7 +331,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "تحرير الكتلة", cancel: "إلغاء", ok: "موافق", declareVar: "اسم المتغير(ات)", type: "النوع", isArray: "مصفوفة؟", arraySize: "حجم المصفوفة / البعد", assignTo: "اسم المتغير", expression: "تعبير", inputVar: "اسم المتغير", outputExpr: "تعبير (استخدم & للدمج)", newline: "سطر جديد؟", condition: "الشرط (تعبير منطقي)", forVar: "متغير الحلقة", start: "قيمة البداية", end: "قيمة النهاية", step: "الخطوة (الزيادة)", direction: "الاتجاه", ascending: "تصاعدي (أعلى)", descending: "تنازلي (أسفل)", callFunc: "اسم الدالة", arguments: "المعاملات (مفصولة بفواصل)", commentText: "نص التعليق", errorTypeMismatch: "القيمة لا تتطابق مع نوع المتغير.", errorRequired: "هذا الحقل مطلوب.", callFuncPlaceholder: "مثال: MyFunction", commentPlaceholder: "اكتب ملاحظاتك هنا...", blockCommentLabel: "ملاحظة/تعليق الكتلة (اختياري)", blockCommentPlaceholder: "مثال: تحقق من أن العمر > 18", declarePlaceholder: "مثال: x, y, sum", assignPlaceholder: "مثال: sum, arr[i]", inputPlaceholder: "مثال: x, arr[idx]", outputPlaceholder: "مثال: \"النتيجة: \" & sum" },
     errors: { executionError: "خطأ في التنفيذ", syntaxError: "خطأ نحوي في التعبير", varNotDefined: "المتغير غير معرف", typeMismatch: "عدم تطابق النوع", arrayIndexOutOfBounds: "فهرس المصفوفة خارج النطاق", divideByZero: "القسمة على صفر" },
     console: { title: "وحدة تحكم التنفيذ - Flowonline2", clearBtn: "مسح", closeTooltip: "إغلاق اللوحة", emptyMessage: "وحدة التحكم فارغة. اضغط \"تشغيل\" لبدء الخوارزمية.", inputPlaceholder: "اكتب القيمة واضغط Enter...", submitBtn: "إرسال", readyStatus: "جاهز", logCount: "السجل: {0} سطر" },
-    canvas: { selectBlock: "اختر كتلة", trueBranch: "صحيح", falseBranch: "خاطئ" }
+    canvas: { selectBlock: "اختر كتلة", trueBranch: "صحيح", falseBranch: "خاطئ" },
+    aboutTitle: 'حول Flowonline2',
+    manualTitle: 'دليل مستخدم Flowonline2',
+    changelogTitle: 'سجل تغييرات Flowonline2',
+    gplLicenseTextFallback: 'تعذر تحميل ملف الترخيص (LICENSE).\n\nهذا المشروع مرخص بموجب GNU General Public License v3.\nراجع LICENSE في المستودع للحصول على النص الكامل.',
+    manualTextFallback: 'تعذر تحميل دليل المستخدم (MANUAL.md).\n\nراجع MANUAL.md في المستودع للحصول على الوثائق الكاملة.',
+    changelogTextFallback: 'تعذر تحميل سجل التغييرات (CHANGELOG.md).\n\nراجع CHANGELOG.md في المستودع للحصول على السجل الكامل.'
   },
   he: {
     title: "Flowonline2", subtitle: "שיבוט אינטראקטיבי של Flowgorithm",
@@ -221,7 +347,13 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "ערוך בלוק", cancel: "ביטול", ok: "אישור", declareVar: "שם המשתנה(ים)", type: "סוג", isArray: "מערך?", arraySize: "גודל מערך / מימד", assignTo: "שם המשתנה", expression: "ביטוי", inputVar: "שם המשתנה", outputExpr: "ביטוי (השתמש ב-& לשרשור)", newline: "שורה חדשה?", condition: "תנאי (ביטוי בוליאני)", forVar: "משתנה הלולאה", start: "ערך התחלתי", end: "ערך סופי", step: "צעד (תוספת)", direction: "כיוון", ascending: "עולה (למעלה)", descending: "יורד (למטה)", callFunc: "שם הפונקציה", arguments: "ארגומנטים (מופרדים בפסיקים)", commentText: "טקסט ההערה", errorTypeMismatch: "הערך אינו תואם לסוג המשתנה.", errorRequired: "שדה זה נדרש.", callFuncPlaceholder: "לדוגמה: MyFunction", commentPlaceholder: "כתוב כאן את ההערות שלך...", blockCommentLabel: "הערת בלוק (אופציונלי)", blockCommentPlaceholder: "לדוגמה: בדוק שגיל > 18", declarePlaceholder: "לדוגמה: x, y, sum", assignPlaceholder: "לדוגמה: sum, arr[i]", inputPlaceholder: "לדוגמה: x, arr[idx]", outputPlaceholder: "לדוגמה: \"תוצאה: \" & sum" },
     errors: { executionError: "שגיאת ביצוע", syntaxError: "שגיאת תחביר בביטוי", varNotDefined: "המשתנה אינו מוגדר", typeMismatch: "אי התאמת סוגים", arrayIndexOutOfBounds: "אינדקס המערך מחוץ לטווח", divideByZero: "חלוקה באפס" },
     console: { title: "מסוף ביצוע - Flowonline2", clearBtn: "נקה", closeTooltip: "סגור חלונית", emptyMessage: "המסוף ריק. לחץ \"הרץ\" כדי להתחיל את האלגוריתם.", inputPlaceholder: "הקלד ערך ולחץ Enter...", submitBtn: "שלח", readyStatus: "מוכן", logCount: "יומן: {0} שורות" },
-    canvas: { selectBlock: "בחר בלוק", trueBranch: "אמת", falseBranch: "שקר" }
+    canvas: { selectBlock: "בחר בלוק", trueBranch: "אמת", falseBranch: "שקר" },
+    aboutTitle: 'אודות Flowonline2',
+    manualTitle: 'מדריך למשתמש של Flowonline2',
+    changelogTitle: 'יומן שינויים של Flowonline2',
+    gplLicenseTextFallback: 'לא ניתן לטעון את קובץ הרישיון (LICENSE).\n\nפרויקט זה מורשה תחת GNU General Public License v3.\nראה LICENSE במאגר עבור הטקסט המלא.',
+    manualTextFallback: 'לא ניתן לטעון את המדריך למשתמש (MANUAL.md).\n\nראה MANUAL.md במאגר עבור תיעוד מלא.',
+    changelogTextFallback: 'לא ניתן לטעון את יומן השינויים (CHANGELOG.md).\n\nראה CHANGELOG.md במאגר עבור ההיסטוריה המלאה.'
   },
   fa: {
     title: "Flowonline2", subtitle: "کلون تعاملی Flowgorithm",
@@ -231,6 +363,12 @@ export const translations: Record<Language, TranslationCatalog> = {
     modals: { title: "ویرایش بلوک", cancel: "لغو", ok: "تأیید", declareVar: "نام متغیر(ها)", type: "نوع", isArray: "آرایه؟", arraySize: "اندازه آرایه / بعد", assignTo: "نام متغیر", expression: "عبارت", inputVar: "نام متغیر", outputExpr: "عبارت (از & برای الحاق استفاده کنید)", newline: "خط جدید؟", condition: "شرط (عبارت بولی)", forVar: "متغیر حلقه", start: "مقدار شروع", end: "مقدار پایان", step: "گام (افزایش)", direction: "جهت", ascending: "صعودی (بالا)", descending: "نزولی (پایین)", callFunc: "نام تابع", arguments: "آرگومان‌ها (جداشده با کاما)", commentText: "متن نظر", errorTypeMismatch: "مقدار با نوع متغیر مطابقت ندارد.", errorRequired: "این فیلد الزامی است.", callFuncPlaceholder: "مثال: MyFunction", commentPlaceholder: "یادداشت‌های خود را اینجا بنویسید...", blockCommentLabel: "یادداشت/نظر بلوک (اختیاری)", blockCommentPlaceholder: "مثال: بررسی کنید که سن > 18", declarePlaceholder: "مثال: x, y, sum", assignPlaceholder: "مثال: sum, arr[i]", inputPlaceholder: "مثال: x, arr[idx]", outputPlaceholder: "مثال: \"نتیجه: \" & sum" },
     errors: { executionError: "خطای اجرا", syntaxError: "خطای نحوی در عبارت", varNotDefined: "متغیر تعریف نشده است", typeMismatch: "عدم تطابق نوع", arrayIndexOutOfBounds: "شاخص آرایه خارج از محدوده", divideByZero: "تقسیم بر صفر" },
     console: { title: "کنسول اجرا - Flowonline2", clearBtn: "پاک کردن", closeTooltip: "بستن پنل", emptyMessage: "کنسول خالی است. \"اجرا\" را فشار دهید تا الگوریتم شروع شود.", inputPlaceholder: "مقدار را تایپ کرده و Enter را فشار دهید...", submitBtn: "ارسال", readyStatus: "آماده", logCount: "گزارش: {0} خط" },
-    canvas: { selectBlock: "انتخاب بلوک", trueBranch: "درست", falseBranch: "نادرست" }
-  }
+    canvas: { selectBlock: "انتخاب بلوک", trueBranch: "درست", falseBranch: "نادرست" },
+    aboutTitle: 'درباره Flowonline2',
+    manualTitle: 'راهنمای کاربر Flowonline2',
+    changelogTitle: 'گزارش تغییرات Flowonline2',
+    gplLicenseTextFallback: 'بارگیری فایل مجوز (LICENSE) ممکن نیست.\n\nاین پروژه تحت مجوز GNU General Public License v3 است.\nبرای متن کامل، به LICENSE در مخزن مراجعه کنید.',
+    manualTextFallback: 'بارگیری راهنمای کاربر (MANUAL.md) ممکن نیست.\n\nبرای مستندات کامل، به MANUAL.md در مخزن مراجعه کنید.',
+    changelogTextFallback: 'بارگیری گزارش تغییرات (CHANGELOG.md) ممکن نیست.\n\nبرای سابقه کامل، به CHANGELOG.md در مخزن مراجعه کنید.'
+  },
 };

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useFlow } from '../context/FlowContext';
 import type { AppLayout } from '../context/FlowContext';
 import { exportToPNG, exportToPDF } from '../utils/exportUtils';
+import { translations } from '../utils/translations';
 import { MobileLanguageSheet } from './MobileLanguageSheet';
 import { WinUIDialog } from '../components/WinUIDialog';
 
 const COLOR_SCHEMES = ['classic', 'pastel', 'vibrant', 'retro', 'twilight', 'blackwhite'] as const;
+const RTL_LANGS = ['ar', 'he', 'fa'] as const;
 const LAYOUTS: { value: AppLayout; label: string }[] = [
   { value: 'flowchart_only', label: 'Canvas only' },
   { value: 'flow_console', label: 'Canvas + Console' },
@@ -14,15 +16,14 @@ const LAYOUTS: { value: AppLayout; label: string }[] = [
   { value: 'flow_code', label: 'Canvas + Source code' },
 ];
 
-const ABOUT_TITLE = 'About Flowonline2';
-const MANUAL_TITLE = 'Flowonline2 User Manual';
-const CHANGELOG_TITLE = 'Flowonline2 Changelog';
-const LICENSE_FALLBACK = '# GNU GENERAL PUBLIC LICENSE\n# Version 3, 29 June 2007\n#\n# Copyright (C) 2026 Flowonline2 contributors\n# Full license text available at https://www.gnu.org/licenses/gpl-3.0.txt';
-const MANUAL_FALLBACK = '# Flowonline2 User Manual\n\n> Translations of MANUAL.md may not be 100% accurate.\n\nFlowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).\n\nSee the in-app Help → User Manual menu for the full text.';
-const CHANGELOG_FALLBACK = '# Flowonline2 Changelog\n\n> Changelog not available offline. See CHANGELOG.md in the repository.';
-
 /**
  * Mobile tools view — settings list.
+ *
+ * Phase 2.5 i18n: titles and license/manual/changelog fallback text are pulled
+ * from the shared `TranslationCatalog` via `translations[language]`. When the
+ * language changes mid-session, the three dialog-body states reset to that
+ * language's fallback AND the fetch effects re-run so the live content
+ * (LICENSE / MANUAL.md / CHANGELOG.md) is also re-fetched in the new locale.
  */
 export const MobileToolsView: React.FC = () => {
   const {
@@ -38,15 +39,22 @@ export const MobileToolsView: React.FC = () => {
     clearLocalStorage,
   } = useFlow() as any;
 
+  // Resolve the catalog for the active language. `language` is `any` after
+  // the `as any` cast above; index access is type-erased through `translations`.
+  const t = translations[language as keyof typeof translations] ?? translations.en;
+  // RTL only applies to the dialog body div; WinUIDialog's title bar chrome
+  // intentionally stays LTR (matches Flowgorithm desktop convention).
+  const isRtl = RTL_LANGS.includes(language as (typeof RTL_LANGS)[number]);
+
   const [langSheetOpen, setLangSheetOpen] = useState(false);
   const [exportSheetOpen, setExportSheetOpen] = useState(false);
   const [exportStatus, setExportStatus] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
-  const [licenseText, setLicenseText] = useState(LICENSE_FALLBACK);
+  const [licenseText, setLicenseText] = useState(t.gplLicenseTextFallback);
   const [manualOpen, setManualOpen] = useState(false);
-  const [manualText, setManualText] = useState(MANUAL_FALLBACK);
+  const [manualText, setManualText] = useState(t.manualTextFallback);
   const [changelogOpen, setChangelogOpen] = useState(false);
-  const [changelogText, setChangelogText] = useState(CHANGELOG_FALLBACK);
+  const [changelogText, setChangelogText] = useState(t.changelogTextFallback);
 
   // Auto-dismiss the export status toast after 2.4s.
   useEffect(() => {
@@ -54,6 +62,17 @@ export const MobileToolsView: React.FC = () => {
     const id = window.setTimeout(() => setExportStatus(null), 2400);
     return () => window.clearTimeout(id);
   }, [exportStatus]);
+
+  // Watch the live `language` so dialogs opened in any locale get fresh fetches
+  // (depend on `language`, not just `open`) AND fall back to the new locale's
+  // text right after a switch (re-derive `t` inside the effect to avoid
+  // listing the per-rendered `t` in deps and dropping the eslint-disable).
+  useEffect(() => {
+    const tCur = translations[language as keyof typeof translations] ?? translations.en;
+    setLicenseText(tCur.gplLicenseTextFallback);
+    setManualText(tCur.manualTextFallback);
+    setChangelogText(tCur.changelogTextFallback);
+  }, [language]);
 
   useEffect(() => {
     if (!aboutOpen) return;
@@ -67,7 +86,7 @@ export const MobileToolsView: React.FC = () => {
       }
     })();
     return () => { cancelled = true; };
-  }, [aboutOpen]);
+  }, [aboutOpen, language]);
 
   useEffect(() => {
     if (!manualOpen) return;
@@ -81,7 +100,7 @@ export const MobileToolsView: React.FC = () => {
       }
     })();
     return () => { cancelled = true; };
-  }, [manualOpen]);
+  }, [manualOpen, language]);
 
   useEffect(() => {
     if (!changelogOpen) return;
@@ -95,7 +114,7 @@ export const MobileToolsView: React.FC = () => {
       }
     })();
     return () => { cancelled = true; };
-  }, [changelogOpen]);
+  }, [changelogOpen, language]);
 
   const handleExport = async (fmt: 'svg' | 'png' | 'pdf') => {
     setExportSheetOpen(false);
@@ -116,7 +135,7 @@ export const MobileToolsView: React.FC = () => {
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(url), 1500);
         success = true;
-        message = 'SVG exported ✓';
+        message = 'SVG exported \u2713';
       } else if (fmt === 'png') {
         const r = await exportToPNG(programTitle || 'diagram');
         success = r.success;
@@ -138,7 +157,7 @@ export const MobileToolsView: React.FC = () => {
     if (!window.confirm('Clear localStorage? This removes your saved flowchart backup.')) return;
     try {
       if (clearLocalStorage) clearLocalStorage();
-      setExportStatus({ msg: 'localStorage cleared ✓', type: 'success' });
+      setExportStatus({ msg: 'localStorage cleared \u2713', type: 'success' });
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
       setExportStatus({ msg: `Failed: ${msg}`, type: 'error' });
@@ -194,7 +213,7 @@ export const MobileToolsView: React.FC = () => {
 
       <div className="m-section-title">Settings</div>
       <button type="button" className="m-row" onClick={() => setLangSheetOpen(true)} aria-label="Change language">
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>🌐</span>
+        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83c\udf10</span>
         <span style={{ flex: 1 }}>Language</span>
         <span style={{ color: '#94a3b8', fontSize: 13 }}>{language}</span>
       </button>
@@ -239,22 +258,22 @@ export const MobileToolsView: React.FC = () => {
 
       <div className="m-section-title">Export</div>
       <button type="button" className="m-row" onClick={() => setExportSheetOpen(true)} aria-label="Export diagram">
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>📤</span>
+        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udce4</span>
         <span style={{ flex: 1 }}>Export diagram</span>
-        <span style={{ color: '#94a3b8', fontSize: 13 }}>SVG · PNG · PDF</span>
+        <span style={{ color: '#94a3b8', fontSize: 13 }}>SVG \u00b7 PNG \u00b7 PDF</span>
       </button>
 
       <div className="m-section-title">Help</div>
       <button type="button" className="m-row" onClick={() => setAboutOpen(true)}>
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>ℹ</span>
+        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\u2139</span>
         <span style={{ flex: 1 }}>About &amp; License</span>
       </button>
       <button type="button" className="m-row" onClick={() => setManualOpen(true)}>
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>📖</span>
+        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udcd6</span>
         <span style={{ flex: 1 }}>User manual</span>
       </button>
       <button type="button" className="m-row" onClick={() => setChangelogOpen(true)}>
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>📝</span>
+        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udcdd</span>
         <span style={{ flex: 1 }}>Changelog</span>
       </button>
       <button
@@ -262,7 +281,7 @@ export const MobileToolsView: React.FC = () => {
         className="m-row"
         onClick={() => openExternal('https://github.com/PiBOH/flowonline2/issues/new/choose')}
       >
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>🐞</span>
+        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udc1e</span>
         <span style={{ flex: 1 }}>Report a bug / Request a feature</span>
       </button>
       <button
@@ -270,13 +289,13 @@ export const MobileToolsView: React.FC = () => {
         className="m-row"
         onClick={() => openExternal('https://github.com/PiBOH/flowonline2/fork')}
       >
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>🔱</span>
+        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udd31</span>
         <span style={{ flex: 1 }}>Fork repository</span>
       </button>
 
       <div className="m-section-title">Storage</div>
       <button type="button" className="m-row danger" onClick={handleClearLocalStorage}>
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>🗑</span>
+        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\uddd1</span>
         <span style={{ flex: 1 }}>Clear localStorage</span>
       </button>
 
@@ -289,27 +308,27 @@ export const MobileToolsView: React.FC = () => {
           <div className="m-sheet" style={{ transform: 'translateY(calc(100% - 40%))' }} role="dialog" aria-label="Export">
             <div className="m-sheet-handle" />
             <div className="m-sheet-header">
-              <span>📤 Export</span>
+              <span>\ud83d\udce4 Export</span>
               <button
                 type="button"
                 onClick={() => setExportSheetOpen(false)}
                 style={{ background: 'transparent', border: 'none', fontSize: 18, cursor: 'pointer', color: '#64748b' }}
                 aria-label="Close"
               >
-                ✕
+                \u2715
               </button>
             </div>
             <div className="m-sheet-body">
               <button type="button" className="m-row" onClick={() => handleExport('svg')}>
-                <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>📐</span>
+                <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udcd0</span>
                 <span style={{ flex: 1 }}>SVG</span>
               </button>
               <button type="button" className="m-row" onClick={() => handleExport('png')}>
-                <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>🖼</span>
+                <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83c\udfa8</span>
                 <span style={{ flex: 1 }}>PNG (HiDPI)</span>
               </button>
               <button type="button" className="m-row" onClick={() => handleExport('pdf')}>
-                <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>📄</span>
+                <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udcc4</span>
                 <span style={{ flex: 1 }}>PDF</span>
               </button>
             </div>
@@ -341,44 +360,49 @@ export const MobileToolsView: React.FC = () => {
         </div>
       )}
 
+      {/* `message=""` is intentional: WinUIDialog's `message` prop is required
+          to keep the desktop type-check happy, but `children` overrides the
+          message render slot when provided. See WinUIDialog.tsx. */}
       <WinUIDialog
         isOpen={aboutOpen}
         onClose={() => setAboutOpen(false)}
-        title={ABOUT_TITLE}
+        title={t.aboutTitle}
         message=""
         type="info"
         defaultWidth={420}
         defaultHeight={320}
       >
-        <div style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 13, color: '#0f172a', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}>
+        <div dir={isRtl ? 'rtl' : 'ltr'} style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 13, color: '#0f172a', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}>
           {licenseText}
         </div>
       </WinUIDialog>
 
+      {/* `message=""` workaround — see WinUIDialog note above. */}
       <WinUIDialog
         isOpen={manualOpen}
         onClose={() => setManualOpen(false)}
-        title={MANUAL_TITLE}
+        title={t.manualTitle}
         message=""
         type="info"
         defaultWidth={420}
         defaultHeight={320}
       >
-        <div style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 13, color: '#0f172a', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}>
+        <div dir={isRtl ? 'rtl' : 'ltr'} style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 13, color: '#0f172a', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}>
           {manualText}
         </div>
       </WinUIDialog>
 
+      {/* `message=""` workaround — see WinUIDialog note above. */}
       <WinUIDialog
         isOpen={changelogOpen}
         onClose={() => setChangelogOpen(false)}
-        title={CHANGELOG_TITLE}
+        title={t.changelogTitle}
         message=""
         type="info"
         defaultWidth={420}
         defaultHeight={320}
       >
-        <div style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 12, color: '#0f172a', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}>
+        <div dir={isRtl ? 'rtl' : 'ltr'} style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 12, color: '#0f172a', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}>
           {changelogText}
         </div>
       </WinUIDialog>

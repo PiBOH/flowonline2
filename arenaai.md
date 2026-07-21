@@ -581,6 +581,26 @@ v2.3.23: Summary of changes
 - `MobileLanguageSheet.tsx` → `MobileBottomSheet.tsx` + `useFlow` + `FlagIcon`
 - Nothing else imports these files yet. **Phase 2** will add `MobileApp.tsx` orchestrator + 5 view components (`MobileCanvasView`, `MobileEditView`, `MobileRunView`, `MobileConsoleView`, `MobileToolsView`) + `MobileTopBar`. **Phase 3** will wire viewport routing into `App.tsx` (additive — MainLayout remains unchanged).
 
+### Milestone 40: Mobile Bundle Phase 2.5 — About/Manual/Changelog i18n + RTL (BETA 2.4.0-beta)
+
+[//]: # (keepachangelog)
+
+#### Added (Phase 2.5: i18n)
+*   **`src/utils/translations.ts`** — 6 new top-level keys × 23 language entries: `aboutTitle`, `manualTitle`, `changelogTitle`, `gplLicenseTextFallback`, `manualTextFallback`, `changelogTextFallback`. The 3 `*Fallback` fields render with `white-space: pre-wrap` and provide brief load-failed messaging pointing users to LICENSE / MANUAL.md / CHANGELOG.md in the repository.
+*   **`src/types/flow.ts`** — `TranslationCatalog` interface extended with 6 top-level string fields (placed after `errors`).
+*   **`src/mobile/MobileToolsView.tsx`** — Pulls dialog titles + bodies from `translations[language]` (no more hardcoded English constants). Three `useState` initializers use the active language's fallback; a `useEffect([language])` resets on language switch; the three fetch effects depend on `[open, language]` so a dialog opened mid-switch re-fetches live content in the new locale. RTL direction (`dir="rtl"` for `ar`/`he`/`fa`) applied to dialog body containers.
+*   **RTL support** — `RTL_LANGS = ['ar', 'he', 'fa']` module-level constant + `isRtl` derivation inside the component + per-dialog `dir` attribute. Browser bidi algorithm then renders Latin filenames (`LICENSE`, `MANUAL.md`, `CHANGELOG.md` etc.) inline correctly inside RTL script.
+
+#### Recovery
+*   During the initial implementation pass, a Python state-machine script accidentally dropped the Persian (`fa`) entry from `src/utils/translations.ts`. The entry was recovered from `git show HEAD:src/utils/translations.ts` and re-inserted with the 6 new keys appended before the closing `  },`. Verifier: per-key grep count is 23, brace balance is 0, `tsc --noEmit` clean, `vitest run` 126/126 passed.
+
+#### Architecture invariants (still held)
+- **Desktop bundle byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
+- **State reuse**: mobile components pull from `useFlow()` — no duplication.
+- **TranslationCatalog reuse**: mobile components import the shared `translations` map from `src/utils/translations.ts`. Desktop `Header.tsx` keeps its inline `langTranslations` map (a Phase 2.6+ opportunity to unify).
+- **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*` — zero desktop bleed.
+- **Bundle isolation**: changes affect mobile-side consumers; the lazy chunk continues to share its scope.
+
 ### Milestone 39: Mobile Bundle Phase 2 + 3 — Views + Orchestrator + App Routing (BETA 2.3.35-beta)
 
 [//]: # (keepachangelog)

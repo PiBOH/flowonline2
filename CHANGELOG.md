@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.4.0-beta] - 2026-07-21
+
+### Added
+- **Mobile Bundle Phase 2.5 — About / User Manual / Changelog i18n.** Mobile dialogs in `src/mobile/MobileToolsView.tsx` no longer ship hardcoded English titles or load-failed bodies. They now resolve through `translations[language]` for all 23 supported languages (`en, en_GB, de, fr, es, it, zh, nl, pt, gl, ru, uk, cs, pl, hu, sl, ja, th, id, mn, ar, he, fa`).
+- **6 new keys × 23 languages in shared `TranslationCatalog`** (`src/utils/translations.ts` + interface in `src/types/flow.ts`): `aboutTitle`, `manualTitle`, `changelogTitle`, `gplLicenseTextFallback`, `manualTextFallback`, `changelogTextFallback`. The 3 `*Fallback` fields render with `white-space: pre-wrap` and provide brief load-failed messaging pointing users to LICENSE / MANUAL.md / CHANGELOG.md in the repository.
+- **RTL direction** in WinUIDialog bodies — Persian (`fa`), Arabic (`ar`), and Hebrew (`he`) dialogs now set `dir="rtl"` on the body container so script direction, punctuation, and bilingual filename references render correctly.
+
+### Changed
+- **`src/mobile/MobileToolsView.tsx`**: dropped 6 module-level hardcoded English dialog constants (`ABOUT_TITLE`, `MANUAL_TITLE`, `CHANGELOG_TITLE`, `LICENSE_FALLBACK`, `MANUAL_FALLBACK`, `CHANGELOG_FALLBACK`). Dialog titles and bodies now pull from `translations[language]`. A `useEffect([language])` resets the 3 dialog-body states to the new language's fallback when the user switches language mid-session; the 3 fetch effects depend on `[open, language]` so a dialog opened across a language change re-fetches live content in the new locale.
+- **`src/types/flow.ts`**: `TranslationCatalog` interface extended with 6 new top-level string fields (placed after `errors` for proximity to related catalog-surface groups).
+- **Recovery:** During the initial implementation pass, a Python state-machine script accidentally dropped the Persian (`fa`) entry from `src/utils/translations.ts`. The entry was recovered from `git show HEAD:src/utils/translations.ts` and re-inserted with the 6 new keys added before the closing braces. All 23 language entries are now verified present (key count = 23 each for the 6 new keys; brace balance = 0; `tsc --noEmit` clean; `vitest run` 126/126 passed).
+
+### Architecture invariants (still held)
+- Desktop bundle byte-for-byte unchanged: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — zero edits.
+- Mobile continues to import `translations` from the shared `src/utils/translations.ts` (no per-component translation duplication introduced).
+- The desktop `Header.tsx` per-language `langTranslations` map remains untouched and can be unified with the shared `TranslationCatalog` in a Phase 2.6+ followup.
+
+---
+
 ## [2.3.35-beta] - 2026-07-21
 
 ### Added
