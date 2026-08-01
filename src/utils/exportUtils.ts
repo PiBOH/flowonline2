@@ -12,7 +12,7 @@ export interface ExportResult {
  */
 export function exportToPNG(filename: string): Promise<ExportResult> {
   return new Promise((resolve) => {
-    const svgEl = document.getElementById('flowchart-svg-export-target');
+    const svgEl = document.getElementById('flowchart-svg-export-target') || document.getElementById('mobile-svg-export-target');
     if (!svgEl) {
       resolve({ success: false, message: 'Unable to find SVG flowchart elements for export.' });
       return;
@@ -75,7 +75,7 @@ export function exportToPNG(filename: string): Promise<ExportResult> {
  */
 export function exportToPDF(filename: string): Promise<ExportResult> {
   return new Promise((resolve) => {
-    const svgEl = document.getElementById('flowchart-svg-export-target');
+    const svgEl = document.getElementById('flowchart-svg-export-target') || document.getElementById('mobile-svg-export-target');
     if (!svgEl) {
       resolve({ success: false, message: 'Unable to find SVG flowchart elements for export.' });
       return;

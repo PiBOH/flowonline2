@@ -35,12 +35,12 @@ jobs:
           VERSION=$(cat version.txt | tr -d '\r\n' | xargs)
           echo "Full version: $VERSION"
 
-          # Release name = version without BETA/ALPHA/RC/STABLE prefix + [bot]
-          # Example: "BETA 2.3.22-beta" → "2.3.22-beta [bot]"
+          # Release name = canonical version from version.txt + [bot]
+          # Example: "2.6.0-beta" → "2.6.0-beta [bot]"
           NAME=$(echo "$VERSION" | sed -E 's/^(BETA|ALPHA|RC|STABLE)\s+//i')
           NAME="${NAME} [bot]"
-          # Tag = same stripped form (no BETA/ALPHA/RC prefix) + _bot, spaces → _
-          # Example: "BETA 2.3.22-beta" → "2.3.22-beta_bot"
+          # Tag = canonical version + _bot (spaces are normalized to underscores)
+          # Example: "2.6.0-beta" → "2.6.0-beta_bot"
           TAG=$(echo "$NAME" | sed 's/ \[bot\]$//' | sed 's/ /_/g')_bot
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "name=$NAME" >> $GITHUB_OUTPUT
@@ -48,7 +48,7 @@ jobs:
 
           # Determine prerelease flag.
           # Stable release (prerelease=false) ONLY if version ENDS with "-stable".
-          # Anything else (BETA, ALPHA, RC, plain numbers, etc.) → pre-release (prerelease=true).
+          # Anything else (beta, alpha, rc, or plain numbers) → pre-release (prerelease=true).
           if echo "$VERSION" | grep -qiE '\-stable$'; then
             echo "prerelease=false" >> $GITHUB_OUTPUT
           else
@@ -64,7 +64,7 @@ jobs:
           # Try to extract the relevant changelog section
           CHANGELOG_SECTION=""
           if [ -f CHANGELOG.md ]; then
-            # Strip ONLY the lifecycle prefix (BETA/ALPHA/RC/STABLE), KEEP the suffix.
+            # Keep the canonical version format from version.txt when locating the changelog section.
             # CHANGELOG.md headers are now formatted as "## [2.3.33-beta]" (no BETA prefix).
             CHANGELOG_SEARCH=$(echo "$VERSION_FULL" | sed -E 's/^(BETA|ALPHA|RC|STABLE)\s+//i')
             # Extract section between this version header and the next one.
@@ -106,7 +106,7 @@ jobs:
           - **Tag:** ${TAG}
           - **Commit:** [$(git rev-parse --short HEAD)](https://github.com/${{ github.repository }}/commit/$(git rev-parse HEAD))
           - **Date:** $(date -u +"%Y-%m-%d %H:%M UTC")
-          - **Trigger:** ${{ github.event_name == 'workflow_dispatch' && 'Manual (workflow_dispatch)' || 'Push to main (version.txt changed)' }}
+          - **Trigger:** ${{ github.event_name == 'workflow_dispatch' && 'Manual (workflow_dispatch)' || 'Push to main (v-prefixed commit)' }}
           - **Triggered by:** @${{ github.actor }}
 
           ### 📝 Recent Changes
@@ -117,6 +117,7 @@ jobs:
           > 🤖 This is an automated release created by the CI/CD pipeline.  
           > Repository: [${{ github.repository }}](https://github.com/${{ github.repository }})  
           > Workflow: [Auto Release](https://github.com/${{ github.repository }}/actions/workflows/auto-release.yml)
+          > Trigger policy: push commits must start with `v`; manual dispatch is also supported.
           EOF
 
           cat /tmp/release_body.md

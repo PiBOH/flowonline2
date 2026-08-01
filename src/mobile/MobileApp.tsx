@@ -1,330 +1,204 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { MobileTopBar } from './MobileTopBar';
 import { MobileSidebar, type MobileViewId } from './MobileSidebar';
-import { MobileCanvasView } from './MobileCanvasView';
+import { MobileCanvasView, MobileExportSvg } from './MobileCanvasView';
+import { MobileBlockEditor } from './MobileBlockEditor';
 import { MobileEditView } from './MobileEditView';
 import { MobileRunView } from './MobileRunView';
 import { MobileConsoleView } from './MobileConsoleView';
 import { MobileToolsView } from './MobileToolsView';
 import { MobileLanguageSheet } from './MobileLanguageSheet';
-import { WinUIDialog } from '../components/WinUIDialog';
+import { M2BottomNav, M2Button, M2Dialog, M2Snackbar } from './Material2';
 import { useFlow } from '../context/FlowContext';
-import { translations as catalogs } from '../utils/translations';
 import { FprgParser } from '../utils/fprgParser';
 import { exportToPNG, exportToPDF } from '../utils/exportUtils';
-import { IconInfo } from '../components/EmojiIcons';
+import { IconChart, IconPencil, IconPlay, IconChatBubble, IconTools, IconInfo } from '../components/EmojiIcons';
 
-const VIEW_STORAGE_KEY = 'flowonline2_mobile_view';
-const RTL_LANGS = new Set<string>(['ar', 'he', 'fa']);
+const VIEW_KEY = 'flowonline2_mobile_view';
+const VALID_VIEWS: MobileViewId[] = ['canvas', 'edit', 'run', 'console', 'tools'];
+const RTL_LANGS = new Set(['ar', 'he', 'fa']);
+const ISSUE_URL = 'https://github.com/PiBOH/flowonline2/issues/new/choose';
 
-/**
- * Mobile orchestrator (Phase 5 + 5.1 sidebar-action wiring).
- *
- *  - Owns hidden file-input ref for .fprg loading.
- *  - Owns local state for About / Manual / Changelog / Language-picker
- *    dialogs. Each opens via `WinUIDialog` overlays rendered at the
- *    bottom of the JSX.
- *  - All sidebar action handlers are wired here (Path C: duplicate the
- *    desktop UI logic instead of lifting state to App.tsx — see the
- *    Phase-5 design note for the rationale).
- *  - Export functions (`exportToPNG`, `exportToPDF`) and the SVG export
- *    query `document.querySelector('svg.flowchart-canvas, svg[id*=flow]')`
- *    directly, no prop threading required by the export utils.
- */
 const MobileApp: React.FC = () => {
-  const flow = useFlow() as any;
-  const dir: 'ltr' | 'rtl' = RTL_LANGS.has(flow.language) ? 'rtl' : 'ltr';
-
+  const flow = useFlow();
+  const dir = RTL_LANGS.has(flow.language) ? 'rtl' : 'ltr';
   const initialView = useMemo<MobileViewId>(() => {
-    if (typeof window === 'undefined') return 'canvas';
-    const stored = window.localStorage.getItem(VIEW_STORAGE_KEY);
-    const valid: MobileViewId[] = ['canvas', 'edit', 'run', 'console', 'tools'];
-    return valid.includes(stored as MobileViewId) ? (stored as MobileViewId) : 'canvas';
+    const stored = typeof window !== 'undefined' ? window.localStorage.getItem(VIEW_KEY) : null;
+    return VALID_VIEWS.includes(stored as MobileViewId) ? stored as MobileViewId : 'canvas';
   }, []);
   const [view, setView] = useState<MobileViewId>(initialView);
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-
-  // Sidebar-opened dialog state (each opens a WinUIDialog overlay).
-  const [showAbout, setShowAbout] = useState(false);
-  const [showManual, setShowManual] = useState(false);
-  const [showChangelog, setShowChangelog] = useState(false);
-  const [showLangSheet, setShowLangSheet] = useState(false);
-
-  // Markdown lazy-load for Man/Changelog overlays.
-  const [manualText, setManualText] = useState<string>('Loading user manual…');
-  const [changelogText, setChangelogText] = useState<string>('Loading changelog…');
-
-  // Hidden file input — referenced by `handleOpenFile`.
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const [dialog, setDialog] = useState<'about' | 'manual' | 'changelog' | 'clear' | null>(null);
+  const [manual, setManual] = useState('Loading MANUAL.md...');
+  const [changelog, setChangelog] = useState('Loading CHANGELOG.md...');
+  const [message, setMessage] = useState<{ text: string; tone: 'success' | 'error' } | null>(null);
+  const [clearCurrentWork, setClearCurrentWork] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    window.localStorage.setItem(VIEW_STORAGE_KEY, view);
+    window.localStorage.setItem(VIEW_KEY, view);
   }, [view]);
 
   useEffect(() => {
-    if (!showManual) return;
-    let cancelled = false;
-    fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/main/MANUAL.md')
-      .then((r) => (r.ok ? r.text() : Promise.reject(new Error(`HTTP ${r.status}`))))
-      .then((txt) => { if (!cancelled) setManualText(txt); })
-      .catch(() => { if (!cancelled) setManualText('Unable to load MANUAL.md from GitHub. Please check your connection.'); });
-    return () => { cancelled = true; };
-  }, [showManual]);
+    if (dialog !== 'manual' && dialog !== 'changelog') return;
+    const controller = new AbortController();
+    const path = dialog === 'manual' ? './MANUAL.md' : './CHANGELOG.md';
+    fetch(path, { signal: controller.signal })
+      .then((response) => response.ok ? response.text() : Promise.reject(new Error(`HTTP ${response.status}`)))
+      .then((text) => dialog === 'manual' ? setManual(text) : setChangelog(text))
+      .catch((error: unknown) => {
+        if ((error as Error).name === 'AbortError') return;
+        if (dialog === 'manual') setManual('Unable to load MANUAL.md.');
+        else setChangelog('Unable to load CHANGELOG.md.');
+      });
+    return () => controller.abort();
+  }, [dialog]);
 
   useEffect(() => {
-    if (!showChangelog) return;
-    let cancelled = false;
-    fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/main/CHANGELOG.md')
-      .then((r) => (r.ok ? r.text() : Promise.reject(new Error(`HTTP ${r.status}`))))
-      .then((txt) => { if (!cancelled) setChangelogText(txt); })
-      .catch(() => { if (!cancelled) setChangelogText('Unable to load CHANGELOG.md from GitHub. Please check your connection.'); });
-    return () => { cancelled = true; };
-  }, [showChangelog]);
+    if (!message) return;
+    const timer = window.setTimeout(() => setMessage(null), 2800);
+    return () => window.clearTimeout(timer);
+  }, [message]);
 
-  // Localized dialog titles — read from the shared `translations` catalog.
-  // `flow.language` is `any` (mobile deliberately opts out of full TS surface)
-  // so we cast the catalog to `any` first; the resulting `c` is also `any`
-  // which TypeScript allows indexing without further casts.
-  const mt = useMemo<Record<string, string>>(() => {
-    const cAny = catalogs as any;
-    const c = cAny?.[flow.language] ?? cAny?.en ?? {};
-    return {
-      aboutTitle: c.aboutTitle ?? 'About Flowonline2',
-      manualTitle: c.manualTitle ?? 'User Manual',
-      changelogTitle: c.changelogTitle ?? 'Changelog',
-    };
-  }, [flow.language]);
-
-  const safe = (fn: () => void) => { try { fn(); } catch { /* noop */ } };
-
-  const downloadBlob = (blob: Blob, fileName: string) => {
+  const download = (blob: Blob, name: string) => {
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1500);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = name;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1200);
   };
 
-  const handleNew = () => safe(() => flow.clearAll?.());
-  const handleClearLocalStorage = () =>
-    safe(() => flow.clearLocalStorage?.({ alsoClearCurrentWork: true }));
+  const title = String(flow.programTitle || 'flowonline2').replace(/\s+/g, '_');
+  const openExternal = (url: string) => window.open(url, '_blank', 'noopener,noreferrer');
 
-  const handleOpenFile = () => {
-    // Click the hidden file input — onChange is wired below.
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChosen = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file) return;
+  const handleSave = () => {
     try {
-      const text = await file.text();
-      // .fprg is XML; .json is the backup format used by MobileTopBar.
-      if (file.name.toLowerCase().endsWith('.json')) {
-        const parsed = JSON.parse(text);
-        safe(() => flow.loadProgram?.(parsed));
-        return;
-      }
-      // Default: parse as Flowgorithm XML.
-      safe(() => flow.loadProgram?.(FprgParser.parse(text)));
-    } catch (err) {
-      // Surface error via console (no WinUI error dialog — keep mobile simple).
-      console.warn('[MobileApp] Open file failed:', err);
+      const xml = FprgParser.serialize(flow.statements, flow.programTitle || 'Untitled Program', flow.programAuthor || '');
+      download(new Blob([xml], { type: 'application/xml' }), `${title}.fprg`);
+      setMessage({ text: 'FPRG file saved.', tone: 'success' });
+    } catch {
+      setMessage({ text: 'Unable to save the FPRG file.', tone: 'error' });
     }
   };
 
-  const handleSave = () => {
-    const statements = Array.isArray(flow.statements) ? flow.statements : [];
-    const title = (flow.programTitle || 'Untitled Program') as string;
-    const author = (flow.programAuthor ?? '') as string;
-    safe(() => {
-      const xml = FprgParser.serialize(statements, title, author);
-      downloadBlob(new Blob([xml], { type: 'application/xml' }), `${title}.fprg`);
-    });
+  const handleBackup = () => {
+    const backup = { title: flow.programTitle || 'Untitled Program', author: flow.programAuthor || '', statements: flow.statements };
+    download(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }), `${title}.json`);
+    setMessage({ text: 'JSON backup saved.', tone: 'success' });
   };
 
-  const handleBackupJson = () => {
-    const payload = {
-      title: flow.programTitle ?? 'Untitled',
-      statements: Array.isArray(flow.statements) ? flow.statements : [],
-    };
-    downloadBlob(
-      new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }),
-      `${(flow.programTitle || 'flowonline2').replace(/\s+/g, '_')}.json`,
-    );
+  const handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    try {
+      const text = await file.text();
+      if (file.name.toLowerCase().endsWith('.json')) {
+        const data: unknown = JSON.parse(text);
+        if (!data || typeof data !== 'object' || !Array.isArray((data as { statements?: unknown }).statements)) {
+          throw new Error('Invalid JSON backup.');
+        }
+        const backup = data as { statements: Parameters<typeof flow.loadProgram>[0]; title?: string; author?: string };
+        flow.loadProgram(backup.statements, backup.title || 'Untitled Program', backup.author || '');
+      } else {
+        const parsed = FprgParser.parse(text);
+        flow.loadProgram(parsed.statements, parsed.title || file.name.replace(/\.fprg$/i, ''), parsed.author || '');
+      }
+      setMessage({ text: 'File opened.', tone: 'success' });
+    } catch {
+      setMessage({ text: 'Unable to open that file.', tone: 'error' });
+    }
   };
 
-  const handleExportSvg = () => {
-    safe(() => {
-      const svgEl = document.querySelector('svg.flowchart-canvas, [data-export-svg]') as SVGElement | null;
-      if (!svgEl) return;
-      const xml = new XMLSerializer().serializeToString(svgEl);
-      downloadBlob(
-        new Blob([xml], { type: 'image/svg+xml' }),
-        `${(flow.programTitle || 'flowonline2').replace(/\s+/g, '_')}.svg`,
-      );
-    });
+  const handleSvg = () => {
+    const svg = document.getElementById('flowchart-svg-export-target') || document.getElementById('mobile-svg-export-target');
+    if (!svg) {
+      setMessage({ text: 'No flowchart is available to export.', tone: 'error' });
+      return;
+    }
+    download(new Blob([new XMLSerializer().serializeToString(svg)], { type: 'image/svg+xml' }), `${title}.svg`);
+    setMessage({ text: 'SVG exported.', tone: 'success' });
   };
 
-  const handleExportPng = () => {
-    safe(() => exportToPNG((flow.programTitle || 'flowonline2') as string));
+  const handlePng = async () => {
+    const result = await exportToPNG(title);
+    setMessage({ text: result.message, tone: result.success ? 'success' : 'error' });
   };
 
-  const handleExportPdf = () => {
-    safe(() => exportToPDF((flow.programTitle || 'flowonline2') as string));
+  const handlePdf = async () => {
+    const result = await exportToPDF(title);
+    setMessage({ text: result.message, tone: result.success ? 'success' : 'error' });
   };
 
-  const handleBugReport = () => {
-    window.open('https://github.com/PiBOH/flowonline2/issues/new/choose', '_blank', 'noopener,noreferrer');
+  const clearStorage = () => {
+    flow.clearLocalStorage({ alsoClearCurrentWork: clearCurrentWork });
+    setClearCurrentWork(false);
+    setDialog(null);
+    setMessage({ text: clearCurrentWork ? 'Local storage and current work cleared.' : 'Saved local storage cleared; current work kept.', tone: 'success' });
   };
-  const handleFeatureRequest = () => {
-    window.open('https://github.com/PiBOH/flowonline2/issues/new/choose', '_blank', 'noopener,noreferrer');
+
+  const selectView = (next: string) => {
+    if (!VALID_VIEWS.includes(next as MobileViewId)) return;
+    setView(next as MobileViewId);
+    setDrawerOpen(false);
   };
-  const handleForkContribute = () => {
-    window.open('https://github.com/PiBOH/flowonline2/fork', '_blank', 'noopener,noreferrer');
-  };
+
+  const navItems = [
+    { id: 'canvas', label: 'Canvas', icon: <IconChart size={20} /> },
+    { id: 'edit', label: 'Edit', icon: <IconPencil size={20} /> },
+    { id: 'run', label: 'Run', icon: <IconPlay size={20} /> },
+    { id: 'console', label: 'Console', icon: <IconChatBubble size={20} /> },
+    { id: 'tools', label: 'Tools', icon: <IconTools size={20} /> },
+  ];
 
   return (
-    <div
-      className="m-root"
-      dir={dir}
-      style={{ height: '100dvh', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}
-    >
-      <MobileTopBar onOpenSidebar={() => setSidebarOpen(true)} />
+    <div className="m2-root" dir={dir}>
+      <div className="m2-app">
+        <MobileTopBar onOpenDrawer={() => setDrawerOpen(true)} />
+        <main className="m2-main">
+          {view === 'canvas' && <MobileCanvasView />}
+          {view === 'edit' && <MobileEditView />}
+          {view === 'run' && <MobileRunView />}
+          {view === 'console' && <MobileConsoleView />}
+          {view === 'tools' && <MobileToolsView
+            onLanguage={() => setLanguageOpen(true)} onAbout={() => setDialog('about')} onManual={() => setDialog('manual')}
+            onChangelog={() => setDialog('changelog')} onClearStorage={() => setDialog('clear')}
+            onExportSvg={handleSvg} onExportPng={handlePng} onExportPdf={handlePdf}
+            onBugReport={() => openExternal(ISSUE_URL)} onFeatureRequest={() => openExternal(ISSUE_URL)}
+            onForkContribute={() => openExternal('https://github.com/PiBOH/flowonline2/fork')}
+          />}
+        </main>
+        <M2BottomNav value={view} items={navItems} onChange={selectView} />
+      </div>
 
-      <main style={{ flex: '1 1 auto', minHeight: 0, overflow: 'hidden', position: 'relative' }}>
-        {view === 'canvas' && <MobileCanvasView />}
-        {view === 'edit' && <MobileEditView />}
-        {view === 'run' && <MobileRunView />}
-        {view === 'console' && <MobileConsoleView />}
-        {view === 'tools' && <MobileToolsView />}
-      </main>
-
-      {/* Hidden file input — driven by `handleOpenFile`. */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".fprg,.json,application/json,text/xml,application/xml"
-        onChange={handleFileChosen}
-        style={{ display: 'none' }}
-        tabIndex={-1}
-        aria-hidden="true"
-      />
-
+      <input ref={inputRef} type="file" accept=".fprg,.json,application/json,text/xml,application/xml" onChange={handleFile} hidden />
+      <MobileExportSvg statements={flow.statements} />
       <MobileSidebar
-        open={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        view={view}
-        onSelectView={setView}
-        language={(flow.language as any) ?? 'en'}
-        canUndo={!!flow.canUndo}
-        canRedo={!!flow.canRedo}
-        onNew={handleNew}
-        onOpenFile={handleOpenFile}
-        onSave={handleSave}
-        onBackupJson={handleBackupJson}
-        onExportSvg={handleExportSvg}
-        onExportPng={handleExportPng}
-        onExportPdf={handleExportPdf}
-        onClearLocalStorage={handleClearLocalStorage}
-        onShowAbout={() => setShowAbout(true)}
-        onShowManual={() => setShowManual(true)}
-        onShowChangelog={() => setShowChangelog(true)}
-        onBugReport={handleBugReport}
-        onFeatureRequest={handleFeatureRequest}
-        onForkContribute={handleForkContribute}
-        onPickLanguage={() => setShowLangSheet(true)}
+        open={drawerOpen} onClose={() => setDrawerOpen(false)} view={view} onSelectView={selectView}
+        onNew={() => { flow.clearAll(); setDrawerOpen(false); }} onOpenFile={() => inputRef.current?.click()}
+        onSave={handleSave} onBackupJson={handleBackup} onExportSvg={handleSvg} onExportPng={handlePng} onExportPdf={handlePdf}
+        onClearLocalStorage={() => setDialog('clear')} onShowAbout={() => setDialog('about')} onShowManual={() => setDialog('manual')}
+        onShowChangelog={() => setDialog('changelog')} onBugReport={() => openExternal(ISSUE_URL)}
+        onFeatureRequest={() => openExternal(ISSUE_URL)} onForkContribute={() => openExternal('https://github.com/PiBOH/flowonline2/fork')}
+        onPickLanguage={() => setLanguageOpen(true)} canUndo={flow.canUndo} canRedo={flow.canRedo}
       />
+      <MobileLanguageSheet open={languageOpen} onClose={() => setLanguageOpen(false)} />
+      <MobileBlockEditor block={flow.editingBlock} open={flow.editingBlock !== null} onClose={flow.closeEditor} />
 
-      {/* About overlay */}
-      <WinUIDialog
-        isOpen={showAbout}
-        onClose={() => setShowAbout(false)}
-        title={mt.aboutTitle || 'About Flowonline2'}
-        message=""
-        defaultWidth={420}
-        defaultHeight={360}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '4px 4px 8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <IconInfo size={36} />
-            <div>
-              <div style={{ fontSize: 18, fontWeight: 800 }}>Flowonline2</div>
-              <div style={{ fontSize: 12, color: '#475569' }}>
-                {(import.meta as any).env?.VITE_APP_VERSION || '0.0.0-UNKNOWN'}
-              </div>
-            </div>
-          </div>
-          <div style={{ fontSize: 13, lineHeight: 1.5, color: '#1f2937' }}>
-            A web replica of <strong>Flowgorithm</strong> for Windows, built in React + Vite. Licensed under the{' '}
-            <strong>GNU GPL v3</strong>.
-          </div>
-          <div style={{ fontSize: 12, color: '#64748b' }}>
-            Source:&nbsp;
-            <a href="https://github.com/PiBOH/flowonline2" target="_blank" rel="noopener noreferrer">
-              github.com/PiBOH/flowonline2
-            </a>
-          </div>
-        </div>
-      </WinUIDialog>
-
-      {/* Manual overlay */}
-      <WinUIDialog
-        isOpen={showManual}
-        onClose={() => setShowManual(false)}
-        title={mt.manualTitle || 'Flowonline2 User Manual'}
-        message=""
-        defaultWidth={520}
-        defaultHeight={460}
-      >
-        <pre style={{
-          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-          fontSize: 12,
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-word',
-          maxHeight: '60vh',
-          overflowY: 'auto',
-          padding: '0 4px',
-          color: '#1f2937',
-        }}>
-          {manualText}
-        </pre>
-      </WinUIDialog>
-
-      {/* Changelog overlay */}
-      <WinUIDialog
-        isOpen={showChangelog}
-        onClose={() => setShowChangelog(false)}
-        title={mt.changelogTitle || 'Flowonline2 Changelog'}
-        message=""
-        defaultWidth={520}
-        defaultHeight={460}
-      >
-        <pre style={{
-          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-          fontSize: 12,
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-word',
-          maxHeight: '60vh',
-          overflowY: 'auto',
-          padding: '0 4px',
-          color: '#1f2937',
-        }}>
-          {changelogText}
-        </pre>
-      </WinUIDialog>
-
-      {/* Language picker sheet (the component reads language itself from useFlow). */}
-      <MobileLanguageSheet
-        open={showLangSheet}
-        onClose={() => setShowLangSheet(false)}
-      />
-
+      <M2Dialog open={dialog === 'about'} onClose={() => setDialog(null)} title="About Flowonline2" actions={<M2Button onClick={() => setDialog(null)}>Close</M2Button>}>
+        <div className="m2-about"><IconInfo size={40} /><strong>Flowonline2</strong><span>{import.meta.env.VITE_APP_VERSION || '0.0.0-UNKNOWN'}</span><p>A web-based Flowgorithm-inspired flowchart editor built with React and Vite. Licensed under GNU GPL v3.</p></div>
+      </M2Dialog>
+      <M2Dialog open={dialog === 'manual'} onClose={() => setDialog(null)} title="User Manual" actions={<M2Button onClick={() => setDialog(null)}>Close</M2Button>}><pre>{manual}</pre></M2Dialog>
+      <M2Dialog open={dialog === 'changelog'} onClose={() => setDialog(null)} title="Changelog" actions={<M2Button onClick={() => setDialog(null)}>Close</M2Button>}><pre>{changelog}</pre></M2Dialog>
+      <M2Dialog open={dialog === 'clear'} onClose={() => { setClearCurrentWork(false); setDialog(null); }} title="Clear localStorage" actions={<><M2Button onClick={() => { setClearCurrentWork(false); setDialog(null); }}>Cancel</M2Button><M2Button variant="contained" onClick={clearStorage}>Clear</M2Button></>}>
+        <p>This removes the saved program. Current work stays open unless the optional Flag is enabled.</p>
+        <label className="m2-flag-toggle"><input type="checkbox" checked={clearCurrentWork} onChange={(event) => setClearCurrentWork(event.target.checked)} /><span>Flag: also clear the current work</span></label>
+      </M2Dialog>
+      {message && <M2Snackbar message={message.text} tone={message.tone} />}
     </div>
   );
 };

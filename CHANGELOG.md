@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.0-beta] - 2026-08-01
+
+### Added
+- **Material Design 2 mobile interface:** Rebuilt the mobile bundle from scratch under `src/mobile/` with an M2 top app bar, navigation drawer, bottom navigation, cards, dialogs, FAB controls, elevation tokens, and touch-friendly spacing.
+- **Dedicated mobile flowchart renderer:** Mobile now renders an isolated, accessible block tree with nested TRUE/FALSE and loop branches instead of mounting the desktop `FlowchartCanvas` or `BlockNode` components.
+- **Optional storage Flag:** The mobile clear-localStorage dialog keeps current work by default and offers an explicit Flag to clear the active flowchart as well.
+
+### Fixed
+- **Mobile accessibility:** Closed navigation drawers are no longer mounted or keyboard-focusable.
+- **Mobile actions:** Export, community links, language selection, execution controls, and storage operations remain wired to the existing FlowContext and export engines.
+- **Mobile editing:** Added a block-type picker for every supported statement type, nested branch/body insertion, delete actions, and a mobile block editor with declaration, array, loop-direction, and output controls.
+- **Mobile export continuity:** The dedicated mobile SVG export target remains mounted across view changes, so SVG, PNG, and PDF exports also work from Tools.
+- **Metadata consistency:** Application metadata and documentation use the canonical `2.6.0-beta` format without a lifecycle prefix.
+
+### Architecture invariants
+- Desktop components and desktop styles were not modified by the mobile redesign.
+- Mobile selectors remain scoped under `.m2-root`.
+- Source strings and project documentation for this release are written in English.
+
+---
+
 ## [2.5.9-beta] - 2026-07-21
 
 ### Changed
