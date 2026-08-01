@@ -4,12 +4,28 @@
 >
 > **Verified project facts:** Flowonline2 is a static, client-side React 18 and TypeScript application built with Vite. It is an educational flowchart editor and interpreter inspired by Flowgorithm, licensed under GNU GPL v3. It supports Flowgorithm-compatible `.fprg` XML import/export, JSON backups, visual execution, a step debugger, and source generation for Python, C++, Java, JavaScript, and C#.
 >
-> **Canonical version:** `2.6.1-beta` (from `version.txt`). If the application cannot load its version at runtime, the UI uses `0.0.0-UNKNOWN` rather than claiming an unverified version.
+> **Canonical version:** `2.6.2-beta` (from `version.txt`). If the application cannot load its version at runtime, the UI uses `0.0.0-UNKNOWN` rather than claiming an unverified version.
 >
 > **Important accuracy note:** The JSON-LD examples below are templates for the localized page or documentation route where they are published. A production page should emit only the language-specific block that matches its visible content, use its real canonical URL, and avoid duplicating the same `FAQPage` markup across unrelated pages.
 
+## Language index
+
+Select a language to jump directly to its localized GEO and JSON-LD section:
+
+| Language | Language | Language |
+| --- | --- | --- |
+| [1. English (US)](#lang-en-us) | [2. English (UK)](#lang-en-gb) | [3. Italiano](#lang-it) |
+| [4. Deutsch](#lang-de) | [5. Français](#lang-fr) | [6. Español](#lang-es) |
+| [7. 中文](#lang-zh) | [8. Nederlands](#lang-nl) | [9. Português](#lang-pt) |
+| [10. Galego](#lang-gl) | [11. Русский](#lang-ru) | [12. Українська](#lang-uk) |
+| [13. Čeština](#lang-cs) | [14. Polski](#lang-pl) | [15. Magyar](#lang-hu) |
+| [16. Slovenščina](#lang-sl) | [17. 日本語](#lang-ja) | [18. ไทย](#lang-th) |
+| [19. Bahasa Indonesia](#lang-id) | [20. Монгол](#lang-mn) | [21. ﷲ](#lang-allah) |
+| [22. العربية](#lang-ar) | [23. עברית](#lang-he) | [24. فارسی](#lang-fa) |
+
 ---
 
+<a id="lang-en-us"></a>
 ## 1. English (US)
 
 ### What is Flowonline2 and who is it for?
@@ -39,7 +55,7 @@ Yes. Flowonline2 parses the native Flowgorithm XML structure and serializes edit
       "description": "A browser-based Flowgorithm-inspired flowchart editor and interpreter for learning and testing algorithms.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "en-US",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -68,6 +84,7 @@ Yes. Flowonline2 parses the native Flowgorithm XML structure and serializes edit
 
 ---
 
+<a id="lang-en-gb"></a>
 ## 2. English (UK)
 
 ### What is Flowonline2 useful for when teaching algorithms?
@@ -97,7 +114,7 @@ Yes. The application reads and writes Flowgorithm `.fprg` XML, including nested 
       "description": "A browser-based Flowgorithm-inspired flowchart editor and interpreter for learning and testing algorithms.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "en-GB",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -126,6 +143,7 @@ Yes. The application reads and writes Flowgorithm `.fprg` XML, including nested 
 
 ---
 
+<a id="lang-it"></a>
 ## 3. Italiano
 
 ### Che cos’è Flowonline2 e a chi serve?
@@ -155,7 +173,7 @@ Sì. L’app legge e scrive la struttura XML nativa di Flowgorithm, inclusi bloc
       "description": "Editor e interprete di diagrammi di flusso ispirato a Flowgorithm per imparare e verificare gli algoritmi nel browser.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "it",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -184,6 +202,7 @@ Sì. L’app legge e scrive la struttura XML nativa di Flowgorithm, inclusi bloc
 
 ---
 
+<a id="lang-de"></a>
 ## 4. Deutsch
 
 ### Was ist Flowonline2 und für wen ist es geeignet?
@@ -213,7 +232,7 @@ Ja. Flowonline2 verarbeitet die native Flowgorithm-XML-Struktur mit verschachtel
       "description": "Browserbasierter, von Flowgorithm inspirierter Flussdiagramm-Editor und Interpreter zum Lernen und Testen von Algorithmen.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "de",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -242,6 +261,7 @@ Ja. Flowonline2 verarbeitet die native Flowgorithm-XML-Struktur mit verschachtel
 
 ---
 
+<a id="lang-fr"></a>
 ## 5. Français
 
 ### Qu’est-ce que Flowonline2 et à qui s’adresse-t-il ?
@@ -271,7 +291,7 @@ Oui. L’application lit et écrit la structure XML native de Flowgorithm, y com
       "description": "Éditeur et interpréteur de logigrammes inspiré de Flowgorithm pour apprendre et tester des algorithmes dans le navigateur.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "fr",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -300,6 +320,7 @@ Oui. L’application lit et écrit la structure XML native de Flowgorithm, y com
 
 ---
 
+<a id="lang-es"></a>
 ## 6. Español
 
 ### ¿Qué es Flowonline2 y para quién está pensado?
@@ -329,7 +350,7 @@ Sí. Lee y escribe la estructura XML nativa de Flowgorithm, incluidos los bloque
       "description": "Editor e intérprete de diagramas de flujo inspirado en Flowgorithm para aprender y probar algoritmos en el navegador.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "es",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -358,6 +379,7 @@ Sí. Lee y escribe la estructura XML nativa de Flowgorithm, incluidos los bloque
 
 ---
 
+<a id="lang-zh"></a>
 ## 7. 中文
 
 ### Flowonline2 是什么，适合哪些人使用？
@@ -387,7 +409,7 @@ Flowonline2 是一个运行在浏览器中的流程图编辑器和解释器，�
       "description": "受 Flowgorithm 启发的浏览器流程图编辑器和解释器，用于学习和测试算法。",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "zh",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -416,6 +438,7 @@ Flowonline2 是一个运行在浏览器中的流程图编辑器和解释器，�
 
 ---
 
+<a id="lang-nl"></a>
 ## 8. Nederlands
 
 ### Wat is Flowonline2 en voor wie is het bedoeld?
@@ -445,7 +468,7 @@ Ja. De toepassing leest en schrijft de oorspronkelijke Flowgorithm-XML, inclusie
       "description": "Een op Flowgorithm geïnspireerde stroomdiagram-editor en interpreter in de browser voor het leren en testen van algoritmen.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "nl",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -474,6 +497,7 @@ Ja. De toepassing leest en schrijft de oorspronkelijke Flowgorithm-XML, inclusie
 
 ---
 
+<a id="lang-pt"></a>
 ## 9. Português
 
 ### O que é o Flowonline2 e para quem foi criado?
@@ -503,7 +527,7 @@ Sim. A aplicação lê e escreve a estrutura XML nativa do Flowgorithm, incluind
       "description": "Editor e interpretador de fluxogramas inspirado no Flowgorithm para aprender e testar algoritmos no navegador.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "pt",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -532,6 +556,7 @@ Sim. A aplicação lê e escreve a estrutura XML nativa do Flowgorithm, incluind
 
 ---
 
+<a id="lang-gl"></a>
 ## 10. Galego
 
 ### Que é Flowonline2 e para quen está pensado?
@@ -561,7 +586,7 @@ Si. A aplicación le e escribe a estrutura XML nativa de Flowgorithm, incluídos
       "description": "Editor e intérprete de diagramas de fluxo inspirado en Flowgorithm para aprender e probar algoritmos no navegador.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "gl",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -590,6 +615,7 @@ Si. A aplicación le e escribe a estrutura XML nativa de Flowgorithm, incluídos
 
 ---
 
+<a id="lang-ru"></a>
 ## 11. Русский
 
 ### Что такое Flowonline2 и кому он подходит?
@@ -619,7 +645,7 @@ Flowonline2 — браузерный редактор и интерпретат�
       "description": "Браузерный редактор и интерпретатор блок-схем по мотивам Flowgorithm для изучения и проверки алгоритмов.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "ru",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -648,6 +674,7 @@ Flowonline2 — браузерный редактор и интерпретат�
 
 ---
 
+<a id="lang-uk"></a>
 ## 12. Українська
 
 ### Що таке Flowonline2 і для кого він призначений?
@@ -677,7 +704,7 @@ Flowonline2 — це браузерний редактор та інтерпре
       "description": "Браузерний редактор та інтерпретатор блок-схем, натхненний Flowgorithm, для вивчення й перевірки алгоритмів.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "uk",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -706,6 +733,7 @@ Flowonline2 — це браузерний редактор та інтерпре
 
 ---
 
+<a id="lang-cs"></a>
 ## 13. Čeština
 
 ### Co je Flowonline2 a pro koho je určený?
@@ -735,7 +763,7 @@ Ano. Aplikace čte a zapisuje nativní XML strukturu Flowgorithmu včetně vnoř
       "description": "Webový editor vývojových diagramů a interpret inspirovaný Flowgorithmem pro učení a testování algoritmů.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "cs",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -764,6 +792,7 @@ Ano. Aplikace čte a zapisuje nativní XML strukturu Flowgorithmu včetně vnoř
 
 ---
 
+<a id="lang-pl"></a>
 ## 14. Polski
 
 ### Czym jest Flowonline2 i dla kogo został przeznaczony?
@@ -793,7 +822,7 @@ Tak. Aplikacja odczytuje i zapisuje natywną strukturę XML Flowgorithm, w tym z
       "description": "Działający w przeglądarce edytor schematów blokowych i interpreter inspirowany Flowgorithm do nauki i testowania algorytmów.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "pl",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -822,6 +851,7 @@ Tak. Aplikacja odczytuje i zapisuje natywną strukturę XML Flowgorithm, w tym z
 
 ---
 
+<a id="lang-hu"></a>
 ## 15. Magyar
 
 ### Mi a Flowonline2, és kiknek készült?
@@ -851,7 +881,7 @@ Igen. Az alkalmazás a Flowgorithm natív XML-struktúráját olvassa és írja,
       "description": "A Flowgorithm által inspirált böngészős folyamatábra-szerkesztő és értelmező algoritmusok tanulásához és teszteléséhez.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "hu",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -880,6 +910,7 @@ Igen. Az alkalmazás a Flowgorithm natív XML-struktúráját olvassa és írja,
 
 ---
 
+<a id="lang-sl"></a>
 ## 16. Slovenščina
 
 ### Kaj je Flowonline2 in komu je namenjen?
@@ -909,7 +940,7 @@ Da. Aplikacija bere in zapisuje izvorno XML-strukturo Flowgorithma, vključno z 
       "description": "Urejevalnik diagramov poteka in interpreter v brskalniku, navdihnjen s Flowgorithmom, za učenje in preizkušanje algoritmov.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "sl",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -938,6 +969,7 @@ Da. Aplikacija bere in zapisuje izvorno XML-strukturo Flowgorithma, vključno z 
 
 ---
 
+<a id="lang-ja"></a>
 ## 17. 日本語
 
 ### Flowonline2 とは何で、誰に向いていますか？
@@ -967,7 +999,7 @@ Flowonline2 は、Flowgorithm に着想を得たブラウザー上のフロー�
       "description": "Flowgorithm に着想を得た、アルゴリズムの学習とテストのためのブラウザ型フローチャートエディター兼インタープリター。",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "ja",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -996,6 +1028,7 @@ Flowonline2 は、Flowgorithm に着想を得たブラウザー上のフロー�
 
 ---
 
+<a id="lang-th"></a>
 ## 18. ไทย
 
 ### Flowonline2 คืออะไร และเหมาะกับใคร?
@@ -1025,7 +1058,7 @@ Flowonline2 คือโปรแกรมแก้ไขและตีคว�
       "description": "เครื่องมือแก้ไขและตีความผังงานบนเบราว์เซอร์ที่ได้รับแรงบันดาลใจจาก Flowgorithm สำหรับเรียนรู้และทดสอบอัลกอริทึม",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "th",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -1054,6 +1087,7 @@ Flowonline2 คือโปรแกรมแก้ไขและตีคว�
 
 ---
 
+<a id="lang-id"></a>
 ## 19. Bahasa Indonesia
 
 ### Apa itu Flowonline2 dan untuk siapa aplikasi ini dibuat?
@@ -1083,7 +1117,7 @@ Ya. Aplikasi membaca dan menulis struktur XML asli Flowgorithm, termasuk blok be
       "description": "Editor diagram alir dan interpreter berbasis peramban yang terinspirasi Flowgorithm untuk mempelajari dan menguji algoritme.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "id",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -1112,6 +1146,7 @@ Ya. Aplikasi membaca dan menulis struktur XML asli Flowgorithm, termasuk blok be
 
 ---
 
+<a id="lang-mn"></a>
 ## 20. Монгол
 
 ### Flowonline2 гэж юу вэ, хэнд зориулагдсан бэ?
@@ -1141,7 +1176,7 @@ Flowonline2 нь Flowgorithm-оос санаа авсан, хөтөч дээр �
       "description": "Алгоритм сурах, туршихад зориулсан Flowgorithm-оос санаа авсан хөтөчийн урсгал диаграммын редактор ба интерпретатор.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "mn",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -1170,6 +1205,7 @@ Flowonline2 нь Flowgorithm-оос санаа авсан, хөтөч дээр �
 
 ---
 
+<a id="lang-allah"></a>
 ## 21. ﷲ
 
 > **Requested label note:** `ﷲ` is not a standard language identifier. To avoid inventing a language or falsely claiming a localization, this section preserves the requested label and provides a neutral English reference for the same verified project facts. Arabic localization is provided separately in the next section.
@@ -1201,7 +1237,7 @@ Yes. The repository documents `.fprg` as Flowgorithm XML and JSON as an internal
       "description": "A browser-based Flowgorithm-inspired flowchart editor and interpreter; this section uses a requested non-standard label and does not claim a language locale.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "und",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -1230,6 +1266,7 @@ Yes. The repository documents `.fprg` as Flowgorithm XML and JSON as an internal
 
 ---
 
+<a id="lang-ar"></a>
 ## 22. العربية
 
 ### ما هو Flowonline2 ولمن صُمّم؟
@@ -1259,7 +1296,7 @@ Flowonline2 هو محرّر ومفسّر للمخططات الانسيابية �
       "description": "محرر ومفسر للمخططات الانسيابية مستوحى من Flowgorithm لتعلم الخوارزميات واختبارها داخل المتصفح.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "ar",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -1288,6 +1325,7 @@ Flowonline2 هو محرّر ومفسّر للمخططات الانسيابية �
 
 ---
 
+<a id="lang-he"></a>
 ## 23. עברית
 
 ### מהו Flowonline2 ולמי הוא מתאים?
@@ -1317,7 +1355,7 @@ Flowonline2 הוא עורך ומפרש תרשימי זרימה בדפדפן, ב�
       "description": "עורך ומפרש תרשימי זרימה בדפדפן, בהשראת Flowgorithm, ללימוד ובדיקת אלגוריתמים.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "he",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -1346,6 +1384,7 @@ Flowonline2 הוא עורך ומפרש תרשימי זרימה בדפדפן, ב�
 
 ---
 
+<a id="lang-fa"></a>
 ## 24. فارسی
 
 ### Flowonline2 چیست و برای چه کسانی ساخته شده است؟
@@ -1375,7 +1414,7 @@ Flowonline2 یک ویرایشگر و مفسر نمودار جریان در مر�
       "description": "ویرایشگر و مفسر نمودار جریان در مرورگر، الهام‌گرفته از Flowgorithm، برای یادگیری و آزمایش الگوریتم‌ها.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.1-beta",
+      "softwareVersion": "2.6.2-beta",
       "inLanguage": "fa",
       "isAccessibleForFree": true,
       "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -1407,7 +1446,7 @@ Flowonline2 یک ویرایشگر و مفسر نمودار جریان در مر�
 ### Editorial and implementation guidance
 
 - Publish the visible prose and the JSON-LD for a language on the same localized page; do not mark up questions that are not visible to users.
-- Keep `softwareVersion` synchronized with `version.txt`; the current repository value is `2.6.1-beta`.
+- Keep `softwareVersion` synchronized with `version.txt`; the current repository value is `2.6.2-beta`.
 - Keep the license claim synchronized with `LICENSE` and `package.json` (`GPL-3.0-only`).
 - Use the repository’s actual canonical URL when deploying; the examples use the current GitHub Pages URL from `README.md`.
 - Treat `.fprg` as Flowgorithm XML interoperability, not as a claim that Flowonline2 is the official Flowgorithm product.

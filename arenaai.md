@@ -709,6 +709,21 @@ v2.3.23: Summary of changes
 
 ---
 
+## Milestone 42: AI-Mode Language Index (2.6.2-beta)
+
+### Added
+*   **`docs/aimode.md` language index:** Added a compact three-column Markdown table at the top of the document linking directly to all 24 localized sections.
+*   **Stable language anchors:** Added explicit `lang-*` anchors for every section, including accented, CJK, Cyrillic, RTL, and symbol-based headings, so navigation does not depend on renderer-specific slugification.
+
+### Changed
+*   **Version synchronization:** Bumped the canonical release metadata to `2.6.2-beta` across `version.txt`, package metadata, `CHANGELOG.md`, `arenaai.md`, and `docs/aimode.md`.
+
+### Architecture invariants
+*   Documentation-only change; no application runtime or `.fprg` parsing/serialization behavior changed.
+*   All 24 localized GEO and JSON-LD sections remain complete and in the original order.
+
+---
+
 ## Milestone 41: Mobile Surface Compatibility and Interaction Hardening (2.6.1-beta)
 
 ### Changed

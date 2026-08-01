@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.2-beta] - 2026-08-01
+
+### Added
+- **Language index in `docs/aimode.md`:** Added a compact Markdown table with direct links to all 24 localized GEO and JSON-LD sections, using explicit stable anchors for reliable navigation across accented, non-Latin, RTL, and symbol-based language headings.
+
+### Changed
+- **Version metadata:** Synchronized `version.txt`, `package.json`, `package-lock.json`, `CHANGELOG.md`, `arenaai.md`, and `docs/aimode.md` to `2.6.2-beta`.
+
+### Architecture invariants
+- Documentation-only change; application runtime and `.fprg` file handling are unchanged.
+- All 24 language sections remain complete and in their original order.
+
+---
+
 ## [2.6.1-beta] - 2026-08-01
 
 ### Changed
