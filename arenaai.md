@@ -82,7 +82,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (2.6.1-beta)
+## 5. Architectural Milestone Logs & Change History (2.6.3-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -706,6 +706,24 @@ v2.3.23: Summary of changes
 - **Desktop files byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
 - **State reuse**: every mobile component pulls from `useFlow()` — no duplication of state.
 - **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*`.  - **Bundle isolation**: `MobileApp` is `React.lazy()`-loaded inside `AppShell`. Desktop users never download `mobile.css` or any mobile component.
+
+---
+
+## Milestone 43: Device-Aware Mobile Detection (2.6.3-beta)
+
+### Fixed
+*   **Desktop resize classification:** `src/mobile/useViewport.ts` no longer treats a desktop browser with a narrow CSS window as mobile. The decision combines User-Agent/platform identity, touch capability, screen dimensions, CSS viewport dimensions, and portrait orientation.
+*   **Touchscreen desktops:** Windows/macOS/Linux desktop browsers with touch support remain on the desktop layout instead of entering the rotated mobile surface.
+*   **iPadOS desktop mode:** Safari reporting `MacIntel` is recognized as a mobile/tablet device only when touch points are available; a coarse pointer alone does not reclassify a Mac desktop.
+*   **Landscape handling:** A mobile device already in landscape is not rotated a second time.
+
+### Added
+*   **`src/mobile/useViewport.test.ts`:** Regression tests for resized desktop windows, desktop touchscreens, Android, iPhone, iPadOS desktop mode, and mobile landscape.
+
+### Architecture invariants
+*   Desktop behavior is preserved when resizing a desktop browser window.
+*   `.fprg` opening, parsing, serialization, and saving behavior is unchanged.
+*   Validation completed: TypeScript, 135 Vitest tests, production build, and whitespace checks.
 
 ---
 

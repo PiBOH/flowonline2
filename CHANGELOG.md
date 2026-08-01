@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.3-beta] - 2026-08-01
+
+### Fixed
+- **Mobile detection:** The rotated mobile surface no longer activates when a desktop browser window is merely resized to a phone-like CSS width.
+- **Device classification:** Mobile mode now combines mobile User-Agent/platform signals, touch capability, screen dimensions, and CSS viewport dimensions. iPadOS desktop-mode Safari is supported through `MacIntel` plus touch detection, while ordinary desktop touchscreens remain desktop.
+- **Orientation handling:** Portrait mobile devices use the rotated presentation; mobile devices already in landscape are not rotated a second time.
+
+### Added
+- **Viewport regression tests:** Added unit coverage for resized desktop windows, desktop touchscreens, Android, iPhone, iPadOS desktop mode, and mobile landscape.
+
+### Architecture invariants
+- Desktop behavior remains unchanged when a desktop browser is resized.
+- `.fprg` parsing, opening, serialization, and saving logic is unchanged.
+- Validation: TypeScript, 135 Vitest tests, production build, and `git diff --check` pass.
+
+---
+
 ## [2.6.2-beta] - 2026-08-01
 
 ### Added

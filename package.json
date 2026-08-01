@@ -1,7 +1,7 @@
 {
   "name": "flowonline2",
   "private": true,
-  "version": "2.6.2-beta",
+  "version": "2.6.3-beta",
   "license": "GPL-3.0-only",
   "type": "module",
   "scripts": {
