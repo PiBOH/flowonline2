@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.4-beta] - 2026-08-01
+
+### Fixed
+- **WinUI close buttons:** The title-bar `X` now stops its `pointerdown` event from reaching the draggable title bar. This prevents pointer capture and `preventDefault()` from suppressing the button click, so every resizable WinUI dialog closes normally.
+
+### Added
+- **WinUI close regression test:** Added jsdom coverage for pointer interaction and the `onClose` callback.
+
+### Architecture invariants
+- Dialog dragging, manual resizing, default-size reset, and `.fprg` file handling remain unchanged.
+- Validation: TypeScript, 136 Vitest tests, production build, and `git diff --check` pass.
+
+---
+
 ## [2.6.3-beta] - 2026-08-01
 
 ### Fixed

@@ -168,7 +168,9 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
             <span>{tc.icon}</span> {title}
           </span>
           <button
+            onPointerDown={(e) => e.stopPropagation()}
             onClick={onClose}
+            aria-label="Close dialog"
             className="w-[24px] h-[20px] hover:bg-red-600 text-white font-sans text-[11px] flex items-center justify-center rounded-sm transition"
           >
             <IconClose size={10} />

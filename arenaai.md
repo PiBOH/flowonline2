@@ -82,7 +82,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (2.6.3-beta)
+## 5. Architectural Milestone Logs & Change History (2.6.4-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -706,6 +706,20 @@ v2.3.23: Summary of changes
 - **Desktop files byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
 - **State reuse**: every mobile component pulls from `useFlow()` — no duplication of state.
 - **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*`.  - **Bundle isolation**: `MobileApp` is `React.lazy()`-loaded inside `AppShell`. Desktop users never download `mobile.css` or any mobile component.
+
+---
+
+## Milestone 44: WinUI Close Button Pointer Fix (2.6.4-beta)
+
+### Fixed
+*   **Resizable WinUI close buttons:** The title-bar close button now stops its `pointerdown` event before it reaches the draggable title bar. This prevents `setPointerCapture()` and `preventDefault()` from suppressing the button's click event.
+
+### Added
+*   **`src/components/WinUIDialog.test.ts`:** Regression coverage confirms that pointer interaction on the `X` invokes `onClose`.
+
+### Architecture invariants
+*   Dialog dragging, manual resizing, default-size reset, and `.fprg` opening/saving remain unchanged.
+*   Validation target: TypeScript, 136 Vitest tests, production build, and whitespace checks.
 
 ---
 
