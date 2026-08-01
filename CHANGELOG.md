@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.5.4-beta] - 2026-07-21
+
+### Fixed
+- **Single-step "Add block" UX (Phase 5.2).** Clicking the inserter arrow on the canvas now opens ONE menu showing both **Paste** (the clipboard count, with Ctrl+V shortcut hint) and **New block** (the 10-type grid). The previous two-step prompt ("paste or new?" then a second picker) is gone. Same applies to the right-click context menu on the inserter: it now shows JUST "Paste Block" with the clipboard count and Ctrl+V hint, since left-click already provides the unified insert menu.
+
+### Architecture invariants preserved
+- Desktop and mobile bundles unchanged except for the targeted FlowchartCanvas.tsx edits.
+- The Paste row is disabled (`disabled={copiedBlocks.length === 0}`) when no blocks have been copied, preserving the existing UX for that case.
+- Viewport coordinates of the popup (`activeInserter.x / y`) are unchanged — no layout regression.
+
+---
+
 ## [2.5.3-beta] - 2026-07-21
 
 ### Fixed

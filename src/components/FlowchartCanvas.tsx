@@ -557,7 +557,38 @@ export const FlowchartCanvas: React.FC = () => {
                 ×
               </button>
             </div>
-            
+
+            {/* === PHASE 5.2: SINGLE-STEP PASTE ROW =========================== */}
+            {/* Click the inserter arrow → ONE menu shows BOTH Paste AND      */}
+            {/* new block types. The previous 2-step flow (paste? or new?) is */}
+            {/* gone. Disabled when clipboard is empty.                        */}
+            <button
+              onClick={() => {
+                pasteBlocks(activeInserter.parentId);
+                setActiveInserter(null);
+              }}
+              disabled={copiedBlocks.length === 0}
+              title={language === 'it' ? 'Incolla i blocchi copiati' : 'Paste copied blocks here'}
+              className="col-span-2 flex items-center justify-between w-full p-1.5 mb-1 rounded border border-transparent hover:border-indigo-300 hover:bg-indigo-50 disabled:opacity-30 disabled:pointer-events-none disabled:cursor-not-allowed transition"
+            >
+              <span className="flex items-center space-x-2">
+                <IconClipboard size={14} className="text-indigo-600" />
+                <span className="text-xs font-bold text-slate-700">
+                  {language === 'it' ? 'Incolla' : 'Paste'} {copiedBlocks.length > 0 ? `(${copiedBlocks.length})` : ''}
+                </span>
+              </span>
+              <span className="text-[9px] text-slate-400 font-mono font-bold">Ctrl+V</span>
+            </button>
+
+            {/* Visual separator between Paste row and the new-block grid. */}
+            <div className="col-span-2 h-[1px] bg-slate-200 my-1 mx-1" />
+
+            {/* "New block" subheader so the user knows the following grid is */}
+            {/* exclusively for creating new blocks (vs. pasting copies).      */}
+            <div className="col-span-2 px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              {language === 'it' ? 'Nuovo blocco' : 'New block'}
+            </div>
+
             <button
               onClick={() => handleInsertBlockType('declare')}
               className="flex items-center space-x-2 p-1.5 rounded hover:bg-yellow-50 text-left border border-transparent hover:border-yellow-200 transition"
@@ -708,30 +739,21 @@ export const FlowchartCanvas: React.FC = () => {
               </>
             ) : (
               <>
+                {/* === PHASE 5.2: SHORTCUT — single-step right-click paste ====== */}
+                {/* Removed the previous 2-step "Insert Block..." sub-trigger  */}
+                {/* because left-click on the inserter arrow already opens   */}
+                {/* the unified menu (with Paste at the top + block grid).   */}
                 <button
                   onClick={() => {
                     pasteBlocks(contextMenu.parentId!);
                     setContextMenu(null);
                   }}
                   disabled={copiedBlocks.length === 0}
+                  title={language === 'it' ? 'Incolla i blocchi copiati qui' : 'Paste copied blocks here'}
                   className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between disabled:opacity-30 disabled:pointer-events-none transition-colors"
                 >
-                  <span><IconClipboard size={13} /> {language === 'it' ? 'Incolla Blocco' : 'Paste Block'}</span>
-                </button>
-                <div className="h-[1px] bg-slate-300 my-1"></div>
-                <button
-                  onClick={() => {
-                    setActiveInserter({
-                      parentId: contextMenu.parentId!,
-                      index: contextMenu.index,
-                      x: contextMenu.x,
-                      y: contextMenu.y
-                    });
-                    setContextMenu(null);
-                  }}
-                  className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between font-bold transition-colors"
-                >
-                  <span><IconPlus size={13} /> {language === 'it' ? 'Inserisci Blocco...' : 'Insert Block...'}</span>
+                  <span><IconClipboard size={13} /> {language === 'it' ? 'Incolla Blocco' : 'Paste Block'} ({copiedBlocks.length})</span>
+                  <span className="text-[9px] text-slate-400 font-mono font-bold">Ctrl+V</span>
                 </button>
               </>
             )}
