@@ -213,7 +213,7 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = (props) => {
     { id: 'help-fork',      label: L.forkContribute,     Icon: IconGlobe,     onClick: props.onForkContribute },
     { id: 'help-lang',      label: L.selectLanguage,     Icon: IconGlobe,     onClick: props.onPickLanguage },
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.language]);
+  ], [props.language]);
 
   const renderRow = (sec: Section) => {
     const isCurrent = props.view === sec.id;
