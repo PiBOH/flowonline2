@@ -581,6 +581,26 @@ v2.3.23: Summary of changes
 - `MobileLanguageSheet.tsx` → `MobileBottomSheet.tsx` + `useFlow` + `FlagIcon`
 - Nothing else imports these files yet. **Phase 2** will add `MobileApp.tsx` orchestrator + 5 view components (`MobileCanvasView`, `MobileEditView`, `MobileRunView`, `MobileConsoleView`, `MobileToolsView`) + `MobileTopBar`. **Phase 3** will wire viewport routing into `App.tsx` (additive — MainLayout remains unchanged).
 
+### Milestone 43: localStorage clear bug fix + "Flag: Also clear current work" toggle (BETA 2.5.1-beta)
+
+[//]: # (keepachangelog)
+
+#### Fixed
+*   **`src/context/FlowContext.tsx`** — `clearLocalStorage` no longer silently lets the 500ms debounced save resurrect the cleared state. The implementation is restructured into two phases split across the `try/catch` boundary:
+    *   **Phase A (inside try):** `window.localStorage.removeItem(STORAGE_KEY)` always; if `opts.alsoClearCurrentWork === true`, also `clearTimeout(saveTimeoutRef.current)` + overwrite `latestSaveRef.current = { statements: [], programTitle: 'Untitled Program', programAuthor: '' }` + removeItem `AUTHOR_KEY` / `'flowonline2_mobile_view'` / `'flowonline2_autosave'`. On any thrown error: `console.warn` + early `return`.
+    *   **Phase B (outside try):** if `alsoClearCurrentWork`, run `setStatements([])` / `setProgramTitleState('Untitled Program')` / `setProgramAuthorState('')` / `setUndoStack([])` / `setRedoStack([])` / `setSelectedBlockIds([])` / `stopRun()`. Never partial.
+*   A failed localStorage write (private mode / quota) no longer half-clears the user's chart — it leaves the in-memory state intact.
+*   Default no-arg `clearLocalStorage()` behavior is preserved (backward-compatible with the existing desktop call site at `Header.tsx:2123`).
+
+#### Added
+*   **`src/mobile/MobileToolsView.tsx`** — `'Flag: Also clear current work'` toggle inside the WinUI confirmation dialog. Off by default. UI: a red-bordered `FLAG` pill + a 18×18 checkbox with `accent-color: #dc2626`. When activated, the dialog border + body become red-tinted and `clearLocalStorage({ alsoClearCurrentWork: true })` is invoked; toast switches from `"legacy saved program removed ✓ (current work kept)"` to `"localStorage fully cleared ✓ (including current work)"`. Also resets `alsoClearCurrent` to false on both `onClose` and after `onOk` so the next clear starts with the conservative default.
+
+#### Architecture invariants (still held)
+- **`clearLocalStorage` is the single source of truth** for "clear storage" — UI components must not call `localStorage.removeItem` directly. Future persisted keys (layout, colorScheme, etc.) belong in this function, not at any call site.
+- Mobile `MobileToolsView.handleClearLocalStorage` is now a thin wrapper that just translates UI state to the optional flag; no manual `removeItem` calls remain in component code.
+- Desktop (`Header.tsx:2123`) is unchanged for now — it still hits the legacy-only path. Desktop Flag-toggle parity is a candidate for the next iteration.
+- `tsc --noEmit` clean; `npx vitest run` 126/126 passed.
+
 ### Milestone 41: Mobile Bundle Phase 3 — From-Scratch Rewrite + Dot-on-Hover Status Badges + Version Fallback (BETA 2.5.0-beta)
 
 [//]: # (keepachangelog)

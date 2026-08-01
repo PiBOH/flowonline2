@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.5.1-beta] - 2026-07-21
+
+### Fixed
+- **`src/context/FlowContext.tsx` — localStorage clear bug.** `clearLocalStorage` no longer silently lets the 500ms debounced save resurrect the cleared state. The implementation is now structured in two phases split across the `try/catch` boundary so a failed storage operation (private-mode browser, quota exceeded) leaves the user's in-memory chart UNTOUCHED rather than half-cleared:
+  - **Phase A** (inside try): `window.localStorage.removeItem(STORAGE_KEY)` plus, when opted in, cancel the pending `saveTimeoutRef.current`, synchronously overwrite `latestSaveRef.current` with the empty-state tuple, and remove `AUTHOR_KEY`, `'flowonline2_mobile_view'`, `'flowonline2_autosave'`. On error: `console.warn` + early `return`.
+  - **Phase B** (outside try): if `opts.alsoClearCurrentWork === true`, run all 7 state setters (`setStatements([])`, `setProgramTitleState('Untitled Program')`, `setProgramAuthorState('')`, `setUndoStack([])`, `setRedoStack([])`, `setSelectedBlockIds([])`, `stopRun()`) — never partially.
+- The default behavior (`clearLocalStorage()` no-arg) is preserved: only `STORAGE_KEY` is removed; the in-memory chart survives; the existing desktop call site at `Header.tsx:2123` is unchanged and still backward-compatible.
+
+### Added
+- **`'Flag' toggle in the mobile clear-localStorage dialog (src/mobile/MobileToolsView.tsx).`** Off by default. When the user activates it, `clearLocalStorage({ alsoClearCurrentWork: true })` is called: the dialog shows a red-bordered `FLAG` pill, the box border turns accent-red, and the toast confirms with `"localStorage fully cleared ✓ (including current work)"`. Default behavior unchanged: `"legacy saved program removed ✓ (current work kept)"`.
+- An informational paragraph in the dialog body explains on-vs-off behavior so the user understands exactly what the Flag does before toggling.
+
+### Architecture invariants (still held)
+- `tsc --noEmit` clean, `npx vitest run` 126/126 passed.
+- `clearLocalStorage` is the single source of truth for "clear storage". Future localStorage keys (layout, colorScheme, etc.) should be added there, not at every call site.
+- Mobile `MobileToolsView.handleClearLocalStorage` no longer manually `localStorage.removeItem('flowonline2_autosave')` — that's centralized.
+- The mobile bundle still lazy-loads; desktop bundle byte-for-byte unchanged.
+
+---
+
 ## [2.5.0-beta] - 2026-07-21
 
 ### Added
