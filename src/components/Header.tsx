@@ -79,7 +79,7 @@ export const Header: React.FC = () => {
   const [licenseText, setLicenseText] = useState('Loading license...');
   const [licenseSource, setLicenseSource] = useState<'repo' | 'fallback'>('repo');
 
-  // Manual Modal state (ALPHA 2.0.12 / BETA 2.1.0 New feature!)
+  // Manual Modal state (2.0.12 / 2.1.0 New feature!)
   const [showManual, setShowManual] = useState(false);
   const [manualText, setManualText] = useState('Loading user manual...');
   const [manualSource, setManualSource] = useState<'repo' | 'fallback'>('repo');
@@ -1497,7 +1497,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     }
   }, [showAbout]);
 
-  // Dynamically load the MANUAL.md file FROM THE OFFICIAL GITHUB URL (ALPHA 2.0.12 / BETA 2.1.0 New Feature!)
+  // Dynamically load the MANUAL.md file FROM THE OFFICIAL GITHUB URL (2.0.12 / 2.1.0 New Feature!)
   useEffect(() => {
     if (showManual) {
       setManualText('Loading user manual from GitHub...');
@@ -2735,7 +2735,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </div>
       )}
 
-      {/* ============ WIN32 MANUAL DIALOG MODAL - WinUI (BETA 2.3.2) ============ */}
+      {/* ============ WIN32 MANUAL DIALOG MODAL - WinUI (2.3.2) ============ */}
       {showManual && (
         <WinUIDialog
           isOpen={showManual}
@@ -2766,7 +2766,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </WinUIDialog>
       )}
 
-      {/* ============ WIN32 CHANGELOG DIALOG MODAL - WinUI (BETA 2.3.2) ============ */}
+      {/* ============ WIN32 CHANGELOG DIALOG MODAL - WinUI (2.3.2) ============ */}
       {showChangelog && (
         <WinUIDialog
           isOpen={showChangelog}

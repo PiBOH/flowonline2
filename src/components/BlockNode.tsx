@@ -125,7 +125,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
   const t = translations[lang].blocks;
   const sc = colorSchemes[colorScheme];
 
-  // Ref to automatically scroll and center the executing block in the viewport (ALPHA 2.0.12 Requirement!)
+  // Ref to automatically scroll and center the executing block in the viewport (2.0.12 Requirement!)
   const nodeRef = useRef<SVGGElement>(null);
 
   useEffect(() => {

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.5.7-beta] - 2026-07-21
+
+### Changed
+- **Lifecycle-prefix strip pass (followup):** completed the remaining cleanup that the prior commit (e1bbbf1) only partially executed. Confirmed the 8 CHANGELOG.md inline refs and 5 src/components/{Header,BlockNode}.tsx comments are stripped (`**Version:** Bumped to 2.3.1.`, `(2.0.12 / 2.1.0 New feature!)`, etc.). Enhanced regex now covers bare `RC` form too.
+
+### Architecture invariants
+- No source-code behavioral changes; only docstring + prose references altered.
+- 126/126 vitest still passing. tsc --noEmit clean.
+
+---
+
 ## [2.5.5-beta] - 2026-07-21
 
 ### Fixed
@@ -14,7 +25,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 - **Dead import:** Removed unused `IconPlus` import from `FlowchartCanvas.tsx` (resolved TS6133 leftover from the Phase 5.2 inserter rewrite).
 
 ### Changed
-- **v-prefix release prep:** Anchored the auto-release workflow on the fresh `BETA 2.5.6-beta` tag (previous v-prefix commit was on `v2.5.4-beta`). No code changes; this entry exists purely to record the schematic-version bump and trigger the next `[bot]` GitHub release.
+- **v-prefix release prep:** Anchored the auto-release workflow on the fresh `2.5.6-beta` tag (previous v-prefix commit was on `v2.5.4-beta`). No code changes; this entry exists purely to record the schematic-version bump and trigger the next `[bot]` GitHub release.
 
 ---
 
@@ -110,7 +121,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ### Changed
 - **`src/components/Header.tsx`** — Replaced 4 colored source-status chips (line 2644 version, line 2664 license, line 2741 manual, line 2769 changelog) with `<StatusDot>` calls. The chips used to say things like "loaded from GitHub" or "fallback path" and were invasive; the new dots are silent at rest and surface their label only on hover / focus / tap.
-- **Version fallback** in `Header.tsx` is now `'0.0.0-UNKNOWN'` (both the React `useState` initial value and the final fallback after both GitHub and local fetches fail). No more hardcoded `'BETA 2.1.0'` lies — the user is told exactly when the version could not be loaded.
+- **Version fallback** in `Header.tsx` is now `'0.0.0-UNKNOWN'` (both the React `useState` initial value and the final fallback after both GitHub and local fetches fail). No more hardcoded `'2.1.0'` lies — the user is told exactly when the version could not be loaded.
 - **`.ignore/.assetsai/README.md`** — Stale MIT-License mentions cleaned up (the directory is `.gitignore`'d but keeping the dev's local notes consistent with current GNU GPL v3 license reduces confusion).
 
 ### Fixed
@@ -181,12 +192,12 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ### Changed
 - **Auto-release pipeline:** Releases now produce a clean GitHub release tagged without the `BETA`/`ALPHA`/`RC`/`STABLE` lifecycle prefix (e.g. `2.3.31-stable_bot` instead of `BETA_2.3.31-stable_bot`).
-- **Stable release channel:** Versions ending in `-stable` are now published as **Stable** releases on GitHub. Any other lifecycle suffix (`-beta`, `-alpha`, `-rc1`, or no suffix) lands as a **Pre-release**. So `BETA 2.3.31-stable` ships as a full stable release rather than a pre-release badge.
+- **Stable release channel:** Versions ending in `-stable` are now published as **Stable** releases on GitHub. Any other lifecycle suffix (`-beta`, `-alpha`, `-rc1`, or no suffix) lands as a **Pre-release**. So `2.3.31-stable` ships as a full stable release rather than a pre-release badge.
 
 ## [2.3.30-beta] - 2026-07-21
 
 ### Changed
-- **Bump + auto-release workflow test:** verision bumped to `BETA 2.3.30-beta` to validate end-to-end auto-release behavior.
+- **Bump + auto-release workflow test:** verision bumped to `2.3.30-beta` to validate end-to-end auto-release behavior.
   - Tag derivative logic in `.github/workflows/auto-release.yml` now strips `BETA/ALPHA/RC/STABLE` prefix → expected tag `2.3.30-beta_bot` and name `2.3.30-beta [bot]`.
   - Prerelease regex `\-stable$` keeps this version marked as `prerelease=true` (pre-release channel), consistent with `2.3.29-beta`.
 
@@ -435,7 +446,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 ### Changed
 - **Language Selector:** Now a styled button opening a WinUI dialog instead of a cramped `<select>` element.
 - **Menu Translations:** Added `bugReport`, `featureRequest`, `forkContribute`, and `selectLanguage` keys to all 22 languages.
-- **Version:** Bumped to BETA 2.3.1.
+- **Version:** Bumped to 2.3.1.
 
 ---
 
@@ -449,7 +460,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 ### Changed
 - **exportUtils.ts:** `exportToPNG` and `exportToPDF` now return `Promise<ExportResult>` so callers can display WinUI dialogs.
 - **Header.tsx:** Export handlers updated to await export results and show WinUI dialogs.
-- **Version:** Bumped to BETA 2.3.0.
+- **Version:** Bumped to 2.3.0.
 
 ---
 
@@ -463,7 +474,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ### Changed
 - **File Menu:** Added Export PNG and Export PDF entries alongside the existing Export SVG.
-- **Version:** Bumped to BETA 2.2.0 (minor release for export engines + Tools menu).
+- **Version:** Bumped to 2.2.0 (minor release for export engines + Tools menu).
 
 ### Fixed
 - **Issue Templates:** Fixed `validations` YAML key being incorrectly nested inside `attributes` in all 4 GitHub issue form templates (bug_report-en.yml, bug_report-it.yml, feature_request-en.yml, feature_request-it.yml).
@@ -484,7 +495,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 - **Empty Default Canvas:** Removed the pre-loaded sample program; new users start with a blank diagram.
 - **GitHub Pages Configuration:** Set `base: './'` in `vite.config.ts` for relative asset paths.
 - **`.gitignore` Sanitization:** Removed obsolete entries, added standard excludes for `node_modules/`, `dist/`, `.env`, `.ignore/`, IDE files.
-- **Version:** Bumped to BETA 2.1.0 (minor release for new features).
+- **Version:** Bumped to 2.1.0 (minor release for new features).
 
 ### Fixed
 - **Version Overwrite:** Moved `setAppVersion` inside `.catch()` to prevent overriding the live GitHub version.
