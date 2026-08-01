@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.5.3-beta] - 2026-07-21
+
+### Fixed
+- **Re-release with all Phase-5 TypeScript errors resolved.** The previous `v2.5.2-beta` release commit (`f516b39`) shipped a broken tree (TS1184 + 4 follow-ups needed). This tag points at the corrected tree, ending up at `<new-commit>`. No user-facing functional change — identical Phase-5 mobile UX, just bug-fixed.
+- **Auto-release workflow re-published a clean `2.5.3-beta_bot` tag** on `main` (the broken `2.5.2-beta_bot` tag remains in the GH registry until manually yank'd via the GH Releases UI; recommended followup for the user).
+
+### Added (Phase 5 — recap)
+- `src/mobile/MobileSidebar.tsx` slide-in drawer with backdrop dim, chevron-tap-to-expand submenu help footer, ESC-to-close a11y + focus-restore + body-scroll lock.
+- `src/mobile/MobileTopBar.tsx` slim 52px one-row top bar with inline 3-line hamburger-left + Run/Step/Pause/Stop-right.
+- `vite.config.ts` read `version.txt` at build time → `import.meta.env.VITE_APP_VERSION` (with `'0.0.0-UNKNOWN'` fallback per user spec).
+- `src/mobile/MobileApp.tsx` Path-C full sidebar wiring: hidden file input ref, 3 WinUI overlays (About/Manual-from-GitHub/Changelog-from-GitHub), MobileLanguageSheet re-use, GitHub `window.open` for bug/feature/fork links.
+
+### Removed
+- `src/mobile/MobileTabBar.tsx` (and its 58-line CSS block); replaced by sidebar drawer.
+
+---
+
 ## [2.5.2-beta] - 2026-07-21
 
 ### Changed

@@ -74,8 +74,9 @@ export interface MobileSidebarProps {
  */
 export const MobileSidebar: React.FC<MobileSidebarProps> = (props) => {
   // ----- Body-scroll lock + a11y focus + ESC handler -----
+  // (`opener` for focus restore is captured as a closure local inside the
+  //  useEffect below so we don't need a second useRef.)
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
-  const openerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!props.open) return;
