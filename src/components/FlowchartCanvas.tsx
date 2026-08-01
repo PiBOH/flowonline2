@@ -3,7 +3,7 @@ import { useFlow, findBlockById } from '../context/FlowContext';
 import { Statement, BlockType } from '../types/flow';
 import { BlockNode, colorSchemes } from './BlockNode';
 import { translations } from '../utils/translations';
-import { IconPencil, IconScissors, IconClipboard, IconInbox, IconError, IconPlus } from './EmojiIcons';
+import { IconPencil, IconScissors, IconClipboard, IconInbox, IconError } from './EmojiIcons';
 
 interface LayoutNode {
   id: string;
@@ -752,7 +752,7 @@ export const FlowchartCanvas: React.FC = () => {
                   title={language === 'it' ? 'Incolla i blocchi copiati qui' : 'Paste copied blocks here'}
                   className="w-full text-left px-3.5 py-1.5 hover:bg-[#C9DEF5] hover:text-slate-900 flex items-center justify-between disabled:opacity-30 disabled:pointer-events-none transition-colors"
                 >
-                  <span><IconClipboard size={13} /> {language === 'it' ? 'Incolla Blocco' : 'Paste Block'} ({copiedBlocks.length})</span>
+                  <span><IconClipboard size={13} /> {language === 'it' ? 'Incolla Blocco' : 'Paste Block'}{copiedBlocks.length > 0 ? ` (${copiedBlocks.length})` : ''}</span>
                   <span className="text-[9px] text-slate-400 font-mono font-bold">Ctrl+V</span>
                 </button>
               </>
