@@ -1,1 +1,1 @@
-BETA 2.5.8-beta
+BETA 2.5.9-beta

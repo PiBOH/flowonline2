@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.5.9-beta] - 2026-07-21
+
+### Changed
+- **CHANGELOG fixup:** added the missing 2.5.8-beta section that the prior commit (`e17ad28`) shipped without. Also bumps version one more step to 2.5.9-beta per ad-ogni-messaggio rule.
+
+### Architecture invariants
+- Pure documentation catch-up; no source-code change.
+- 126/126 vitest still passing. tsc --noEmit clean.
+
+---
+
+## [2.5.8-beta] - 2026-07-21
+
+### Changed
+- **MobileTabBar.tsx deletion finally committed:** staging-state orphan from Phase 5 sidebar-drawer rework now resolved (file had been rm'd but never git rm'd + committed). Captured via `git rm` + commit so `git status --short` returns to a known-clean baseline.
+- **LF/CRLF drift ghosts purged:** 7 src/ files showed ` M` due to line-ending noise from earlier `sed -i` ops; reset via `git checkout HEAD --` (no content change since `git diff` was empty on every file). Imported files: App.tsx, Console.tsx, FlowchartCanvas.tsx, WinUIDialog.tsx, FlowContext.tsx, codeGenerator.ts, translations.ts.
+
+### Architecture invariants
+- MobileTabBar.tsx deletion has zero downstream importers (verified by `grep -rn "MobileTabBar" src/` returning NONE).
+- 126/126 vitest still passing. tsc --noEmit clean.
+
+---
+
 ## [2.5.7-beta] - 2026-07-21
 
 ### Changed
