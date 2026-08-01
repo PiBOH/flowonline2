@@ -154,10 +154,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
 - In saved .fprg files, \\n is automatically translated to ToChar(13) for full desktop compatibility!`;
 
   // LOCAL MENU & ABOUT TRANSLATIONS (For 1000% multilingual fidelity!)
-  // Exported so the mobile sidebar (`src/mobile/MobileSidebar.tsx`) can render
-  // the same labels as the desktop menu without duplicating the 23-language
-  // map. Single source-of-truth lives here; mobile imports it.
-  export const menuTranslations: Record<Language, {
+  const menuTranslations: Record<Language, {
     file: string;
     edit: string;
     program: string;

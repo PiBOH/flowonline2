@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFlow } from '../context/FlowContext';
 import { translations as catalogs } from '../utils/translations';
-import { menuTranslations } from '../components/Header';
 import type { Language } from '../types/flow';
 import {
   IconChart, IconPencil, IconPlay, IconChatBubble, IconTools,
@@ -36,8 +35,7 @@ export interface MobileSidebarProps {
   onSelectView: (v: MobileViewId) => void;
   language: Language;
   // Action helpers invoked by the parent (MobileApp.tsx wires them to
-  // useFlow / exportUtils / window.open / FprgParser directly — see
-  // MobileApp.tsx for the canonical paths).
+  // useFlow / exportUtils / window.open / FprgParser directly).
   onNew: () => void;
   onOpenFile: () => void;
   onSave: () => void;
@@ -68,11 +66,11 @@ export interface MobileSidebarProps {
  *
  * Architecture invariants:
  *   - Reads only `undo` / `redo` / `clearConsole` from `useFlow()`.
- *     All other side-effects are passed in by the parent.
- *   - 23-language labels are taken from `menuTranslations` (the same
- *     map the desktop menus use), merged with the standard
- *     `translations` catalog fall-through so any missing key degrades
- *     gracefully to `''` instead of crashing.
+ *   - All other side-effects are passed in by the parent.
+ *   - i18n: reads from the shared `translations` catalog where keys exist,
+ *     and uses hardcoded English fallbacks for menu-only keys (TODO:
+ *     extract Header's `menuTranslations` map into a shared file in a
+ *     future pass to remove the duplication).
  */
 export const MobileSidebar: React.FC<MobileSidebarProps> = (props) => {
   // ----- Body-scroll lock + a11y focus + ESC handler -----
@@ -85,16 +83,13 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = (props) => {
     document.body.style.overflow = 'hidden';
 
     // Remember which element opened the drawer so we can restore focus
-    // when it closes. We grab document.activeElement BEFORE we ever
-    // shift focus into the drawer.
-    openerRef.current = (document.activeElement as HTMLElement) ?? null;
+    // when it closes.
+    const opener = (document.activeElement as HTMLElement) ?? null;
 
-    // Move focus to the close button.
     requestAnimationFrame(() => {
       try { closeBtnRef.current?.focus(); } catch { /* noop */ }
     });
 
-    // ESC closes the drawer.
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.stopPropagation();
@@ -106,7 +101,10 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = (props) => {
     return () => {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener('keydown', onKey);
-      try { openerRef.current?.focus(); } catch { /* noop */ }
+      // Defer focus restore to next tick so React unmount doesn't fight it.
+      requestAnimationFrame(() => {
+        try { opener?.focus(); } catch { /* noop */ }
+      });
     };
   }, [props.open, props.onClose]);
 
@@ -115,54 +113,91 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = (props) => {
 
   const { undo, redo, clearConsole } = useFlow() as any;
 
-  // Merge the standard `translations` catalog with `menuTranslations` so
-  // we expose the keys the desktop menus use. Missing keys degrade to ''.
-  const t = useMemo(() => {
-    const base = (catalogs[props.language] ?? {}) as Record<string, string>;
-    const mt = ((menuTranslations as any)[props.language] ?? {}) as Record<string, string>;
-    return { ...base, ...mt } as Record<string, string>;
+  /**
+   * Per-language labels (`L`).
+   *
+   * Source priority (highest → lowest):
+   *   1. Shared `translations` catalog (varies by language).
+   *   2. Hardcoded English (TODO: populate in a future i18n pass).
+   *
+   * The keys we read from the shared catalog are the ones the desktop
+   * already exposes (toolbar.*, aboutTitle, manualTitle, changelogTitle,
+   * console.clearBtn). The desktop menu's `menuTranslations` map lives
+   * INSIDE the Header function body so it cannot be exported without a
+   * refactor; for now we mirror those strings as English fallbacks.
+   */
+  const L = useMemo<Record<string, string>>(() => {
+    const c = ((catalogs[props.language] as any) ?? (catalogs.en as any) ?? {});
+    const tb = c.toolbar ?? {};
+    return {
+      // Toolbar labels (shared)
+      run: tb.run ?? 'Run',
+      step: tb.step ?? 'Step',
+      pause: tb.pause ?? 'Pause',
+      stop: tb.stop ?? 'Stop',
+      speed: tb.speed ?? 'Speed',
+      undo: tb.undo ?? 'Undo',
+      redo: tb.redo ?? 'Redo',
+      // File ops (best-effort reuse of toolbar keys)
+      open: tb.import ?? 'Open…',
+      save: tb.export ?? 'Save',
+      backup: tb.exportJson ?? 'Backup JSON',
+      clearAll: tb.clear ?? 'Clear All',
+      // Dialog titles (shared)
+      aboutTitle: c.aboutTitle ?? 'About Flowonline2',
+      manualTitle: c.manualTitle ?? 'User Manual',
+      changelogTitle: c.changelogTitle ?? 'Changelog',
+      clearConsole: c.console?.clearBtn ?? tb.clear ?? 'Clear',
+      // Menu-only keys (TODO: translate all 23 languages)
+      new: 'New',
+      exportSvg: 'Export SVG',
+      exportPng: 'Export PNG',
+      exportPdf: 'Export PDF',
+      clearStorage: 'Clear Local Storage',
+      help: 'Help',
+      manualMenuOption: 'User Manual',
+      changelogMenuOption: 'Changelog',
+      about: 'About Flowonline2',
+      bugReport: 'Report Bug',
+      featureRequest: 'Feature Request',
+      forkContribute: 'Fork & Contribute',
+      selectLanguage: 'Select Language',
+      // Section labels (TODO: translate)
+      canvasTab: 'Canvas',
+      editTab: 'Edit',
+      runTab: 'Run',
+      consoleTab: 'Console',
+      toolsTab: 'Tools',
+    };
   }, [props.language]);
-
-  // Section labels for the 5 main rows. Currently English-only labels
-  // because the desktop tabs themselves don't carry an i18n key. If a
-  // future pass adds `mt.canvasTab/...` keys we'll swap them in here.
-  const LABELS: Record<MobileViewId, string> = {
-    canvas: t.canvasTab ?? 'Canvas',
-    edit: t.editTab ?? 'Edit',
-    run: t.runTab ?? 'Run',
-    console: t.consoleTab ?? 'Console',
-    tools: t.toolsTab ?? 'Tools',
-  };
 
   // ----- Sections (each main item, with optional sub-list) -----
   const sections = useMemo<Section[]>(() => {
     const fileSubs: SubItem[] = [
-      { id: 'sub-new', label: t.new, Icon: IconDocument, onClick: props.onNew },
-      { id: 'sub-open', label: t.open, Icon: IconFolderOpen, onClick: props.onOpenFile },
-      { id: 'sub-save', label: t.save, Icon: IconSave, onClick: props.onSave },
-      { id: 'sub-backup', label: t.backup, Icon: IconInbox, onClick: props.onBackupJson },
-      { id: 'sub-svg', label: t.exportSvg, Icon: IconPalette, onClick: props.onExportSvg },
-      { id: 'sub-png', label: t.exportPng, Icon: IconMagnifier, onClick: props.onExportPng },
-      { id: 'sub-pdf', label: t.exportPdf, Icon: IconBooks, onClick: props.onExportPdf },
-      { id: 'sub-clearstorage', label: t.clearStorage, Icon: IconTrash, onClick: props.onClearLocalStorage },
+      { id: 'sub-new', label: L.new, Icon: IconDocument, onClick: props.onNew },
+      { id: 'sub-open', label: L.open, Icon: IconFolderOpen, onClick: props.onOpenFile },
+      { id: 'sub-save', label: L.save, Icon: IconSave, onClick: props.onSave },
+      { id: 'sub-backup', label: L.backup, Icon: IconInbox, onClick: props.onBackupJson },
+      { id: 'sub-svg', label: L.exportSvg, Icon: IconPalette, onClick: props.onExportSvg },
+      { id: 'sub-png', label: L.exportPng, Icon: IconMagnifier, onClick: props.onExportPng },
+      { id: 'sub-pdf', label: L.exportPdf, Icon: IconBooks, onClick: props.onExportPdf },
+      { id: 'sub-clearstorage', label: L.clearStorage, Icon: IconTrash, onClick: props.onClearLocalStorage },
     ];
     const editSubs: SubItem[] = [
-      { id: 'sub-undo', label: t.undo, Icon: IconRefresh, onClick: () => { try { undo?.(); } catch {} }, disabled: !props.canUndo },
-      { id: 'sub-redo', label: t.redo, Icon: IconRefresh, onClick: () => { try { redo?.(); } catch {} }, disabled: !props.canRedo },
+      { id: 'sub-undo', label: L.undo, Icon: IconRefresh, onClick: () => { try { undo?.(); } catch {} }, disabled: !props.canUndo },
+      { id: 'sub-redo', label: L.redo, Icon: IconRefresh, onClick: () => { try { redo?.(); } catch {} }, disabled: !props.canRedo },
     ];
     const consoleSubs: SubItem[] = [
-      { id: 'sub-clearconsole', label: t.consoleTabClear ?? t.consoleClear ?? (catalogs[props.language]?.console?.clearBtn ?? 'Clear'), Icon: IconTrash, onClick: () => { try { clearConsole?.(); } catch {} } },
+      { id: 'sub-clearconsole', label: L.clearConsole, Icon: IconTrash, onClick: () => { try { clearConsole?.(); } catch {} } },
     ];
 
     return [
-      { id: 'canvas',  label: LABELS.canvas,  Icon: IconChart,      subItems: fileSubs },
-      { id: 'edit',    label: LABELS.edit,    Icon: IconPencil,     subItems: editSubs },
-      { id: 'run',     label: LABELS.run,     Icon: IconPlay,       subItems: [] },
-      { id: 'console', label: LABELS.console, Icon: IconChatBubble, subItems: consoleSubs },
-      { id: 'tools',   label: LABELS.tools,   Icon: IconTools,      subItems: [] },
+      { id: 'canvas',  label: L.canvasTab,  Icon: IconChart,      subItems: fileSubs },
+      { id: 'edit',    label: L.editTab,    Icon: IconPencil,     subItems: editSubs },
+      { id: 'run',     label: L.runTab,     Icon: IconPlay,       subItems: [] },
+      { id: 'console', label: L.consoleTab, Icon: IconChatBubble, subItems: consoleSubs },
+      { id: 'tools',   label: L.toolsTab,   Icon: IconTools,      subItems: [] },
     ];
-  // We depend on props.* directly so a parent re-render re-creates the list
-  // (callbacks captured by closures would otherwise go stale).
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.language, props.canUndo, props.canRedo,
       props.onNew, props.onOpenFile, props.onSave, props.onBackupJson,
@@ -170,15 +205,15 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = (props) => {
       props.onClearLocalStorage]);
 
   const helpSubs: SubItem[] = useMemo(() => [
-    { id: 'help-manual',    label: t.manualMenuOption,   Icon: IconBooks,     onClick: props.onShowManual },
-    { id: 'help-changelog', label: t.changelogMenuOption, Icon: IconBooks,   onClick: props.onShowChangelog },
-    { id: 'help-about',     label: t.about,              Icon: IconInfo,      onClick: props.onShowAbout },
-    { id: 'help-bug',       label: t.bugReport,          Icon: IconWarning,   onClick: props.onBugReport },
-    { id: 'help-feat',      label: t.featureRequest,     Icon: IdeaLightbulb, onClick: props.onFeatureRequest },
-    { id: 'help-fork',      label: t.forkContribute,     Icon: IconGlobe,     onClick: props.onForkContribute },
-    { id: 'help-lang',      label: t.selectLanguage,     Icon: IconGlobe,     onClick: props.onPickLanguage },
+    { id: 'help-manual',    label: L.manualMenuOption,   Icon: IconBooks,     onClick: props.onShowManual },
+    { id: 'help-changelog', label: L.changelogMenuOption, Icon: IconBooks,   onClick: props.onShowChangelog },
+    { id: 'help-about',     label: L.about,              Icon: IconInfo,      onClick: props.onShowAbout },
+    { id: 'help-bug',       label: L.bugReport,          Icon: IconWarning,   onClick: props.onBugReport },
+    { id: 'help-feat',      label: L.featureRequest,     Icon: IdeaLightbulb, onClick: props.onFeatureRequest },
+    { id: 'help-fork',      label: L.forkContribute,     Icon: IconGlobe,     onClick: props.onForkContribute },
+    { id: 'help-lang',      label: L.selectLanguage,     Icon: IconGlobe,     onClick: props.onPickLanguage },
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [props.language]);
+  }, [props.language]);
 
   const renderRow = (sec: Section) => {
     const isCurrent = props.view === sec.id;
@@ -268,7 +303,7 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = (props) => {
               aria-expanded={helpExpanded}
             >
               <span className="m-sidebar__icon"><IconInfo size={18} /></span>
-              <span className="m-sidebar__label">{t.help}</span>
+              <span className="m-sidebar__label">{L.help}</span>
             </button>
             <button
               type="button"

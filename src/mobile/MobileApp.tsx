@@ -9,10 +9,10 @@ import { MobileToolsView } from './MobileToolsView';
 import { MobileLanguageSheet } from './MobileLanguageSheet';
 import { WinUIDialog } from '../components/WinUIDialog';
 import { useFlow } from '../context/FlowContext';
+import { translations as catalogs } from '../utils/translations';
 import { FprgParser } from '../utils/fprgParser';
 import { exportToPNG, exportToPDF } from '../utils/exportUtils';
-import { menuTranslations as mtCatalog } from '../components/Header';
-import { IconInfo, IconBooks, IconCode } from '../components/EmojiIcons';
+import { IconInfo } from '../components/EmojiIcons';
 
 const VIEW_STORAGE_KEY = 'flowonline2_mobile_view';
 const RTL_LANGS = new Set<string>(['ar', 'he', 'fa']);
@@ -82,10 +82,14 @@ const MobileApp: React.FC = () => {
     return () => { cancelled = true; };
   }, [showChangelog]);
 
-  // Localized labels (same source-of-truth as the desktop menus).
-  const mt = useMemo(() => {
-    const m = (mtCatalog as any)[flow.language] ?? (mtCatalog as any).en;
-    return m as Record<string, string>;
+  // Localized dialog titles — read from the shared `translations` catalog.
+  const mt = useMemo<Record<string, string>>(() => {
+    const c = ((catalogs[flow.language] as any) ?? (catalogs.en as any) ?? {});
+    return {
+      aboutTitle: c.aboutTitle ?? 'About Flowonline2',
+      manualTitle: c.manualTitle ?? 'User Manual',
+      changelogTitle: c.changelogTitle ?? 'Changelog',
+    };
   }, [flow.language]);
 
   const safe = (fn: () => void) => { try { fn(); } catch { /* noop */ } };
@@ -240,7 +244,6 @@ const MobileApp: React.FC = () => {
         title={mt.aboutTitle || 'About Flowonline2'}
         defaultWidth={420}
         defaultHeight={360}
-        closeOnOutsideClick
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '4px 4px 8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -272,7 +275,6 @@ const MobileApp: React.FC = () => {
         title={mt.manualTitle || 'Flowonline2 User Manual'}
         defaultWidth={520}
         defaultHeight={460}
-        closeOnOutsideClick
       >
         <pre style={{
           fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
@@ -295,7 +297,6 @@ const MobileApp: React.FC = () => {
         title={mt.changelogTitle || 'Flowonline2 Changelog'}
         defaultWidth={520}
         defaultHeight={460}
-        closeOnOutsideClick
       >
         <pre style={{
           fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
@@ -311,12 +312,10 @@ const MobileApp: React.FC = () => {
         </pre>
       </WinUIDialog>
 
-      {/* Language picker sheet */}
+      {/* Language picker sheet (the component reads language itself from useFlow). */}
       <MobileLanguageSheet
         open={showLangSheet}
         onClose={() => setShowLangSheet(false)}
-        currentLanguage={(flow.language as any) ?? 'en'}
-        onPick={(lang) => { safe(() => flow.setLanguage?.(lang)); setShowLangSheet(false); }}
       />
 
       {/* Watermark: MobileApp is a separate bundle, this iconographer guard
