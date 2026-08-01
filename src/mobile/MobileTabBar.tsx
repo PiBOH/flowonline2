@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import { IconChart, IconPencil, IconPlay, IconChatBubble, IconTools } from '../components/EmojiIcons';
 
 export type MobileTabId = 'canvas' | 'edit' | 'run' | 'console' | 'tools';
 
@@ -10,38 +11,66 @@ export interface MobileTabBarProps {
 interface TabDef {
   id: MobileTabId;
   label: string;
-  icon: string;
+  Icon: React.FC<{ size?: number; className?: string }>;
 }
 
+/**
+ * Mobile-only bottom navigation rail (Phase 3 rewrite).
+ *
+ * 5-column grid, glassy backdrop, 72px tall + safe-area bottom inset.
+ * Each tab is a 24px SVG icon + 11px label. Active tab has an accent
+ * indicator (3px tall, top of the column) and accent text color. The
+ * indicator's lateral position is animated on tab change so the user
+ * gets a smooth horizontal "physical tab" feel.
+ *
+ * Icons come from the shared `EmojiIcons.tsx` SVG library so they stay
+ * crisp and colorful without depending on platform emoji.
+ */
 const TABS: TabDef[] = [
-  { id: 'canvas', label: 'Canvas', icon: '◇' },
-  { id: 'edit',   label: 'Edit',   icon: '✎' },
-  { id: 'run',    label: 'Run',    icon: '▶' },
-  { id: 'console',label: 'Console',icon: '💬' },
-  { id: 'tools',  label: 'Tools',  icon: '⚙' },
+  { id: 'canvas',  label: 'Canvas',  Icon: IconChart },
+  { id: 'edit',    label: 'Edit',    Icon: IconPencil },
+  { id: 'run',     label: 'Run',     Icon: IconPlay },
+  { id: 'console', label: 'Console', Icon: IconChatBubble },
+  { id: 'tools',   label: 'Tools',   Icon: IconTools },
 ];
 
-/**
- * Mobile-only bottom tab bar (Material 3 / iOS 17 feel).
- * Active tab → blue-600; inactive → slate-500.
- * 64px tall + safe-bottom inset.
- */
 export const MobileTabBar: React.FC<MobileTabBarProps> = ({ active, onChange }) => {
+  const railRef = useRef<HTMLDivElement>(null);
+  const indicatorRef = useRef<HTMLDivElement>(null);
+
+  // Animate the top indicator under the active tab on change.
+  useEffect(() => {
+    const rail = railRef.current;
+    const ind = indicatorRef.current;
+    if (!rail || !ind) return;
+    const activeBtn = rail.querySelector<HTMLButtonElement>(`[data-tab='${active}']`);
+    if (!activeBtn) return;
+    const railWidth = rail.clientWidth;
+    const colWidth = railWidth / TABS.length;
+    const activeIdx = TABS.findIndex((t) => t.id === active);
+    const leftPx = activeIdx * colWidth + (colWidth - ind.clientWidth) / 2;
+    ind.style.left = `${leftPx}px`;
+  }, [active]);
+
   return (
-    <nav className="m-tabbar" role="tablist">
+    <nav ref={railRef} className="m-tabbar" role="tablist" aria-label="Mobile sections">
+      <div ref={indicatorRef} className="m-tabbar__indicator" aria-hidden="true" />
       {TABS.map((tab) => {
         const isActive = tab.id === active;
         return (
           <button
             key={tab.id}
+            data-tab={tab.id}
             type="button"
             role="tab"
             aria-selected={isActive}
             aria-label={tab.label}
-            className={isActive ? 'active' : ''}
+            className={`m-tabbar__btn ${isActive ? 'active' : ''}`}
             onClick={() => onChange(tab.id)}
           >
-            <span style={{ fontSize: 22, lineHeight: 1 }}>{tab.icon}</span>
+            <span className="m-tabbar__icon">
+              <tab.Icon size={22} />
+            </span>
             <span>{tab.label}</span>
           </button>
         );

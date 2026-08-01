@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 /**
- * Reusable iOS / Material 3-style bottom sheet.
+ * Reusable iOS / Material 3-style bottom sheet (Phase 3 minor polish).
  *
  * - Snap points (percent of viewport height, e.g. ['30%', '60%', '90%']).
  * - Backdrop tap closes; swipe-down past threshold closes.
@@ -12,11 +12,11 @@ import { createPortal } from 'react-dom';
 export interface MobileBottomSheetProps {
   open: boolean;
   onClose: () => void;
-  snapPoints?: string[]; // e.g. ['40%', '85%']
+  snapPoints?: string[];
   initialSnap?: number;
   title?: string;
   showHandle?: boolean;
-  dismissThreshold?: number; // px swipe-down to close (default 80)
+  dismissThreshold?: number;
   children: React.ReactNode;
 }
 
@@ -35,7 +35,6 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
   const sheetRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number | null>(null);
 
-  // Reset drag offset whenever the sheet opens or snap changes
   useEffect(() => {
     if (open) {
       setCurrentSnap(initialSnap);
@@ -43,7 +42,6 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
     }
   }, [open, initialSnap]);
 
-  // Close on Escape (desktop debugging)
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -53,7 +51,6 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
 
-  // Lock body scroll while open
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -69,7 +66,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
   const onTouchMove = (e: React.TouchEvent) => {
     if (touchStartY.current === null) return;
     const dy = e.touches[0].clientY - touchStartY.current;
-    if (dy > 0) setDragY(dy); // only downward drag offset
+    if (dy > 0) setDragY(dy);
   };
   const onTouchEnd = () => {
     if (dragY > dismissThreshold) {
@@ -82,17 +79,12 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
 
   if (!open) return null;
 
-  // Parse percent to pixels for translateY (closed = bottom 0 = 100% down)
   const currentHeight = snapPoints[Math.min(currentSnap, snapPoints.length - 1)];
   const sheetTranslateY = `calc(100% - ${currentHeight} + ${dragY}px)`;
 
   return createPortal(
     <>
-      <div
-        className="m-sheet-backdrop open"
-        onClick={onClose}
-        aria-hidden="true"
-      />
+      <div className="m-sheet-backdrop open" onClick={onClose} aria-hidden="true" />
       <div
         ref={sheetRef}
         className="m-sheet"
@@ -111,13 +103,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
             <button
               type="button"
               onClick={onClose}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                fontSize: 18,
-                cursor: 'pointer',
-                color: '#64748b',
-              }}
+              className="m-icon-btn"
               aria-label="Close"
             >
               ✕
@@ -127,6 +113,6 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
         <div className="m-sheet-body">{children}</div>
       </div>
     </>,
-    document.body
+    document.body,
   );
 };

@@ -581,6 +581,42 @@ v2.3.23: Summary of changes
 - `MobileLanguageSheet.tsx` → `MobileBottomSheet.tsx` + `useFlow` + `FlagIcon`
 - Nothing else imports these files yet. **Phase 2** will add `MobileApp.tsx` orchestrator + 5 view components (`MobileCanvasView`, `MobileEditView`, `MobileRunView`, `MobileConsoleView`, `MobileToolsView`) + `MobileTopBar`. **Phase 3** will wire viewport routing into `App.tsx` (additive — MainLayout remains unchanged).
 
+### Milestone 41: Mobile Bundle Phase 3 — From-Scratch Rewrite + Dot-on-Hover Status Badges + Version Fallback (BETA 2.5.0-beta)
+
+[//]: # (keepachangelog)
+
+#### Added
+*   **`src/components/StatusDot.tsx`** — Shared desktop + mobile status component. Default state is a tiny colored dot (8px). On hover / focus / tap, smoothly expands into a pill containing the label. Touch users get a tap-and-shows-briefly behavior (auto-collapse after 2.4s, outside-click also collapses). Variants: `live` (green, optional glow), `fallback` (amber), `done` (blue), `error` (red), `info` (slate). Accessible: `role="status"`, `aria-label` always present, focusable for keyboard users.
+*   **`src/mobile/mobile.css`** — Full design-token rewrite. Tokens (spacing, type scale, motion easings, shadows, color palette) defined under `.m-root`. Tab bar with animated top accent indicator, card-based sections, sheets, FAB stack. Every selector strictly scoped under `.m-root` so the desktop bundle can never pick up mobile rules.
+*   **`src/mobile/MobileApp.tsx`** (rewritten) — Hoisted `RTL_LANGS` Set to module scope. Persists the user's selected tab in localStorage (`flowonline2_mobile_view`). Sets `dir='rtl'|'ltr'` on the mobile root depending on whether the active language is Persian / Arabic / Hebrew.
+*   **`src/mobile/MobileTopBar.tsx`** (rewritten) — 60px sticky glassy top bar with brand + contextual title + autosave `StatusDot` + Save-JSON icon button. Persistence status derived from a cheap O(1) comparison on `(statements.length, last-id, programTitle)` instead of a full-tree JSON.stringify on every keystroke.
+*   **`src/mobile/MobileTabBar.tsx`** (rewritten) — 5-tab bottom navigation rail using colorful SVG icons from the shared `EmojiIcons.tsx` library (IconChart, IconPencil, IconPlay, IconChatBubble, IconTools). Smooth animated top accent indicator on tab change. 72px tall + safe-area bottom inset.
+*   **`src/mobile/MobileCanvasView.tsx`** (rewritten) — Wraps `<FlowchartCanvas>` with a top status overlay (statement count + zoom) and a bottom-right zoom FAB stack.
+*   **`src/mobile/MobileEditView.tsx`** (rewritten) — Card-based sections (Selection / Clipboard / History / Canvas). Copy / Cut / Paste / Undo / Redo / Clear-canvas with proper disabled-state and a `WinUIDialog` confirm for clear (no `window.confirm`).
+*   **`src/mobile/MobileRunView.tsx`** (rewritten) — Top `StatusDot` for execution state + 2×2 action grid (Run / Step / Pause / Stop) + speed slider (1–600%) + Notes section.
+*   **`src/mobile/MobileConsoleView.tsx`** (rewritten) — Minimal mobile-safe wrap of the existing `<Console>`.
+*   **`src/mobile/MobileToolsView.tsx`** (rewritten) — 5 card sections: Program title / author, Settings (language / color / layout), Export (SVG / PNG / PDF), Help (about+license / user manual / changelog / bug+feature / fork repository), Storage (clear localStorage). About / Manual / Changelog rows now show a per-row `StatusDot` for load state (live from repo, fallback, or idle).
+*   **`src/mobile/MobileLanguageSheet.tsx`** (rewritten) — 23-language picker as a bottom sheet with colorful SVG `FlagIcon`s + a translation-accuracy warning in the sheet header.
+*   **`src/mobile/MobileBottomSheet.tsx`** (rewritten) — Minor polish; functional behavior unchanged (snap points, drag-down dismiss, scroll lock, Escape-to-close, portaled to `document.body`).
+*   **`CONTRIBUTORS.md`** (rewritten) — Full credits listing PiBOH (creator / maintainer) + AlexGiulioBerton (active lead collaborator) + lmarena (acknowledged model-tooling contributor) + `@arenaai` (upstream handle). Documents the `Co-authored-by:` trailer convention used in every commit.
+
+#### Changed
+*   **`src/components/Header.tsx`** — Replaced 4 colored source-status chips (version, license, manual, changelog) with `<StatusDot>` calls. The chips used to say things like "loaded from GitHub" or "fallback path" and were invasive (always rendered a pill on the page even when the user wasn't looking at them); the new dots are silent at rest and surface their label only on hover / focus / tap.
+*   **Version fallback string** in `Header.tsx` is now `'0.0.0-UNKNOWN'` (both the React `useState` initial value and the final fallback after both GitHub and local fetches fail). No more hardcoded `'BETA 2.1.0'` lies — the user is told exactly when the version could not be loaded.
+*   **`.ignore/.assetsai/README.md`** — Stale MIT-License mentions cleaned up (the directory is `.gitignore`'d but keeping dev's local notes consistent with the current GNU GPL v3 license reduces confusion).
+
+#### Fixed
+*   **`MobileToolsView` useEffect cleanup bug** — The 3 fetch effects (about / manual / changelog) used to return `() => { cancelled = true; }` from inside an async IIFE; `useEffect` receives a Promise and discards. The cleanup is now hoisted outside the IIFE so the `cancelled` flag flips correctly on unmount or language change. Stale state-update warnings are gone.
+*   **`mobile.css !important` override** — The rule `.status-dot[data-open='true']` was forcing a slate-100 background even when `StatusDot`'s inline style set a per-variant tinted background. The `!important` is gone; the per-variant pill tint (e.g. amber for fallback) survives on expansion.
+*   **`StatusDot` pill max-width** bumped 260 → 320 so longer German ("Lizenz dynamisch von GitHub geladen") + Asian license / manual labels don't truncate visibly.
+
+#### Architecture invariants (still held)
+- **Desktop bundle stays put**: only `Header.tsx` was edited, and only at the 4 source-status locations plus the version fallback string. `MainLayout` (in `App.tsx`), `FlowchartCanvas`, `Sidebar`, `Console`, `Modals`, `WinUIDialog`, `BlockNode` are byte-for-byte identical.
+- **Mobile CSS stays scoped under `.m-root`** (zero desktop bleed).
+- **Tests pass**: `tsc --noEmit` clean, `npx vitest run` 126/126 passed, `npm run build` succeeds.
+- **State reuse**: every mobile component still pulls from `useFlow()` — no duplication of state.
+- **TranslationCatalog reuse**: mobile components import the shared `translations` map from `src/utils/translations.ts`. The per-row `StatusDot` source indicators reuse the per-language i18n labels introduced in Milestone 40 (`mt.versionRepoLoaded`, `mt.licenseRepoLoaded`, `mt.manualRepoLoaded`, `mt.changelogRepoLoaded`, etc.).
+
 ### Milestone 40: Mobile Bundle Phase 2.5 — About/Manual/Changelog i18n + RTL (BETA 2.4.0-beta)
 
 [//]: # (keepachangelog)

@@ -6,27 +6,31 @@ import { MobileEditView } from './MobileEditView';
 import { MobileRunView } from './MobileRunView';
 import { MobileConsoleView } from './MobileConsoleView';
 import { MobileToolsView } from './MobileToolsView';
+import { useFlow } from '../context/FlowContext';
 
 const VIEW_STORAGE_KEY = 'flowonline2_mobile_view';
+const RTL_LANGS = new Set<string>(['ar', 'he', 'fa']);
 
 /**
- * Mobile orchestrator.
+ * Mobile orchestrator (Phase 3 rewrite).
  *
  * Responsibilities:
- *   1. Load `mobile.css` lazily at mount (single-import side-effect).
- *   2. Pick initial view from localStorage so a returning user lands on
- *      the last tab they visited.
+ *   1. Mount `.m-root` so the rest of the mobile CSS scopes cleanly.
+ *   2. Restore the last tab the user was on (localStorage, validated).
  *   3. Render TopBar + active view + TabBar.
  *
- * NOT responsible for viewport detection — App.tsx imports MobileApp
- * with React.lazy() and routes here only on <=767px.
- *
- * Long-press block context menu is intentionally DEMOTED to Phase 2.5
- * (currently no block-pick wiring; `MobileActionMenu` is unused in this
- * view to avoid the “menu opens but everything disabled” UX trap).
+ * Architecture invariants:
+ *   - Never modifies the desktop bundle.
+ *   - Never adds state to FlowContext.
+ *   - `useFlow()` is consumed `as any` because Phase 3 deliberately avoids
+ *     signing up the mobile bundle to the desktop TypeScript surface area.
  */
 const MobileApp: React.FC = () => {
-  // Read initial view from localStorage only once via lazy initializer.
+  // Check expected touch viewport; for a Phase 3 hardening pass we let
+  // the desktop bundle degrade gracefully on touch desktops (rare).
+  const { language } = useFlow() as any;
+  const dir: 'ltr' | 'rtl' = RTL_LANGS.has(language) ? 'rtl' : 'ltr';
+
   const initialView = useMemo<MobileTabId>(() => {
     if (typeof window === 'undefined') return 'canvas';
     const stored = window.localStorage.getItem(VIEW_STORAGE_KEY);
@@ -41,17 +45,9 @@ const MobileApp: React.FC = () => {
   }, [view]);
 
   return (
-    <div className="mobile-app-root" style={{ display: 'flex', flexDirection: 'column', height: '100dvh', minHeight: '100vh' }}>
+    <div className="m-root" dir={dir} style={{ height: '100dvh', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <MobileTopBar view={view} />
-      <main
-        style={{
-          flex: '1 1 auto',
-          minHeight: 0,
-          overflow: 'hidden',
-          position: 'relative',
-          background: '#ffffff',
-        }}
-      >
+      <main style={{ flex: '1 1 auto', minHeight: 0, overflow: 'hidden', position: 'relative' }}>
         {view === 'canvas' && <MobileCanvasView />}
         {view === 'edit' && <MobileEditView />}
         {view === 'run' && <MobileRunView />}

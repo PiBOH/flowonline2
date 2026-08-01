@@ -1,61 +1,148 @@
-/* ============================================
-   MOBILE BUNDLE — strictly scoped CSS.
-   Every selector below MUST be prefixed with .mobile-app-root
-   so the desktop bundle and any desktop-mounted flowgorithm UI
-   is never affected by these rules.
-   ============================================ */
+/* ============================================================
+   MOBILE BUNDLE — Phase 3 full rewrite.
+   Every selector MUST stay strictly scoped to `.m-root` so the
+   desktop bundle and any desktop-mounted flowgorithm UI is
+   never affected.
 
-.mobile-app-root {
-  /* Reset tiny defaults so flex sizing works on iOS Safari */
+   Design tokens (Material 3-inspired, light-only first cut).
+   All values are intended to be theme-swappable in a later pass.
+   ============================================================ */
+
+.m-root {
+  /* Tokens */
+  --m-bg:        #f8fafc;
+  --m-surface:   #ffffff;
+  --m-surface-2: #f1f5f9;
+  --m-surface-3: #e2e8f0;
+  --m-border:    rgba(15, 23, 42, 0.08);
+  --m-border-strong: rgba(15, 23, 42, 0.16);
+  --m-text:      #0f172a;
+  --m-text-2:    #475569;
+  --m-text-3:    #64748b;
+  --m-accent:    #2563eb;
+  --m-accent-2:  #1d4ed8;
+  --m-ok:        #16a34a;
+  --m-warn:      #d97706;
+  --m-err:       #dc2626;
+  --m-info:      #3b82f6;
+  --m-radius:    14px;
+  --m-radius-sm: 8px;
+  --m-shadow-1:  0 1px 2px rgba(0,0,0,0.05);
+  --m-shadow-2:  0 4px 12px rgba(15, 23, 42, 0.10);
+  --m-shadow-3:  0 12px 32px rgba(15, 23, 42, 0.18);
+  --m-ease:      cubic-bezier(.4, 0, .2, 1);
+
+  /* Reset */
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   -webkit-font-smoothing: antialiased;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif;
-  background: #f8fafc; /* slate-50 — material 3 surface */
-  color: #0f172a;     /* slate-900 */
+  background: var(--m-bg);
+  color: var(--m-text);
+  font-size: 14px;
+  line-height: 1.45;
 }
 
-/* ----- Safe Areas ----- */
-.mobile-app-root .m-safe-top    { padding-top:    env(safe-area-inset-top, 0px); }
-.mobile-app-root .m-safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
-.mobile-app-root .m-safe-left   { padding-left:   env(safe-area-inset-left, 0px); }
-.mobile-app-root .m-safe-right  { padding-right:  env(safe-area-inset-right, 0px); }
+/* ----- Type scale ----- */
+.m-root .m-h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; color: var(--m-text); }
+.m-root .m-h2 { font-size: 17px; font-weight: 700; color: var(--m-text); }
+.m-root .m-h3 { font-size: 14px; font-weight: 700; color: var(--m-text); }
+.m-root .m-caption { font-size: 12px; font-weight: 600; color: var(--m-text-3); letter-spacing: 0.02em; }
 
-/* ----- Top Bar ----- */
-.mobile-app-root .m-topbar {
+/* ----- Safe-area helpers ----- */
+.m-root .m-safe-top    { padding-top:    env(safe-area-inset-top, 0px); }
+.m-root .m-safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.m-root .m-safe-left   { padding-left:   env(safe-area-inset-left, 0px); }
+.m-root .m-safe-right  { padding-right:  env(safe-area-inset-right, 0px); }
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+.m-root .m-topbar {
   position: sticky;
   top: 0;
   z-index: 30;
-  height: 56px;
+  height: 60px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--m-border);
+  transition: background-color 200ms var(--m-ease);
+}
+.m-root .m-topbar__brand {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: saturate(180%) blur(16px);
-  -webkit-backdrop-filter: saturate(180%) blur(16px);
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
-  padding: 0 8px;
+  gap: 10px;
+  min-width: 0;
 }
+.m-root .m-topbar__title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--m-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.m-root .m-topbar__subtitle {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--m-text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 6px;
+}
+.m-root .m-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.m-root .m-icon-btn {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--m-text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 120ms var(--m-ease);
+}
+.m-root .m-icon-btn:hover { background: rgba(15, 23, 42, 0.06); }
+.m-root .m-icon-btn:active { background: rgba(15, 23, 42, 0.10); transform: scale(0.96); }
 
-/* ----- Tab Bar ----- */
-.mobile-app-root .m-tabbar {
+/* ============================================================
+   TAB BAR (fixed bottom, M3 navigation rail style)
+   ============================================================ */
+.m-root .m-tabbar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 40;
-  height: 64px;
+  height: 72px;
   background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: saturate(180%) blur(16px);
-  -webkit-backdrop-filter: saturate(180%) blur(16px);
-  border-top: 1px solid rgba(15, 23, 42, 0.08);
-  display: flex;
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-top: 1px solid var(--m-border);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   align-items: stretch;
-  justify-content: space-around;
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-.mobile-app-root .m-tabbar > button {
-  flex: 1 1 0;
-  min-width: 0;
+.m-root .m-tabbar__btn {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -63,258 +150,379 @@
   gap: 2px;
   background: transparent;
   border: none;
-  color: #64748b; /* slate-500 */
-  font-size: 10px;
+  color: var(--m-text-3);
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: color 120ms ease;
   padding: 8px 4px;
+  transition: color 120ms var(--m-ease);
+  outline: none;
 }
-.mobile-app-root .m-tabbar > button.active {
-  color: #2563eb; /* blue-600 */
-}
-.mobile-app-root .m-tabbar > button:active {
-  background: rgba(15, 23, 42, 0.05);
-}
-
-/* ----- Bottom Sheet ----- */
-.mobile-app-root .m-sheet-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.42);
-  z-index: 80;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 180ms ease;
-}
-.mobile-app-root .m-sheet-backdrop.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.mobile-app-root .m-sheet {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #ffffff;
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
-  box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.18);
-  z-index: 90;
-  display: flex;
-  flex-direction: column;
-  transition: transform 220ms cubic-bezier(0.32, 0.72, 0, 1);
-  will-change: transform;
-  touch-action: none;
-}
-.mobile-app-root .m-sheet-handle {
-  width: 40px;
-  height: 4px;
-  background: rgba(15, 23, 42, 0.18);
-  border-radius: 999px;
-  margin: 8px auto 0;
-  flex-shrink: 0;
-}
-.mobile-app-root .m-sheet-header {
-  padding: 12px 16px 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
-  font-size: 16px;
-  font-weight: 700;
-  color: #0f172a;
-  flex-shrink: 0;
-}
-.mobile-app-root .m-sheet-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 0 0 env(safe-area-inset-bottom, 0px);
-}
-.mobile-app-root .m-sheet-body.padded {
-  padding: 8px 16px 16px;
-}
-
-/* ----- List rows inside sheet (or as scroll Views) ----- */
-.mobile-app-root .m-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
-  text-align: left;
-  font-size: 15px;
-  color: #0f172a;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.mobile-app-root .m-row:active { background: rgba(15, 23, 42, 0.05); }
-.mobile-app-root .m-row:last-child { border-bottom: none; }
-.mobile-app-root .m-row.subtitle {
-  font-size: 13px;
-  color: #64748b;
-}
-.mobile-app-root .m-row.danger { color: #dc2626; }
-
-/* ----- View container (one of the 5) ----- */
-.mobile-app-root .m-view {
+.m-root .m-tabbar__btn.active { color: var(--m-accent); }
+.m-root .m-tabbar__btn:active:not(.active) { background: rgba(15, 23, 42, 0.04); }
+.m-root .m-tabbar__indicator {
   position: absolute;
-  top: 56px;
-  left: 0;
-  right: 0;
-  bottom: 64px;
+  top: 6px;
+  width: 28px;
+  height: 3px;
+  background: var(--m-accent);
+  border-radius: 0 0 3px 3px;
+  transition: left 220ms var(--m-ease), width 220ms var(--m-ease), opacity 220ms var(--m-ease);
+  opacity: 0;
+}
+.m-root .m-tabbar__btn.active .m-tabbar__indicator { opacity: 1; }
+.m-root .m-tabbar__icon {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   STATUS DOT styles (Phase 3 — desktop + mobile shared via the
+   StatusDot component; CSS gives it consumer-side hover/focus ring,
+   the per-variant tint comes from the component's inline style).
+   ============================================================ */
+.m-root .status-dot {
+  outline: none;
+}
+.m-root .status-dot:focus-visible {
+  box-shadow: 0 0 0 2px var(--m-accent);
+  border-radius: 999px;
+}
+
+/* ============================================================
+   VIEW CONTAINER (the 5 mobile screens)
+   The view fills its <main> ancestor completely via `inset: 0`.
+   `<main>` itself is positioned by flex inside `.m-root`:
+     - m-topbar (sticky, 60px, in flow) sits above main
+     - m-tabbar (fixed, 72px, out of flow) overlays main at bottom
+   Note: do NOT add `top: 60px` here — that would create a dead 60px
+   strip because main already starts below the topbar.
+   ============================================================ */
+.m-root .m-view {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: #ffffff;
+  background: var(--m-bg);
 }
 
-/* ----- Big action button block (mobile Run controls) ----- */
-.mobile-app-root .m-action-grid {
+/* ============================================================
+   LISTS, SECTIONS, CARDS (mobile settings lists, edit palette)
+   ============================================================ */
+.m-root .m-section {
+  background: var(--m-surface);
+  border-radius: var(--m-radius);
+  margin: 12px;
+  box-shadow: var(--m-shadow-1);
+  overflow: hidden;
+}
+.m-root .m-section-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m-text-3);
+  padding: 16px 16px 8px;
+}
+.m-root .m-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 15px;
+  color: var(--m-text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  border-bottom: 1px solid var(--m-border);
+  transition: background-color 120ms var(--m-ease);
+}
+.m-root .m-row:last-child { border-bottom: none; }
+.m-root .m-row:hover:not([disabled]):not(.danger) { background: var(--m-surface-2); }
+.m-root .m-row:active:not([disabled]) { background: var(--m-surface-3); transform: scale(0.997); }
+.m-root .m-row[disabled] { opacity: 0.4; cursor: not-allowed; }
+.m-root .m-row .m-row__icon {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--m-text-2);
+  flex-shrink: 0;
+}
+.m-root .m-row__label { flex: 1 1 auto; min-width: 0; font-weight: 500; }
+.m-root .m-row__value { color: var(--m-text-3); font-size: 13px; font-weight: 600; }
+.m-root .m-row__hint { color: var(--m-text-3); font-size: 12px; }
+.m-root .m-row.danger { color: var(--m-err); font-weight: 600; }
+.m-root .m-row.danger .m-row__icon { color: var(--m-err); }
+.m-root .m-row.subtitle { font-size: 13px; color: var(--m-text-2); cursor: default; min-height: 0; padding: 10px 16px; }
+.m-root .m-row.subtitle:hover { background: transparent; }
+
+/* ============================================================
+   INPUTS / SELECTS (mobile-shaped)
+   ============================================================ */
+.m-root .m-input,
+.m-root .m-select {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--m-border-strong);
+  border-radius: var(--m-radius-sm);
+  background: var(--m-surface);
+  color: var(--m-text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 120ms var(--m-ease), box-shadow 120ms var(--m-ease);
+  min-width: 0;
+}
+.m-root .m-input:focus,
+.m-root .m-select:focus {
+  border-color: var(--m-accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+}
+
+/* ============================================================
+   ACTION GRID (mobile Run view + Edit view)
+   ============================================================ */
+.m-root .m-action-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   padding: 16px;
-  background: #f1f5f9;
+  background: var(--m-surface-2);
 }
-.mobile-app-root .m-action {
-  background: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 14px;
+.m-root .m-action {
+  background: var(--m-surface);
+  border: 1px solid var(--m-border);
+  border-radius: var(--m-radius);
   padding: 18px 12px;
   font-size: 14px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--m-text);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  min-height: 92px;
+  transition: transform 120ms var(--m-ease), background-color 120ms var(--m-ease);
+  box-shadow: var(--m-shadow-1);
 }
-.mobile-app-root .m-action:disabled { opacity: 0.35; cursor: not-allowed; }
-.mobile-app-root .m-action.run    { background: #2563eb; color: #ffffff; border-color: #1d4ed8; }
-.mobile-app-root .m-action.run:disabled    { background: #93c5fd; border-color: #93c5fd; color: #ffffff; opacity: 0.6; }
-.mobile-app-root .m-action.step   { background: #14b8a6; color: #ffffff; border-color: #0d9488; }
-.mobile-app-root .m-action.step:disabled   { background: #5eead4; border-color: #5eead4; color: #ffffff; opacity: 0.6; }
-.mobile-app-root .m-action.pause  { background: #f59e0b; color: #ffffff; border-color: #d97706; }
-.mobile-app-root .m-action.pause:disabled  { background: #fcd34d; border-color: #fcd34d; color: #ffffff; opacity: 0.6; }
-.mobile-app-root .m-action.stop   { background: #ef4444; color: #ffffff; border-color: #dc2626; }
-.mobile-app-root .m-action.stop:disabled   { background: #fca5a5; border-color: #fca5a5; color: #ffffff; opacity: 0.6; }
+.m-root .m-action:hover:not([disabled]) { background: var(--m-surface-2); }
+.m-root .m-action:active:not([disabled]) { transform: scale(0.96); }
+.m-root .m-action[disabled] { opacity: 0.4; cursor: not-allowed; }
+.m-root .m-action__icon { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; }
+.m-root .m-action.run    { background: var(--m-accent); color: #fff; border-color: var(--m-accent-2); }
+.m-root .m-action.step   { background: #14b8a6; color: #fff; border-color: #0d9488; }
+.m-root .m-action.pause  { background: #f59e0b; color: #fff; border-color: #d97706; }
+.m-root .m-action.stop   { background: #ef4444; color: #fff; border-color: #dc2626; }
 
-/* ----- Status pill (Running / Paused indicator) ----- */
-.mobile-app-root .m-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  background: rgba(15, 23, 42, 0.08);
-  color: #0f172a;
-}
-.mobile-app-root .m-pill.dot::before {
-  content: "";
-  width: 6px; height: 6px; border-radius: 999px;
-  background: #94a3b8;
-}
-.mobile-app-root .m-pill.dot.running::before  { background: #22c55e; }
-.mobile-app-root .m-pill.dot.paused::before   { background: #f59e0b; }
-.mobile-app-root .m-pill.dot.done::before     { background: #3b82f6; }
-.mobile-app-root .m-pill.running  { background: rgba(34, 197, 94, 0.14);  color: #15803d; }
-.mobile-app-root .m-pill.paused   { background: rgba(245, 158, 11, 0.16); color: #b45309; }
-.mobile-app-root .m-pill.done     { background: rgba(59, 130, 246, 0.16);color: #1d4ed8; }
-
-/* ----- Speed slider ----- */
-.mobile-app-root .m-speed {
-  display: flex;
+/* ============================================================
+   SPEED SLIDER (Run view)
+   ============================================================ */
+.m-root .m-speed {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background: #ffffff;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  margin: 0 12px;
+  background: var(--m-surface);
+  border-radius: var(--m-radius);
+  box-shadow: var(--m-shadow-1);
 }
-.mobile-app-root .m-speed input[type="range"] {
-  flex: 1;
+.m-root .m-speed input[type='range'] {
+  width: 100%;
+  accent-color: var(--m-accent);
 }
+.m-root .m-speed__value { font-weight: 700; min-width: 44px; text-align: right; }
 
-/* ----- Misc helpers ----- */
-.mobile-app-root .m-section-title {
-  padding: 14px 16px 6px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #64748b;
-}
-.mobile-app-root .m-scroll {
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-.mobile-app-root .m-flex-1 { flex: 1 1 auto; min-height: 0; min-width: 0; }
-.mobile-app-root .m-empty {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 8px;
-  color: #94a3b8;
-  font-size: 13px;
-  padding: 32px;
-  text-align: center;
-}
-
-/* ----- Long-press active state ----- */
-.mobile-app-root .m-longpress-active {
-  outline: 3px solid rgba(37, 99, 235, 0.4);
-  outline-offset: 2px;
-  filter: brightness(0.95);
-}
-
-/* ----- Pinch-zoom canvas wrapper ----- */
-.mobile-app-root .m-canvas-wrap {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-  background: #ffffff;
-  touch-action: pinch-zoom;
-}
-.mobile-app-root .m-canvas-overlay {
+/* ============================================================
+   CANVAS VIEW (mobile)
+   ============================================================ */
+.m-root .m-canvas-overlay {
   position: absolute;
+  z-index: 10;
   top: 8px;
   left: 8px;
   right: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(15, 23, 42, 0.7);
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 6px 10px;
-  border-radius: 999px;
-  pointer-events: none;
-  z-index: 10;
-}
-.mobile-app-root .m-canvas-overlay button {
-  background: transparent;
-  border: none;
-  color: inherit;
-  font-weight: 700;
+  gap: 8px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: saturate(160%) blur(12px);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  border: 1px solid var(--m-border);
+  border-radius: 12px;
+  box-shadow: var(--m-shadow-1);
+  font-size: 12px;
+  color: var(--m-text);
   pointer-events: auto;
-  padding: 0 4px;
+}
+.m-root .m-canvas-overlay .m-caption { font-size: 11px; }
+.m-root .m-canvas-fab {
+  position: absolute;
+  right: 12px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 20;
+}
+.m-root .m-fab {
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 26px;
+  background: var(--m-surface);
+  color: var(--m-accent);
+  box-shadow: var(--m-shadow-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 120ms var(--m-ease);
+}
+.m-root .m-fab.fab-primary {
+  width: 60px;
+  height: 60px;
+  background: var(--m-accent);
+  color: #fff;
+  border-radius: 30px;
+  box-shadow: var(--m-shadow-3);
+}
+.m-root .m-fab:active { transform: scale(0.94); }
+.m-root .m-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  background: var(--m-surface);
+  overflow: hidden;
+}
+
+/* ============================================================
+   BOTTOM SHEETS (MobileBottomSheet component)
+   ============================================================ */
+.m-root .m-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.42);
+  z-index: 80;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms var(--m-ease);
+}
+.m-root .m-sheet-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.m-root .m-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--m-surface);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: var(--m-shadow-3);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  transition: transform 260ms var(--m-ease);
+  will-change: transform;
+  touch-action: none;
+  max-height: 92dvh;
+}
+.m-root .m-sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(15, 23, 42, 0.20);
+  border-radius: 999px;
+  margin: 10px auto 0;
+  flex-shrink: 0;
+}
+.m-root .m-sheet-header {
+  padding: 14px 18px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--m-border);
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.m-root .m-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ============================================================
+   TOAST (export status)
+   ============================================================ */
+.m-root .m-toast {
+  position: fixed;
+  bottom: 96px;
+  left: 16px;
+  right: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  z-index: 200;
+  box-shadow: var(--m-shadow-3);
+  animation: m-toast-in 200ms var(--m-ease);
+}
+.m-root .m-toast--success { background: var(--m-ok); color: #fff; }
+.m-root .m-toast--error { background: var(--m-err); color: #fff; }
+@keyframes m-toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+.m-root .m-scroll { overflow-y: auto; overscroll-behavior: contain; }
+.m-root .m-flex-1 { flex: 1 1 auto; min-height: 0; }
+.m-root .m-gap-2 { gap: 8px; }
+.m-root .m-gap-3 { gap: 12px; }
+.m-root .m-mt-1 { margin-top: 4px; }
+.m-root .m-mt-2 { margin-top: 8px; }
+.m-root .m-mb-1 { margin-bottom: 4px; }
+.m-root .m-mb-2 { margin-bottom: 8px; }
+.m-root .m-p-2 { padding: 8px; }
+.m-root .m-p-3 { padding: 12px; }
+.m-root .m-p-4 { padding: 16px; }
+.m-root .m-text-center { text-align: center; }
+.m-root .m-text-right { text-align: right; }
+.m-root .m-text-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+.m-root .m-divider { height: 1px; background: var(--m-border); margin: 0; border: none; }
+
+/* ============================================================
+   RTL
+   ============================================================ */
+.m-root[dir='rtl'] .m-row__label { text-align: right; }
+.m-root[dir='rtl'] .m-topbar__title { text-align: right; }
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .m-root * { animation-duration: 1ms !important; transition-duration: 1ms !important; }
 }

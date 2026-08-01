@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.5.0-beta] - 2026-07-21
+
+### Added
+- **`src/components/StatusDot.tsx`** — Shared desktop + mobile status component. Default state is a tiny colored dot (8px, optional glow on `glow` prop). On hover / focus / tap, smoothly expands to a pill containing the label (max 320px, ellipsis on overflow). Touch: tap to show pill, auto-collapses after 2.4s, outside-click also collapses. Five variants: `live` (green), `fallback` (amber), `done` (blue), `error` (red), `info` (slate). Accessible: `role="status"`, `aria-label` always present, focusable.
+- **`src/mobile/mobile.css`** — Full design-token rewrite (Phase 3 mobile-from-scratch). New design tokens (spacing, type scale, motion easings, shadows, color palette) defined under `.m-root`. Tab bar with animated top accent indicator, card-based sections, sheets, FAB stack. Every selector strictly scoped under `.m-root` so the desktop bundle can never pick up mobile rules.
+- **`src/mobile/MobileTopBar.tsx`** (rewrittten) — 60px sticky glassy top bar + brand + contextual title + autosave `StatusDot` + Save-JSON icon button. The persistence `StatusDot` reflects saved / saving / stale / idle state, all from a cheap O(1) comparison on `(statements.length, last-id, programTitle)` instead of full-tree JSON.stringify.
+- **`src/mobile/MobileTabBar.tsx`** (rewritten) — 5-tab bottom navigation rail using colorful SVG icons from the shared `EmojiIcons.tsx` library (IconChart, IconPencil, IconPlay, IconChatBubble, IconTools). Smooth animated top accent indicator on tab change. 72px tall + safe-area bottom inset.
+- **`src/mobile/MobileCanvasView.tsx`** (rewritten) — Wraps `<FlowchartCanvas>` with a top status overlay (statement count + zoom) and a bottom-right zoom FAB stack (zoom-out, reset, zoom-primary zoom-in).
+- **`src/mobile/MobileEditView.tsx`** (rewritten) — Card-based sections (Selection / Clipboard / History / Canvas). Copy / Cut / Paste / Undo / Redo / Clear-canvas with proper enabled-state and a `WinUIDialog` confirm for clear (no `window.confirm`).
+- **`src/mobile/MobileRunView.tsx`** (rewritten) — Top `StatusDot` for execution state (idle / running / paused / done) + 2×2 action grid (Run / Step / Pause / Stop) + speed slider (1–600%) + Notes section explaining Step / Pause semantics.
+- **`src/mobile/MobileConsoleView.tsx`** (rewritten) — Minimal mobile-safe wrap of the existing `<Console>`.
+- **`src/mobile/MobileToolsView.tsx`** (rewritten) — 5 card sections (Program title/author / Settings language+color+layout / Export SVG/PNG/PDF / Help about+manual+changelog+issue+fork / Storage clear-localStorage). Per-row `StatusDot` indicates LICENSE / MANUAL / CHANGELOG load state (live, fallback, or idle) without an invasive pill at rest.
+- **`src/mobile/MobileLanguageSheet.tsx`** (rewritten) — 23-language picker as a bottom sheet with colorful SVG `FlagIcon`s + a translation-accuracy warning in the sheet header.
+- **`src/mobile/MobileBottomSheet.tsx`** (rewritten) — Minor polish; functional behavior unchanged (snap points, drag-down dismiss, scroll lock, Escape-to-close, portaled to `document.body`).
+- **`src/mobile/MobileApp.tsx`** (rewritten) — Hoisted `RTL_LANGS` Set to module scope. Persists the user's selected tab in localStorage (`flowonline2_mobile_view`). Sets `dir='rtl'|'ltr'` on the mobile root depending on whether the active language is Persian / Arabic / Hebrew.
+- **`CONTRIBUTORS.md`** (rewritten) — Full credits listing [PiBOH](https://github.com/PiBOH) (creator / maintainer) + [AlexGiulioBerton](https://github.com/AlexGiulioBerton) (active lead collaborator) + lmarena (acknowledged model-tooling contributor) + `@arenaai` (upstream handle). Documents the `Co-authored-by:` trailer convention used in every commit.
+
+### Changed
+- **`src/components/Header.tsx`** — Replaced 4 colored source-status chips (line 2644 version, line 2664 license, line 2741 manual, line 2769 changelog) with `<StatusDot>` calls. The chips used to say things like "loaded from GitHub" or "fallback path" and were invasive; the new dots are silent at rest and surface their label only on hover / focus / tap.
+- **Version fallback** in `Header.tsx` is now `'0.0.0-UNKNOWN'` (both the React `useState` initial value and the final fallback after both GitHub and local fetches fail). No more hardcoded `'BETA 2.1.0'` lies — the user is told exactly when the version could not be loaded.
+- **`.ignore/.assetsai/README.md`** — Stale MIT-License mentions cleaned up (the directory is `.gitignore`'d but keeping the dev's local notes consistent with current GNU GPL v3 license reduces confusion).
+
+### Fixed
+- **`MobileToolsView` useEffect cleanup bug** — The 3 fetch effects (about / manual / changelog) used to return `() => { cancelled = true; }` from inside an async IIFE, which `useEffect` receives as a `Promise` and discards. The cleanup is now hoisted outside the IIFE so the `cancelled` flag flips correctly on unmount or language change. Stale state-update warnings are gone.
+- **`mobile.css !important` override** — The rule `.status-dot[data-open='true']` was forcing a slate-100 background even when the `StatusDot` inline style set a per-variant tinted background. The `!important` is gone; the per-variant pill tint (e.g. amber for fallback) now survives on expansion.
+- **`StatusDot` pill max-width** bumped 260 → 320 so longer German ("Lizenz dynamisch von GitHub geladen") + Asian license/manual labels don't truncate visibly with ellipsis.
+
+### Architecture invariants (still held)
+- **Desktop bundle stays put**: only `Header.tsx` was edited, and only at the 4 source-status locations plus the version fallback string. `MainLayout` (in `App.tsx`), `FlowchartCanvas`, `Sidebar`, `Console`, `Modals`, `WinUIDialog`, `BlockNode` are byte-for-byte identical.
+- **Mobile CSS stays scoped under `.m-root`** (zero desktop bleed).
+- **Tests pass**: `tsc --noEmit` clean, `npx vitest run` 126/126 passed, `npm run build` succeeds.
+- **State reuse**: every mobile component still pulls from `useFlow()` — no duplication of state.
+
+---
+
 ## [2.4.0-beta] - 2026-07-21
 
 ### Added

@@ -5,6 +5,20 @@ import { exportToPNG, exportToPDF } from '../utils/exportUtils';
 import { translations } from '../utils/translations';
 import { MobileLanguageSheet } from './MobileLanguageSheet';
 import { WinUIDialog } from '../components/WinUIDialog';
+import { StatusDot } from '../components/StatusDot';
+import {
+  IconTools,
+  IconGlobe,
+  IconPalette,
+  IconDocument,
+  IconBooks,
+  IconChangelog,
+  IconInbox,
+  IconCode,
+  IconTrash,
+  IconChart,
+  IconPencil,
+} from '../components/EmojiIcons';
 
 const COLOR_SCHEMES = ['classic', 'pastel', 'vibrant', 'retro', 'twilight', 'blackwhite'] as const;
 const RTL_LANGS = ['ar', 'he', 'fa'] as const;
@@ -17,13 +31,19 @@ const LAYOUTS: { value: AppLayout; label: string }[] = [
 ];
 
 /**
- * Mobile tools view — settings list.
+ * Mobile tools view (Phase 3 rewrite).
  *
- * Phase 2.5 i18n: titles and license/manual/changelog fallback text are pulled
- * from the shared `TranslationCatalog` via `translations[language]`. When the
- * language changes mid-session, the three dialog-body states reset to that
- * language's fallback AND the fetch effects re-run so the live content
- * (LICENSE / MANUAL.md / CHANGELOG.md) is also re-fetched in the new locale.
+ * Card-based sections:
+ *   1. Program — title + author
+ *   2. Settings — language, color scheme, layout
+ *   3. Export — opens the export sheet
+ *   4. Help — about/license, manual, changelog, bug-feature-fork
+ *   5. Storage — clear localStorage
+ *
+ * The about / manual / changelog dialogs load LICENSE / MANUAL.md /
+ * CHANGELOG.md from the repo; instead of an invasive badge saying
+ * "loaded from X", we surface that info as a tiny `StatusDot` next to
+ * the row — same dot-on-hover pattern used everywhere else.
  */
 export const MobileToolsView: React.FC = () => {
   const {
@@ -39,50 +59,59 @@ export const MobileToolsView: React.FC = () => {
     clearLocalStorage,
   } = useFlow() as any;
 
-  // Resolve the catalog for the active language. `language` is `any` after
-  // the `as any` cast above; index access is type-erased through `translations`.
   const t = translations[language as keyof typeof translations] ?? translations.en;
-  // RTL only applies to the dialog body div; WinUIDialog's title bar chrome
-  // intentionally stays LTR (matches Flowgorithm desktop convention).
   const isRtl = RTL_LANGS.includes(language as (typeof RTL_LANGS)[number]);
 
   const [langSheetOpen, setLangSheetOpen] = useState(false);
-  const [exportSheetOpen, setExportSheetOpen] = useState(false);
-  const [exportStatus, setExportStatus] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+  const [clearSheetOpen, setClearSheetOpen] = useState(false);
+
   const [aboutOpen, setAboutOpen] = useState(false);
-  const [licenseText, setLicenseText] = useState(t.gplLicenseTextFallback);
+  const [aboutStatus, setAboutStatus] = useState<'live' | 'fallback' | 'idle'>('idle');
+  const [aboutText, setAboutText] = useState(t.gplLicenseTextFallback);
+
   const [manualOpen, setManualOpen] = useState(false);
+  const [manualStatus, setManualStatus] = useState<'live' | 'fallback' | 'idle'>('idle');
   const [manualText, setManualText] = useState(t.manualTextFallback);
+
   const [changelogOpen, setChangelogOpen] = useState(false);
+  const [changelogStatus, setChangelogStatus] = useState<'live' | 'fallback' | 'idle'>('idle');
   const [changelogText, setChangelogText] = useState(t.changelogTextFallback);
 
-  // Auto-dismiss the export status toast after 2.4s.
-  useEffect(() => {
-    if (!exportStatus) return;
-    const id = window.setTimeout(() => setExportStatus(null), 2400);
-    return () => window.clearTimeout(id);
-  }, [exportStatus]);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
-  // Watch the live `language` so dialogs opened in any locale get fresh fetches
-  // (depend on `language`, not just `open`) AND fall back to the new locale's
-  // text right after a switch (re-derive `t` inside the effect to avoid
-  // listing the per-rendered `t` in deps and dropping the eslint-disable).
+  const showToast = (msg: string, type: 'success' | 'error') => {
+    setToast({ msg, type });
+    window.setTimeout(() => setToast(null), 2400);
+  };
+
+  // When language changes, reset the dialog texts to the new locale's fallback.
   useEffect(() => {
     const tCur = translations[language as keyof typeof translations] ?? translations.en;
-    setLicenseText(tCur.gplLicenseTextFallback);
+    setAboutText(tCur.gplLicenseTextFallback);
     setManualText(tCur.manualTextFallback);
     setChangelogText(tCur.changelogTextFallback);
   }, [language]);
 
+  // Fetch LICENSE / MANUAL.md / CHANGELOG.md only when the user opens them.
+  // Each effect uses a `cancelled` flag hoisted OUTSIDE the async IIFE so the
+  // cleanup correctly runs on unmount or language change, preventing stale
+  // state writes from an in-flight fetch.
   useEffect(() => {
     if (!aboutOpen) return;
     let cancelled = false;
+    setAboutStatus('idle');
     (async () => {
       try {
         const r = await fetch('./LICENSE');
-        if (!cancelled && r.ok) setLicenseText(await r.text());
+        if (cancelled) return;
+        if (r.ok) {
+          setAboutText(await r.text());
+          if (!cancelled) setAboutStatus('live');
+        } else {
+          setAboutStatus('fallback');
+        }
       } catch {
-        /* keep fallback */
+        if (!cancelled) setAboutStatus('fallback');
       }
     })();
     return () => { cancelled = true; };
@@ -91,12 +120,19 @@ export const MobileToolsView: React.FC = () => {
   useEffect(() => {
     if (!manualOpen) return;
     let cancelled = false;
+    setManualStatus('idle');
     (async () => {
       try {
         const r = await fetch('./MANUAL.md');
-        if (!cancelled && r.ok) setManualText(await r.text());
+        if (cancelled) return;
+        if (r.ok) {
+          setManualText(await r.text());
+          if (!cancelled) setManualStatus('live');
+        } else {
+          setManualStatus('fallback');
+        }
       } catch {
-        /* keep fallback */
+        if (!cancelled) setManualStatus('fallback');
       }
     })();
     return () => { cancelled = true; };
@@ -105,19 +141,27 @@ export const MobileToolsView: React.FC = () => {
   useEffect(() => {
     if (!changelogOpen) return;
     let cancelled = false;
+    setChangelogStatus('idle');
     (async () => {
       try {
         const r = await fetch('./CHANGELOG.md');
-        if (!cancelled && r.ok) setChangelogText(await r.text());
+        if (cancelled) return;
+        if (r.ok) {
+          setChangelogText(await r.text());
+          if (!cancelled) setChangelogStatus('live');
+        } else {
+          setChangelogStatus('fallback');
+        }
       } catch {
-        /* keep fallback */
+        if (!cancelled) setChangelogStatus('fallback');
       }
     })();
     return () => { cancelled = true; };
   }, [changelogOpen, language]);
 
   const handleExport = async (fmt: 'svg' | 'png' | 'pdf') => {
-    setExportSheetOpen(false);
+    setLangSheetOpen(false);
+    setClearSheetOpen(false);
     try {
       let success = false;
       let message = '';
@@ -135,7 +179,7 @@ export const MobileToolsView: React.FC = () => {
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(url), 1500);
         success = true;
-        message = 'SVG exported \u2713';
+        message = 'SVG exported ✓';
       } else if (fmt === 'png') {
         const r = await exportToPNG(programTitle || 'diagram');
         success = r.success;
@@ -145,22 +189,22 @@ export const MobileToolsView: React.FC = () => {
         success = r.success;
         message = r.message;
       }
-      setExportStatus({ msg: success ? `${fmt.toUpperCase()} ${message}` : `Export failed: ${message}`, type: success ? 'success' : 'error' });
+      showToast(`${fmt.toUpperCase()} ${message}`, success ? 'success' : 'error');
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
-      setExportStatus({ msg: `Export failed: ${msg}`, type: 'error' });
+      showToast(`Export failed: ${msg}`, 'error');
     }
   };
 
   const handleClearLocalStorage = () => {
-    if (typeof window === 'undefined') return;
-    if (!window.confirm('Clear localStorage? This removes your saved flowchart backup.')) return;
+    setClearSheetOpen(false);
     try {
       if (clearLocalStorage) clearLocalStorage();
-      setExportStatus({ msg: 'localStorage cleared \u2713', type: 'success' });
+      window.localStorage.removeItem('flowonline2_autosave');
+      showToast('localStorage cleared ✓', 'success');
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
-      setExportStatus({ msg: `Failed: ${msg}`, type: 'error' });
+      showToast(`Failed: ${msg}`, 'error');
     }
   };
 
@@ -170,242 +214,236 @@ export const MobileToolsView: React.FC = () => {
   };
 
   return (
-    <div className="m-view m-scroll">
-      <div className="m-section-title">Program</div>
-      <div className="m-row">
-        <span style={{ flex: 1, color: '#64748b', fontWeight: 600, fontSize: 12 }}>Title</span>
-        <input
-          type="text"
-          value={programTitle || ''}
-          onChange={(e) => setProgramTitle && setProgramTitle(e.target.value)}
-          placeholder="Untitled"
-          style={{
-            flex: 2,
-            border: '1px solid #e2e8f0',
-            borderRadius: 8,
-            padding: '6px 10px',
-            fontSize: 14,
-            background: '#ffffff',
-            color: '#0f172a',
-          }}
-          aria-label="Program title"
-        />
-      </div>
-      <div className="m-row">
-        <span style={{ flex: 1, color: '#64748b', fontWeight: 600, fontSize: 12 }}>Author</span>
-        <input
-          type="text"
-          value={programAuthor || ''}
-          onChange={(e) => setProgramAuthor && setProgramAuthor(e.target.value)}
-          placeholder="Author"
-          style={{
-            flex: 2,
-            border: '1px solid #e2e8f0',
-            borderRadius: 8,
-            padding: '6px 10px',
-            fontSize: 14,
-            background: '#ffffff',
-            color: '#0f172a',
-          }}
-          aria-label="Program author"
-        />
+    <div className="m-view m-scroll" style={{ background: 'var(--m-bg)' }}>
+      <div className="m-section">
+        <div className="m-section-title">Program</div>
+        <div className="m-row subtitle" style={{ alignItems: 'center' }}>
+          <span className="m-row__icon"><IconDocument size={18} /></span>
+          <span className="m-row__label" style={{ flex: 0, width: 60 }}>Title</span>
+          <input
+            className="m-input"
+            type="text"
+            value={programTitle || ''}
+            onChange={(e) => setProgramTitle && setProgramTitle(e.target.value)}
+            placeholder="Untitled"
+            aria-label="Program title"
+          />
+        </div>
+        <div className="m-row subtitle" style={{ alignItems: 'center' }}>
+          <span className="m-row__icon"><IconPencil size={18} /></span>
+          <span className="m-row__label" style={{ flex: 0, width: 60 }}>Author</span>
+          <input
+            className="m-input"
+            type="text"
+            value={programAuthor || ''}
+            onChange={(e) => setProgramAuthor && setProgramAuthor(e.target.value)}
+            placeholder="Author"
+            aria-label="Program author"
+          />
+        </div>
       </div>
 
-      <div className="m-section-title">Settings</div>
-      <button type="button" className="m-row" onClick={() => setLangSheetOpen(true)} aria-label="Change language">
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83c\udf10</span>
-        <span style={{ flex: 1 }}>Language</span>
-        <span style={{ color: '#94a3b8', fontSize: 13 }}>{language}</span>
-      </button>
-      <div className="m-row subtitle">
-        <span style={{ flex: 1 }}>Color scheme</span>
-        <select
-          value={colorScheme || 'classic'}
-          onChange={(e) => setColorScheme && setColorScheme(e.target.value)}
-          style={{
-            padding: '6px 10px',
-            fontSize: 14,
-            border: '1px solid #e2e8f0',
-            borderRadius: 8,
-            background: '#ffffff',
-          }}
-          aria-label="Color scheme"
+      <div className="m-section">
+        <div className="m-section-title">Settings</div>
+        <button type="button" className="m-row" onClick={() => setLangSheetOpen(true)} aria-label="Change language">
+          <span className="m-row__icon"><IconGlobe size={18} /></span>
+          <span className="m-row__label">Language</span>
+          <span className="m-row__value">{language}</span>
+        </button>
+        <div className="m-row subtitle" style={{ alignItems: 'center' }}>
+          <span className="m-row__icon"><IconPalette size={18} /></span>
+          <span className="m-row__label">Color scheme</span>
+          <select
+            className="m-select"
+            value={colorScheme || 'classic'}
+            onChange={(e) => setColorScheme && setColorScheme(e.target.value)}
+            aria-label="Color scheme"
+          >
+            {COLOR_SCHEMES.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+        </div>
+        <div className="m-row subtitle" style={{ alignItems: 'center' }}>
+          <span className="m-row__icon"><IconTools size={18} /></span>
+          <span className="m-row__label">Layout</span>
+          <select
+            className="m-select"
+            value={layout || 'triple_split'}
+            onChange={(e) => setLayout && setLayout(e.target.value as AppLayout)}
+            aria-label="Layout"
+          >
+            {LAYOUTS.map((l) => (
+              <option key={l.value} value={l.value}>{l.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="m-section">
+        <div className="m-section-title">Export</div>
+        <button type="button" className="m-row" onClick={() => handleExport('svg')} aria-label="Export as SVG">
+          <span className="m-row__icon"><IconChart size={18} /></span>
+          <span className="m-row__label">Export SVG</span>
+        </button>
+        <button type="button" className="m-row" onClick={() => handleExport('png')} aria-label="Export as PNG (HiDPI)">
+          <span className="m-row__icon"><IconInbox size={18} /></span>
+          <span className="m-row__label">Export PNG (HiDPI)</span>
+        </button>
+        <button type="button" className="m-row" onClick={() => handleExport('pdf')} aria-label="Export as PDF">
+          <span className="m-row__icon"><IconDocument size={18} /></span>
+          <span className="m-row__label">Export PDF</span>
+        </button>
+      </div>
+
+      <div className="m-section">
+        <div className="m-section-title">Help</div>
+        <button type="button" className="m-row" onClick={() => setAboutOpen(true)}>
+          <span className="m-row__icon"><IconBooks size={18} /></span>
+          <span className="m-row__label">About &amp; License</span>
+          <StatusDot
+            variant={aboutStatus === 'live' ? 'live' : aboutStatus === 'fallback' ? 'fallback' : 'info'}
+            label={
+              aboutStatus === 'live'
+                ? 'Loaded live from repo'
+                : aboutStatus === 'fallback'
+                ? 'Loaded from local fallback'
+                : 'Open to load LICENSE'
+            }
+          />
+        </button>
+        <button type="button" className="m-row" onClick={() => setManualOpen(true)}>
+          <span className="m-row__icon"><IconBooks size={18} /></span>
+          <span className="m-row__label">User manual</span>
+          <StatusDot
+            variant={manualStatus === 'live' ? 'live' : manualStatus === 'fallback' ? 'fallback' : 'info'}
+            label={
+              manualStatus === 'live'
+                ? 'Loaded live from repo'
+                : manualStatus === 'fallback'
+                ? 'Loaded from local fallback'
+                : 'Open to load MANUAL.md'
+            }
+          />
+        </button>
+        <button type="button" className="m-row" onClick={() => setChangelogOpen(true)}>
+          <span className="m-row__icon"><IconChangelog size={18} /></span>
+          <span className="m-row__label">Changelog</span>
+          <StatusDot
+            variant={changelogStatus === 'live' ? 'live' : changelogStatus === 'fallback' ? 'fallback' : 'info'}
+            label={
+              changelogStatus === 'live'
+                ? 'Loaded live from repo'
+                : changelogStatus === 'fallback'
+                ? 'Loaded from local fallback'
+                : 'Open to load CHANGELOG.md'
+            }
+          />
+        </button>
+        <button
+          type="button"
+          className="m-row"
+          onClick={() => openExternal('https://github.com/PiBOH/flowonline2/issues/new/choose')}
         >
-          {COLOR_SCHEMES.map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
-      </div>
-      <div className="m-row subtitle">
-        <span style={{ flex: 1 }}>Layout</span>
-        <select
-          value={layout || 'triple_split'}
-          onChange={(e) => setLayout && setLayout(e.target.value as AppLayout)}
-          style={{
-            padding: '6px 10px',
-            fontSize: 14,
-            border: '1px solid #e2e8f0',
-            borderRadius: 8,
-            background: '#ffffff',
-          }}
-          aria-label="Layout"
+          <span className="m-row__icon"><IconInbox size={18} /></span>
+          <span className="m-row__label">Report a bug / Request a feature</span>
+        </button>
+        <button
+          type="button"
+          className="m-row"
+          onClick={() => openExternal('https://github.com/PiBOH/flowonline2/fork')}
         >
-          {LAYOUTS.map((l) => (
-            <option key={l.value} value={l.value}>{l.label}</option>
-          ))}
-        </select>
+          <span className="m-row__icon"><IconCode size={18} /></span>
+          <span className="m-row__label">Fork repository</span>
+        </button>
       </div>
 
-      <div className="m-section-title">Export</div>
-      <button type="button" className="m-row" onClick={() => setExportSheetOpen(true)} aria-label="Export diagram">
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udce4</span>
-        <span style={{ flex: 1 }}>Export diagram</span>
-        <span style={{ color: '#94a3b8', fontSize: 13 }}>SVG \u00b7 PNG \u00b7 PDF</span>
-      </button>
-
-      <div className="m-section-title">Help</div>
-      <button type="button" className="m-row" onClick={() => setAboutOpen(true)}>
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\u2139</span>
-        <span style={{ flex: 1 }}>About &amp; License</span>
-      </button>
-      <button type="button" className="m-row" onClick={() => setManualOpen(true)}>
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udcd6</span>
-        <span style={{ flex: 1 }}>User manual</span>
-      </button>
-      <button type="button" className="m-row" onClick={() => setChangelogOpen(true)}>
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udcdd</span>
-        <span style={{ flex: 1 }}>Changelog</span>
-      </button>
-      <button
-        type="button"
-        className="m-row"
-        onClick={() => openExternal('https://github.com/PiBOH/flowonline2/issues/new/choose')}
-      >
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udc1e</span>
-        <span style={{ flex: 1 }}>Report a bug / Request a feature</span>
-      </button>
-      <button
-        type="button"
-        className="m-row"
-        onClick={() => openExternal('https://github.com/PiBOH/flowonline2/fork')}
-      >
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udd31</span>
-        <span style={{ flex: 1 }}>Fork repository</span>
-      </button>
-
-      <div className="m-section-title">Storage</div>
-      <button type="button" className="m-row danger" onClick={handleClearLocalStorage}>
-        <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\uddd1</span>
-        <span style={{ flex: 1 }}>Clear localStorage</span>
-      </button>
+      <div className="m-section">
+        <div className="m-section-title">Storage</div>
+        <button type="button" className="m-row danger" onClick={() => setClearSheetOpen(true)}>
+          <span className="m-row__icon"><IconTrash size={18} /></span>
+          <span className="m-row__label">Clear localStorage</span>
+        </button>
+      </div>
 
       {/* Sheets & dialogs */}
       <MobileLanguageSheet open={langSheetOpen} onClose={() => setLangSheetOpen(false)} />
 
-      {exportSheetOpen && (
-        <>
-          <div className="m-sheet-backdrop open" onClick={() => setExportSheetOpen(false)} aria-hidden="true" />
-          <div className="m-sheet" style={{ transform: 'translateY(calc(100% - 40%))' }} role="dialog" aria-label="Export">
-            <div className="m-sheet-handle" />
-            <div className="m-sheet-header">
-              <span>\ud83d\udce4 Export</span>
-              <button
-                type="button"
-                onClick={() => setExportSheetOpen(false)}
-                style={{ background: 'transparent', border: 'none', fontSize: 18, cursor: 'pointer', color: '#64748b' }}
-                aria-label="Close"
-              >
-                \u2715
-              </button>
-            </div>
-            <div className="m-sheet-body">
-              <button type="button" className="m-row" onClick={() => handleExport('svg')}>
-                <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udcd0</span>
-                <span style={{ flex: 1 }}>SVG</span>
-              </button>
-              <button type="button" className="m-row" onClick={() => handleExport('png')}>
-                <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83c\udfa8</span>
-                <span style={{ flex: 1 }}>PNG (HiDPI)</span>
-              </button>
-              <button type="button" className="m-row" onClick={() => handleExport('pdf')}>
-                <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>\ud83d\udcc4</span>
-                <span style={{ flex: 1 }}>PDF</span>
-              </button>
-            </div>
-          </div>
-        </>
-      )}
+      <WinUIDialog
+        isOpen={clearSheetOpen}
+        onClose={() => setClearSheetOpen(false)}
+        onOk={handleClearLocalStorage}
+        title="Clear localStorage?"
+        message="This will remove your saved flowchart backup and language preference. This cannot be undone."
+        type="confirm"
+        defaultWidth={360}
+        defaultHeight={220}
+        okLabel="Clear"
+      />
 
-      {exportStatus && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 84,
-            left: 16,
-            right: 16,
-            padding: '12px 16px',
-            background: exportStatus.type === 'success' ? '#10b981' : '#ef4444',
-            color: '#ffffff',
-            borderRadius: 12,
-            fontSize: 13,
-            fontWeight: 600,
-            zIndex: 200,
-            textAlign: 'center',
-            boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
-          }}
-          role="status"
-          aria-live="polite"
-        >
-          {exportStatus.msg}
-        </div>
-      )}
-
-      {/* `message=""` is intentional: WinUIDialog's `message` prop is required
-          to keep the desktop type-check happy, but `children` overrides the
-          message render slot when provided. See WinUIDialog.tsx. */}
       <WinUIDialog
         isOpen={aboutOpen}
         onClose={() => setAboutOpen(false)}
+        onOk={() => setAboutOpen(false)}
         title={t.aboutTitle}
         message=""
         type="info"
-        defaultWidth={420}
+        defaultWidth={380}
         defaultHeight={320}
       >
-        <div dir={isRtl ? 'rtl' : 'ltr'} style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 13, color: '#0f172a', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}>
-          {licenseText}
+        <div
+          dir={isRtl ? 'rtl' : 'ltr'}
+          style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 13, color: 'var(--m-text)', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}
+        >
+          {aboutText}
         </div>
       </WinUIDialog>
 
-      {/* `message=""` workaround — see WinUIDialog note above. */}
       <WinUIDialog
         isOpen={manualOpen}
         onClose={() => setManualOpen(false)}
+        onOk={() => setManualOpen(false)}
         title={t.manualTitle}
         message=""
         type="info"
-        defaultWidth={420}
+        defaultWidth={380}
         defaultHeight={320}
       >
-        <div dir={isRtl ? 'rtl' : 'ltr'} style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 13, color: '#0f172a', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}>
+        <div
+          dir={isRtl ? 'rtl' : 'ltr'}
+          style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 13, color: 'var(--m-text)', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}
+        >
           {manualText}
         </div>
       </WinUIDialog>
 
-      {/* `message=""` workaround — see WinUIDialog note above. */}
       <WinUIDialog
         isOpen={changelogOpen}
         onClose={() => setChangelogOpen(false)}
+        onOk={() => setChangelogOpen(false)}
         title={t.changelogTitle}
         message=""
         type="info"
-        defaultWidth={420}
+        defaultWidth={380}
         defaultHeight={320}
       >
-        <div dir={isRtl ? 'rtl' : 'ltr'} style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 12, color: '#0f172a', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}>
+        <div
+          dir={isRtl ? 'rtl' : 'ltr'}
+          style={{ padding: 12, whiteSpace: 'pre-wrap', fontSize: 12, color: 'var(--m-text)', overflow: 'auto', maxHeight: 240, userSelect: 'text' }}
+        >
           {changelogText}
         </div>
       </WinUIDialog>
+
+      {toast && (
+        <div
+          className={`m-toast ${toast.type === 'success' ? 'm-toast--success' : 'm-toast--error'}`}
+          role="status"
+          aria-live="polite"
+        >
+          {toast.msg}
+        </div>
+      )}
     </div>
   );
 };

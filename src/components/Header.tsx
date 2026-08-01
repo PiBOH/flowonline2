@@ -4,6 +4,7 @@ import { translations } from '../utils/translations';
 import { FprgParser } from '../utils/fprgParser';
 import { exportToPNG, exportToPDF } from '../utils/exportUtils';
 import { WinUIDialog } from './WinUIDialog';
+import { StatusDot } from './StatusDot';
 import { Language } from '../types/flow';
 
 import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe, IconPlay, IconStep, IconPause, IconStop, IconMonitor, FlagIcon } from './EmojiIcons';
@@ -61,8 +62,10 @@ export const Header: React.FC = () => {
   // Dropdown states for Menus
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  // Dynamic App Version state (BETA 2.1.0 fallback default!)
-  const [appVersion, setAppVersion] = useState('BETA 2.1.0');
+  // Dynamic App Version state. If both fetches (GitHub raw → local file) fail,
+  // we render exactly `0.0.0-UNKNOWN` so the user is never lied to about which
+  // version they're running. This is also the initial SSR-safe default.
+  const [appVersion, setAppVersion] = useState('0.0.0-UNKNOWN');
   const [versionSource, setVersionSource] = useState<'repo' | 'fallback'>('repo');
 
   // About Modal state
@@ -1446,7 +1449,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             setVersionSource('repo');
           })
           .catch(() => {
-            setAppVersion('BETA 2.1.0'); // Local final fallback updated to BETA!
+            setAppVersion('0.0.0-UNKNOWN'); // Final fallback when remote and local both fail.
             setVersionSource('fallback');
           });
       });
@@ -2641,9 +2644,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                 <h4 className="font-extrabold text-[14px] text-slate-900 tracking-wide">Flowonline2</h4>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <p className="text-[12px] text-slate-500 font-semibold">{mt.aboutVersion} {appVersion}</p>
-                  <span className={`px-1.5 py-0.5 rounded font-mono text-[7px] font-black ${versionSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 animate-pulse' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
-                    {versionSource === 'repo' ? mt.versionRepoLoaded : mt.versionFallbackLoaded}
-                  </span>
+                  <StatusDot
+                    variant={versionSource === 'repo' ? 'live' : 'fallback'}
+                    label={versionSource === 'repo' ? mt.versionRepoLoaded : mt.versionFallbackLoaded}
+                    glow
+                  />
                 </div>
                 <p className="text-[12px] text-slate-600 mt-2">
                   {mt.aboutAuthor}: <a href="https://piboh.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">PiBOH</a>
@@ -2661,9 +2666,10 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             <div className="flex-1 flex flex-col space-y-1.5 my-1">
               <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wide shrink-0">
                 <span>{mt.aboutLicense}</span>
-                <span className={`px-2.5 py-0.5 rounded-full font-sans text-[8px] font-black ${licenseSource === 'repo' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}`}>
-                  {licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
-                </span>
+                <StatusDot
+                  variant={licenseSource === 'repo' ? 'live' : 'fallback'}
+                  label={licenseSource === 'repo' ? mt.licenseRepoLoaded : mt.licenseFallbackLoaded}
+                />
               </div>
               <textarea
                 readOnly
@@ -2737,10 +2743,13 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           onOk={() => setShowManual(false)}
         >
           <div className="flex flex-col gap-2 select-text">
-            {/* Documentation source badge */}
-            <div className={`text-[9px] px-2 py-1 rounded font-semibold text-center ${manualSource === 'repo' ? 'bg-emerald-200 text-emerald-800' : 'bg-yellow-200 text-yellow-800'}`}>
-              {manualSource === 'repo' ? 'Documentation: ' + mt.manualRepoLoaded : mt.manualFallbackLoaded}
-              <span className="font-mono ml-2 text-slate-500">MANUAL.md</span>
+            {/* Documentation source indicator: dot-on-hover badge + filename visible at rest */}
+            <div className="flex items-center gap-2 text-[9px] text-slate-500 select-none">
+              <StatusDot
+                variant={manualSource === 'repo' ? 'live' : 'fallback'}
+                label={manualSource === 'repo' ? mt.manualRepoLoaded : mt.manualFallbackLoaded}
+              />
+              <span className="font-mono ml-auto text-slate-500 uppercase tracking-wide">MANUAL.md</span>
             </div>
 
             {/* BEAUTIFULLY STYLED MARKDOWN VIEWER PANEL */}
@@ -2765,10 +2774,13 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           onOk={() => setShowChangelog(false)}
         >
           <div className="flex flex-col gap-2 select-text">
-            {/* Changelog Source Badge */}
-            <div className={`text-[9px] px-2 py-1 rounded font-semibold text-center ${changelogSource === 'repo' ? 'bg-emerald-200 text-emerald-800' : 'bg-yellow-200 text-yellow-800'}`}>
-              {changelogSource === 'repo' ? mt.changelogRepoLoaded : mt.changelogFallbackLoaded}
-              <span className="font-mono ml-2 text-slate-500">CHANGELOG.md</span>
+            {/* Changelog source indicator: dot-on-hover badge + filename visible at rest */}
+            <div className="flex items-center gap-2 text-[9px] text-slate-500 select-none">
+              <StatusDot
+                variant={changelogSource === 'repo' ? 'live' : 'fallback'}
+                label={changelogSource === 'repo' ? mt.changelogRepoLoaded : mt.changelogFallbackLoaded}
+              />
+              <span className="font-mono ml-auto text-slate-500 uppercase tracking-wide">CHANGELOG.md</span>
             </div>
 
             {/* Content Viewer */}

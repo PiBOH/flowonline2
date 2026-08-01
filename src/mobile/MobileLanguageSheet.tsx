@@ -5,10 +5,9 @@ import type { Language } from '../types/flow';
 import { FlagIcon } from '../components/EmojiIcons';
 
 /**
- * Mobile-language picker as a bottom sheet.
+ * Mobile-language picker as a bottom sheet (Phase 3 rewrite).
  * Lists 23 supported languages with flag SVGs (reuses the existing
- * `FlagIcon` component — no extra dependency). Same content as the
- * desktop `WinUIDialog`-based language picker, just mobile-shaped.
+ * `FlagIcon` component — no extra dependency).
  */
 export interface MobileLanguageSheetProps {
   open: boolean;
@@ -41,11 +40,8 @@ const LANGUAGE_LABELS: Record<Language, string> = {
   fa: 'فارسی',
 };
 
-export const MobileLanguageSheet: React.FC<MobileLanguageSheetProps> = ({
-  open,
-  onClose,
-}) => {
-  const { language, setLanguage } = useFlow();
+export const MobileLanguageSheet: React.FC<MobileLanguageSheetProps> = ({ open, onClose }) => {
+  const { language, setLanguage } = useFlow() as any;
 
   const languages = useMemo(() => Object.keys(LANGUAGE_LABELS) as Language[], []);
 
@@ -55,13 +51,13 @@ export const MobileLanguageSheet: React.FC<MobileLanguageSheetProps> = ({
       onClose={onClose}
       snapPoints={['60%', '90%']}
       initialSnap={0}
-      title="🌐  Language"
+      title="🌐 Language"
       showHandle
     >
-      <div className="m-section-title">
-        ⚠️ Translations may not be 100% accurate
+      <div className="m-section-title" style={{ color: '#dc2626', fontWeight: 700 }}>
+        ⚠ Translations may not be 100% accurate
       </div>
-      <div className="m-scroll m-flex-1" style={{ maxHeight: '70vh' }}>
+      <div className="m-scroll" style={{ maxHeight: '70vh' }}>
         {languages.map((code) => {
           const isActive = code === language;
           return (
@@ -79,10 +75,10 @@ export const MobileLanguageSheet: React.FC<MobileLanguageSheetProps> = ({
                   : undefined
               }
             >
-              <FlagIcon code={code} size={22} />
-              <span style={{ flex: 1 }}>{LANGUAGE_LABELS[code]}</span>
+              <span className="m-row__icon"><FlagIcon code={code} size={22} /></span>
+              <span className="m-row__label">{LANGUAGE_LABELS[code]}</span>
               {isActive && (
-                <span style={{ color: '#2563eb', fontWeight: 800 }}>✓</span>
+                <span style={{ color: 'var(--m-accent)', fontWeight: 800 }}>✓</span>
               )}
             </button>
           );
