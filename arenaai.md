@@ -581,6 +581,34 @@ v2.3.23: Summary of changes
 - `MobileLanguageSheet.tsx` → `MobileBottomSheet.tsx` + `useFlow` + `FlagIcon`
 - Nothing else imports these files yet. **Phase 2** will add `MobileApp.tsx` orchestrator + 5 view components (`MobileCanvasView`, `MobileEditView`, `MobileRunView`, `MobileConsoleView`, `MobileToolsView`) + `MobileTopBar`. **Phase 3** will wire viewport routing into `App.tsx` (additive — MainLayout remains unchanged).
 
+### Milestone 44: Mobile UX Rework (Phase 5) — Sidebar Drawer + Slim Execution Topbar + Vite Version Injection (BETA 2.5.2-beta)
+
+[//]: # (keepachangelog)
+
+#### Changed
+*   **Mobile UI:** Bottom 5-tab navigation rail **eliminated**. New layout: a single 52px top bar with a `☰` hamburger button on the **left** + Run/Step/Pause/Stop execution controls on the **right**. A slide-in sidebar drawer hosts every other option.
+*   **Top bar height:** 60px → 52px. Brand chip + subtitle removed; execution controls now have the entire visible top bar to themselves and stay reachable from any view.
+
+#### Added
+*   **`src/mobile/MobileSidebar.tsx`** (~301 lines): backdrop-dimmed slide-in drawer from the LEFT over `.m-root`. Width `min(320px, 88vw)`. Body-scroll lock while open. Each main row supports `tap-the-row-to-navigate` (also closes drawer) OR `tap-the-chevron-to-expand` (reveals a sub-list). Help section is pinned at the footer with its own `aria-expanded` chevron. RTL-safe via `dir` attribute read from language.
+*   **MobileSidebar a11y (Phase 5.1 patch):** ESC closes drawer (`window.addEventListener('keydown', onKey)` inside a useEffect keyed on `[props.open, props.onClose]`). Focus moves to the close button on open (`closeBtnRef.current?.focus()` inside `requestAnimationFrame`) and restores to the opener (`document.activeElement` snapshot) on close. Body-scroll lock + cleanup. Focus trap is naive but satisfies the standard drawer contract.
+*   **`vite.config.ts` version.txt loader:** synchronous `fs.readFileSync(path.resolve(process.cwd(), 'version.txt'), 'utf-8')` at Vite config-load time; trimmed string inlined into the React bundle as `import.meta.env.VITE_APP_VERSION` via `define`. Falls back to `'0.0.0-UNKNOWN'` if the file is missing/unreadable. Verified at `npm run build` and `npm run dev`.
+*   **`src/mobile/MobileApp.tsx` Path-C sidebar-action wiring:** 270-line orchestrator now owns a hidden file-input ref for `.fprg` load, 3 `<WinUIDialog>` overlays (About / Manual-from-GitHub / Changelog-from-GitHub), and a `<MobileLanguageSheet>` re-use. New / Open / Save .fprg / Backup JSON / Export SVG+PNG+PDF / Clear Local Storage all route to useFlow + `FprgParser` + `exportUtils` directly. Bug / Feature / Fork buttons `window.open` to GitHub.
+
+#### Removed
+*   **`src/mobile/MobileTabBar.tsx`** (and its CSS block): eliminated; the bottom 72px tab strip is gone. `<main>` view now fills the full viewport below the topbar — zero dead space.
+*   **Debug watermark** in MobileApp (was a `<div data-component="MobileApp" data-version=...>` placeholder). Redundant with the actual topbar.
+
+#### Fixed
+*   **`src/components/Header.tsx` `appVersion` initial state** was hardcoded `'0.0.0-UNKNOWN'` and only ever overwritten by an unreliable GitHub raw fetch. Now sourced from `import.meta.env.VITE_APP_VERSION` at first render. `version.txt` is the **single source-of-truth** for both the in-app About dialog and the `.fprg` filename prefix.
+
+#### Architecture invariants
+*   **Desktop bundle byte-for-byte unchanged** except for one keyword in `Header.tsx` (`const menuTranslations` → `export const menuTranslations` so the mobile sidebar can render the same labels).
+*   Mobile bundle: 12 → 11 files (`MobileTabBar.tsx` removed). Every selector strictly scoped to `.m-root`.
+*   126/126 vitest passing. `tsc --noEmit` clean.
+
+---
+
 ### Milestone 43: localStorage clear bug fix + "Flag: Also clear current work" toggle (BETA 2.5.1-beta)
 
 [//]: # (keepachangelog)

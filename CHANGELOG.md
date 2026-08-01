@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.5.2-beta] - 2026-07-21
+
+### Changed
+- **Mobile UX redesign (Phase 5):** Replaced the bottom 5-tab navigation rail with a single one-row top bar (☰ hamburger-left + Run/Step/Pause/Stop-right). A slide-in sidebar drawer now hosts every other option: view switching (Canvas/Edit/Run/Console/Tools), file ops (New/Open/Save/Backup JSON/Export SVG+PNG+PDF/Clear Local Storage), edit ops (Undo/Redo), console ops (Clear output), and a pinned Help footer (Manual/Changelog/About/Report Bug/Request Feature/Fork & Contribute/Language picker).
+- **Top bar height: 60px → 52px.** Brand chip + subtitle removed; the execution controls (Run/Step/Pause/Stop) now have the entire visible top bar to themselves and stay reachable from any view.
+- **Sidebar drawer width:** `min(320px, 88vw)` so it scales gracefully down to ≤360px phones, capped so it never overflows the screen.
+
+### Added
+- **`src/mobile/MobileSidebar.tsx`** (~250 lines): backdrop-dimmed slide-in drawer from the left. Body-scroll lock while open. Each main row supports `tap-the-row-to-navigate` (also closes drawer) **or** `tap-the-chevron-to-expand` (reveals a sub-list). Help section pinned at the footer with its own `aria-expanded` chevron. Full RTL-safe direction via `.m-root[dir='rtl']` flow.
+- **Vite build-time `version.txt` injection (`vite.config.ts`):** synchronous `fs.readFileSync(path.resolve(process.cwd(), 'version.txt'), 'utf-8')` at Vite config-load time; trimmed string inlined into the React bundle as `import.meta.env.VITE_APP_VERSION` via `define: { … }`. Fallback `0.0.0-UNKNOWN` if the file is missing/unreadable so the UI is never lied to about which version is running.
+
+### Removed
+- **`src/mobile/MobileTabBar.tsx`** (and its CSS block): eliminated; the bottom 72px tab strip is gone. MobileApp no longer renders `<MobileTabBar>`. The `<main>` view now fills the full viewport below the topbar — zero dead space.
+
+### Fixed
+- **Header `appVersion` initial state** (`src/components/Header.tsx`): was hardcoded `'0.0.0-UNKNOWN'` and only ever overwritten by a GitHub raw fetch (which was unreliable). Now sourced from `import.meta.env.VITE_APP_VERSION` at first render. `version.txt` is the **single source-of-truth** for both the in-app About dialog and the `.fprg` filename prefix.
+
+### Architecture invariants
+- Desktop bundle byte-for-byte unchanged except for the one-line Header initial-state change (additive — `setAppVersion` still functions identically if used).
+- Mobile bundle: 12 → 11 files (`MobileTabBar.tsx` removed). Every selector strictly scoped to `.m-root`.
+- 126/126 vitest passing. `tsc --noEmit` clean.
+
+---
+
 ## [2.5.1-beta] - 2026-07-21
 
 ### Fixed

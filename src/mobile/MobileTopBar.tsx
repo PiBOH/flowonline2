@@ -1,144 +1,128 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useFlow } from '../context/FlowContext';
-import { IconSave, IconInfo } from '../components/EmojiIcons';
-import { StatusDot } from '../components/StatusDot';
-import type { MobileTabId } from './MobileTabBar';
+import { IconPlay, IconStep, IconPause, IconStop } from '../components/EmojiIcons';
 
 export interface MobileTopBarProps {
-  view: MobileTabId;
+  /**
+   * Called when the user taps the hamburger button.
+   * Parent (MobileApp) opens the sidebar drawer.
+   */
+  onOpenSidebar: () => void;
 }
 
 /**
- * Mobile-only top bar (Phase 3 rewrite).
- * 60px tall, sticky, glassy backdrop so it stays out of the way of canvas
- * content. Brand chip on the left, contextual title + program name in the
- * middle (single line, ellipsis on overflow), and a Save-JSON action +
- * persistence `StatusDot` on the right.
+ * Mobile-only top bar (Phase 5 — slim execution bar).
  *
- * The persistence StatusDot uses the dot-on-hover pattern so the bar
- * never carries an invasive pill — at rest it's a small colored dot that
- * expands to a "Saved to localStorage" / "Auto-saving…" message only when
- * the user cares to look.
+ * ONE row, fixed height, glassy backdrop. The layout is intentionally
+ * minimal so the user has the smallest possible surface to mis-tap:
+ *
+ *   ┌──────────────────────────────────────────────────┐
+ *   │ [☰]                 [▶ Run] [⏭ Step] [⏸ Pause] [⏹ Stop] │
+ *   └──────────────────────────────────────────────────┘
+ *
+ * The hamburger on the LEFT opens the sidebar drawer (all file/edit/
+ * tools/help options live there). The execution buttons on the RIGHT
+ * are functional from ANY view — the user doesn't have to switch to
+ * the Run tab first to start the algorithm.
+ *
+ * Architecture invariants:
+ *   - Never reads/writes localStorage (sidebar handles autosave/save).
+ *   - Never shows the brand chip / program title (sidebar handles it).
+ *   - Reads only `executionStatus`, `startRun`, `stepRun`, `pauseRun`,
+ *     `stopRun` from `useFlow()` so it stays cheap.
  */
-export const MobileTopBar: React.FC<MobileTopBarProps> = ({ view }) => {
-  const { programTitle, statements } = useFlow() as any;
+export const MobileTopBar: React.FC<MobileTopBarProps> = ({ onOpenSidebar }) => {
+  const { executionStatus, startRun, stepRun, pauseRun, stopRun } = useFlow() as any;
 
-  const TITLES: Record<MobileTabId, string> = {
-    canvas: 'Flowonline2',
-    edit: 'Edit',
-    run: 'Run',
-    console: 'Console',
-    tools: 'Tools',
+  // Normalize status — tolerate both `'running'` and `'running' | 'paused' | ...`.
+  const status: string = typeof executionStatus === 'string' ? executionStatus : 'idle';
+  const isRunning = status === 'running';
+  const isPaused = status === 'paused';
+
+  // Safe wrappers so a thrown start/step/pause/stop never crashes the UI.
+  const safeRun = () => {
+    if (isRunning) return;
+    try { (startRun as any)?.(); } catch { /* noop */ }
   };
-
-  const hasStatements = Array.isArray(statements) && statements.length > 0;
-  const stmtCount = hasStatements ? statements.length : 0;
-
-  // localStorage save indicator → StatusDot variant.
-  type SaveStatus = 'idle' | 'saving' | 'saved' | 'stale';
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
-  const [saveLabel, setSaveLabel] = useState('Not yet saved');
-
-  // Cheap autosave comparison: instead of JSON.stringify-ing the whole
-  // statements tree on every keystroke, we compare the cheap shape
-  // (length + last-id) plus the programTitle. Drastic cost reduction for
-  // large flowcharts; false negatives only happen when length + last-id
-  // match but a mid-tree block changed, which the next save keyboard
-  // event will catch anyway.
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem('flowonline2_autosave');
-      if (!raw) {
-        setSaveStatus('idle');
-        setSaveLabel('Not yet saved');
-        return;
-      }
-      const parsed = JSON.parse(raw);
-      const arr = Array.isArray(statements) ? statements : [];
-      const storedArr = Array.isArray(parsed.statements) ? parsed.statements : [];
-      const sameLength = arr.length === storedArr.length;
-      const sameTitle = parsed.programTitle === (programTitle ?? '');
-      const sameLast =
-        !sameLength || !arr.length
-          ? sameLength
-          : arr[arr.length - 1]?.id === storedArr[storedArr.length - 1]?.id;
-      const matches = sameLength && sameTitle && sameLast;
-      if (matches) {
-        setSaveStatus('saved');
-        setSaveLabel('Saved to localStorage ✓');
-      } else {
-        setSaveStatus('stale');
-        setSaveLabel('Unsaved changes — tap Save to keep');
-      }
-    } catch {
-      setSaveStatus('idle');
-      setSaveLabel('Not yet saved');
-    }
-  }, [statements, programTitle]);
-
-  const handleSave = () => {
-    setSaveStatus('saving');
-    setSaveLabel('Saving…');
-    try {
-      const payload = {
-        title: programTitle ?? 'Untitled',
-        statements,
-      };
-      // Persist JSON copy too so the StatusDot can compare and update.
-      window.localStorage.setItem('flowonline2_autosave', JSON.stringify(payload));
-      // Browser download — mobile-friendly.
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${(programTitle || 'flowonline2').replace(/\s+/g, '_')}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 1500);
-      setSaveStatus('saved');
-      setSaveLabel('Saved to localStorage ✓');
-    } catch {
-      setSaveStatus('stale');
-      setSaveLabel('Save failed');
-    }
+  const safeStep = () => {
+    if (isRunning) return;
+    try { (stepRun as any)?.(); } catch { /* noop */ }
   };
-
-  const dotVariant =
-    saveStatus === 'saved'
-      ? 'live'
-      : saveStatus === 'saving'
-      ? 'info'
-      : saveStatus === 'stale'
-      ? 'fallback'
-      : 'info';
+  const safePause = () => {
+    if (!isRunning) return;
+    try { (pauseRun as any)?.(); } catch { /* noop */ }
+  };
+  const safeStop = () => {
+    if (!isRunning && !isPaused) return;
+    try { (stopRun as any)?.(); } catch { /* noop */ }
+  };
 
   return (
     <header className="m-topbar m-safe-top" role="banner">
-      <div className="m-topbar__brand">
-        <IconInfo size={20} className="" />
-        <div style={{ minWidth: 0 }}>
-          <div className="m-topbar__title">{TITLES[view]}</div>
-          <div className="m-topbar__subtitle">
-            {programTitle || 'Untitled'} · {stmtCount} stmt
-          </div>
-        </div>
-      </div>
-      <div className="m-topbar__actions">
-        <StatusDot
-          variant={dotVariant as any}
-          label={saveLabel}
-          glow={saveStatus === 'saved'}
-        />
+      <button
+        type="button"
+        onClick={onOpenSidebar}
+        className="m-icon-btn m-icon-btn--menu"
+        aria-label="Open menu"
+        title="Menu"
+      >
+        {/* Inline 3-line hamburger SVG (zero-dep, identical across browsers). */}
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+          aria-hidden="true"
+        >
+          <line x1="4" y1="7" x2="20" y2="7" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="17" x2="20" y2="17" />
+        </svg>
+      </button>
+
+      <div className="m-topbar__actions" role="toolbar" aria-label="Execution controls">
         <button
           type="button"
-          onClick={handleSave}
-          disabled={!hasStatements}
+          onClick={safeRun}
+          disabled={isRunning}
           className="m-icon-btn"
-          aria-label="Save flowchart as JSON"
-          title="Save flowchart as JSON"
+          aria-label="Run"
+          title="Run"
         >
-          <IconSave size={20} />
+          <IconPlay size={20} />
+        </button>
+        <button
+          type="button"
+          onClick={safeStep}
+          disabled={isRunning}
+          className="m-icon-btn"
+          aria-label="Step"
+          title="Step"
+        >
+          <IconStep size={20} />
+        </button>
+        <button
+          type="button"
+          onClick={safePause}
+          disabled={!isRunning}
+          className="m-icon-btn"
+          aria-label="Pause"
+          title="Pause"
+        >
+          <IconPause size={20} />
+        </button>
+        <button
+          type="button"
+          onClick={safeStop}
+          disabled={!isRunning && !isPaused}
+          className="m-icon-btn"
+          aria-label="Stop"
+          title="Stop"
+        >
+          <IconStop size={20} />
         </button>
       </div>
     </header>

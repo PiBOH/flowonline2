@@ -62,10 +62,16 @@ export const Header: React.FC = () => {
   // Dropdown states for Menus
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  // Dynamic App Version state. If both fetches (GitHub raw → local file) fail,
-  // we render exactly `0.0.0-UNKNOWN` so the user is never lied to about which
-  // version they're running. This is also the initial SSR-safe default.
-  const [appVersion, setAppVersion] = useState('0.0.0-UNKNOWN');
+  // Dynamic App Version state. The initial value is injected at build time
+  // by `vite.config.ts` (it reads `version.txt` and exposes it as
+  // `import.meta.env.VITE_APP_VERSION`). If the file is missing/unreadable
+  // the build falls back to `0.0.0-UNKNOWN` so the UI is never lied to about
+  // which version it's running. Any subsequent GitHub-raw fetch can still
+  // overwrite this with a fresher value.
+  const [appVersion, setAppVersion] = useState<string>(
+    ((import.meta as any).env?.VITE_APP_VERSION as string | undefined) ||
+      '0.0.0-UNKNOWN',
+  );
   const [versionSource, setVersionSource] = useState<'repo' | 'fallback'>('repo');
 
   // About Modal state
@@ -148,7 +154,10 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
 - In saved .fprg files, \\n is automatically translated to ToChar(13) for full desktop compatibility!`;
 
   // LOCAL MENU & ABOUT TRANSLATIONS (For 1000% multilingual fidelity!)
-  const menuTranslations: Record<Language, {
+  // Exported so the mobile sidebar (`src/mobile/MobileSidebar.tsx`) can render
+  // the same labels as the desktop menu without duplicating the 23-language
+  // map. Single source-of-truth lives here; mobile imports it.
+  export const menuTranslations: Record<Language, {
     file: string;
     edit: string;
     program: string;
