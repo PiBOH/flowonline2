@@ -98,7 +98,15 @@ interface FlowContextType {
   deleteBlock: (id: string) => void;
   updateBlock: (id: string, updatedFields: Partial<Statement>) => void;
   clearAll: () => void;
-  clearLocalStorage: () => void;
+  /**
+   * Clear persisted localStorage entries. Optional `alsoClearCurrentWork`
+   * flag (default `false`) extends the clear to:
+   *   - AUTHOR_KEY + flowonline2_mobile_view + flowonline2_autosave
+   *   - Reset in-memory state (statements/title/author/history/selection)
+   *   - Cancel any pending debounced save + sync latestSaveRef so the
+   *     cleared state stays cleared (no debounce can resurrect it).
+   */
+  clearLocalStorage: (opts?: { alsoClearCurrentWork?: boolean }) => void;
   loadProgram: (statements: Statement[], title: string, author: string) => void;
   
   // Modal Editor state
@@ -399,13 +407,80 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     stopRun();
   };
 
-  // CLEAR LOCAL STORAGE (remove saved flowchart history without clearing current work)
-  const clearLocalStorage = () => {
+  // CLEAR LOCAL STORAGE (remove saved flowchart backup)
+  //
+  // Default behavior (no args, backward-compatible):
+  //   - Removes STORAGE_KEY (`flowonline2_program`) only.
+  //   - The in-memory `statements`/title/author stay untouched so the
+  //     user's in-progress work survives. The next render's debounced
+  //     save keeps persisting the in-memory work to the legacy save slot.
+  //
+  // With `alsoClearCurrentWork = true`:
+  //   - Removes AUTHOR_KEY (`flowonline2_author`),
+  //     `flowonline2_mobile_view`, and `flowonline2_autosave` too.
+  //   - Cancels any in-flight debounced save so it can't resurrect the
+  //     cleared data, then synchronously overwrites `latestSaveRef`
+  //     with the empty-state tuple.
+  //   - Resets in-memory state: statements=[], title="Untitled Program",
+  //     author="", undoStack=[], redoStack=[], selectedBlockIds=[],
+  //     and stops any running VM.
+  //
+  // Architecture invariant: the localStorage phase and the in-memory
+  // reset phase are deliberately split across the try/catch boundary.
+  // If a localStorage call throws (e.g. quota / private-mode browser),
+  // we bail BEFORE touching the in-memory state, so the user's canvas
+  // is preserved rather than half-cleared.
+  //
+  // This is the single source of truth for "clear storage" so future
+  // localStorage keys (e.g. layout / colorScheme if we ever persist
+  // them) should be added here, not at every call site.
+  const clearLocalStorage = (opts?: { alsoClearCurrentWork?: boolean }) => {
     try {
       if (typeof window === 'undefined') return;
+
+      // (A) Default legacy clear.
       window.localStorage.removeItem(STORAGE_KEY);
+
+      if (!opts?.alsoClearCurrentWork) return;
+
+      // (1) Cancel any pending debounced save so it cannot re-write the
+      //     cleared keys with the stale in-memory state.
+      if (saveTimeoutRef.current !== null) {
+        window.clearTimeout(saveTimeoutRef.current);
+        saveTimeoutRef.current = null;
+      }
+
+      // (2) Synchronously update the latest-save ref so the unmount
+      //     effect (if it fires immediately) only persists empty data.
+      latestSaveRef.current = {
+        statements: [],
+        programTitle: 'Untitled Program',
+        programAuthor: '',
+      };
+
+      // (3) Remove the remaining known keys.
+      window.localStorage.removeItem(AUTHOR_KEY);
+      window.localStorage.removeItem('flowonline2_mobile_view');
+      window.localStorage.removeItem('flowonline2_autosave');
     } catch (e) {
       console.warn('Failed to clear localStorage:', e);
+      // Bail so a half-cleared state doesn't leave the in-memory chart
+      // ~out of sync with what localStorage now contains.
+      return;
+    }
+
+    // (B) State-reset phase — OUTSIDE the try/catch so React state
+    // setters cannot be partially applied. Either the storage phase
+    // succeeded and we reset in full, or we returned early above and
+    // the user's canvas stays untouched.
+    if (opts?.alsoClearCurrentWork) {
+      setStatements([]);
+      setProgramTitleState('Untitled Program');
+      setProgramAuthorState('');
+      setUndoStack([]);
+      setRedoStack([]);
+      setSelectedBlockIds([]);
+      stopRun();
     }
   };
 

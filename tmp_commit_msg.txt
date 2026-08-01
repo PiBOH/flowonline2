@@ -1,86 +1,48 @@
-Mobile-from-scratch: full mobile bundle rewrite + dot-on-hover StatusDot + version fallback
-
-Mobile bundle Phase 3 — replaces the previous Phase 2/2.5 mobile bundle with a
-clean design-system rewrite. Desktop bundle remains essentially unchanged
-(only Header.tsx touched, only at the four source-status badge locations
-plus the version fallback string).
-
-### Added
-*   src/components/StatusDot.tsx — new shared desktop+mobile status
-    component. Default state is a tiny 8px dot; on hover/focus/tap it
-    smoothly expands into a pill containing the label. Five variants:
-    live / fallback / done / error / info.
-*   src/mobile/mobile.css — full design-token rewrite. Tokens for spacing,
-    type, motion, color, shadows — all under .m-root scope so the desktop
-    bundle can never pick up mobile rules.
-*   src/mobile/MobileTopBar.tsx — sticky glassy 60px top bar with brand,
-    contextual title, autosave StatusDot, and Save-as-JSON icon button.
-*   src/mobile/MobileTabBar.tsx — 5-tab bottom navigation rail using
-    colorful SVG icons from the shared EmojiIcons library; smooth animated
-    top accent indicator on tab change.
-*   src/mobile/MobileCanvasView.tsx — wraps FlowchartCanvas with a top
-    status overlay and a bottom-right zoom FAB stack.
-*   src/mobile/MobileEditView.tsx — 4 card-style sections (Selection /
-    Clipboard / History / Canvas) with proper disabled-state and a WinUI
-    dialog for clear-canvas confirmation.
-*   src/mobile/MobileRunView.tsx — StatusDot for execution state (idle /
-    running / paused / done), 2x2 action grid (Run/Step/Pause/Stop),
-    speed slider, and Notes section.
-*   src/mobile/MobileConsoleView.tsx — minimal mobile-safe wrap of the
-    existing desktop Console component.
-*   src/mobile/MobileToolsView.tsx — 5 card sections (Program/Settings/
-    Export/Help/Storage) plus per-row StatusDots for LICENSE/MANUAL/
-    CHANGELOG load state.
-*   src/mobile/MobileLanguageSheet.tsx — 23-language picker as a bottom
-    sheet with FlagIcon SVGs and a translation-accuracy warning.
-*   src/mobile/MobileBottomSheet.tsx — minor polish; behavior unchanged.
-*   src/mobile/MobileApp.tsx — hoisted RTL_LANGS Set to module scope;
-    persists selected tab in localStorage; sets dir='rtl'/'ltr' on the
-    mobile root depending on the active language.
-*   CONTRIBUTORS.md — rewritten to list PiBOH (creator/maintainer),
-    AlexGiulioBerton (active lead collaborator), and lmarena/@arenaai
-    (acknowledged model-tooling contributors); documents the
-    Co-authored-by: trailer convention used in every commit.
-
-### Changed
-*   src/components/Header.tsx — replaced 4 colored source-status chips
-    (version, license, manual, changelog) with <StatusDot> calls so they
-    no longer take up row width and never actively claim "loaded from
-    GitHub" without the user invoking the hover affordance. Version
-    fallback string is now '0.0.0-UNKNOWN' so the user is never lied to
-    about which version they're running when both fetches fail.
-*   .ignore/.assetsai/README.md — stale MIT-License references cleaned
-    up to keep dev notes consistent with the current GNU GPL v3 license.
+Fix localStorage clear + add 'Flag: Also clear current work' toggle
 
 ### Fixed
-*   MobileToolsView: useEffect cleanup bug. The 3 fetch effects (about /
-    manual / changelog) hoisted their cancelled flag out of the async
-    IIFE; stale state-update warnings are gone.
-*   mobile.css: removed !important from .status-dot[data-open='true']
-    so the per-variant pill tint survives on expansion.
-*   StatusDot: bumped pill max-width 260 → 320 so longer German and
-    Asian license/manual labels don't truncate visibly.
-*   MobileTopBar: replaced the full-tree JSON.stringify autosave diff
-    with a cheap O(1) check on (statements.length, last-id, programTitle)
-    to avoid O(N) work on every keystroke for large flowcharts.
-*   mobile.css: .m-view offsets fixed. The previous top: 60px / bottom:
-    72px created a 60px dead strip at the top of every mobile view
-    because <main> already accounts for the topbar. Now uses inset: 0
-    so the view fills <main> completely.
+*   `src/context/FlowContext.tsx` — `clearLocalStorage` no longer just
+    removes `flowonline2_program` and silently lets the debounced
+    500ms save resurrect the cleared state. The new implementation
+    also cancels any pending debounced save timeout, synchronously
+    overwrites `latestSaveRef.current` with the empty-state tuple, and
+    cleans up the additional `flowonline2_author`,
+    `flowonline2_mobile_view`, `flowonline2_autosave` keys when the
+    user opts in.
+*   The fix is structured in two phases split across the `try/catch`
+    boundary so a failed localStorage write (private-mode browser,
+    quota exceeded) leaves the user's in-memory chart UNTOUCHED
+    rather than half-cleared. Phase A: storage + ref updates in try.
+    Phase B: state setters OUTSIDE try. Either both phases run, or
+    the catch returns early with only a console.warn.
+
+### Added
+*   **'Flag' toggle in the mobile clear-localStorage dialog
+    (`src/mobile/MobileToolsView.tsx`).** Off by default. When the user
+    activates it, `clearLocalStorage({ alsoClearCurrentWork: true })`
+    is called: the dialog emoji pill + accent-red border highlight
+    the destructive intent; the toast confirms with "localStorage
+    fully cleared ✓ (including current work)"; the in-memory canvas
+    is fully reset.
+*   **Default behavior is preserved.** The desktop menu at
+    `src/components/Header.tsx:2123` still calls `clearLocalStorage()`
+    with no args, hitting the backward-compatible default branch
+    that ONLY removes `flowonline2_program` — the user's
+    in-progress work continues to autosave to the legacy slot. No
+    call-site updates were required.
 
 ### Architecture invariants (still held)
-*   tsc --noEmit clean, npx vitest run 126/126 passed, npm run build
-    succeeds.
-*   Desktop bundle stays put: only Header.tsx edited at the 4 source-
-    status locations plus the version fallback string. MainLayout,
-    FlowchartCanvas, Sidebar, Console, Modals, WinUIDialog, BlockNode
-    are byte-for-byte identical.
-*   Mobile CSS stays scoped under .m-root (zero desktop bleed).
-*   State reuse: every mobile component still pulls from useFlow() —
-    no duplication of state.
-
-No `v` prefix in this commit message so the auto-release workflow does
-not fire. Next intended auto-release will be a `v`-prefixed commit.
+*   tsc --noEmit clean, npx vitest run 126/126 passed.
+*   Single source of truth for "clear storage" lives in
+    `FlowContext.clearLocalStorage` — future localStorage keys
+    (layout, colorScheme, etc.) should be added there, not at
+    every call site.
+*   The mobile `MobileToolsView.handleClearLocalStorage` no longer
+    manually `localStorage.removeItem('flowonline2_autosave')` —
+    that key is now removed centrally inside FlowContext when the
+    flag is on.
 
 Co-authored-by: PiBOH <support@piboh.github.io>
 Co-authored-by: AlexGiulioBerton <alexgiulioberton@users.noreply.github.com>
+
+No v prefix in this commit — auto-release workflow will not fire.

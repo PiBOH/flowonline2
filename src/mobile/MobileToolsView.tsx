@@ -64,6 +64,12 @@ export const MobileToolsView: React.FC = () => {
 
   const [langSheetOpen, setLangSheetOpen] = useState(false);
   const [clearSheetOpen, setClearSheetOpen] = useState(false);
+  // Phase 4 — "Flag" toggle in the clear-localStorage dialog. Off by
+  // default: only the legacy saved-program key is removed (the user's
+  // in-progress work survives). On by user choice: also clears the
+  // autosave + mobile-view-tab + author key + resets in-memory state so
+  // nothing re-persists.
+  const [alsoClearCurrent, setAlsoClearCurrent] = useState(false);
 
   const [aboutOpen, setAboutOpen] = useState(false);
   const [aboutStatus, setAboutStatus] = useState<'live' | 'fallback' | 'idle'>('idle');
@@ -199,9 +205,16 @@ export const MobileToolsView: React.FC = () => {
   const handleClearLocalStorage = () => {
     setClearSheetOpen(false);
     try {
-      if (clearLocalStorage) clearLocalStorage();
-      window.localStorage.removeItem('flowonline2_autosave');
-      showToast('localStorage cleared ✓', 'success');
+      if (clearLocalStorage) clearLocalStorage({ alsoClearCurrentWork: alsoClearCurrent });
+      showToast(
+        alsoClearCurrent
+          ? 'localStorage fully cleared ✓ (including current work)'
+          : 'legacy saved program removed ✓ (current work kept)',
+        'success',
+      );
+      // Reset the toggle so the next clear-dialog opens with the
+      // conservative default again.
+      setAlsoClearCurrent(false);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
       showToast(`Failed: ${msg}`, 'error');
@@ -371,15 +384,67 @@ export const MobileToolsView: React.FC = () => {
 
       <WinUIDialog
         isOpen={clearSheetOpen}
-        onClose={() => setClearSheetOpen(false)}
+        onClose={() => {
+          setClearSheetOpen(false);
+          setAlsoClearCurrent(false);
+        }}
         onOk={handleClearLocalStorage}
         title="Clear localStorage?"
-        message="This will remove your saved flowchart backup and language preference. This cannot be undone."
+        message=""
         type="confirm"
-        defaultWidth={360}
-        defaultHeight={220}
+        defaultWidth={380}
+        defaultHeight={260}
         okLabel="Clear"
-      />
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <p style={{ margin: 0, lineHeight: 1.4, color: 'var(--m-text)' }}>
+            This removes your saved flowchart backup. This cannot be undone.
+          </p>
+          <label
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              cursor: 'pointer',
+              padding: '10px 12px',
+              borderRadius: 8,
+              border: `1px solid ${alsoClearCurrent ? '#dc2626' : 'rgba(15, 23, 42, 0.16)'}`,
+              background: alsoClearCurrent ? 'rgba(220, 38, 38, 0.06)' : 'transparent',
+              transition: 'background-color 120ms ease, border-color 120ms ease',
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={alsoClearCurrent}
+              onChange={(e) => setAlsoClearCurrent(e.target.checked)}
+              aria-label="Flag: also clear the current work"
+              style={{ width: 18, height: 18, cursor: 'pointer', accentColor: '#dc2626' }}
+            />
+            <span
+              aria-hidden="true"
+              style={{
+                fontSize: 11,
+                fontWeight: 800,
+                color: '#dc2626',
+                letterSpacing: '0.06em',
+                padding: '2px 6px',
+                border: '1px solid #dc2626',
+                borderRadius: 4,
+              }}
+            >
+              FLAG
+            </span>
+            <span style={{ fontWeight: 600, color: 'var(--m-text)' }}>
+              Also clear the current work
+            </span>
+          </label>
+          <p style={{ margin: 0, fontSize: 11, lineHeight: 1.4, color: 'var(--m-text-3)' }}>
+            <strong style={{ color: 'var(--m-text-2)' }}>Off (default):</strong> clears only the legacy saved-program key — your in-progress work keeps autosaving.
+            <br />
+            <strong style={{ color: '#dc2626' }}>On (flag):</strong> also clears the autosave + author + view-tab keys AND resets the in-memory canvas.
+          </p>
+        </div>
+      </WinUIDialog>
 
       <WinUIDialog
         isOpen={aboutOpen}
