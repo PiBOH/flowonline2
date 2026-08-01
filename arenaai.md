@@ -705,5 +705,25 @@ v2.3.23: Summary of changes
 #### Architecture invariants (still held)
 - **Desktop files byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
 - **State reuse**: every mobile component pulls from `useFlow()` — no duplication of state.
-- **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*`.
-- **Bundle isolation**: `MobileApp` is `React.lazy()`-loaded inside `AppShell`. Desktop users never download `mobile.css` or any mobile component.
+- **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*`.  - **Bundle isolation**: `MobileApp` is `React.lazy()`-loaded inside `AppShell`. Desktop users never download `mobile.css` or any mobile component.
+
+---
+
+## Milestone 40: Material Design 2 Mobile Rebuild (2.6.0-beta)
+
+### Added
+*   **Material Design 2 mobile shell:** Rebuilt the mobile interface under `src/mobile/` with an M2 top app bar, navigation drawer, bottom navigation, cards, dialogs, FAB controls, 4dp spacing, classic elevation, and touch-sized controls. The desktop interface remains unchanged.
+*   **Dedicated mobile flow renderer:** `MobileCanvasView.tsx` now renders an isolated accessible statement tree with explicit TRUE/FALSE branches and loop bodies. It does not import or mount the desktop `FlowchartCanvas` or `BlockNode` components.
+*   **Optional storage Flag:** Mobile clear-localStorage keeps the active work by default. A user-controlled Flag can explicitly clear the current flowchart as well.
+*   **Mobile editing and export:** The canvas exposes a Material 2 block-type picker for all supported statements, nested branch/body insertion, deletion, and a typed block editor. A persistent mobile SVG target keeps SVG, PNG, and PDF export working from every mobile view.
+
+### Fixed
+*   **Drawer accessibility:** A closed mobile drawer is unmounted, so hidden navigation controls cannot receive keyboard focus.
+*   **Mobile action wiring:** Tools keeps file operations, exports, language selection, community links, execution controls, and storage actions connected to existing application state and helpers.
+*   **Version consistency:** The canonical application version is `2.6.0-beta` in `version.txt`, package metadata, changelog, and release documentation. No `BETA` prefix is used in the version value.
+
+### Architecture invariants
+*   Desktop components and desktop styles were not modified by this milestone.
+*   Mobile selectors are scoped under `.m2-root`.
+*   Project source strings and operational documentation for this milestone are written in English.
+*   Validation: `npx tsc --noEmit`, `npx vitest run` (126 tests), and `npm run build` all pass.

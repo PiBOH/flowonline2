@@ -89,7 +89,7 @@ body:
   id: app-version
   attributes:
     label: 📦 Versione App
-    placeholder: es. BETA 2.1.0 (Controlla la barra del titolo)
+    placeholder: es. 2.6.0-beta (Controlla la barra del titolo)
   validations:
     required: true
 - type: textarea

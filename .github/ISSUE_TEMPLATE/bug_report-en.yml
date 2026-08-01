@@ -89,7 +89,7 @@ body:
   id: app-version
   attributes:
     label: 📦 App Version
-    placeholder: e.g. BETA 2.1.0 (Check the title bar)
+    placeholder: e.g. 2.6.0-beta (Check the title bar)
   validations:
     required: true
 - type: textarea

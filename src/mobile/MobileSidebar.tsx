@@ -1,41 +1,16 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React from 'react';
 import { useFlow } from '../context/FlowContext';
-import { translations as catalogs } from '../utils/translations';
-import type { Language } from '../types/flow';
-import {
-  IconChart, IconPencil, IconPlay, IconChatBubble, IconTools,
-  IconInfo, IconBooks, IconGlobe,
-  IconDocument, IconFolderOpen, IconSave, IconTrash,
-  IconRefresh, IdeaLightbulb,
-  IconInbox, IconMagnifier, IconPalette, IconWarning, IconClose,
-} from '../components/EmojiIcons';
+import { IconChart, IconPencil, IconPlay, IconChatBubble, IconTools, IconDocument, IconFolderOpen, IconSave, IconInbox, IconPalette, IconTrash, IconBooks, IconInfo, IconGlobe, IconWarning, IconRefresh } from '../components/EmojiIcons';
+import { M2Drawer, M2IconButton, M2CloseIcon } from './Material2';
 
 export type MobileViewId = 'canvas' | 'edit' | 'run' | 'console' | 'tools';
-export type MobileTabId = MobileViewId; // back-compat alias
-
-interface SubItem {
-  id: string;
-  label: string;
-  Icon?: React.FC<{ size?: number; className?: string }>;
-  onClick: () => void;
-  disabled?: boolean;
-}
-
-interface Section {
-  id: MobileViewId;
-  label: string;
-  Icon: React.FC<{ size?: number; className?: string }>;
-  subItems: SubItem[];
-}
+export type MobileTabId = MobileViewId;
 
 export interface MobileSidebarProps {
   open: boolean;
   onClose: () => void;
   view: MobileViewId;
-  onSelectView: (v: MobileViewId) => void;
-  language: Language;
-  // Action helpers invoked by the parent (MobileApp.tsx wires them to
-  // useFlow / exportUtils / window.open / FprgParser directly).
+  onSelectView: (view: MobileViewId) => void;
   onNew: () => void;
   onOpenFile: () => void;
   onSave: () => void;
@@ -55,283 +30,56 @@ export interface MobileSidebarProps {
   canRedo: boolean;
 }
 
-/**
- * Mobile-only sidebar drawer (Phase 5 + 5.1 accessibility patch).
- *
- *   - Slide-in from LEFT over a dimmed backdrop.
- *   - Tap backdrop / close-button / leaf-item to dismiss.
- *   - ESC closes; focus moves to close-button on open and back to the
- *     opener on close (a11y contract for modal-style dialogs).
- *   - Body scroll locked while open.
- *
- * Architecture invariants:
- *   - Reads only `undo` / `redo` / `clearConsole` from `useFlow()`.
- *   - All other side-effects are passed in by the parent.
- *   - i18n: reads from the shared `translations` catalog where keys exist,
- *     and uses hardcoded English fallbacks for menu-only keys (TODO:
- *     extract Header's `menuTranslations` map into a shared file in a
- *     future pass to remove the duplication).
- */
+const sections: Array<{ id: MobileViewId; label: string; icon: React.ReactNode }> = [
+  { id: 'canvas', label: 'Canvas', icon: <IconChart size={20} /> },
+  { id: 'edit', label: 'Edit', icon: <IconPencil size={20} /> },
+  { id: 'run', label: 'Run', icon: <IconPlay size={20} /> },
+  { id: 'console', label: 'Console', icon: <IconChatBubble size={20} /> },
+  { id: 'tools', label: 'Tools', icon: <IconTools size={20} /> },
+];
+
 export const MobileSidebar: React.FC<MobileSidebarProps> = (props) => {
-  // ----- Body-scroll lock + a11y focus + ESC handler -----
-  // (`opener` for focus restore is captured as a closure local inside the
-  //  useEffect below so we don't need a second useRef.)
-  const closeBtnRef = useRef<HTMLButtonElement | null>(null);
-
-  useEffect(() => {
-    if (!props.open) return;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    // Remember which element opened the drawer so we can restore focus
-    // when it closes.
-    const opener = (document.activeElement as HTMLElement) ?? null;
-
-    requestAnimationFrame(() => {
-      try { closeBtnRef.current?.focus(); } catch { /* noop */ }
-    });
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.stopPropagation();
-        props.onClose();
-      }
-    };
-    window.addEventListener('keydown', onKey);
-
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      window.removeEventListener('keydown', onKey);
-      // Defer focus restore to next tick so React unmount doesn't fight it.
-      requestAnimationFrame(() => {
-        try { opener?.focus(); } catch { /* noop */ }
-      });
-    };
-  }, [props.open, props.onClose]);
-
-  const [expanded, setExpanded] = useState<MobileViewId | null>(null);
-  const [helpExpanded, setHelpExpanded] = useState<boolean>(false);
-
-  const { undo, redo, clearConsole } = useFlow() as any;
-
-  /**
-   * Per-language labels (`L`).
-   *
-   * Source priority (highest → lowest):
-   *   1. Shared `translations` catalog (varies by language).
-   *   2. Hardcoded English (TODO: populate in a future i18n pass).
-   *
-   * The keys we read from the shared catalog are the ones the desktop
-   * already exposes (toolbar.*, aboutTitle, manualTitle, changelogTitle,
-   * console.clearBtn). The desktop menu's `menuTranslations` map lives
-   * INSIDE the Header function body so it cannot be exported without a
-   * refactor; for now we mirror those strings as English fallbacks.
-   */
-  const L = useMemo<Record<string, string>>(() => {
-    const c = ((catalogs[props.language] as any) ?? (catalogs.en as any) ?? {});
-    const tb = c.toolbar ?? {};
-    return {
-      // Toolbar labels (shared)
-      run: tb.run ?? 'Run',
-      step: tb.step ?? 'Step',
-      pause: tb.pause ?? 'Pause',
-      stop: tb.stop ?? 'Stop',
-      speed: tb.speed ?? 'Speed',
-      undo: tb.undo ?? 'Undo',
-      redo: tb.redo ?? 'Redo',
-      // File ops (best-effort reuse of toolbar keys)
-      open: tb.import ?? 'Open…',
-      save: tb.export ?? 'Save',
-      backup: tb.exportJson ?? 'Backup JSON',
-      clearAll: tb.clear ?? 'Clear All',
-      // Dialog titles (shared)
-      aboutTitle: c.aboutTitle ?? 'About Flowonline2',
-      manualTitle: c.manualTitle ?? 'User Manual',
-      changelogTitle: c.changelogTitle ?? 'Changelog',
-      clearConsole: c.console?.clearBtn ?? tb.clear ?? 'Clear',
-      // Menu-only keys (TODO: translate all 23 languages)
-      new: 'New',
-      exportSvg: 'Export SVG',
-      exportPng: 'Export PNG',
-      exportPdf: 'Export PDF',
-      clearStorage: 'Clear Local Storage',
-      help: 'Help',
-      manualMenuOption: 'User Manual',
-      changelogMenuOption: 'Changelog',
-      about: 'About Flowonline2',
-      bugReport: 'Report Bug',
-      featureRequest: 'Feature Request',
-      forkContribute: 'Fork & Contribute',
-      selectLanguage: 'Select Language',
-      // Section labels (TODO: translate)
-      canvasTab: 'Canvas',
-      editTab: 'Edit',
-      runTab: 'Run',
-      consoleTab: 'Console',
-      toolsTab: 'Tools',
-    };
-  }, [props.language]);
-
-  // ----- Sections (each main item, with optional sub-list) -----
-  const sections = useMemo<Section[]>(() => {
-    const fileSubs: SubItem[] = [
-      { id: 'sub-new', label: L.new, Icon: IconDocument, onClick: props.onNew },
-      { id: 'sub-open', label: L.open, Icon: IconFolderOpen, onClick: props.onOpenFile },
-      { id: 'sub-save', label: L.save, Icon: IconSave, onClick: props.onSave },
-      { id: 'sub-backup', label: L.backup, Icon: IconInbox, onClick: props.onBackupJson },
-      { id: 'sub-svg', label: L.exportSvg, Icon: IconPalette, onClick: props.onExportSvg },
-      { id: 'sub-png', label: L.exportPng, Icon: IconMagnifier, onClick: props.onExportPng },
-      { id: 'sub-pdf', label: L.exportPdf, Icon: IconBooks, onClick: props.onExportPdf },
-      { id: 'sub-clearstorage', label: L.clearStorage, Icon: IconTrash, onClick: props.onClearLocalStorage },
-    ];
-    const editSubs: SubItem[] = [
-      { id: 'sub-undo', label: L.undo, Icon: IconRefresh, onClick: () => { try { undo?.(); } catch {} }, disabled: !props.canUndo },
-      { id: 'sub-redo', label: L.redo, Icon: IconRefresh, onClick: () => { try { redo?.(); } catch {} }, disabled: !props.canRedo },
-    ];
-    const consoleSubs: SubItem[] = [
-      { id: 'sub-clearconsole', label: L.clearConsole, Icon: IconTrash, onClick: () => { try { clearConsole?.(); } catch {} } },
-    ];
-
-    return [
-      { id: 'canvas',  label: L.canvasTab,  Icon: IconChart,      subItems: fileSubs },
-      { id: 'edit',    label: L.editTab,    Icon: IconPencil,     subItems: editSubs },
-      { id: 'run',     label: L.runTab,     Icon: IconPlay,       subItems: [] },
-      { id: 'console', label: L.consoleTab, Icon: IconChatBubble, subItems: consoleSubs },
-      { id: 'tools',   label: L.toolsTab,   Icon: IconTools,      subItems: [] },
-    ];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.language, props.canUndo, props.canRedo,
-      props.onNew, props.onOpenFile, props.onSave, props.onBackupJson,
-      props.onExportSvg, props.onExportPng, props.onExportPdf,
-      props.onClearLocalStorage]);
-
-  const helpSubs: SubItem[] = useMemo(() => [
-    { id: 'help-manual',    label: L.manualMenuOption,   Icon: IconBooks,     onClick: props.onShowManual },
-    { id: 'help-changelog', label: L.changelogMenuOption, Icon: IconBooks,   onClick: props.onShowChangelog },
-    { id: 'help-about',     label: L.about,              Icon: IconInfo,      onClick: props.onShowAbout },
-    { id: 'help-bug',       label: L.bugReport,          Icon: IconWarning,   onClick: props.onBugReport },
-    { id: 'help-feat',      label: L.featureRequest,     Icon: IdeaLightbulb, onClick: props.onFeatureRequest },
-    { id: 'help-fork',      label: L.forkContribute,     Icon: IconGlobe,     onClick: props.onForkContribute },
-    { id: 'help-lang',      label: L.selectLanguage,     Icon: IconGlobe,     onClick: props.onPickLanguage },
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [props.language]);
-
-  const renderRow = (sec: Section) => {
-    const isCurrent = props.view === sec.id;
-    const isExpanded = expanded === sec.id;
-    return (
-      <div key={sec.id} className={`m-sidebar__section ${isCurrent ? 'current' : ''}`}>
-        <div className="m-sidebar__row-group">
-          <button
-            type="button"
-            className="m-sidebar__row"
-            onClick={() => { props.onSelectView(sec.id); props.onClose(); }}
-            aria-current={isCurrent ? 'page' : undefined}
-          >
-            <span className="m-sidebar__icon"><sec.Icon size={18} /></span>
-            <span className="m-sidebar__label">{sec.label}</span>
-          </button>
-          {sec.subItems.length > 0 && (
-            <button
-              type="button"
-              className="m-sidebar__chev"
-              onClick={() => setExpanded(isExpanded ? null : sec.id)}
-              aria-label={isExpanded ? `Collapse ${sec.label}` : `Expand ${sec.label}`}
-              aria-expanded={isExpanded}
-            >
-              <span aria-hidden="true">{isExpanded ? '▾' : '▸'}</span>
-            </button>
-          )}
-        </div>
-        {isExpanded && sec.subItems.length > 0 && (
-          <div className="m-sidebar__sub" role="group">
-            {sec.subItems.map((it) => (
-              <button
-                key={it.id}
-                type="button"
-                disabled={!!it.disabled}
-                className="m-sidebar__subrow"
-                onClick={() => { it.onClick(); props.onClose(); }}
-              >
-                {it.Icon && <span className="m-sidebar__subicon"><it.Icon size={16} /></span>}
-                <span>{it.label}</span>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  };
+  const { undo, redo, clearConsole } = useFlow();
+  const choose = (view: MobileViewId) => { props.onSelectView(view); props.onClose(); };
+  const action = (fn: () => void) => { fn(); props.onClose(); };
+  const item = (label: string, icon: React.ReactNode, fn: () => void, disabled = false) => (
+    <button key={label} type="button" className="m2-drawer__item" disabled={disabled} onClick={() => action(fn)}>
+      <span className="m2-drawer__item-icon">{icon}</span><span>{label}</span>
+    </button>
+  );
 
   return (
-    <>
-      <div
-        className={`m-sidebar-backdrop ${props.open ? 'open' : ''}`}
-        onClick={props.onClose}
-        aria-hidden={!props.open}
-      />
-      <aside
-        className={`m-sidebar ${props.open ? 'open' : ''}`}
-        role="dialog"
-        aria-modal={props.open}
-        aria-label="Mobile menu"
-        aria-hidden={!props.open}
-      >
-        <div className="m-sidebar__header">
-          <div className="m-sidebar__title">Flowonline2</div>
-          <button
-            ref={closeBtnRef}
-            type="button"
-            className="m-icon-btn"
-            onClick={props.onClose}
-            aria-label="Close menu"
-            title="Close"
-          >
-            <IconClose size={18} />
-          </button>
-        </div>
-
-        <nav className="m-sidebar__nav" aria-label="Sections">
-          {sections.map(renderRow)}
-        </nav>
-
-        <div className="m-sidebar__footer">
-          <div className="m-sidebar__row-group">
-            <button
-              type="button"
-              className="m-sidebar__row m-sidebar__row--help"
-              onClick={() => setHelpExpanded((v) => !v)}
-              aria-expanded={helpExpanded}
-            >
-              <span className="m-sidebar__icon"><IconInfo size={18} /></span>
-              <span className="m-sidebar__label">{L.help}</span>
-            </button>
-            <button
-              type="button"
-              className="m-sidebar__chev"
-              onClick={() => setHelpExpanded((v) => !v)}
-              aria-label={helpExpanded ? 'Collapse Help' : 'Expand Help'}
-            >
-              <span aria-hidden="true">{helpExpanded ? '▾' : '▸'}</span>
-            </button>
-          </div>
-          {helpExpanded && (
-            <div className="m-sidebar__sub" role="group">
-              {helpSubs.map((it) => (
-                <button
-                  key={it.id}
-                  type="button"
-                  className="m-sidebar__subrow"
-                  onClick={() => { it.onClick(); props.onClose(); }}
-                >
-                  {it.Icon && <span className="m-sidebar__subicon"><it.Icon size={16} /></span>}
-                  <span>{it.label}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </aside>
-    </>
+    <M2Drawer open={props.open} onClose={props.onClose}>
+      <header className="m2-drawer__header">
+        <span>Flowonline2</span>
+        <M2IconButton aria-label="Close navigation drawer" onClick={props.onClose}><M2CloseIcon size={20} /></M2IconButton>
+      </header>
+      <nav className="m2-drawer__nav" aria-label="Mobile sections">
+        {sections.map((section) => <button key={section.id} type="button" className={`m2-drawer__item ${props.view === section.id ? 'is-active' : ''}`} onClick={() => choose(section.id)}><span className="m2-drawer__item-icon">{section.icon}</span><span>{section.label}</span></button>)}
+        <div className="m2-section-label">File</div>
+        {item('New program', <IconDocument size={20} />, props.onNew)}
+        {item('Open file', <IconFolderOpen size={20} />, props.onOpenFile)}
+        {item('Save FPRG', <IconSave size={20} />, props.onSave)}
+        {item('Backup JSON', <IconInbox size={20} />, props.onBackupJson)}
+        <div className="m2-section-label">Export</div>
+        {item('Export SVG', <IconPalette size={20} />, props.onExportSvg)}
+        {item('Export PNG', <IconInbox size={20} />, props.onExportPng)}
+        {item('Export PDF', <IconBooks size={20} />, props.onExportPdf)}
+        <div className="m2-section-label">Edit</div>
+        {item('Undo', <IconRefresh size={20} />, () => undo?.(), !props.canUndo)}
+        {item('Redo', <IconRefresh size={20} />, () => redo?.(), !props.canRedo)}
+        <div className="m2-section-label">Storage</div>
+        {item('Clear localStorage', <IconTrash size={20} />, props.onClearLocalStorage)}
+        <div className="m2-section-label">Help</div>
+        {item('About & License', <IconInfo size={20} />, props.onShowAbout)}
+        {item('User Manual', <IconBooks size={20} />, props.onShowManual)}
+        {item('Changelog', <IconBooks size={20} />, props.onShowChangelog)}
+        {item('Report a Bug', <IconWarning size={20} />, props.onBugReport)}
+        {item('Feature Request', <IconInbox size={20} />, props.onFeatureRequest)}
+        {item('Fork & Contribute', <IconGlobe size={20} />, props.onForkContribute)}
+        {item('Select Language', <IconGlobe size={20} />, props.onPickLanguage)}
+        {item('Clear Console', <IconTrash size={20} />, () => clearConsole?.())}
+      </nav>
+    </M2Drawer>
   );
 };
