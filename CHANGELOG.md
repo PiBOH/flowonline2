@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 - **Inserter menu count badges:** Both left-click and right-click paste rows now suppress the `(N)` clipboard count when `copiedBlocks.length === 0`, preventing visually misleading `Paste (0)` labels.
 - **Dead import:** Removed unused `IconPlus` import from `FlowchartCanvas.tsx` (resolved TS6133 leftover from the Phase 5.2 inserter rewrite).
 
+### Changed
+- **v-prefix release prep:** Anchored the auto-release workflow on the fresh `BETA 2.5.6-beta` tag (previous v-prefix commit was on `v2.5.4-beta`). No code changes; this entry exists purely to record the schematic-version bump and trigger the next `[bot]` GitHub release.
+
 ---
 
 ## [2.5.4-beta] - 2026-07-21
