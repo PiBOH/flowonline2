@@ -82,7 +82,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (2.3.21-beta)
+## 5. Architectural Milestone Logs & Change History (2.6.1-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -709,13 +709,31 @@ v2.3.23: Summary of changes
 
 ---
 
-## Milestone 40: Material Design 2 Mobile Rebuild (2.6.0-beta)
+## Milestone 41: Mobile Surface Compatibility and Interaction Hardening (2.6.1-beta)
+
+### Changed
+*   **Shared desktop surface on mobile:** Portrait mobile viewports reuse the existing `MainLayout` inside a scoped landscape presentation wrapper. Landscape touch devices are not rotated twice.
+*   **Viewport detection:** `useViewport` now handles touch orientation changes, resize events, and browsers without `matchMedia`.
+
+### Fixed
+*   **localStorage persistence:** Clearing saved data cancels pending debounced writes in both modes, preventing the removed backup from being recreated immediately. The optional current-work Flag remains disabled by default.
+*   **WinUI dialogs:** Dragging and manual resizing use Pointer Events for mouse, pen, and touch support, including coordinate conversion inside the rotated surface.
+*   **CSS compilation:** Removed the stray closing brace that blocked the production build.
+
+### Architecture invariants
+*   `.fprg` opening, parsing, serialization, and saving behavior is unchanged.
+*   Desktop behavior remains outside the `.desktop-mobile-mode` scope.
+*   Validation completed: TypeScript, 126 Vitest tests, production build, and whitespace checks.
+
+---
+
+## Milestone 40: Mobile Interface Rebuild (2.6.0-beta)
 
 ### Added
-*   **Material Design 2 mobile shell:** Rebuilt the mobile interface under `src/mobile/` with an M2 top app bar, navigation drawer, bottom navigation, cards, dialogs, FAB controls, 4dp spacing, classic elevation, and touch-sized controls. The desktop interface remains unchanged.
+*   **Touch-friendly mobile shell:** Rebuilt the mobile interface under `src/mobile/` with a top app bar, navigation drawer, bottom navigation, cards, dialogs, FAB controls, consistent spacing, classic elevation, and touch-sized controls. The desktop interface remains unchanged.
 *   **Dedicated mobile flow renderer:** `MobileCanvasView.tsx` now renders an isolated accessible statement tree with explicit TRUE/FALSE branches and loop bodies. It does not import or mount the desktop `FlowchartCanvas` or `BlockNode` components.
 *   **Optional storage Flag:** Mobile clear-localStorage keeps the active work by default. A user-controlled Flag can explicitly clear the current flowchart as well.
-*   **Mobile editing and export:** The canvas exposes a Material 2 block-type picker for all supported statements, nested branch/body insertion, deletion, and a typed block editor. A persistent mobile SVG target keeps SVG, PNG, and PDF export working from every mobile view.
+*   **Mobile editing and export:** The canvas exposes a block-type picker for all supported statements, nested branch/body insertion, deletion, and a typed block editor. A persistent mobile SVG target keeps SVG, PNG, and PDF export working from every mobile view.
 
 ### Fixed
 *   **Drawer accessibility:** A closed mobile drawer is unmounted, so hidden navigation controls cannot receive keyboard focus.
@@ -724,6 +742,6 @@ v2.3.23: Summary of changes
 
 ### Architecture invariants
 *   Desktop components and desktop styles were not modified by this milestone.
-*   Mobile selectors are scoped under `.m2-root`.
+*   Mobile selectors are scoped to the mobile surface and do not alter the desktop layout.
 *   Project source strings and operational documentation for this milestone are written in English.
 *   Validation: `npx tsc --noEmit`, `npx vitest run` (126 tests), and `npm run build` all pass.
