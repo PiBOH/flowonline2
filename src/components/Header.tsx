@@ -95,6 +95,8 @@ export const Header: React.FC = () => {
 
   // WinUI Dialog state (replace browser alerts/confirms)
   const [winUIDialog, setWinUIDialog] = useState<{ isOpen: boolean; title: string; message: string; type: 'info' | 'warning' | 'error' | 'confirm'; onOk?: () => void }>({ isOpen: false, title: '', message: '', type: 'info' });
+  const [clearCurrentWork, setClearCurrentWork] = useState(false);
+  const clearCurrentWorkRef = useRef(false);
 
   // Language picker state
   const [showLanguagePicker, setShowLanguagePicker] = useState(false);
@@ -1935,7 +1937,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       
       {/* ============ TITLE BAR (Faithful Windows Desktop Style - VERSION DYNAMICALLY LOADED!) ============ */}
       <div 
-        className="h-[28px] text-white flex items-center justify-between px-[6px] border-b border-[#1F3354]"
+        className="desktop-title-bar h-[28px] text-white flex items-center justify-between px-[6px] border-b border-[#1F3354]"
         style={{
           background: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)'
         }}
@@ -2054,7 +2056,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       {/* ============ MENU BAR (Faithful Windows Desktop Style with hover sliding) ============ */}
       <div 
         ref={menuBarRef}
-        className="h-[44px] md:h-[24px] bg-[#F0F0F0] border-b border-[#C8C8C8] flex items-center px-[4px] relative z-40 text-slate-800 text-[12px] font-sans"
+        className="desktop-menu-bar h-[44px] md:h-[24px] bg-[#F0F0F0] border-b border-[#C8C8C8] flex items-center px-[4px] relative z-40 text-slate-800 text-[12px] font-sans"
       >
         {/* HAMBURGER BUTTON — visible only on mobile */}
         <button
@@ -2126,7 +2128,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                 </span>
               </button>
               <div className="h-[1px] bg-slate-300 my-1"></div>
-              <button onClick={() => { setWinUIDialog({ isOpen: true, title: mt.clearStorage, message: 'Clear saved flowchart from local storage? Your current canvas will not be affected.', type: 'confirm', onOk: () => clearLocalStorage() }); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#FFF0F0] flex items-center text-rose-700">
+              <button onClick={() => { clearCurrentWorkRef.current = false; setClearCurrentWork(false); setWinUIDialog({ isOpen: true, title: mt.clearStorage, message: 'Clear saved flowchart from local storage? Your current canvas will not be affected unless the optional Flag is enabled.', type: 'confirm', onOk: () => { clearLocalStorage({ alsoClearCurrentWork: clearCurrentWorkRef.current }); clearCurrentWorkRef.current = false; setClearCurrentWork(false); } }); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#FFF0F0] flex items-center text-rose-700">
                 <span><IconTrash size={14} /> {mt.clearStorage}</span>
               </button>
             </div>
@@ -2374,7 +2376,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
 
       {/* ============ TOOLBAR (Faithful Windows Desktop Style) ============ */}
       <div 
-        className="h-[36px] border-b border-[#B0B0B0] flex items-center px-[4px] gap-[1px] justify-between"
+        className="desktop-toolbar h-[36px] border-b border-[#B0B0B0] flex items-center px-[4px] gap-[1px] justify-between"
         style={{
           background: 'linear-gradient(to bottom, #FAFAFA, #E4E4E4)'
         }}
@@ -2808,15 +2810,34 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       {/* WinUI Dialog for alerts/confirms */}
       <WinUIDialog
         isOpen={winUIDialog.isOpen}
-        onClose={() => setWinUIDialog(prev => ({ ...prev, isOpen: false }))}
+        onClose={() => { clearCurrentWorkRef.current = false; setClearCurrentWork(false); setWinUIDialog(prev => ({ ...prev, isOpen: false })); }}
         title={winUIDialog.title}
         message={winUIDialog.message}
         type={winUIDialog.type}
         onOk={() => { winUIDialog.onOk?.(); setWinUIDialog(prev => ({ ...prev, isOpen: false })); }}
-        onCancel={() => setWinUIDialog(prev => ({ ...prev, isOpen: false }))}
+        onCancel={() => { clearCurrentWorkRef.current = false; setClearCurrentWork(false); setWinUIDialog(prev => ({ ...prev, isOpen: false })); }}
         okLabel={t.modals.ok}
         cancelLabel={t.modals.cancel}
-      />
+      >
+        {winUIDialog.type === 'confirm' && winUIDialog.title === mt.clearStorage ? (
+          <div className="select-text">
+            <p>{winUIDialog.message}</p>
+            <label className="mt-4 flex items-start gap-2 cursor-pointer select-text">
+              <input
+                type="checkbox"
+                checked={clearCurrentWork}
+                onChange={(event) => {
+                  clearCurrentWorkRef.current = event.target.checked;
+                  setClearCurrentWork(event.target.checked);
+                }}
+                className="mt-0.5 h-4 w-4 accent-[#2F5A8C]"
+              />
+              <span className="font-semibold text-slate-700">Flag: also clear the current work</span>
+            </label>
+            <p className="mt-2 text-[11px] text-slate-500">Disabled by default. When enabled, the open flowchart, author, history, and related saved work are cleared too.</p>
+          </div>
+        ) : undefined}
+      </WinUIDialog>
 
       {/* Language Picker WinUI Dialog */}
       {showLanguagePicker && (

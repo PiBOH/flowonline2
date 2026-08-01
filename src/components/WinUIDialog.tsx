@@ -34,68 +34,105 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
   const [size, setSize] = useState({ w: defaultWidth, h: defaultHeight });
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(false);
-  const dragRef = useRef<{ startX: number; startY: number; posX: number; posY: number }>({ startX: 0, startY: 0, posX: 0, posY: 0 });
-  const resizeRef = useRef<{ startX: number; startY: number; startW: number; startH: number }>({ startX: 0, startY: 0, startW: defaultWidth, startH: defaultHeight });
+  const dragRef = useRef<{ startX: number; startY: number; posX: number; posY: number; pointerId: number }>({ startX: 0, startY: 0, posX: 0, posY: 0, pointerId: -1 });
+  const resizeRef = useRef<{ startX: number; startY: number; startW: number; startH: number; pointerId: number }>({ startX: 0, startY: 0, startW: defaultWidth, startH: defaultHeight, pointerId: -1 });
   const dialogRef = useRef<HTMLDivElement>(null);
+  const isRotatedMobileSurface = typeof document !== 'undefined' && Boolean(document.querySelector('.desktop-mobile-mode'));
 
-  // Center dialog on open, reset to default size
+  // The rotated mobile surface has logical landscape dimensions: its local
+  // width is the physical viewport height and its local height is the physical
+  // viewport width. Use those dimensions only for dialogs inside that surface.
   useEffect(() => {
     if (isOpen) {
-      const ww = window.innerWidth;
-      const wh = window.innerHeight;
-      setPosition({ x: Math.max(0, (ww - defaultWidth) / 2), y: Math.max(0, (wh - defaultHeight) / 2) });
-      setSize({ w: defaultWidth, h: defaultHeight });
+      const viewportWidth = isRotatedMobileSurface ? window.innerHeight : window.innerWidth;
+      const viewportHeight = isRotatedMobileSurface ? window.innerWidth : window.innerHeight;
+      const width = Math.min(defaultWidth, Math.max(300, viewportWidth - 16));
+      const height = Math.min(defaultHeight, Math.max(140, viewportHeight - 16));
+      setPosition({ x: Math.max(0, (viewportWidth - width) / 2), y: Math.max(0, (viewportHeight - height) / 2) });
+      setSize({ w: width, h: height });
     }
-  }, [isOpen, defaultWidth, defaultHeight]);
+  }, [isOpen, defaultWidth, defaultHeight, isRotatedMobileSurface]);
 
   // Dragging handlers
-  const onMouseDownTitle = useCallback((e: React.MouseEvent) => {
+  const onPointerDownTitle = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
     setDragging(true);
-    dragRef.current = { startX: e.clientX, startY: e.clientY, posX: position.x, posY: position.y };
+    dragRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      posX: position.x,
+      posY: position.y,
+      pointerId: e.pointerId,
+    };
   }, [position]);
 
   useEffect(() => {
     if (!dragging) return;
-    const onMove = (e: MouseEvent) => {
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerId !== dragRef.current.pointerId) return;
+      const screenDeltaX = e.clientX - dragRef.current.startX;
+      const screenDeltaY = e.clientY - dragRef.current.startY;
+      const deltaX = isRotatedMobileSurface ? screenDeltaY : screenDeltaX;
+      const deltaY = isRotatedMobileSurface ? -screenDeltaX : screenDeltaY;
       setPosition({
-        x: dragRef.current.posX + e.clientX - dragRef.current.startX,
-        y: dragRef.current.posY + e.clientY - dragRef.current.startY,
+        x: dragRef.current.posX + deltaX,
+        y: dragRef.current.posY + deltaY,
       });
     };
-    const onUp = () => setDragging(false);
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
-    return () => {
-      document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseup', onUp);
+    const onUp = (e: PointerEvent) => {
+      if (e.pointerId === dragRef.current.pointerId) setDragging(false);
     };
-  }, [dragging]);
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onUp);
+    document.addEventListener('pointercancel', onUp);
+    return () => {
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      document.removeEventListener('pointercancel', onUp);
+    };
+  }, [dragging, isRotatedMobileSurface]);
 
   // Resizing handlers
-  const onMouseDownResize = useCallback((e: React.MouseEvent) => {
+  const onPointerDownResize = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    e.currentTarget.setPointerCapture(e.pointerId);
     setResizing(true);
-    resizeRef.current = { startX: e.clientX, startY: e.clientY, startW: size.w, startH: size.h };
+    resizeRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      startW: size.w,
+      startH: size.h,
+      pointerId: e.pointerId,
+    };
   }, [size]);
 
   useEffect(() => {
     if (!resizing) return;
-    const onMove = (e: MouseEvent) => {
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerId !== resizeRef.current.pointerId) return;
+      const screenDeltaX = e.clientX - resizeRef.current.startX;
+      const screenDeltaY = e.clientY - resizeRef.current.startY;
+      const deltaW = isRotatedMobileSurface ? screenDeltaY : screenDeltaX;
+      const deltaH = isRotatedMobileSurface ? -screenDeltaX : screenDeltaY;
       setSize({
-        w: Math.max(300, resizeRef.current.startW + e.clientX - resizeRef.current.startX),
-        h: Math.max(140, resizeRef.current.startH + e.clientY - resizeRef.current.startY),
+        w: Math.max(300, resizeRef.current.startW + deltaW),
+        h: Math.max(140, resizeRef.current.startH + deltaH),
       });
     };
-    const onUp = () => setResizing(false);
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
-    return () => {
-      document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseup', onUp);
+    const onUp = (e: PointerEvent) => {
+      if (e.pointerId === resizeRef.current.pointerId) setResizing(false);
     };
-  }, [resizing]);
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onUp);
+    document.addEventListener('pointercancel', onUp);
+    return () => {
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      document.removeEventListener('pointercancel', onUp);
+    };
+  }, [resizing, isRotatedMobileSurface]);
 
   if (!isOpen) return null;
 
@@ -118,14 +155,14 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
           top: position.y,
           width: size.w,
           height: size.h,
-          maxWidth: 'calc(100vw - 16px)',
-          maxHeight: 'calc(100dvh - 16px)',
+          maxWidth: isRotatedMobileSurface ? 'calc(100dvh - 16px)' : 'calc(100vw - 16px)',
+          maxHeight: isRotatedMobileSurface ? 'calc(100dvw - 16px)' : 'calc(100dvh - 16px)',
         }}
       >
         {/* Title bar */}          <div
             className="h-[28px] text-white flex items-center justify-between px-[8px] shrink-0 cursor-default select-none touch-target"
-            style={{ background: tc.gradient }}
-          onMouseDown={onMouseDownTitle}
+            style={{ background: tc.gradient, touchAction: 'none' }}
+          onPointerDown={onPointerDownTitle}
         >
           <span className="text-[11px] font-semibold font-sans tracking-wide flex items-center gap-1.5">
             <span>{tc.icon}</span> {title}
@@ -164,9 +201,10 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
         {/* Resize handle */}
         <div
           className="absolute bottom-0 right-0 w-[16px] h-[16px] cursor-se-resize"
-          onMouseDown={onMouseDownResize}
+          onPointerDown={onPointerDownResize}
           style={{
             background: 'linear-gradient(135deg, transparent 50%, #999 50%)',
+            touchAction: 'none',
           }}
         />
       </div>

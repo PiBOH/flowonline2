@@ -329,7 +329,14 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   latestSaveRef.current = { statements, programTitle, programAuthor };
 
   const saveTimeoutRef = useRef<number | null>(null);
+  const storageClearPendingRef = useRef(false);
   useEffect(() => {
+    if (storageClearPendingRef.current) {
+      const isClearedState = statements.length === 0 && programTitle === 'Untitled Program' && programAuthor === '';
+      if (isClearedState) return;
+      storageClearPendingRef.current = false;
+    }
+
     if (saveTimeoutRef.current) window.clearTimeout(saveTimeoutRef.current);
     saveTimeoutRef.current = window.setTimeout(() => {
       const { statements: s, programTitle: t, programAuthor: a } = latestSaveRef.current;
@@ -343,6 +350,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Save immediately on unmount using latest ref (avoids stale closure)
   useEffect(() => {
     return () => {
+      if (storageClearPendingRef.current) return;
       const { statements: s, programTitle: t, programAuthor: a } = latestSaveRef.current;
       persistToStorage(s, t, a);
     };
@@ -438,19 +446,22 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       if (typeof window === 'undefined') return;
 
-      // (A) Default legacy clear.
+      // (A) Clear the saved backup first. Suppress the next persistence
+      //     cycle for both modes: the user explicitly asked to remove the
+      //     saved data, so it must not be recreated until a later edit.
       window.localStorage.removeItem(STORAGE_KEY);
+      storageClearPendingRef.current = true;
 
-      if (!opts?.alsoClearCurrentWork) return;
-
-      // (1) Cancel any pending debounced save so it cannot re-write the
-      //     cleared keys with the stale in-memory state.
+      // Cancel any pending debounced save for both clear modes so the
+      // explicitly removed backup cannot be recreated immediately.
       if (saveTimeoutRef.current !== null) {
         window.clearTimeout(saveTimeoutRef.current);
         saveTimeoutRef.current = null;
       }
 
-      // (2) Synchronously update the latest-save ref so the unmount
+      if (!opts?.alsoClearCurrentWork) return;
+
+      // Synchronously update the latest-save ref so the unmount
       //     effect (if it fires immediately) only persists empty data.
       latestSaveRef.current = {
         statements: [],

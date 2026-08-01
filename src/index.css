@@ -162,3 +162,93 @@ input[type="range"]::-webkit-slider-thumb {
   .mobile-only { display: none; }
   .hamburger-btn { display: none; }
 }
+
+/* ============================================
+   MOBILE DESKTOP-SURFACE MODE
+   ============================================
+   On narrow screens App.tsx reuses MainLayout instead of the separate
+   mobile bundle. The logical canvas is landscape-sized and rotated so the
+   desktop UI remains one coherent surface. These rules are scoped entirely
+   to .desktop-mobile-mode and cannot affect desktop-sized viewports.
+*/
+.desktop-mobile-mode {
+    position: fixed;
+    inset: 0;
+    width: 100dvw;
+    height: 100dvh;
+    overflow: hidden;
+    background: #d4d0c8;
+    touch-action: pan-x pan-y;
+  }
+
+  .desktop-mobile-mode > .desktop-layout-root {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100dvh;
+    height: 100dvw;
+    min-width: 100dvh;
+    min-height: 100dvw;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center center;
+  }
+
+  /* Cancel the phone-oriented rules only for the reused desktop UI. */
+  .desktop-mobile-mode .touch-target {
+    min-width: 0;
+    min-height: 0;
+  }
+  .desktop-mobile-mode .desktop-menu-bar {
+    height: 24px;
+  }
+  .desktop-mobile-mode .desktop-menu {
+    height: 24px;
+    overflow: visible;
+    flex: 1 1 auto;
+    padding: 0 4px !important;
+    gap: initial !important;
+  }
+  .desktop-mobile-mode .desktop-menu > div {
+    min-height: 24px;
+    display: block;
+    flex-shrink: 0;
+  }
+  .desktop-mobile-mode .desktop-menu > div > button {
+    min-height: 20px;
+    min-width: 0;
+    height: 20px;
+    padding: 2px 10px;
+    font-size: 12px;
+  }
+  .desktop-mobile-mode .desktop-toolbar {
+    height: 36px;
+    overflow: visible;
+    padding: 0 8px !important;
+    gap: initial !important;
+  }
+  .desktop-mobile-mode .desktop-toolbar > button,
+  .desktop-mobile-mode .desktop-toolbar > div {
+    min-width: 0;
+    min-height: 0;
+    flex-shrink: 0;
+  }
+  .desktop-mobile-mode .mobile-only,
+  .desktop-mobile-mode .hamburger-btn,
+  .desktop-mobile-mode .mobile-menu-panel,
+  .desktop-mobile-mode .mobile-menu-overlay {
+    display: none !important;
+  }
+  .desktop-mobile-mode .desktop-workspace,
+  .desktop-mobile-mode .desktop-layout-row {
+    flex-direction: row;
+  }
+  .desktop-mobile-mode .desktop-side-panel {
+    height: 100%;
+  }
+  .desktop-mobile-mode .desktop-side-panel--console { width: 360px; }
+  .desktop-mobile-mode .desktop-side-panel--variables { width: 300px; }
+  .desktop-mobile-mode .desktop-side-panel--code { width: 320px; }
+  .desktop-mobile-mode .desktop-side-panel--triple {
+    width: 320px;
+    flex-direction: column;
+  }
