@@ -82,57 +82,57 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (BETA 2.3.21-beta)
+## 5. Architectural Milestone Logs & Change History (2.3.21-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
-### Milestone 1: Windows MDI (Multiple Document Interface) Desktop Frame (BETA 2.0.3-beta)
+### Milestone 1: Windows MDI (Multiple Document Interface) Desktop Frame (2.0.3-beta)
 *   **Aero Glass Gradient Header:** Redesigned the main app header with a dual gradient (`#5B8DC4` -> `#2F5A8C`), standard Windows system controls (`─`, `▢`, `✕`), and the Flowgorithm 4-box colored vector logo.
 *   **System Menu & Toolbar:** Added standard retro dropdown menus (`File`, `Modifica`, `Programma`) and a standard `32x32px` flat-button toolbar.
 *   **Workspace Splitting:** Introduced an MDI layout context parameter (`AppLayout`) with five switchable layouts (`flowchart_only`, `flow_variables`, `flow_console`, `triple_split`, `flow_code`), allowing the canvas, variable watch, and console windows to be docked or closed in real-time.
 *   **Triple Split Layout:** Simulated Flowgorithm's default configuration: flowchart canvas on the left, and a vertical stack containing the variable watch on top and the console on the bottom on the right.
 
-### Milestone 2: Variable Case-Insensitivity (BETA 2.0.3 Fix)
+### Milestone 2: Variable Case-Insensitivity (2.0.3 Fix)
 *   **Challenge:** Flowgorithm is case-insensitive for variable lookups and assignments. The web prototype was case-sensitive, making loaded `.fprg` files fail to resolve symbols (e.g. declaring `MyVar` but assigning to `myvar`).
 *   **Resolution:** Modified both `ExpressionParser` (`src/utils/parser.ts`) and the VM executor step routines (`src/context/FlowContext.tsx`) to resolve variables using case-insensitive comparisons.
 
-### Milestone 3: Support for Character and Type Conversions (BETA 2.0.4 Fix)
+### Milestone 3: Support for Character and Type Conversions (2.0.4 Fix)
 *   **Challenge:** Flowgorithm represents characters as strings of length 1 and manipulates them using a specific set of intrinsic helper functions. Imported `.fprg` files processing arrays of characters failed to compile or execute.
 *   **Resolution:** Extended the recursive expression evaluator (`src/utils/parser.ts`) to support Flowgorithm's built-in conversion and string intrinsic functions:
     *   **Caratteri:** `Char(s, i)` (extract character), `ToCode(c)` (char to ASCII code), `ToChar(n)` (ASCII code to char).
     *   **Conversioni:** `ToInteger(s)`, `ToReal(s)`, `ToString(n)`.
     *   **Matematiche/Trigonometriche:** `Int(n)` (whole value trunc), `Sgn(n)` (sign function), `Arcsin`, `Arccos`, `Arctan`.
 
-### Milestone 4: Graphic Sfumature & Shape Outlines (BETA 2.0.5-beta)
+### Milestone 4: Graphic Sfumature & Shape Outlines (2.0.5-beta)
 *   **Declare Tab:** Created an authentic SVG outline path for `DeclareBlock` rendering a folder tab on top, matching the visual cues of Flowgorithm.
 *   **Terminal & Shape Colors:** Mapped all blocks to the exact color scheme in PiBOH's `flowonline` stylesheet (`--cs-terminal`, `--cs-process`, `--cs-io`, `--cs-decision`, `--cs-loop`, `--cs-call`).
 *   **Blue Dot Inserters:** Styled connector hover states to draw the classic glowing 3D blue inserter circles that expand and show a golden drop-shadow when hovered.
 
-### Milestone 5: Critical FPRG XML Parsing Fix (BETA 2.0.6 Fix)
+### Milestone 5: Critical FPRG XML Parsing Fix (2.0.6 Fix)
 *   **Challenge:** Opened `.fprg` files from Flowgorithm loaded without evaluating assignments. Variables remained at their default values (`0`, `""`, or `false`) throughout execution.
 *   **Discovery:** Flowgorithm's XML schema represents assignments using the `expression` attribute, e.g., `<assign variable="x" expression="10"/>`, while our early XML parser incorrectly attempted to read the `value` attribute (`el.getAttribute('value')`). This caused every imported assignment expression to load as empty (`""`).
 *   **Resolution:** Patched `FprgParser.elementToStatement` to retrieve `expression` as the primary attribute (with `value` as a fallback), and updated the XML serializer (`FprgParser.serializeStatements`) to output standard `expression="..."` XML tags for assignments. This successfully restored fully functional variable assignments on all imported `.fprg` files.
 
-### Milestone 6: If Nesting and Operator Compatibility (BETA 2.0.7 Fix)
+### Milestone 6: If Nesting and Operator Compatibility (2.0.7 Fix)
 *   **Equality Operator (=):** Flowgorithm allows a single `=` to represent comparison (equality) in conditions (e.g. `If x = 5`). Added tokenization mapping to convert a single `=` to the relational equality operator `==` inside `src/utils/parser.ts`.
 *   **Direct Child Node Selection:** Fixed a major bug in nested `If` branches where `getElementsByTagName` recursively traversed descendants, causing outer `If` blocks to "steal" inner `If` blocks' `<else>` or `<then>` nodes. Replaced with strict direct-child lookups using `Array.from(el.children).find(...)`.
 
-### Milestone 7: Alphabetical Ordering, Newlines and UI Emulation (BETA 2.0.8 Fix)
+### Milestone 7: Alphabetical Ordering, Newlines and UI Emulation (2.0.8 Fix)
 *   **Lexicographical String Comparison:** Fixed a bug where string comparative relational operations (like checking `x < z` alphabetically) failed because the evaluator forced numeric conversions (`Number(val) < Number(right)`). Removed the numeric forcing wrappers, allowing JavaScript's native comparative operators to lexicographically compare strings and numerically compare numbers with 100% precision.
 *   **ToChar(13) Carriage Return Parsing:** Pre-wrap rendering collapses `\r` (carriage return, ASCII 13) into simple whitespaces on Webkit/Blink browsers. Resolved by adding a global regex replace in the console message renderer (`src/components/Console.tsx`) converting `\r` into Line Feeds `\n`. This successfully restored beautiful, multiline output layouts in standard dialogue balloons.
 *   **Toolbar "Open" (📂) Button Activation:** Fixed a React DOM reference bug where `<input type="file">` was nested inside the conditional drop-down. Moved it outside the dropdown, enabling the toolbar "Open" button to trigger file selections at all times.
 
-### Milestone 8: Hover Slide-To-Active Menus & Global Click Closures (BETA 2.0.9-beta)
+### Milestone 8: Hover Slide-To-Active Menus & Global Click Closures (2.0.9-beta)
 *   **Win32 Hover Dropdown Sliding:** Added `onMouseEnter` handlers across all dropdown menu headers, allowing dropdowns to activate automatically on hover when a dropdown is already open.
 *   **Global Click closures:** Created a global document `mousedown` listener to close dropdowns when clicking outside, emulating standard desktop window menus.
 *   **DPI-Aware 600% Zoom Toolbar:** Added Zoom In (`🔍+`), Zoom Out (`🔍-`), zoom percentage, and Reset Zoom (`🔄`) controls on the upper-right side of the toolbar.
 *   **Win32 About Dialog Sizing:** Resized the Win32 About dialog to exactly `700px` width by `525px` height.
 
-### Milestone 9: Unquoted Newlines and XML Auto-Translation (BETA 2.0.10-beta)
+### Milestone 9: Unquoted Newlines and XML Auto-Translation (2.0.10-beta)
 *   **Unquoted Newline Constant (\\n):** Modified the string tokenizer (`src/utils/parser.ts`) to intercept unquoted `\n` characters (e.g., `text & \n & min`) and parse them directly as first-class Line Feed (`\n`) string tokens.
 *   **FPRG Import/Export Normalization:** Extended `FprgParser.ts` to automatically translate all `ToChar(13)` expressions inside files loaded from the PC to unquoted `\n` constants inside the web application, and translate them back to standard `ToChar(13)` when saving/exporting.
 
-### Milestone 10: Auto-Scrolling, JSON Backup Upload, and Twilight Dark Themes (BETA 2.0.12 Completed)
+### Milestone 10: Auto-Scrolling, JSON Backup Upload, and Twilight Dark Themes (2.0.12 Completed)
 *   **Auto-scrolling Active Executing Block:** Added a React `ref` with `useEffect` on `isHighlighted` in `BlockNode.tsx` to automatically scroll and center the active executing block within the user's viewport.
 *   **Top Alignment on Load:** Added a scroll-to-top handler in `FlowchartCanvas.tsx` to center the "Main" start block whenever an algorithm is loaded.
 *   **JSON Backup Upload:** Upgraded the file loader inside `Header.tsx` to automatically detect `.json` files, parse them as backup states, and populate the canvas.
@@ -141,7 +141,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Auto-Open Console:** Configured the VM runner to automatically open the Console/Triple-split layout upon executing code if it was closed.
 *   **Dynamic Version Badge:** Added an automatic fetch to load the live version from the remote GitHub `version.txt` file and display the loaded source as a decorative notification badge.
 
-### Milestone 11: Keyboard Block Selection, Copy & Paste Clipboard, and Right-Click Context Menus (BETA 2.0.13 Completed)
+### Milestone 11: Keyboard Block Selection, Copy & Paste Clipboard, and Right-Click Context Menus (2.0.13 Completed)
 *   **Keyboard Deletion and Block Selection:** Integrated single-click selection on any block shape (glowing blue dotted border) with support for pressing `Delete` or `Backspace` to instantly remove blocks.
 *   **Win32 Context Menu (Tasto Destro):** Developed a complete custom desktop-style right-click context menu:
     *   **Right-clicking a block:** Opens floating menu with Edit (Modifica), Cut (Taglia), Copy (Copia), Paste After (Incolla), and Delete (Elimina) options.
@@ -149,11 +149,11 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Clipboard Copy-Paste Buffering:** Created copy, cut, and paste context handlers that recursively clone blocks, regenerate all nested block IDs to prevent UUID collisions, and support Ctrl+C, Ctrl+X, and Ctrl+V keyboard shortcuts.
 *   **Spacious 800x600 px User Manual Viewer:** Enlarged the MANUAL.md Win32 dialog box to exactly `800x600px` and implemented a fully-functional, custom Markdown-to-JSX compiler to render titles, blockquotes, code-snippets, lists, and tables inline with rich styles!
 
-### Milestone 12: Direct Branch Target Propagations and True/False Visual Correction (BETA 2.0.13 Fix)
+### Milestone 12: Direct Branch Target Propagations and True/False Visual Correction (2.0.13 Fix)
 *   **Nested Branch Inserter Contexts:** Fixed the missing `parentContext` parameter inside recursive `renderLinesAndArrows` calls, allowing nested inserters to correctly propagate their target IDs (`branch_end:parentId:branchType`) instead of defaulting to `'main_end'`.
 *   **True/False Visual Alignment:** Corrected the inverted visual labeling of condition branches: the `thenBranch` on the left is now correctly labeled **VERO (True)** in vibrant green, and the `elseBranch` on the right is labeled **FALSO (False)** in standard contrast color, matching the standard desktop layout of Flowgorithm perfectly.
 
-### Milestone 13: Polish Release — Tutorial, Galleria Esempi, Export PNG & Bug Fixes (BETA 2.1.0-beta)
+### Milestone 13: Polish Release — Tutorial, Galleria Esempi, Export PNG & Bug Fixes (2.1.0-beta)
 
 [//]: # (keepachangelog)
 
@@ -166,10 +166,10 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Empty Default Canvas:** Removed the pre-loaded sample program so new users start with a blank diagram (paired with the Tutorial for onboarding).
 *   **GitHub Pages Configuration:** Set `base: './'` in `vite.config.ts` for relative asset paths.
 *   **`.gitignore` Sanitization:** Removed obsolete entries (`.assetsai/`, `.logo-images/`, `arenaai.md`, `-e`) and added standard excludes for `node_modules/`, `dist/`, `.env`, `.ignore/`, and IDE files.
-*   **Version Source Alignment:** Bumped `version.txt` and `arenaai.md` to `BETA 2.1.0` in sync.
+*   **Version Source Alignment:** Bumped `version.txt` and `arenaai.md` to `2.1.0` in sync.
 
 #### Fixed
-*   **Version Overwrite (Critical):** Moved `setAppVersion('BETA 2.0.13')` inside the `.catch()` block to prevent always overriding the live GitHub version.
+*   **Version Overwrite (Critical):** Moved `setAppVersion('2.0.13')` inside the `.catch()` block to prevent always overriding the live GitHub version.
 *   **Undo Flooding on Title Edit:** Changed `setProgramTitle`/`setProgramAuthor` to update state directly without pushing history on every keystroke.
 *   **Misleading Undo/Redo Messages:** Added `safeStopRun()` that checks execution status before calling `stopRun()` during undo/redo.
 *   **Hardcoded IF Labels:** Replaced `'VERO (True)'`/`'FALSO (False)'` with language-specific translations.
@@ -183,7 +183,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **SVG Export Cleanliness:** Removed inserter buttons, delete buttons, and interactive CSS classes from exported SVG/PNG images.
 
 
-### Milestone 14: Tools Menu, Export Engines, and Author Auto-Detection (BETA 2.2.0-beta)
+### Milestone 14: Tools Menu, Export Engines, and Author Auto-Detection (2.2.0-beta)
 
 [//]: # (keepachangelog)
 
@@ -198,7 +198,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Issue Templates Validation:** Fixed `validations` YAML key being incorrectly nested inside `attributes` in all 4 GitHub issue form templates (`bug_report-en.yml`, `bug_report-it.yml`, `feature_request-en.yml`, `feature_request-it.yml`). Moved `validations.required` to top-level form schema.
 
 
-### Milestone 15: 22-Language Full Localization and WinUI Export Dialogs (BETA 2.3.0-beta)
+### Milestone 15: 22-Language Full Localization and WinUI Export Dialogs (2.3.0-beta)
 
 [//]: # (keepachangelog)
 
@@ -212,7 +212,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Header.tsx:** Export handlers updated to `await` export results and show WinUI dialogs with appropriate messages.
 
 
-### Milestone 16: WinUI Language Picker, Help Menu Links, and Selectable Text (BETA 2.3.1-beta)
+### Milestone 16: WinUI Language Picker, Help Menu Links, and Selectable Text (2.3.1-beta)
 
 [//]: # (keepachangelog)
 
@@ -227,7 +227,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Translations:** Added `bugReport`, `featureRequest`, `forkContribute`, and `selectLanguage` keys to all 22 supported languages.
 
 
-### Milestone 17: WinUI About/Manual/Changelog Dialogs (BETA 2.3.2-beta)
+### Milestone 17: WinUI About/Manual/Changelog Dialogs (2.3.2-beta)
 
 [//]: # (keepachangelog)
 
@@ -241,7 +241,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Language Picker Centering:** Increased default dimensions to 480×400 px so the 22-language grid is properly centered on screen instead of appearing too low.
 
 
-### Milestone 18: Language Flags, Resize Behavior, and Logo Polish (BETA 2.3.3-beta)
+### Milestone 18: Language Flags, Resize Behavior, and Logo Polish (2.3.3-beta)
 
 [//]: # (keepachangelog)
 
@@ -256,7 +256,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Manual Resize Only:** WinUIDialog now uses `height` instead of `minHeight` CSS property, preventing automatic content-driven expansion. Windows stay at user-set size with scrollbars and can only be resized by dragging the bottom-right corner handle.
 
 
-### Milestone 19: Freeze Prevention, Memory Safeguards, and Logo Hardcoding (BETA 2.3.5-beta)
+### Milestone 19: Freeze Prevention, Memory Safeguards, and Logo Hardcoding (2.3.5-beta)
 
 [//]: # (keepachangelog)
 
@@ -271,7 +271,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Hardcoded Logo SVG:** Replaced `logo_crop.png` references in title bar and About modal with the full inline SVG from `logo.svg` (Flowgorithm 4-box colored logo with gradients and glow effects), ensuring consistent rendering across all browsers.
 
 
-### Milestone 20: Dynamic Tab Title, Favicon, and Menu Polish (BETA 2.3.6-beta)
+### Milestone 20: Dynamic Tab Title, Favicon, and Menu Polish (2.3.6-beta)
 
 [//]: # (keepachangelog)
 
@@ -283,26 +283,26 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Menu Clarity:** Removed the `(MANUAL.md)` suffix from all 22 language translations of the User Manual menu entry (e.g., "User Manual..." instead of "User Manual (MANUAL.md)...") for cleaner appearance.
 
 
-### Milestone 21: CPU/RAM Real-Time Tab Title (BETA 2.3.7–2.3.8)
+### Milestone 21: CPU/RAM Real-Time Tab Title (2.3.7–2.3.8)
 
 [//]: # (keepachangelog)
 
-#### Added (BETA 2.3.7-beta)
+#### Added (2.3.7-beta)
 *   **CPU Usage Estimation:** Tab title now shows estimated CPU usage percentage via `requestAnimationFrame` frame timing jitter analysis (delta from expected 16.67ms vs actual frame time).
 *   **RAM Display:** JS heap used memory shown in MB via Chrome `performance.memory.usedJSHeapSize` API.
 *   **Format:** `Flowonline2 | CPU 2.3% | RAM 234MB` — throttled to update once per second (not every frame) to avoid overhead.
 
-#### Fixed (BETA 2.3.7-beta)
+#### Fixed (2.3.7-beta)
 *   rAF loop properly stopped on component unmount via `running` flag.
 *   Frame deltas clamped to 100ms max to prevent tab-switch CPU spikes.
 
-#### Changed (BETA 2.3.8-beta)
+#### Changed (2.3.8-beta)
 *   **Tab Title Format:** Simplified to `CPU X.X% | RAM XXXMB` (removed "Flowonline2" prefix for cleaner look).
 *   **Cross-Browser Favicon:** Added `icon.png` fallback and `apple-touch-icon` for universal browser support (Firefox, Safari, Chrome). Kept SVG favicon for modern Chromium browsers.
 *   RAM hidden on non-Chrome browsers (Firefox/Safari lack `performance.memory` API).
 
 
-### Milestone 22: IDLE Freeze Fix and localStorage Optimization (BETA 2.3.9-beta)
+### Milestone 22: IDLE Freeze Fix and localStorage Optimization (2.3.9-beta)
 
 [//]: # (keepachangelog)
 
@@ -312,35 +312,35 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Save Race Condition:** `saveTimeoutRef` now properly cleared on dependency changes to prevent stale saves overwriting newer state.
 
 
-### Milestone 23: Favicon PNG and DRY Refactor (BETA 2.3.10–2.3.11)
+### Milestone 23: Favicon PNG and DRY Refactor (2.3.10–2.3.11)
 
 [//]: # (keepachangelog)
 
-#### Added (BETA 2.3.10-beta)
+#### Added (2.3.10-beta)
 *   **icon.png:** 500×500 transparent PNG favicon generated from `logo.svg` via `sharp-cli` for universal browser tab icon support.
 *   **index.html:** `icon.png` as primary favicon, `logo.svg` as SVG fallback, `apple-touch-icon` using `icon.png`.
 
-#### Changed (BETA 2.3.11-beta)
+#### Changed (2.3.11-beta)
 *   **DRY Refactor — persistToStorage:** Extracted duplicate localStorage save logic (previously copy-pasted in debounce effect and unmount effect) into a single `persistToStorage(s, t, a)` helper function.
 *   **Unmount Error Logging:** localStorage errors during unmount save now logged via `console.warn` (previously silently ignored with empty `.catch()`).
 
 
-### Milestone 24: Assets in public/ and Multi-Resolution favicon.ico (BETA 2.3.12–2.3.13)
+### Milestone 24: Assets in public/ and Multi-Resolution favicon.ico (2.3.12–2.3.13)
 
 [//]: # (keepachangelog)
 
-#### Fixed (BETA 2.3.12-beta)
+#### Fixed (2.3.12-beta)
 *   **Favicon Deploy:** Moved `icon.png`, `logo.svg`, `logo.png` from project root to `public/` directory. Vite only copies files from `public/` into `dist/` — before this fix, favicon assets were excluded from build output, breaking the tab icon on GitHub Pages.
 
-#### Added (BETA 2.3.13-beta)
+#### Added (2.3.13-beta)
 *   **Multi-Resolution favicon.ico:** Generated `favicon.ico` (16×16, 32×32, 48×48 px, 5.6KB) from `icon.png` via `sharp`. Multi-size ICO provides maximum cross-browser compatibility (legacy IE, all modern browsers).
 *   **index.html:** `favicon.ico` (`image/x-icon`) as primary favicon with `icon.png` and `logo.svg` as fallbacks.
 
-#### Removed (BETA 2.3.13-beta)
+#### Removed (2.3.13-beta)
 *   One-time `generate_ico.cjs` script and duplicate root `logo.svg` cleaned up after generation.
 
 
-### Milestone 25: Dependency Cleanup (BETA 2.3.14-beta)
+### Milestone 25: Dependency Cleanup (2.3.14-beta)
 
 [//]: # (keepachangelog)
 
@@ -350,12 +350,12 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **package-lock.json:** Reduced by 655 lines after removing all transitive sharp dependencies.
 
 
-### Milestone 26: Dynamic Version Badge and GitHub Release (BETA 2.3.15-beta)
+### Milestone 26: Dynamic Version Badge and GitHub Release (2.3.15-beta)
 
 [//]: # (keepachangelog)
 
 #### Changed
-*   **README.md Version Badge:** Replaced static hardcoded badge (`version-BETA 2.0.13-orange`) with dynamic shields.io GitHub Releases badge that auto-reads the latest release tag:
+*   **README.md Version Badge:** Replaced static hardcoded badge (`version-2.0.13-orange`) with dynamic shields.io GitHub Releases badge that auto-reads the latest release tag:
     ```html
     <img src="https://img.shields.io/github/v/release/PiBOH/flowonline2?include_prereleases&display_name=release&style=for-the-badge&label=VERSION">
     ```
@@ -365,7 +365,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **GitHub Release 2.3.15-beta:** First automated release created via GitHub API with tag `2.3.15`, title `2.3.15-beta`, description "Code backup", and prerelease flag.
 
 
-### Milestone 27: Logo Compression and Unused Dependency Removal (BETA 2.3.16-beta)
+### Milestone 27: Logo Compression and Unused Dependency Removal (2.3.16-beta)
 
 [//]: # (keepachangelog)
 
@@ -380,7 +380,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **GitHub Release 2.3.16-beta:** Created via API with tag `2.3.16`.
 
 
-### Milestone 28: Keyboard Listener Memory Leak Fix (BETA 2.3.17-beta)
+### Milestone 28: Keyboard Listener Memory Leak Fix (2.3.17-beta)
 
 [//]: # (keepachangelog)
 
@@ -392,7 +392,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **GitHub Release 2.3.17-beta:** Created via API with tag `2.3.17`.
 
 
-### Milestone 29: Critical Bugfixes — Stale Closure, Deep Clone, and IF Labels (BETA 2.3.18-beta)
+### Milestone 29: Critical Bugfixes — Stale Closure, Deep Clone, and IF Labels (2.3.18-beta)
 
 [//]: # (keepachangelog)
 
@@ -412,7 +412,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
     - (and 14 more languages)
 
 
-### Milestone 30: Unit Test Suite — Vitest, 126 Tests, 3 Critical Modules (BETA 2.3.19-beta)
+### Milestone 30: Unit Test Suite — Vitest, 126 Tests, 3 Critical Modules (2.3.19-beta)
 
 [//]: # (keepachangelog)
 
@@ -427,7 +427,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **tsconfig.json:** Added `"exclude": ["node_modules", "dist"]` for cleaner compilation.
 
 
-### Milestone 31: Emoji → SVG Conversion for Cross-Platform Consistency (BETA 2.3.20-beta)
+### Milestone 31: Emoji → SVG Conversion for Cross-Platform Consistency (2.3.20-beta)
 
 [//]: # (keepachangelog)
 
@@ -443,7 +443,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Cross-Platform Emoji Rendering:** Emoji characters render inconsistently across operating systems and browsers (Windows shows monochrome outlines, macOS shows colorful designs, Linux may show nothing). SVG icons guarantee pixel-identical appearance everywhere.
 
 
-### Milestone 32: GitHub Actions CI/CD — Auto Review, Test, and Release (BETA 2.3.21-beta)
+### Milestone 32: GitHub Actions CI/CD — Auto Review, Test, and Release (2.3.21-beta)
 
 [//]: # (keepachangelog)
 
@@ -455,17 +455,17 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
     *   `test`: Runs `npm test` (Vitest 126 tests, depends on typecheck). Uploads failure logs as artifacts on failure.
     All jobs use Node 20, npm caching, ubuntu-latest.
 *   **auto-release.yml (CD):** GitHub Actions workflow triggered on push to `main` when `version.txt` changes, or manual `workflow_dispatch` (supports draft mode).
-    *   Reads `version.txt` and strips `BETA`/`ALPHA`/`RC`/`STABLE` prefix to extract the release tag (e.g., `BETA 2.3.21-beta` → tag `2.3.21-beta`).
+    *   Reads `version.txt` and strips `BETA`/`ALPHA`/`RC`/`STABLE` prefix to extract the release tag (e.g., `2.3.21-beta` → tag `2.3.21-beta`).
     *   Detects prerelease flag from suffix (`alpha`/`beta`/`rc` → `prerelease: true`).
     *   Extracts the relevant section from `CHANGELOG.md` (strips suffix to match header format).
     *   Creates a GitHub Release via `softprops/action-gh-release@v2` with:
         *   **Tag:** version number with suffix (e.g., `2.3.21-beta`)
-        *   **Title:** `BETA 2.3.21-beta [bot]`
+        *   **Title:** `2.3.21-beta [bot]`
         *   **Body:** Automated template with version, commit hash (linked), date, trigger info, actor, and changelog section.
     *   Uses `GITHUB_TOKEN` for authentication with `contents: write` permission.
 
 
-### Milestone 34: Mobile UI Hamburger + Toolbar Visibility Fix (BETA 2.3.23-beta → BETA 2.3.28-beta)
+### Milestone 34: Mobile UI Hamburger + Toolbar Visibility Fix (2.3.23-beta → 2.3.28-beta)
 
 **Problem (persistent across multiple commits):** The header hamburger button and the desktop toolbar were both invisible on mobile (≤767px):
 - The menu bar parent had `h-[24px]` (24px fixed), but the hamburger button is `height: 40px` from the `.hamburger-btn` CSS — button visibly overflowed the parent and was effectively hidden.
@@ -480,7 +480,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 
 **Result:** Hamburger button AND all toolbar actions (New, Open, Save, Run, Step, Pause, Stop, Undo, Redo, Color scheme, Zoom) are now reachable on mobile. The toolbar stays at 44px tall, scrolls horizontally if too wide for the screen.
 
-### Milestone 33: Commit Naming Convention for Releases (BETA 2.3.22-beta)
+### Milestone 33: Commit Naming Convention for Releases (2.3.22-beta)
 
 [//]: # (keepachangelog)
 
@@ -491,7 +491,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 | Prefix | Example | Release? |
 |---|---|---|
 | `v` | `v2.3.23: Release BETA` | ✅ Triggered |
-| No `v` | `BETA 2.3.23: Fix bug` | ❌ Skipped |
+| No `v` | `2.3.23: Fix bug` | ❌ Skipped |
 | No `v` | `Fix CI pipeline` | ❌ Skipped |
 
 **Rule for AI agents:** When bumping the version (updating `version.txt` + `CHANGELOG.md` + `arenaai.md`), always use a commit message starting with `v` followed by the version number. Example:
@@ -501,7 +501,7 @@ v2.3.23: Summary of changes
 
 
 
-### Milestone 35: P0 Memory Leak Fixes + Language Selector on Right + err:unknown (BETA 2.3.29-beta)
+### Milestone 35: P0 Memory Leak Fixes + Language Selector on Right + err:unknown (2.3.29-beta)
 
 **Closed P0 leaks:**
 - `Sidebar.tsx`: `copyTimeoutRef = useRef<number | null>(null)` + dedicated `useEffect(() => () => window.clearTimeout(...))` unmount cleanup. `handleCopy` now clears existing ref before scheduling a new one.
@@ -517,29 +517,29 @@ v2.3.23: Summary of changes
 - 6+ `console.warn` calls in Header.tsx + 4 in FlowContext.tsx remain un-gated with `import.meta.env?.DEV`. P2 production noise fix.
 - Refactor opportunity: `selectedBlockIdsRef.current = selectedBlockIds;` runs on every render — could be moved into `useEffect(() => { ref.current = state }, [state])` for clarity.
 
-### Milestone 36: Auto-Release Pipeline Polish — Tag Prefix Strip + Stable Channel (BETA 2.3.30-beta → BETA 2.3.31-stable)
+### Milestone 36: Auto-Release Pipeline Polish — Tag Prefix Strip + Stable Channel (2.3.30-beta → 2.3.31-stable)
 
 [//]: # (keepachangelog)
 
-#### Changed (BETA 2.3.30-beta)
+#### Changed (2.3.30-beta)
 *   **Tag prefix removal:** `.github/workflows/auto-release.yml` derives the GitHub release tag from the *already-stripped* `NAME` rather than from the raw `version.txt`. Eliminates the `BETA_2.3.28` / `STABLE_2.3.28` prefixes in tag names.
 *   **NAME derivation unchanged:** `NAME = sed -E 's/^(BETA|ALPHA|RC|STABLE)\s+//i'($VERSION) + ' [bot]'`.
 *   **TAG derivation updated:** `TAG = sed 's/ \[bot\]$//' | sed 's/ /_/g'($NAME) + '_bot'`.
 
-#### Changed (BETA 2.3.31-stable)
+#### Changed (2.3.31-stable)
 *   **Prerelease rule inverted:** Auto-release now sets `prerelease=false` **only** when `version.txt` *ends* with `-stable`. All other lifecycles (BETA, ALPHA, RC*, or no suffix) default to `prerelease=true` as a safe fall-back.
-*   **`BETA 2.3.31-stable` lands as a Stable release** (no pre-release badge).
+*   **`2.3.31-stable` lands as a Stable release** (no pre-release badge).
 
 #### Operational cheat sheet (post-2.3.31)
 | `version.txt` content   | Channel    | Tag                       | Name                       |
 |-------------------------|------------|---------------------------|----------------------------|
-| `BETA 2.3.x-beta`       | Pre-release| `2.3.x-beta_bot`          | `2.3.x-beta [bot]`         |
-| `BETA 2.3.x-alpha`      | Pre-release| `2.3.x-alpha_bot`         | `2.3.x-alpha [bot]`        |
+| `2.3.x-beta`       | Pre-release| `2.3.x-beta_bot`          | `2.3.x-beta [bot]`         |
+| `2.3.x-alpha`      | Pre-release| `2.3.x-alpha_bot`         | `2.3.x-alpha [bot]`        |
 | `2.3.x-rc1`             | Pre-release| `2.3.x-rc1_bot`           | `2.3.x-rc1 [bot]`          |
-| `BETA 2.3.x-stable`     | **Stable** | `2.3.x-stable_bot`        | `2.3.x-stable [bot]`       |
+| `2.3.x-stable`     | **Stable** | `2.3.x-stable_bot`        | `2.3.x-stable [bot]`       |
 | `2.3.x`                 | Pre-release| `2.3.x_bot`               | `2.3.x [bot]`              |
 
-### Milestone 37: BETA-Classic Two-Row Mobile Header (BETA 2.3.32-beta)
+### Milestone 37: BETA-Classic Two-Row Mobile Header (2.3.32-beta)
 
 [//]: # (keepachangelog)
 
@@ -559,7 +559,7 @@ v2.3.23: Summary of changes
 | 3   | Run · Step · Pause · Stop · undo · redo · zoom · file ops (existing desktop-toolbar, unchanged) |
 | –   | Hamburger slide-out panel → hidden              |
 
-### Milestone 38: Mobile Bundle Phase 1 — Foundation + Reusable Components (BETA 2.3.33-beta)
+### Milestone 38: Mobile Bundle Phase 1 — Foundation + Reusable Components (2.3.33-beta)
 
 [//]: # (keepachangelog)
 
@@ -581,8 +581,8 @@ v2.3.23: Summary of changes
 - `MobileLanguageSheet.tsx` → `MobileBottomSheet.tsx` + `useFlow` + `FlagIcon`
 - Nothing else imports these files yet. **Phase 2** will add `MobileApp.tsx` orchestrator + 5 view components (`MobileCanvasView`, `MobileEditView`, `MobileRunView`, `MobileConsoleView`, `MobileToolsView`) + `MobileTopBar`. **Phase 3** will wire viewport routing into `App.tsx` (additive — MainLayout remains unchanged).
 
-### Milestone 45: Re-release BETA 2.5.3-beta (post-Phase-5 TypeScript cleanup)[//]: # (keepachangelog)#### Changed*   **Version bumped** from `BETA 2.5.2-beta` → `BETA 2.5.3-beta` to escape the broken `2.5.2-beta_bot` tag the auto-release workflow already published on the broken commit `f516b39`. The next v-prefix release will re-create a clean tag on a working HEAD.*   **User action required:** Manually yank the broken `2.5.2-beta_bot` release via the GH Releases UI.#### Fixed (recap of the 3 follow-up commits ending the broken v2.5.2-beta cycle)*   `src/components/Header.tsx`: reverted `export const menuTranslations` to `const` (TS1184 because it was inside the function body).*   `src/mobile/MobileSidebar.tsx`: corrected the same `}`→`]` useMemo close typo carried over from the full rewrite.*   `src/mobile/MobileApp.tsx`: six fixes — strip dead `<IconCode size={1} />` watermark block + its import; add `message=""` to all 3 WinUIDialog overlays (required prop); refactor `mt` useMemo to cast `catalogs as any` first then index; drop unused `openerRef`; restore `MobileLanguageSheet` to its 2-prop minimal shape. 126/126 vitest passing.#### Architecture invariants preserved*   Desktop bundle byte-for-byte unchanged except for Header.tsx initial-state change.*   Mobile bundle: 12 → 11 files (`MobileTabBar.tsx` removed). All selectors strictly scoped to `.m-root`.---
-### Milestone 44: Mobile UX Rework (Phase 5) — Sidebar Drawer + Slim Execution Topbar + Vite Version Injection (BETA 2.5.2-beta)
+### Milestone 45: Re-release 2.5.3-beta (post-Phase-5 TypeScript cleanup)[//]: # (keepachangelog)#### Changed*   **Version bumped** from `2.5.2-beta` → `2.5.3-beta` to escape the broken `2.5.2-beta_bot` tag the auto-release workflow already published on the broken commit `f516b39`. The next v-prefix release will re-create a clean tag on a working HEAD.*   **User action required:** Manually yank the broken `2.5.2-beta_bot` release via the GH Releases UI.#### Fixed (recap of the 3 follow-up commits ending the broken v2.5.2-beta cycle)*   `src/components/Header.tsx`: reverted `export const menuTranslations` to `const` (TS1184 because it was inside the function body).*   `src/mobile/MobileSidebar.tsx`: corrected the same `}`→`]` useMemo close typo carried over from the full rewrite.*   `src/mobile/MobileApp.tsx`: six fixes — strip dead `<IconCode size={1} />` watermark block + its import; add `message=""` to all 3 WinUIDialog overlays (required prop); refactor `mt` useMemo to cast `catalogs as any` first then index; drop unused `openerRef`; restore `MobileLanguageSheet` to its 2-prop minimal shape. 126/126 vitest passing.#### Architecture invariants preserved*   Desktop bundle byte-for-byte unchanged except for Header.tsx initial-state change.*   Mobile bundle: 12 → 11 files (`MobileTabBar.tsx` removed). All selectors strictly scoped to `.m-root`.---
+### Milestone 44: Mobile UX Rework (Phase 5) — Sidebar Drawer + Slim Execution Topbar + Vite Version Injection (2.5.2-beta)
 
 [//]: # (keepachangelog)
 
@@ -610,7 +610,7 @@ v2.3.23: Summary of changes
 
 ---
 
-### Milestone 43: localStorage clear bug fix + "Flag: Also clear current work" toggle (BETA 2.5.1-beta)
+### Milestone 43: localStorage clear bug fix + "Flag: Also clear current work" toggle (2.5.1-beta)
 
 [//]: # (keepachangelog)
 
@@ -630,7 +630,7 @@ v2.3.23: Summary of changes
 - Desktop (`Header.tsx:2123`) is unchanged for now — it still hits the legacy-only path. Desktop Flag-toggle parity is a candidate for the next iteration.
 - `tsc --noEmit` clean; `npx vitest run` 126/126 passed.
 
-### Milestone 41: Mobile Bundle Phase 3 — From-Scratch Rewrite + Dot-on-Hover Status Badges + Version Fallback (BETA 2.5.0-beta)
+### Milestone 41: Mobile Bundle Phase 3 — From-Scratch Rewrite + Dot-on-Hover Status Badges + Version Fallback (2.5.0-beta)
 
 [//]: # (keepachangelog)
 
@@ -651,7 +651,7 @@ v2.3.23: Summary of changes
 
 #### Changed
 *   **`src/components/Header.tsx`** — Replaced 4 colored source-status chips (version, license, manual, changelog) with `<StatusDot>` calls. The chips used to say things like "loaded from GitHub" or "fallback path" and were invasive (always rendered a pill on the page even when the user wasn't looking at them); the new dots are silent at rest and surface their label only on hover / focus / tap.
-*   **Version fallback string** in `Header.tsx` is now `'0.0.0-UNKNOWN'` (both the React `useState` initial value and the final fallback after both GitHub and local fetches fail). No more hardcoded `'BETA 2.1.0'` lies — the user is told exactly when the version could not be loaded.
+*   **Version fallback string** in `Header.tsx` is now `'0.0.0-UNKNOWN'` (both the React `useState` initial value and the final fallback after both GitHub and local fetches fail). No more hardcoded `'2.1.0'` lies — the user is told exactly when the version could not be loaded.
 *   **`.ignore/.assetsai/README.md`** — Stale MIT-License mentions cleaned up (the directory is `.gitignore`'d but keeping dev's local notes consistent with the current GNU GPL v3 license reduces confusion).
 
 #### Fixed
@@ -666,7 +666,7 @@ v2.3.23: Summary of changes
 - **State reuse**: every mobile component still pulls from `useFlow()` — no duplication of state.
 - **TranslationCatalog reuse**: mobile components import the shared `translations` map from `src/utils/translations.ts`. The per-row `StatusDot` source indicators reuse the per-language i18n labels introduced in Milestone 40 (`mt.versionRepoLoaded`, `mt.licenseRepoLoaded`, `mt.manualRepoLoaded`, `mt.changelogRepoLoaded`, etc.).
 
-### Milestone 40: Mobile Bundle Phase 2.5 — About/Manual/Changelog i18n + RTL (BETA 2.4.0-beta)
+### Milestone 40: Mobile Bundle Phase 2.5 — About/Manual/Changelog i18n + RTL (2.4.0-beta)
 
 [//]: # (keepachangelog)
 
@@ -686,7 +686,7 @@ v2.3.23: Summary of changes
 - **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*` — zero desktop bleed.
 - **Bundle isolation**: changes affect mobile-side consumers; the lazy chunk continues to share its scope.
 
-### Milestone 39: Mobile Bundle Phase 2 + 3 — Views + Orchestrator + App Routing (BETA 2.3.35-beta)
+### Milestone 39: Mobile Bundle Phase 2 + 3 — Views + Orchestrator + App Routing (2.3.35-beta)
 
 [//]: # (keepachangelog)
 
