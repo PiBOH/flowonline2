@@ -83,8 +83,12 @@ const MobileApp: React.FC = () => {
   }, [showChangelog]);
 
   // Localized dialog titles — read from the shared `translations` catalog.
+  // `flow.language` is `any` (mobile deliberately opts out of full TS surface)
+  // so we cast the catalog to `any` first; the resulting `c` is also `any`
+  // which TypeScript allows indexing without further casts.
   const mt = useMemo<Record<string, string>>(() => {
-    const c = ((catalogs[flow.language] as any) ?? (catalogs.en as any) ?? {});
+    const cAny = catalogs as any;
+    const c = cAny?.[flow.language] ?? cAny?.en ?? {};
     return {
       aboutTitle: c.aboutTitle ?? 'About Flowonline2',
       manualTitle: c.manualTitle ?? 'User Manual',
@@ -242,6 +246,7 @@ const MobileApp: React.FC = () => {
         isOpen={showAbout}
         onClose={() => setShowAbout(false)}
         title={mt.aboutTitle || 'About Flowonline2'}
+        message=""
         defaultWidth={420}
         defaultHeight={360}
       >
@@ -273,6 +278,7 @@ const MobileApp: React.FC = () => {
         isOpen={showManual}
         onClose={() => setShowManual(false)}
         title={mt.manualTitle || 'Flowonline2 User Manual'}
+        message=""
         defaultWidth={520}
         defaultHeight={460}
       >
@@ -295,6 +301,7 @@ const MobileApp: React.FC = () => {
         isOpen={showChangelog}
         onClose={() => setShowChangelog(false)}
         title={mt.changelogTitle || 'Flowonline2 Changelog'}
+        message=""
         defaultWidth={520}
         defaultHeight={460}
       >
@@ -318,11 +325,6 @@ const MobileApp: React.FC = () => {
         onClose={() => setShowLangSheet(false)}
       />
 
-      {/* Watermark: MobileApp is a separate bundle, this iconographer guard
-          helps debugging if the parent App.tsx ever switches default. */}
-      <div style={{ display: 'none' }} data-component="MobileApp" data-version={(import.meta as any).env?.VITE_APP_VERSION || '0.0.0-UNKNOWN'}>
-        <IconCode size={1} />
-      </div>
     </div>
   );
 };
