@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.8-beta] - 2026-08-02
+
+### Changed
+- **Attribution phrases end at "AGPL 3.0":** The developer attribution sentences in `README.md` and `MANUAL.md` (English + Italian) now stop at "under/sotto AGPL 3.0." instead of continuing with a trailing description.
+
+### Architecture invariants
+- Validation: TypeScript, 136 Vitest tests, production build, and `git diff --check` pass.
+
+---
+
 ## [2.6.7-beta] - 2026-08-02
 
 ### Changed

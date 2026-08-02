@@ -14,7 +14,7 @@
 
 ---
 
-**Flowonline2** is a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart editor and interpreter **Flowgorithm (Windows version 4.5)**. Developed by **PiBOH** under AGPL 3.0, it compiles entirely to static client-side files, offering a zero-config, highly-responsive programming playground directly in your web browser.
+**Flowonline2** is a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart editor and interpreter **Flowgorithm (Windows version 4.5)**. Developed by **PiBOH** under AGPL 3.0.
 
 > 🔗 **Launch the App:** [piboh.github.io/flowonline2](https://piboh.github.io/flowonline2/)  
 > 📦 **Legacy Repository:** [github.com/PiBOH/flowonline](https://github.com/PiBOH/flowonline)
