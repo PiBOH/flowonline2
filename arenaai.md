@@ -709,6 +709,19 @@ v2.3.23: Summary of changes
 
 ---
 
+## Milestone 55: Disclaimer Icon Replaced with Bookmark-Tabs SVG (2.6.15-beta)
+
+### Changed
+*   **Disclaimer icon:** The Help-menu Disclaimer entry (desktop `Header.tsx`, mobile `MobileToolsView` / `MobileSidebar`) now uses `IconBookmarkTabs` (stacked pages with colorful bookmark tabs, emoji-style) instead of the balance-scale `IconScale`. The obsolete `IconScale` component was removed.
+*   Version bumped to `2.6.15-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+### Architecture invariants
+*   All Help-menu policy entries keep emoji-derived SVG icons for cross-platform consistency.
+*   Desktop and mobile help surfaces stay in sync.
+
+---
+
 ## Milestone 54: Disclaimer in Help Menu + MANUAL Link Fixes + Tighter Menu Bar (2.6.14-beta)
 
 ### Changed

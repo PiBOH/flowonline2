@@ -513,16 +513,21 @@ export const IconLock: React.FC<IconProps> = (p) => (
   </SvgIcon>
 );
 
-// ── Disclaimer Scale (⚖️) — Golden balance scale ──
-export const IconScale: React.FC<IconProps> = (p) => (
+// ── Bookmark Tabs (📑) — Stacked pages with colorful bookmark tabs ──
+export const IconBookmarkTabs: React.FC<IconProps> = (p) => (
   <SvgIcon {...p}>
-    <rect x="1.5" y="13" width="13" height="1.6" rx="0.5" fill="#8D6E63" stroke="#5D4037" strokeWidth="0.4"/>
-    <path d="M8 1.5v11.5" stroke="#B8860B" strokeWidth="0.9"/>
-    <path d="M8 4c-1.2 0-2-0.9-2-1.8L8 1.2l2 1c0 0.9-0.8 1.8-2 1.8z" fill="#FFC107" stroke="#B8860B" strokeWidth="0.5"/>
-    <path d="M3.5 6h4M8.5 6h4" stroke="#B8860B" strokeWidth="0.7" strokeLinecap="round"/>
-    <path d="M3.5 6l-1.2 4.2h6L7.1 6z" fill="#FFD54F" stroke="#B8860B" strokeWidth="0.5"/>
-    <path d="M8.5 6l-1.2 4.2h6L12.5 6z" fill="#FFE082" stroke="#B8860B" strokeWidth="0.5"/>
-    <circle cx="6.4" cy="11" r="0.7" fill="#B8860B"/>
-    <circle cx="11.6" cy="11" r="0.7" fill="#B8860B"/>
+    {/* Back page */}
+    <rect x="5" y="2.5" width="8.5" height="11" rx="1" fill="#64B5F6" stroke="#1976D2" strokeWidth="0.6"/>
+    {/* Bookmark tabs on the back page */}
+    <rect x="6.2" y="1.6" width="2.1" height="4.6" rx="0.4" fill="#E53935" stroke="#B71C1C" strokeWidth="0.4"/>
+    <rect x="8.6" y="1.6" width="2.1" height="4.6" rx="0.4" fill="#FB8C00" stroke="#E65100" strokeWidth="0.4"/>
+    <rect x="11" y="1.6" width="2.1" height="4.6" rx="0.4" fill="#43A047" stroke="#1B5E20" strokeWidth="0.4"/>
+    {/* Front page */}
+    <rect x="1.8" y="4.5" width="8.8" height="10.4" rx="1" fill="#FDFDFD" stroke="#90A4AE" strokeWidth="0.7"/>
+    {/* Text lines on the front page */}
+    <rect x="3.3" y="6.6" width="6.8" height="0.9" rx="0.45" fill="#CFD8DC"/>
+    <rect x="3.3" y="8.6" width="5.6" height="0.9" rx="0.45" fill="#CFD8DC"/>
+    <rect x="3.3" y="10.6" width="6.8" height="0.9" rx="0.45" fill="#CFD8DC"/>
+    <rect x="3.3" y="12.6" width="4.4" height="0.9" rx="0.45" fill="#CFD8DC"/>
   </SvgIcon>
 );

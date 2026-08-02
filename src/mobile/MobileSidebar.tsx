@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFlow } from '../context/FlowContext';
-import { IconChart, IconPencil, IconPlay, IconChatBubble, IconTools, IconDocument, IconFolderOpen, IconSave, IconInbox, IconPalette, IconTrash, IconBooks, IconInfo, IconGlobe, IconWarning, IconRefresh, IconShield, IconLock, IconScale } from '../components/EmojiIcons';
+import { IconChart, IconPencil, IconPlay, IconChatBubble, IconTools, IconDocument, IconFolderOpen, IconSave, IconInbox, IconPalette, IconTrash, IconBooks, IconInfo, IconGlobe, IconWarning, IconRefresh, IconShield, IconLock, IconBookmarkTabs } from '../components/EmojiIcons';
 import { M2Drawer, M2IconButton, M2CloseIcon } from './Material2';
 
 export type MobileViewId = 'canvas' | 'edit' | 'run' | 'console' | 'tools';
@@ -79,7 +79,7 @@ export const MobileSidebar: React.FC<MobileSidebarProps> = (props) => {
         {item('Changelog', <IconBooks size={20} />, props.onShowChangelog)}
         {item('Security Policy', <IconShield size={20} />, props.onShowSecurity)}
         {item('Privacy Policy', <IconLock size={20} />, props.onShowPrivacy)}
-        {item('Disclaimer', <IconScale size={20} />, props.onShowDisclaimer)}
+        {item('Disclaimer', <IconBookmarkTabs size={20} />, props.onShowDisclaimer)}
         {item('Report a Bug', <IconWarning size={20} />, props.onBugReport)}
         {item('Feature Request', <IconInbox size={20} />, props.onFeatureRequest)}
         {item('Fork & Contribute', <IconGlobe size={20} />, props.onForkContribute)}

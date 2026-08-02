@@ -7,7 +7,7 @@ import { WinUIDialog } from './WinUIDialog';
 import { StatusDot } from './StatusDot';
 import { Language } from '../types/flow';
 
-import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe, IconPlay, IconStep, IconPause, IconStop, IconMonitor, IconShield, IconLock, IconScale, FlagIcon } from './EmojiIcons';
+import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe, IconPlay, IconStep, IconPause, IconStop, IconMonitor, IconShield, IconLock, IconBookmarkTabs, FlagIcon } from './EmojiIcons';
 const LANGUAGE_NAMES: Record<Language, string> = {
   en: 'English (US)', en_GB: 'English (UK)', it: 'Italiano', de: 'Deutsch',
   fr: 'Français', es: 'Español', zh: '中文', nl: 'Nederlands',
@@ -2679,7 +2679,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                 <span><IconLock size={14} /> {mt.privacyPolicy}</span>
               </button>
               <button onClick={() => { setShowDisclaimer(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span><IconScale size={14} /> {mt.disclaimerPolicy}</span>
+                <span><IconBookmarkTabs size={14} /> {mt.disclaimerPolicy}</span>
               </button>
               <button onClick={() => { setShowAbout(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span><IconInfo size={14} /> {mt.about}</span>

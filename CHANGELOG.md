@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.15-beta] - 2026-08-02
+
+### Changed
+- **Disclaimer icon → 📑 bookmark tabs SVG:** The Disclaimer entry in the Help menu (desktop + mobile) now uses the new `IconBookmarkTabs` SVG (stacked pages with colorful bookmark tabs, matching the emoji) instead of the balance-scale `IconScale`. `IconScale` was removed from `EmojiIcons.tsx` and all imports updated (`Header.tsx`, `MobileSidebar.tsx`, `MobileToolsView.tsx`).
+- Validation: TypeScript, Vitest, production build, and `git diff --check` all pass.
+
 ## [2.6.14-beta] - 2026-08-02
 
 ### Changed
