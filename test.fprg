@@ -3,7 +3,7 @@
     <attributes>
         <attribute name="name" value="Es 13"/>
         <attribute name="authors" value="PC"/>
-        <attribute name="about" value="Created with Flowonline2 - PiBOH under GNU GPL v3"/>
+        <attribute name="about" value="Created with Flowonline2 - PiBOH under GNU AGPL v3"/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>

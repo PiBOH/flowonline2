@@ -237,7 +237,7 @@ export interface TranslationCatalog {
   aboutTitle: string;
   manualTitle: string;
   changelogTitle: string;
-  gplLicenseTextFallback: string;
+  agplLicenseTextFallback: string;
   manualTextFallback: string;
   changelogTextFallback: string;
 }

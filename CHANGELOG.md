@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.5-beta] - 2026-08-02
+
+### Changed
+- **License migration to GNU AGPL v3:** Replaced every remaining pre-migration license reference with the GNU Affero General Public License v3 across the whole project. Updated `package.json`/`package-lock.json` (`AGPL-3.0-only`), `README.md`, `MANUAL.md` (incl. the stale Italian MIT mention), `arenaai.md`, `CHANGELOG.md`, `docs/aimode.md` (all 24 localized sections + JSON-LD license URLs), `Header.tsx` fallback text, `translations.ts` (`gplLicenseTextFallback` → `agplLicenseTextFallback` for all 23 languages), `codeGenerator.ts`, `codeGenerator.test.ts`, `fprgParser.ts` about-attribute, and `MobileApp.tsx`.
+
+### Architecture invariants
+- The `LICENSE` file (AGPL-3.0) is now the single source of truth referenced everywhere.
+- Validation: TypeScript, 136 Vitest tests, production build, and `git diff --check` pass.
+
+---
+
 ## [2.6.4-beta] - 2026-08-01
 
 ### Fixed
@@ -230,7 +241,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 ### Changed
 - **`src/components/Header.tsx`** — Replaced 4 colored source-status chips (line 2644 version, line 2664 license, line 2741 manual, line 2769 changelog) with `<StatusDot>` calls. The chips used to say things like "loaded from GitHub" or "fallback path" and were invasive; the new dots are silent at rest and surface their label only on hover / focus / tap.
 - **Version fallback** in `Header.tsx` is now `'0.0.0-UNKNOWN'` (both the React `useState` initial value and the final fallback after both GitHub and local fetches fail). No more hardcoded `'2.1.0'` lies — the user is told exactly when the version could not be loaded.
-- **`.ignore/.assetsai/README.md`** — Stale MIT-License mentions cleaned up (the directory is `.gitignore`'d but keeping the dev's local notes consistent with current GNU GPL v3 license reduces confusion).
+- **`.ignore/.assetsai/README.md`** — Stale pre-migration license mentions cleaned up (the directory is `.gitignore`'d but keeping the dev's local notes consistent with the current GNU AGPL v3 license reduces confusion).
 
 ### Fixed
 - **`MobileToolsView` useEffect cleanup bug** — The 3 fetch effects (about / manual / changelog) used to return `() => { cancelled = true; }` from inside an async IIFE, which `useEffect` receives as a `Promise` and discards. The cleanup is now hoisted outside the IIFE so the `cancelled` flag flips correctly on unmount or language change. Stale state-update warnings are gone.
@@ -249,7 +260,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ### Added
 - **Mobile Bundle Phase 2.5 — About / User Manual / Changelog i18n.** Mobile dialogs in `src/mobile/MobileToolsView.tsx` no longer ship hardcoded English titles or load-failed bodies. They now resolve through `translations[language]` for all 23 supported languages (`en, en_GB, de, fr, es, it, zh, nl, pt, gl, ru, uk, cs, pl, hu, sl, ja, th, id, mn, ar, he, fa`).
-- **6 new keys × 23 languages in shared `TranslationCatalog`** (`src/utils/translations.ts` + interface in `src/types/flow.ts`): `aboutTitle`, `manualTitle`, `changelogTitle`, `gplLicenseTextFallback`, `manualTextFallback`, `changelogTextFallback`. The 3 `*Fallback` fields render with `white-space: pre-wrap` and provide brief load-failed messaging pointing users to LICENSE / MANUAL.md / CHANGELOG.md in the repository.
+- **6 new keys × 23 languages in shared `TranslationCatalog`** (`src/utils/translations.ts` + interface in `src/types/flow.ts`): `aboutTitle`, `manualTitle`, `changelogTitle`, `agplLicenseTextFallback`, `manualTextFallback`, `changelogTextFallback`. The 3 `*Fallback` fields render with `white-space: pre-wrap` and provide brief load-failed messaging pointing users to LICENSE / MANUAL.md / CHANGELOG.md in the repository.
 - **RTL direction** in WinUIDialog bodies — Persian (`fa`), Arabic (`ar`), and Hebrew (`he`) dialogs now set `dir="rtl"` on the body container so script direction, punctuation, and bilingual filename references render correctly.
 
 ### Changed

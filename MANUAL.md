@@ -17,7 +17,7 @@ Choose your language / Scegli la lingua:
 
 Welcome to **Flowonline2**, a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart interpreter **Flowgorithm** (Windows version 4.5).
 
-Developed by PiBOH under the GNU General Public License v3, this static, client-side application brings the full power of Flowgorithm to any web browser with zero configuration.
+Developed by PiBOH under the GNU Affero General Public License v3, this static, client-side application brings the full power of Flowgorithm to any web browser with zero configuration.
 
 ### 1. User Interface & Emulation
 * **Title Bar (Windows Style):** Emulates a classic Windows desktop window, complete with the multi-colored Flowgorithm logo and decorative window controls (Minimize, Maximize, Close). Clicking these controls will open an authentic Win32 dialog box warning stating they are decorative.
@@ -66,7 +66,7 @@ Flowonline2 evaluates standard Flowgorithm operators. Below is a detailed refere
 
 Benvenuto su **Flowonline2**, un clone web straordinariamente fedele al 1000% del celebre interprete educativo di diagrammi di flusso **Flowgorithm** (versione Windows 4.5).
 
-Sviluppato da PiBOH sotto licenza MIT, questo applicativo statico porta tutta la potenza di Flowgorithm nel browser, senza bisogno di alcuna configurazione.
+Sviluppato da PiBOH sotto la GNU Affero General Public License v3, questo applicativo statico porta tutta la potenza di Flowgorithm nel browser, senza bisogno di alcuna configurazione.
 
 ### 1. Interfaccia Utente ed Emulazione
 * **Barra del Titolo (Stile Windows):** Emula una classica finestra desktop, completa del logo di Flowgorithm a 4 colori e tasti di controllo fittizi (Riduci a icona, Ingrandisci, Chiudi). Cliccando su di essi apparirà un avviso di sistema Win32.

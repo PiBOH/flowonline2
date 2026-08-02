@@ -1,6 +1,6 @@
 # arenaai.md - Flowonline2 Development, Maintenance and Change Log
 
-This file acts as the primary operational instruction manual for AI models maintaining or extending **Flowonline2**, a pixel-perfect, fully-functional web clone of Flowgorithm developed by PiBOH under the GNU General Public License v3.
+This file acts as the primary operational instruction manual for AI models maintaining or extending **Flowonline2**, a pixel-perfect, fully-functional web clone of Flowgorithm developed by PiBOH under the GNU Affero General Public License v3.
 
 ---
 
@@ -78,11 +78,11 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 2.  **Verify State Contract:** Check `src/types/flow.ts` and `src/context/FlowContext.tsx` to align your logic with the existing tree structure and current execution step-manager.
 3.  **Never Start from Scratch:** Refactor or extend existing modules step-by-step rather than recreating the whole file tree from scratch. Keep changes backwards compatible.
 4.  **Preserve DOM-Based XML Parsing:** Ensure that bidirectional `.fprg` parsing remains purely client-side using the native browser `DOMParser` and `XMLSerializer` to maintain ZERO-dependency portability.
-5.  **Maintain PiBOH License Notice:** Always preserve the PiBOH and GNU GPL v3 license credits in the header/footer of the main viewport.
+5.  **Maintain PiBOH License Notice:** Always preserve the PiBOH and GNU AGPL v3 license credits in the header/footer of the main viewport.
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (2.6.4-beta)
+## 5. Architectural Milestone Logs & Change History (2.6.5-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -261,7 +261,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 [//]: # (keepachangelog)
 
 #### Fixed
-*   **License Textarea Size:** Changed from `flex-1` to explicit `h-[300px]` with proper overflow to restore full visibility of GPL v3 license text in the About dialog.
+*   **License Textarea Size:** Changed from `flex-1` to explicit `h-[300px]` with proper overflow to restore full visibility of AGPL v3 license text in the About dialog.
 *   **Execution Speed Cap:** Minimum execution delay at max speed raised from 1ms to 16ms (60 FPS cap) to prevent UI thread lockup during continuous execution.
 *   **Interval Leak:** Added `clearInterval` cleanup before `setInterval` in both `startRun` and `submitInput` to prevent multiple concurrent execution timers.
 *   **Console Memory Cap:** `addConsoleMessage` capped at 1000 items (FIFO removal) to prevent memory exhaustion from infinite output loops.
@@ -652,7 +652,7 @@ v2.3.23: Summary of changes
 #### Changed
 *   **`src/components/Header.tsx`** — Replaced 4 colored source-status chips (version, license, manual, changelog) with `<StatusDot>` calls. The chips used to say things like "loaded from GitHub" or "fallback path" and were invasive (always rendered a pill on the page even when the user wasn't looking at them); the new dots are silent at rest and surface their label only on hover / focus / tap.
 *   **Version fallback string** in `Header.tsx` is now `'0.0.0-UNKNOWN'` (both the React `useState` initial value and the final fallback after both GitHub and local fetches fail). No more hardcoded `'2.1.0'` lies — the user is told exactly when the version could not be loaded.
-*   **`.ignore/.assetsai/README.md`** — Stale MIT-License mentions cleaned up (the directory is `.gitignore`'d but keeping dev's local notes consistent with the current GNU GPL v3 license reduces confusion).
+*   **`.ignore/.assetsai/README.md`** — Stale MIT-License mentions cleaned up (the directory is `.gitignore`'d but keeping dev's local notes consistent with the current GNU AGPL v3 license reduces confusion).
 
 #### Fixed
 *   **`MobileToolsView` useEffect cleanup bug** — The 3 fetch effects (about / manual / changelog) used to return `() => { cancelled = true; }` from inside an async IIFE; `useEffect` receives a Promise and discards. The cleanup is now hoisted outside the IIFE so the `cancelled` flag flips correctly on unmount or language change. Stale state-update warnings are gone.
@@ -671,7 +671,7 @@ v2.3.23: Summary of changes
 [//]: # (keepachangelog)
 
 #### Added (Phase 2.5: i18n)
-*   **`src/utils/translations.ts`** — 6 new top-level keys × 23 language entries: `aboutTitle`, `manualTitle`, `changelogTitle`, `gplLicenseTextFallback`, `manualTextFallback`, `changelogTextFallback`. The 3 `*Fallback` fields render with `white-space: pre-wrap` and provide brief load-failed messaging pointing users to LICENSE / MANUAL.md / CHANGELOG.md in the repository.
+*   **`src/utils/translations.ts`** — 6 new top-level keys × 23 language entries: `aboutTitle`, `manualTitle`, `changelogTitle`, `agplLicenseTextFallback`, `manualTextFallback`, `changelogTextFallback`. The 3 `*Fallback` fields render with `white-space: pre-wrap` and provide brief load-failed messaging pointing users to LICENSE / MANUAL.md / CHANGELOG.md in the repository.
 *   **`src/types/flow.ts`** — `TranslationCatalog` interface extended with 6 top-level string fields (placed after `errors`).
 *   **`src/mobile/MobileToolsView.tsx`** — Pulls dialog titles + bodies from `translations[language]` (no more hardcoded English constants). Three `useState` initializers use the active language's fallback; a `useEffect([language])` resets on language switch; the three fetch effects depend on `[open, language]` so a dialog opened mid-switch re-fetches live content in the new locale. RTL direction (`dir="rtl"` for `ar`/`he`/`fa`) applied to dialog body containers.
 *   **RTL support** — `RTL_LANGS = ['ar', 'he', 'fa']` module-level constant + `isRtl` derivation inside the component + per-dialog `dir` attribute. Browser bidi algorithm then renders Latin filenames (`LICENSE`, `MANUAL.md`, `CHANGELOG.md` etc.) inline correctly inside RTL script.
@@ -706,6 +706,24 @@ v2.3.23: Summary of changes
 - **Desktop files byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
 - **State reuse**: every mobile component pulls from `useFlow()` — no duplication of state.
 - **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*`.  - **Bundle isolation**: `MobileApp` is `React.lazy()`-loaded inside `AppShell`. Desktop users never download `mobile.css` or any mobile component.
+
+---
+
+## Milestone 45: License Migration to GNU AGPL v3 (2.6.5-beta)
+
+### Changed
+*   **Full project license migration:** Every remaining pre-migration license reference was replaced with the GNU Affero General Public License v3, matching the updated `LICENSE` file (AGPL-3.0).
+*   **`package.json` / `package-lock.json`:** `license` field updated from `GPL-3.0-only` to `AGPL-3.0-only`; version bumped to `2.6.5-beta`.
+*   **`src/components/Header.tsx`:** Hardcoded fallback license text and its variable renamed from `gplLicenseTextFallback` to `agplLicenseTextFallback` (AGPL v3 notice).
+*   **`src/utils/translations.ts` + `src/types/flow.ts`:** Translation catalog key `gplLicenseTextFallback` renamed to `agplLicenseTextFallback` in all 23 languages with updated AGPL text.
+*   **`src/utils/codeGenerator.ts` / `codeGenerator.test.ts`:** Generated-code headers now cite GNU AGPL v3.
+*   **`src/utils/fprgParser.ts`:** `.fprg` `about` attribute now reads `Created with Flowonline2 - PiBOH under GNU AGPL v3`.
+*   **`src/mobile/MobileApp.tsx`:** About text now reads `Licensed under GNU AGPL v3.`
+*   **Docs:** `README.md`, `MANUAL.md` (incl. stale Italian MIT line), `CHANGELOG.md`, `arenaai.md`, and `docs/aimode.md` (24 languages + JSON-LD `agpl-3.0.html` URLs) all updated to AGPL v3.
+
+### Architecture invariants
+*   No functional or UI change — this is a pure licensing/metadata migration.
+*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
 
 ---
 

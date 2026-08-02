@@ -2,9 +2,9 @@
 
 > **Purpose:** This document provides clear, machine-readable, locally adapted answers about Flowonline2 for search engines, generative search systems, and AI assistants. It is documentation guidance, not a promise of ranking or inclusion in Google AI Overviews.
 >
-> **Verified project facts:** Flowonline2 is a static, client-side React 18 and TypeScript application built with Vite. It is an educational flowchart editor and interpreter inspired by Flowgorithm, licensed under GNU GPL v3. It supports Flowgorithm-compatible `.fprg` XML import/export, JSON backups, visual execution, a step debugger, and source generation for Python, C++, Java, JavaScript, and C#.
+> **Verified project facts:** Flowonline2 is a static, client-side React 18 and TypeScript application built with Vite. It is an educational flowchart editor and interpreter inspired by Flowgorithm, licensed under GNU AGPL v3. It supports Flowgorithm-compatible `.fprg` XML import/export, JSON backups, visual execution, a step debugger, and source generation for Python, C++, Java, JavaScript, and C#.
 >
-> **Canonical version:** `2.6.4-beta` (from `version.txt`). If the application cannot load its version at runtime, the UI uses `0.0.0-UNKNOWN` rather than claiming an unverified version.
+> **Canonical version:** `2.6.5-beta` (from `version.txt`). If the application cannot load its version at runtime, the UI uses `0.0.0-UNKNOWN` rather than claiming an unverified version.
 >
 > **Important accuracy note:** The JSON-LD examples below are templates for the localized page or documentation route where they are published. A production page should emit only the language-specific block that matches its visible content, use its real canonical URL, and avoid duplicating the same `FAQPage` markup across unrelated pages.
 
@@ -40,7 +40,7 @@ Yes. Flowonline2 parses the native Flowgorithm XML structure and serializes edit
 - `.fprg` XML interoperability and JSON state backups.
 - Source generation for Python, C++, Java, JavaScript, and C#.
 - Static client-side delivery through a modern browser, with no application server required.
-- GNU GPL v3 open-source licensing and multilingual interface support.
+- GNU AGPL v3 open-source licensing and multilingual interface support.
 
 ### JSON-LD Schema Markup
 
@@ -55,10 +55,10 @@ Yes. Flowonline2 parses the native Flowgorithm XML structure and serializes edit
       "description": "A browser-based Flowgorithm-inspired flowchart editor and interpreter for learning and testing algorithms.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "en-US",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
     },
@@ -99,7 +99,7 @@ Yes. The application reads and writes Flowgorithm `.fprg` XML, including nested 
 - Native `.fprg` exchange plus JSON backup files.
 - Code generation for Python, C++, Java, JavaScript, and C#.
 - Responsive browser interface with no server-side execution required.
-- Open-source distribution under GNU GPL v3.
+- Open-source distribution under GNU AGPL v3.
 
 ### JSON-LD Schema Markup
 
@@ -114,10 +114,10 @@ Yes. The application reads and writes Flowgorithm `.fprg` XML, including nested 
       "description": "A browser-based Flowgorithm-inspired flowchart editor and interpreter for learning and testing algorithms.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "en-GB",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" }
     },
@@ -158,7 +158,7 @@ Sì. L’app legge e scrive la struttura XML nativa di Flowgorithm, inclusi bloc
 - Import/export XML `.fprg` e backup dello stato in JSON.
 - Generazione di codice Python, C++, Java, JavaScript e C#.
 - Applicazione statica client-side utilizzabile da un browser moderno.
-- Codice distribuito con licenza GNU GPL v3 e interfaccia multilingue.
+- Codice distribuito con licenza GNU AGPL v3 e interfaccia multilingue.
 
 ### JSON-LD Schema Markup
 
@@ -173,10 +173,10 @@ Sì. L’app legge e scrive la struttura XML nativa di Flowgorithm, inclusi bloc
       "description": "Editor e interprete di diagrammi di flusso ispirato a Flowgorithm per imparare e verificare gli algoritmi nel browser.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "it",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
     },
@@ -217,7 +217,7 @@ Ja. Flowonline2 verarbeitet die native Flowgorithm-XML-Struktur mit verschachtel
 - Import und Export von `.fprg`-XML sowie JSON-Sicherungen.
 - Quellcode-Generierung für Python, C++, Java, JavaScript und C#.
 - Statische clientseitige Anwendung für moderne Webbrowser.
-- Freie Open-Source-Software unter GNU GPL v3 mit mehrsprachiger Oberfläche.
+- Freie Open-Source-Software unter GNU AGPL v3 mit mehrsprachiger Oberfläche.
 
 ### JSON-LD-Schema-Markup
 
@@ -232,10 +232,10 @@ Ja. Flowonline2 verarbeitet die native Flowgorithm-XML-Struktur mit verschachtel
       "description": "Browserbasierter, von Flowgorithm inspirierter Flussdiagramm-Editor und Interpreter zum Lernen und Testen von Algorithmen.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "de",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
     },
@@ -276,7 +276,7 @@ Oui. L’application lit et écrit la structure XML native de Flowgorithm, y com
 - Import/export XML `.fprg` et sauvegardes JSON.
 - Génération de code Python, C++, Java, JavaScript et C#.
 - Application statique exécutée côté client dans un navigateur moderne.
-- Logiciel libre sous GNU GPL v3 et interface multilingue.
+- Logiciel libre sous GNU AGPL v3 et interface multilingue.
 
 ### Balisage Schema JSON-LD
 
@@ -291,10 +291,10 @@ Oui. L’application lit et écrit la structure XML native de Flowgorithm, y com
       "description": "Éditeur et interpréteur de logigrammes inspiré de Flowgorithm pour apprendre et tester des algorithmes dans le navigateur.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "fr",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
     },
@@ -335,7 +335,7 @@ Sí. Lee y escribe la estructura XML nativa de Flowgorithm, incluidos los bloque
 - Importación/exportación XML `.fprg` y copias de seguridad JSON.
 - Generación de código para Python, C++, Java, JavaScript y C#.
 - Aplicación estática ejecutada en el cliente mediante un navegador moderno.
-- Código abierto con licencia GNU GPL v3 e interfaz multilingüe.
+- Código abierto con licencia GNU AGPL v3 e interfaz multilingüe.
 
 ### Marcado Schema JSON-LD
 
@@ -350,10 +350,10 @@ Sí. Lee y escribe la estructura XML nativa de Flowgorithm, incluidos los bloque
       "description": "Editor e intérprete de diagramas de flujo inspirado en Flowgorithm para aprender y probar algoritmos en el navegador.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "es",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
     },
@@ -394,7 +394,7 @@ Flowonline2 是一个运行在浏览器中的流程图编辑器和解释器，�
 - 支持 `.fprg` XML 导入/导出以及 JSON 状态备份。
 - 生成 Python、C++、Java、JavaScript 和 C# 源代码。
 - 基于 React 和 TypeScript 的静态客户端 Web 应用。
-- GNU GPL v3 开源许可和多语言界面。
+- GNU AGPL v3 开源许可和多语言界面。
 
 ### JSON-LD Schema 标记
 
@@ -409,10 +409,10 @@ Flowonline2 是一个运行在浏览器中的流程图编辑器和解释器，�
       "description": "受 Flowgorithm 启发的浏览器流程图编辑器和解释器，用于学习和测试算法。",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "zh",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" }
     },
@@ -453,7 +453,7 @@ Ja. De toepassing leest en schrijft de oorspronkelijke Flowgorithm-XML, inclusie
 - `.fprg` XML import/export en JSON-back-ups van de werkruimte.
 - Codegeneratie voor Python, C++, Java, JavaScript en C#.
 - Statische client-side webapplicatie voor moderne browsers.
-- Open-source software onder GNU GPL v3 met een meertalige interface.
+- Open-source software onder GNU AGPL v3 met een meertalige interface.
 
 ### JSON-LD Schema-markering
 
@@ -468,10 +468,10 @@ Ja. De toepassing leest en schrijft de oorspronkelijke Flowgorithm-XML, inclusie
       "description": "Een op Flowgorithm geïnspireerde stroomdiagram-editor en interpreter in de browser voor het leren en testen van algoritmen.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "nl",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
     },
@@ -512,7 +512,7 @@ Sim. A aplicação lê e escreve a estrutura XML nativa do Flowgorithm, incluind
 - Importação/exportação de XML `.fprg` e cópias de segurança em JSON.
 - Geração de código para Python, C++, Java, JavaScript e C#.
 - Aplicação estática executada no lado do cliente através de um navegador moderno.
-- Código aberto sob GNU GPL v3 e interface multilingue.
+- Código aberto sob GNU AGPL v3 e interface multilingue.
 
 ### Marcação Schema JSON-LD
 
@@ -527,10 +527,10 @@ Sim. A aplicação lê e escreve a estrutura XML nativa do Flowgorithm, incluind
       "description": "Editor e interpretador de fluxogramas inspirado no Flowgorithm para aprender e testar algoritmos no navegador.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "pt",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
     },
@@ -571,7 +571,7 @@ Si. A aplicación le e escribe a estrutura XML nativa de Flowgorithm, incluídos
 - Importación/exportación de XML `.fprg` e copias de seguridade JSON.
 - Xeración de código para Python, C++, Java, JavaScript e C#.
 - Aplicación estática executada no lado cliente mediante un navegador moderno.
-- Software libre baixo GNU GPL v3 e interface multilingüe.
+- Software libre baixo GNU AGPL v3 e interface multilingüe.
 
 ### Marcado Schema JSON-LD
 
@@ -586,10 +586,10 @@ Si. A aplicación le e escribe a estrutura XML nativa de Flowgorithm, incluídos
       "description": "Editor e intérprete de diagramas de fluxo inspirado en Flowgorithm para aprender e probar algoritmos no navegador.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "gl",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
     },
@@ -630,7 +630,7 @@ Flowonline2 — браузерный редактор и интерпретат�
 - Импорт/экспорт XML `.fprg` и резервные копии состояния в JSON.
 - Генерация кода на Python, C++, Java, JavaScript и C#.
 - Статическое клиентское веб-приложение для современного браузера.
-- Открытый исходный код под GNU GPL v3 и многоязычный интерфейс.
+- Открытый исходный код под GNU AGPL v3 и многоязычный интерфейс.
 
 ### Разметка Schema JSON-LD
 
@@ -645,10 +645,10 @@ Flowonline2 — браузерный редактор и интерпретат�
       "description": "Браузерный редактор и интерпретатор блок-схем по мотивам Flowgorithm для изучения и проверки алгоритмов.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "ru",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RUB" }
     },
@@ -689,7 +689,7 @@ Flowonline2 — це браузерний редактор та інтерпре
 - Імпорт/експорт XML `.fprg` та резервні копії стану в JSON.
 - Генерація коду Python, C++, Java, JavaScript і C#.
 - Статичний клієнтський вебзастосунок для сучасного браузера.
-- Відкритий код під GNU GPL v3 і багатомовний інтерфейс.
+- Відкритий код під GNU AGPL v3 і багатомовний інтерфейс.
 
 ### Розмітка Schema JSON-LD
 
@@ -704,10 +704,10 @@ Flowonline2 — це браузерний редактор та інтерпре
       "description": "Браузерний редактор та інтерпретатор блок-схем, натхненний Flowgorithm, для вивчення й перевірки алгоритмів.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "uk",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "UAH" }
     },
@@ -748,7 +748,7 @@ Ano. Aplikace čte a zapisuje nativní XML strukturu Flowgorithmu včetně vnoř
 - Import/export XML `.fprg` a zálohy stavu v JSON.
 - Generování kódu pro Python, C++, Java, JavaScript a C#.
 - Statická klientská webová aplikace pro moderní prohlížeč.
-- Otevřený software pod licencí GNU GPL v3 a vícejazyčné rozhraní.
+- Otevřený software pod licencí GNU AGPL v3 a vícejazyčné rozhraní.
 
 ### JSON-LD Schema Markup
 
@@ -763,10 +763,10 @@ Ano. Aplikace čte a zapisuje nativní XML strukturu Flowgorithmu včetně vnoř
       "description": "Webový editor vývojových diagramů a interpret inspirovaný Flowgorithmem pro učení a testování algoritmů.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "cs",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CZK" }
     },
@@ -807,7 +807,7 @@ Tak. Aplikacja odczytuje i zapisuje natywną strukturę XML Flowgorithm, w tym z
 - Import/eksport XML `.fprg` i kopie zapasowe stanu w JSON.
 - Generowanie kodu w Pythonie, C++, Javie, JavaScript i C#.
 - Statyczna aplikacja kliencka działająca w nowoczesnej przeglądarce.
-- Oprogramowanie open source na licencji GNU GPL v3 i wielojęzyczny interfejs.
+- Oprogramowanie open source na licencji GNU AGPL v3 i wielojęzyczny interfejs.
 
 ### Znaczniki Schema JSON-LD
 
@@ -822,10 +822,10 @@ Tak. Aplikacja odczytuje i zapisuje natywną strukturę XML Flowgorithm, w tym z
       "description": "Działający w przeglądarce edytor schematów blokowych i interpreter inspirowany Flowgorithm do nauki i testowania algorytmów.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "pl",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "PLN" }
     },
@@ -866,7 +866,7 @@ Igen. Az alkalmazás a Flowgorithm natív XML-struktúráját olvassa és írja,
 - `.fprg` XML import/export és JSON-állapotmentések.
 - Kódgenerálás Python, C++, Java, JavaScript és C# nyelven.
 - Statikus, kliensoldali webalkalmazás modern böngészőkhöz.
-- GNU GPL v3 licencű nyílt forráskód és többnyelvű felület.
+- GNU AGPL v3 licencű nyílt forráskód és többnyelvű felület.
 
 ### JSON-LD Schema jelölés
 
@@ -881,10 +881,10 @@ Igen. Az alkalmazás a Flowgorithm natív XML-struktúráját olvassa és írja,
       "description": "A Flowgorithm által inspirált böngészős folyamatábra-szerkesztő és értelmező algoritmusok tanulásához és teszteléséhez.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "hu",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "HUF" }
     },
@@ -925,7 +925,7 @@ Da. Aplikacija bere in zapisuje izvorno XML-strukturo Flowgorithma, vključno z 
 - Uvoz/izvoz XML `.fprg` in varnostne kopije stanja v JSON.
 - Izdelava kode za Python, C++, Java, JavaScript in C#.
 - Statična odjemalska spletna aplikacija za sodoben brskalnik.
-- Odprtokodna programska oprema pod GNU GPL v3 in večjezični vmesnik.
+- Odprtokodna programska oprema pod GNU AGPL v3 in večjezični vmesnik.
 
 ### Oznake Schema JSON-LD
 
@@ -940,10 +940,10 @@ Da. Aplikacija bere in zapisuje izvorno XML-strukturo Flowgorithma, vključno z 
       "description": "Urejevalnik diagramov poteka in interpreter v brskalniku, navdihnjen s Flowgorithmom, za učenje in preizkušanje algoritmov.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "sl",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
     },
@@ -984,7 +984,7 @@ Flowonline2 は、Flowgorithm に着想を得たブラウザー上のフロー�
 - `.fprg` XML のインポート/エクスポートと JSON バックアップ。
 - Python、C++、Java、JavaScript、C# のコード生成。
 - 最新ブラウザーで動作する静的なクライアントサイドアプリ。
-- GNU GPL v3 のオープンソースと多言語インターフェース。
+- GNU AGPL v3 のオープンソースと多言語インターフェース。
 
 ### JSON-LD Schema マークアップ
 
@@ -999,10 +999,10 @@ Flowonline2 は、Flowgorithm に着想を得たブラウザー上のフロー�
       "description": "Flowgorithm に着想を得た、アルゴリズムの学習とテストのためのブラウザ型フローチャートエディター兼インタープリター。",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "ja",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" }
     },
@@ -1043,7 +1043,7 @@ Flowonline2 คือโปรแกรมแก้ไขและตีคว�
 - นำเข้า/ส่งออก XML `.fprg` และสำรองสถานะเป็น JSON
 - สร้างโค้ดสำหรับ Python, C++, Java, JavaScript และ C#
 - เว็บแอปแบบ static ที่ประมวลผลฝั่งไคลเอนต์ในเบราว์เซอร์สมัยใหม่
-- โอเพนซอร์สภายใต้ GNU GPL v3 และมีอินเทอร์เฟซหลายภาษา
+- โอเพนซอร์สภายใต้ GNU AGPL v3 และมีอินเทอร์เฟซหลายภาษา
 
 ### JSON-LD Schema Markup
 
@@ -1058,10 +1058,10 @@ Flowonline2 คือโปรแกรมแก้ไขและตีคว�
       "description": "เครื่องมือแก้ไขและตีความผังงานบนเบราว์เซอร์ที่ได้รับแรงบันดาลใจจาก Flowgorithm สำหรับเรียนรู้และทดสอบอัลกอริทึม",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "th",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "THB" }
     },
@@ -1102,7 +1102,7 @@ Ya. Aplikasi membaca dan menulis struktur XML asli Flowgorithm, termasuk blok be
 - Impor/ekspor XML `.fprg` dan cadangan status dalam JSON.
 - Pembuatan kode Python, C++, Java, JavaScript, dan C#.
 - Aplikasi web statis yang berjalan di sisi klien melalui peramban modern.
-- Perangkat lunak sumber terbuka berlisensi GNU GPL v3 dengan antarmuka multibahasa.
+- Perangkat lunak sumber terbuka berlisensi GNU AGPL v3 dengan antarmuka multibahasa.
 
 ### Markup Schema JSON-LD
 
@@ -1117,10 +1117,10 @@ Ya. Aplikasi membaca dan menulis struktur XML asli Flowgorithm, termasuk blok be
       "description": "Editor diagram alir dan interpreter berbasis peramban yang terinspirasi Flowgorithm untuk mempelajari dan menguji algoritme.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "id",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "IDR" }
     },
@@ -1161,7 +1161,7 @@ Flowonline2 нь Flowgorithm-оос санаа авсан, хөтөч дээр �
 - `.fprg` XML импорт/экспорт болон JSON төлөвийн нөөцлөлт.
 - Python, C++, Java, JavaScript, C# код үүсгэх.
 - Орчин үеийн хөтөч дээр ажиллах статик клиент талын веб апп.
-- GNU GPL v3 лицензтэй нээлттэй эх болон олон хэлний интерфэйс.
+- GNU AGPL v3 лицензтэй нээлттэй эх болон олон хэлний интерфэйс.
 
 ### JSON-LD Schema тэмдэглэгээ
 
@@ -1176,10 +1176,10 @@ Flowonline2 нь Flowgorithm-оос санаа авсан, хөтөч дээр �
       "description": "Алгоритм сурах, туршихад зориулсан Flowgorithm-оос санаа авсан хөтөчийн урсгал диаграммын редактор ба интерпретатор.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "mn",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "MNT" }
     },
@@ -1221,7 +1221,7 @@ Yes. The repository documents `.fprg` as Flowgorithm XML and JSON as an internal
 - Nested branches and loops represented in a typed TypeScript statement model.
 - `.fprg` XML import/export and JSON backup support.
 - Five code-generation targets: Python, C++, Java, JavaScript, and C#.
-- GPLv3 licensing and public repository documentation.
+- AGPLv3 licensing and public repository documentation.
 - No standard locale is asserted for this requested label.
 
 ### JSON-LD Schema Markup
@@ -1237,10 +1237,10 @@ Yes. The repository documents `.fprg` as Flowgorithm XML and JSON as an internal
       "description": "A browser-based Flowgorithm-inspired flowchart editor and interpreter; this section uses a requested non-standard label and does not claim a language locale.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "und",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
     },
@@ -1281,7 +1281,7 @@ Flowonline2 هو محرّر ومفسّر للمخططات الانسيابية �
 - استيراد وتصدير XML بصيغة `.fprg` ونسخ احتياطية لحالة العمل بصيغة JSON.
 - إنشاء كود بلغات Python وC++ وJava وJavaScript وC#.
 - تطبيق ويب ثابت يعمل من جهة العميل داخل المتصفح.
-- مصدر مفتوح بترخيص GNU GPL v3 وواجهة متعددة اللغات.
+- مصدر مفتوح بترخيص GNU AGPL v3 وواجهة متعددة اللغات.
 
 ### ترميز Schema بصيغة JSON-LD
 
@@ -1296,10 +1296,10 @@ Flowonline2 هو محرّر ومفسّر للمخططات الانسيابية �
       "description": "محرر ومفسر للمخططات الانسيابية مستوحى من Flowgorithm لتعلم الخوارزميات واختبارها داخل المتصفح.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "ar",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
     },
@@ -1340,7 +1340,7 @@ Flowonline2 הוא עורך ומפרש תרשימי זרימה בדפדפן, ב�
 - ייבוא וייצוא XML בפורמט `.fprg` וגיבויי מצב בפורמט JSON.
 - יצירת קוד עבור Python, C++, Java, JavaScript ו־C#.
 - יישום Web סטטי שמופעל בצד הלקוח בדפדפן מודרני.
-- קוד פתוח ברישיון GNU GPL v3 וממשק רב־לשוני.
+- קוד פתוח ברישיון GNU AGPL v3 וממשק רב־לשוני.
 
 ### סימון Schema מסוג JSON-LD
 
@@ -1355,10 +1355,10 @@ Flowonline2 הוא עורך ומפרש תרשימי זרימה בדפדפן, ב�
       "description": "עורך ומפרש תרשימי זרימה בדפדפן, בהשראת Flowgorithm, ללימוד ובדיקת אלגוריתמים.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "he",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "ILS" }
     },
@@ -1399,7 +1399,7 @@ Flowonline2 یک ویرایشگر و مفسر نمودار جریان در مر�
 - وارد کردن و صادر کردن XML با پسوند `.fprg` و پشتیبان‌گیری از وضعیت در JSON.
 - تولید کد برای Python، C++، Java، JavaScript و C#.
 - برنامه وب ایستا که در سمت کاربر و در مرورگر مدرن اجرا می‌شود.
-- نرم‌افزار متن‌باز با مجوز GNU GPL v3 و رابط چندزبانه.
+- نرم‌افزار متن‌باز با مجوز GNU AGPL v3 و رابط چندزبانه.
 
 ### نشانه‌گذاری Schema با JSON-LD
 
@@ -1414,10 +1414,10 @@ Flowonline2 یک ویرایشگر و مفسر نمودار جریان در مر�
       "description": "ویرایشگر و مفسر نمودار جریان در مرورگر، الهام‌گرفته از Flowgorithm، برای یادگیری و آزمایش الگوریتم‌ها.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web Browser",
-      "softwareVersion": "2.6.4-beta",
+      "softwareVersion": "2.6.5-beta",
       "inLanguage": "fa",
       "isAccessibleForFree": true,
-      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license": "https://www.gnu.org/licenses/agpl-3.0.html",
       "author": { "@type": "Person", "name": "PiBOH" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
     },
@@ -1446,8 +1446,8 @@ Flowonline2 یک ویرایشگر و مفسر نمودار جریان در مر�
 ### Editorial and implementation guidance
 
 - Publish the visible prose and the JSON-LD for a language on the same localized page; do not mark up questions that are not visible to users.
-- Keep `softwareVersion` synchronized with `version.txt`; the current repository value is `2.6.4-beta`.
-- Keep the license claim synchronized with `LICENSE` and `package.json` (`GPL-3.0-only`).
+- Keep `softwareVersion` synchronized with `version.txt`; the current repository value is `2.6.5-beta`.
+- Keep the license claim synchronized with `LICENSE` and `package.json` (`AGPL-3.0-only`).
 - Use the repository’s actual canonical URL when deploying; the examples use the current GitHub Pages URL from `README.md`.
 - Treat `.fprg` as Flowgorithm XML interoperability, not as a claim that Flowonline2 is the official Flowgorithm product.
 - Avoid claiming server-side execution, private telemetry, native desktop support, or guaranteed search visibility: the verified architecture is static and client-side.
