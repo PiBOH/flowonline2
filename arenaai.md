@@ -82,9 +82,18 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (2.6.18-beta)
+## 5. Architectural Milestone Logs & Change History (2.6.19-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
+
+---
+
+### Milestone 59: GitHub Pages Artifact and Version Detection Fix (2.6.19-beta)
+
+### Fixed
+*   **GitHub Pages artifact:** `.github/workflows/deploy-pages.yml` now copies `404.html` and `version.txt` into `dist` before the Pages artifact is uploaded.
+*   **Version detection:** `Header.tsx` reads the deployed `version.txt` using `import.meta.env.BASE_URL`, with the build-time Vite value and `0.0.0-UNKNOWN` as safe fallbacks.
+*   Version bumped to `2.6.19-beta`.
 
 ---
 

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.19-beta] - 2026-08-02
+
+### Fixed
+- **GitHub Pages deployment:** The deploy workflow now explicitly copies `404.html` and `version.txt` into `dist` before uploading the Pages artifact.
+- **Automatic version detection:** The application reads the deployed `version.txt` relative to the configured Vite base URL, while retaining the build-time version and `0.0.0-UNKNOWN` fallback when necessary.
+- Validation: TypeScript, Vitest, production build, and `git diff --check` pass.
+
 ## [2.6.18-beta] - 2026-08-02
 
 ### Added

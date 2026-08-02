@@ -40,6 +40,11 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Prepare GitHub Pages artifact
+        run: |
+          cp 404.html dist/404.html
+          cp version.txt dist/version.txt
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 

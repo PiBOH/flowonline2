@@ -68,10 +68,8 @@ export const Header: React.FC = () => {
   // the build falls back to `0.0.0-UNKNOWN` so the UI is never lied to about
   // which version it's running. Any subsequent GitHub-raw fetch can still
   // overwrite this with a fresher value.
-  const [appVersion, setAppVersion] = useState<string>(
-    ((import.meta as any).env?.VITE_APP_VERSION as string | undefined) ||
-      '0.0.0-UNKNOWN',
-  );
+  const buildVersion = import.meta.env.VITE_APP_VERSION || '0.0.0-UNKNOWN';
+  const [appVersion, setAppVersion] = useState<string>(buildVersion);
   const [versionSource, setVersionSource] = useState<'repo' | 'fallback'>('repo');
 
   // About Modal state
@@ -1654,36 +1652,29 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
 
   const mt = menuTranslations[language];
 
-  // Dynamically load the version.txt file FROM THE OFFICIAL GITHUB URL (Ensuring absolute live updating!)
+  // Read the exact version file shipped with the Pages artifact. Vite also
+  // injects the same value at build time, so the UI remains correct even if
+  // a host blocks fetch requests. The explicit local fetch keeps the source
+  // visible and supports deployments that update version.txt independently.
   useEffect(() => {
-    setVersionSource('repo');
-    fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/refs/heads/main/version.txt')
+    const versionUrl = `${import.meta.env.BASE_URL}version.txt`;
+    fetch(versionUrl, { cache: 'no-store' })
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to load version.');
+        if (!res.ok) throw new Error('version.txt was not included in the deployment.');
         return res.text();
       })
       .then((text) => {
-        setAppVersion(text.trim());
+        const version = text.trim();
+        if (!version) throw new Error('version.txt is empty.');
+        setAppVersion(version);
         setVersionSource('repo');
       })
-      .catch((err) => {
-        console.warn('Unable to load live version from GitHub, trying local:', err);
-        // Fallback local fetch
-        fetch('./version.txt')
-          .then((localRes) => {
-            if (!localRes.ok) throw new Error('Local version.txt missing.');
-            return localRes.text();
-          })
-          .then((text) => {
-            setAppVersion(text.trim());
-            setVersionSource('repo');
-          })
-          .catch(() => {
-            setAppVersion('0.0.0-UNKNOWN'); // Final fallback when remote and local both fail.
-            setVersionSource('fallback');
-          });
+      .catch((error: unknown) => {
+        console.warn('Unable to load deployed version.txt; using build version:', error);
+        setAppVersion(buildVersion);
+        setVersionSource(buildVersion === '0.0.0-UNKNOWN' ? 'fallback' : 'repo');
       });
-  }, []);
+  }, [buildVersion]);
 
   // Dynamically load the LICENSE file FROM THE OFFICIAL GITHUB URL (Ensuring absolute live updating!)
   useEffect(() => {
