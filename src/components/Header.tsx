@@ -2351,7 +2351,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
 
         {/* GLOBE LANGUAGE SWITCHER */}
         <div className="relative ml-auto mr-2 flex items-center gap-1.5 text-slate-600 text-[11px] font-semibold">
-          <span>            <IconGlobe size={14} /> {mt.languageLabel}:</span>
+          <span>            <IconGlobe size={14} /> Language:</span>
           <button
             onClick={() => setShowLanguagePicker(true)}
             className="border border-[#B0B0B0] bg-white rounded-md py-0.5 px-2 text-slate-700 font-bold hover:bg-[#C9DEF5] focus:outline-none cursor-pointer transition"
@@ -2832,7 +2832,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         <WinUIDialog
           isOpen={showLanguagePicker}
           onClose={() => setShowLanguagePicker(false)}
-          title={mt.selectLanguage}
+          title="Select Language"
           message=""
           type="info"
           defaultWidth={480}
@@ -2901,7 +2901,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               <button onClick={() => { handleExportPng(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 rounded hover:bg-slate-100 text-sm">• {mt.exportPng}</button>
               <button onClick={() => { clearLocalStorage(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 rounded hover:bg-slate-100 text-sm">• {mt.clearStorage}</button>
               <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2 pt-2 pb-1">{mt.help}</div>
-              <button onClick={() => { setShowLanguagePicker(true); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 rounded hover:bg-slate-100 text-sm">• {mt.selectLanguage}</button>
+              <button onClick={() => { setShowLanguagePicker(true); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 rounded hover:bg-slate-100 text-sm">• Select Language</button>
               <button onClick={() => { setShowAbout(true); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 rounded hover:bg-slate-100 text-sm">• {mt.about}</button>
               <button onClick={() => { setShowManual(true); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 rounded hover:bg-slate-100 text-sm">• {mt.manualMenuOption}</button>
               <button onClick={() => { setShowChangelog(true); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 rounded hover:bg-slate-100 text-sm">• {mt.changelogMenuOption}</button>

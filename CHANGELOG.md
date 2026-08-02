@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.7-beta] - 2026-08-02
+
+### Changed
+- **Language label kept in English:** The language selector label in the desktop header toolbar (`Header.tsx`), the language picker dialog title, the mobile menu language entry, and the source-code language label in `Sidebar.tsx` now always read `Language` / `Select Language` in English instead of being localized.
+
+### Architecture invariants
+- Validation: TypeScript, 136 Vitest tests, production build, and `git diff --check` pass.
+
+---
+
 ## [2.6.6-beta] - 2026-08-02
 
 ### Changed

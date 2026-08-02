@@ -82,7 +82,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (2.6.6-beta)
+## 5. Architectural Milestone Logs & Change History (2.6.7-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -706,6 +706,17 @@ v2.3.23: Summary of changes
 - **Desktop files byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
 - **State reuse**: every mobile component pulls from `useFlow()` — no duplication of state.
 - **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*`.  - **Bundle isolation**: `MobileApp` is `React.lazy()`-loaded inside `AppShell`. Desktop users never download `mobile.css` or any mobile component.
+
+---
+
+## Milestone 47: Language Label Kept in English (2.6.7-beta)
+
+### Changed
+*   **Language selector label is now always English:** The desktop header toolbar label (`Header.tsx`), the language picker dialog title (`Select Language`), the mobile menu language entry, and the source-code language label in `Sidebar.tsx` no longer localize the word `Language` — it always renders as `Language` / `Select Language`.
+
+### Architecture invariants
+*   No functional change — only UI wording.
+*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
 
 ---
 

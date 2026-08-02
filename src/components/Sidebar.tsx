@@ -152,7 +152,7 @@ export const Sidebar: React.FC = () => {
           <div className="flex-1 flex flex-col h-full overflow-hidden space-y-3">
             <div className="flex flex-col space-y-1 select-none">
               <label className={`text-[10px] font-bold uppercase tracking-wide ${subText}`}>
-                {t.sidebar.languageLabel}
+                Language
               </label>
               <select
                 value={targetLang}
