@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.17-beta] - 2026-08-02
+
+### Changed
+- **README.md badges updated:** The license badge now uses the colored `0066cc` variant with a `link` to the LICENSE file, and the version badge now uses the `009933` green color with `cacheSeconds=60`, as provided by the maintainer.
+- Validation: TypeScript, Vitest, production build, and `git diff --check` all pass.
+
 ## [2.6.16-beta] - 2026-08-02
 
 ### Changed

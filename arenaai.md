@@ -88,6 +88,16 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 
 ---
 
+### Milestone 57: README Badges Updated (2.6.17-beta)
+
+### Changed
+*   **README.md license badge:** Updated to the `0066cc` blue variant with a `link` pointing to the `LICENSE` file and `cacheSeconds=60`.
+*   **README.md version badge:** Updated to the `009933` green color with `cacheSeconds=60`.
+*   Version bumped to `2.6.17-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+---
+
 ### Milestone 56: Milestone Log Reordering & Heading Unification (2.6.16-beta)
 
 ### Changed
