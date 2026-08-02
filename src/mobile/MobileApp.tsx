@@ -29,11 +29,12 @@ const MobileApp: React.FC = () => {
   const [view, setView] = useState<MobileViewId>(initialView);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
-  const [dialog, setDialog] = useState<'about' | 'manual' | 'changelog' | 'security' | 'privacy' | 'clear' | null>(null);
+  const [dialog, setDialog] = useState<'about' | 'manual' | 'changelog' | 'security' | 'privacy' | 'disclaimer' | 'clear' | null>(null);
   const [manual, setManual] = useState('Loading MANUAL.md...');
   const [changelog, setChangelog] = useState('Loading CHANGELOG.md...');
   const [security, setSecurity] = useState('Loading SECURITY.md...');
   const [privacy, setPrivacy] = useState('Loading PRIVACY.md...');
+  const [disclaimer, setDisclaimer] = useState('Loading DISCLAIMER.md...');
   const [message, setMessage] = useState<{ text: string; tone: 'success' | 'error' } | null>(null);
   const [clearCurrentWork, setClearCurrentWork] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,6 +49,7 @@ const MobileApp: React.FC = () => {
       changelog: './CHANGELOG.md',
       security: './docs/SECURITY.md',
       privacy: './docs/PRIVACY.md',
+      disclaimer: './docs/DISCLAIMER.md',
     };
     const path = docs[dialog ?? ''];
     if (!path) return;
@@ -59,6 +61,7 @@ const MobileApp: React.FC = () => {
         else if (dialog === 'changelog') setChangelog(text);
         else if (dialog === 'security') setSecurity(text);
         else if (dialog === 'privacy') setPrivacy(text);
+        else if (dialog === 'disclaimer') setDisclaimer(text);
       })
       .catch((error: unknown) => {
         if ((error as Error).name === 'AbortError') return;
@@ -66,6 +69,7 @@ const MobileApp: React.FC = () => {
         else if (dialog === 'changelog') setChangelog('Unable to load CHANGELOG.md.');
         else if (dialog === 'security') setSecurity('Unable to load SECURITY.md.');
         else if (dialog === 'privacy') setPrivacy('Unable to load PRIVACY.md.');
+        else if (dialog === 'disclaimer') setDisclaimer('Unable to load DISCLAIMER.md.');
       });
     return () => controller.abort();
   }, [dialog]);
@@ -182,6 +186,7 @@ const MobileApp: React.FC = () => {
           {view === 'tools' && <MobileToolsView
             onLanguage={() => setLanguageOpen(true)} onAbout={() => setDialog('about')} onManual={() => setDialog('manual')}
             onChangelog={() => setDialog('changelog')} onSecurity={() => setDialog('security')} onPrivacy={() => setDialog('privacy')}
+            onDisclaimer={() => setDialog('disclaimer')}
             onClearStorage={() => setDialog('clear')}
             onExportSvg={handleSvg} onExportPng={handlePng} onExportPdf={handlePdf}
             onBugReport={() => openExternal(ISSUE_URL)} onFeatureRequest={() => openExternal(ISSUE_URL)}
@@ -199,6 +204,7 @@ const MobileApp: React.FC = () => {
         onSave={handleSave} onBackupJson={handleBackup} onExportSvg={handleSvg} onExportPng={handlePng} onExportPdf={handlePdf}
         onClearLocalStorage={() => setDialog('clear')} onShowAbout={() => setDialog('about')} onShowManual={() => setDialog('manual')}
         onShowChangelog={() => setDialog('changelog')} onShowSecurity={() => setDialog('security')} onShowPrivacy={() => setDialog('privacy')}
+        onShowDisclaimer={() => setDialog('disclaimer')}
         onBugReport={() => openExternal(ISSUE_URL)}
         onFeatureRequest={() => openExternal(ISSUE_URL)} onForkContribute={() => openExternal('https://github.com/PiBOH/flowonline2/fork')}
         onPickLanguage={() => setLanguageOpen(true)} canUndo={flow.canUndo} canRedo={flow.canRedo}
@@ -213,6 +219,7 @@ const MobileApp: React.FC = () => {
       <M2Dialog open={dialog === 'changelog'} onClose={() => setDialog(null)} title="Changelog" actions={<M2Button onClick={() => setDialog(null)}>Close</M2Button>}><pre>{changelog}</pre></M2Dialog>
       <M2Dialog open={dialog === 'security'} onClose={() => setDialog(null)} title="Security Policy" actions={<M2Button onClick={() => setDialog(null)}>Close</M2Button>}><pre>{security}</pre></M2Dialog>
       <M2Dialog open={dialog === 'privacy'} onClose={() => setDialog(null)} title="Privacy Policy" actions={<M2Button onClick={() => setDialog(null)}>Close</M2Button>}><pre>{privacy}</pre></M2Dialog>
+      <M2Dialog open={dialog === 'disclaimer'} onClose={() => setDialog(null)} title="Disclaimer" actions={<M2Button onClick={() => setDialog(null)}>Close</M2Button>}><pre>{disclaimer}</pre></M2Dialog>
       <M2Dialog open={dialog === 'clear'} onClose={() => { setClearCurrentWork(false); setDialog(null); }} title="Clear localStorage" actions={<><M2Button onClick={() => { setClearCurrentWork(false); setDialog(null); }}>Cancel</M2Button><M2Button variant="contained" onClick={clearStorage}>Clear</M2Button></>}>
         <p>This removes the saved program. Current work stays open unless the optional Flag is enabled.</p>
         <label className="m2-flag-toggle"><input type="checkbox" checked={clearCurrentWork} onChange={(event) => setClearCurrentWork(event.target.checked)} /><span>Flag: also clear the current work</span></label>

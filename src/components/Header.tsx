@@ -7,7 +7,7 @@ import { WinUIDialog } from './WinUIDialog';
 import { StatusDot } from './StatusDot';
 import { Language } from '../types/flow';
 
-import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe, IconPlay, IconStep, IconPause, IconStop, IconMonitor, IconShield, IconLock, FlagIcon } from './EmojiIcons';
+import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe, IconPlay, IconStep, IconPause, IconStop, IconMonitor, IconShield, IconLock, IconScale, FlagIcon } from './EmojiIcons';
 const LANGUAGE_NAMES: Record<Language, string> = {
   en: 'English (US)', en_GB: 'English (UK)', it: 'Italiano', de: 'Deutsch',
   fr: 'Français', es: 'Español', zh: '中文', nl: 'Nederlands',
@@ -105,6 +105,12 @@ export const Header: React.FC = () => {
   const [privacySource, setPrivacySource] = useState<'repo' | 'fallback'>('repo');
   const privacyTextFallback = '# Flowonline2 Privacy Policy\n\n> Fallback privacy policy not available.';
 
+  // Disclaimer Modal state
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [disclaimerText, setDisclaimerText] = useState('Loading disclaimer...');
+  const [disclaimerSource, setDisclaimerSource] = useState<'repo' | 'fallback'>('repo');
+  const disclaimerTextFallback = '# Flowonline2 Disclaimer\n\n> Fallback disclaimer not available.';
+
   // WinUI Dialog state (replace browser alerts/confirms)
   const [winUIDialog, setWinUIDialog] = useState<{ isOpen: boolean; title: string; message: string; type: 'info' | 'warning' | 'error' | 'confirm'; onOk?: () => void }>({ isOpen: false, title: '', message: '', type: 'info' });
   const [clearCurrentWork, setClearCurrentWork] = useState(false);
@@ -180,6 +186,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     securityFallbackLoaded: string;
     privacyRepoLoaded: string;
     privacyFallbackLoaded: string;
+    disclaimerPolicy: string;
+    disclaimerRepoLoaded: string;
+    disclaimerFallbackLoaded: string;
     selectLanguage: string;
     undo: string;
     redo: string;
@@ -272,6 +281,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Security Policy loaded from hardcoded fallback compilation code",
       privacyRepoLoaded: "Privacy Policy dynamically loaded from GitHub",
       privacyFallbackLoaded: "Privacy Policy loaded from hardcoded fallback compilation code",
+      disclaimerPolicy: "Disclaimer",
+      disclaimerRepoLoaded: "Disclaimer dynamically loaded from GitHub",
+      disclaimerFallbackLoaded: "Disclaimer loaded from hardcoded fallback compilation code",
       selectLanguage: "Select Language"
     },
     en_GB: {
@@ -331,6 +343,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Security Policy loaded from hardcoded fallback compilation code",
       privacyRepoLoaded: "Privacy Policy dynamically loaded from GitHub",
       privacyFallbackLoaded: "Privacy Policy loaded from hardcoded fallback compilation code",
+      disclaimerPolicy: "Disclaimer",
+      disclaimerRepoLoaded: "Disclaimer dynamically loaded from GitHub",
+      disclaimerFallbackLoaded: "Disclaimer loaded from hardcoded fallback compilation code",
       selectLanguage: "Select Language"
     },
     it: {
@@ -390,6 +405,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Politica di Sicurezza caricata dal codice compilato di fallback",
       privacyRepoLoaded: "Informativa sulla Privacy caricata dinamicamente da GitHub",
       privacyFallbackLoaded: "Informativa sulla Privacy caricata dal codice compilato di fallback",
+      disclaimerPolicy: "Disclaimer",
+      disclaimerRepoLoaded: "Disclaimer caricato dinamicamente da GitHub",
+      disclaimerFallbackLoaded: "Disclaimer caricato dal codice compilato di fallback",
       selectLanguage: "Seleziona Lingua"
     },
     de: {
@@ -449,6 +467,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Sicherheitsrichtlinie aus Fallback-Code geladen",
       privacyRepoLoaded: "Datenschutzrichtlinie dynamisch von GitHub geladen",
       privacyFallbackLoaded: "Datenschutzrichtlinie aus Fallback-Code geladen",
+      disclaimerPolicy: "Haftungsausschluss",
+      disclaimerRepoLoaded: "Haftungsausschluss dynamisch von GitHub geladen",
+      disclaimerFallbackLoaded: "Haftungsausschluss aus Fallback-Code geladen",
       selectLanguage: "Sprache auswählen"
     },
     fr: {
@@ -508,6 +529,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Politique de sécurité de secours chargée",
       privacyRepoLoaded: "Politique de confidentialité chargée dynamiquement depuis GitHub",
       privacyFallbackLoaded: "Politique de confidentialité de secours chargée",
+      disclaimerPolicy: "Avis de non-responsabilité",
+      disclaimerRepoLoaded: "Avis de non-responsabilité chargé dynamiquement depuis GitHub",
+      disclaimerFallbackLoaded: "Avis de non-responsabilité de secours chargé",
       selectLanguage: "Sélectionner la langue"
     },
     es: {
@@ -567,6 +591,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Política de seguridad de reserva cargada",
       privacyRepoLoaded: "Política de privacidad cargada desde GitHub",
       privacyFallbackLoaded: "Política de privacidad de reserva cargada",
+      disclaimerPolicy: "Aviso de exención de responsabilidad",
+      disclaimerRepoLoaded: "Aviso de exención de responsabilidad cargado desde GitHub",
+      disclaimerFallbackLoaded: "Aviso de exención de responsabilidad de reserva cargado",
       selectLanguage: "Seleccionar idioma"
     },
     zh: {
@@ -626,6 +653,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "安全政策已从硬编码回退代码加载",
       privacyRepoLoaded: "隐私政策已从 GitHub 动态加载",
       privacyFallbackLoaded: "隐私政策已从硬编码回退代码加载",
+      disclaimerPolicy: "免责声明",
+      disclaimerRepoLoaded: "免责声明已从 GitHub 动态加载",
+      disclaimerFallbackLoaded: "免责声明已从硬编码回退代码加载",
       selectLanguage: "选择语言"
     },
     nl: {
@@ -685,6 +715,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Beveiligingsbeleid geladen van fallback",
       privacyRepoLoaded: "Privacybeleid dynamisch geladen van GitHub",
       privacyFallbackLoaded: "Privacybeleid geladen van fallback",
+      disclaimerPolicy: "Disclaimer",
+      disclaimerRepoLoaded: "Disclaimer dynamisch geladen van GitHub",
+      disclaimerFallbackLoaded: "Disclaimer geladen van fallback",
       selectLanguage: "Taal selecteren"
     },
     pt: {
@@ -744,6 +777,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Política de Segurança de fallback carregada",
       privacyRepoLoaded: "Política de Privacidade carregada dinamicamente do GitHub",
       privacyFallbackLoaded: "Política de Privacidade de fallback carregada",
+      disclaimerPolicy: "Aviso de isenção de responsabilidade",
+      disclaimerRepoLoaded: "Aviso de isenção de responsabilidade carregado dinamicamente do GitHub",
+      disclaimerFallbackLoaded: "Aviso de isenção de responsabilidade de fallback carregado",
       selectLanguage: "Selecionar Idioma"
     },
     gl: {
@@ -803,6 +839,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Política de seguridade de reserva cargada",
       privacyRepoLoaded: "Política de privacidade cargada dinamicamente de GitHub",
       privacyFallbackLoaded: "Política de privacidade de reserva cargada",
+      disclaimerPolicy: "Aviso de exención de responsabilidade",
+      disclaimerRepoLoaded: "Aviso de exención de responsabilidade cargado dinamicamente de GitHub",
+      disclaimerFallbackLoaded: "Aviso de exención de responsabilidade de reserva cargado",
       selectLanguage: "Seleccionar idioma"
     },
     ru: {
@@ -862,6 +901,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Политика безопасности загружена из резервного кода",
       privacyRepoLoaded: "Политика конфиденциальности загружена с GitHub",
       privacyFallbackLoaded: "Политика конфиденциальности загружена из резервного кода",
+      disclaimerPolicy: "Отказ от ответственности",
+      disclaimerRepoLoaded: "Отказ от ответственности загружен с GitHub",
+      disclaimerFallbackLoaded: "Отказ от ответственности загружен из резервного кода",
       selectLanguage: "Выбрать язык"
     },
     uk: {
@@ -921,6 +963,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Політику безпеки завантажено з резервного коду",
       privacyRepoLoaded: "Політику конфіденційності завантажено з GitHub",
       privacyFallbackLoaded: "Політику конфіденційності завантажено з резервного коду",
+      disclaimerPolicy: "Відмова від відповідальності",
+      disclaimerRepoLoaded: "Відмову від відповідальності завантажено з GitHub",
+      disclaimerFallbackLoaded: "Відмову від відповідальності завантажено з резервного коду",
       selectLanguage: "Вибрати мову"
     },
     cs: {
@@ -980,6 +1025,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Bezpečnostní politika načtena ze záložního kódu",
       privacyRepoLoaded: "Zásady ochrany osobních údajů načteny z GitHubu",
       privacyFallbackLoaded: "Zásady ochrany osobních údajů načteny ze záložního kódu",
+      disclaimerPolicy: "Prohlášení o vyloučení odpovědnosti",
+      disclaimerRepoLoaded: "Prohlášení o vyloučení odpovědnosti načteno z GitHubu",
+      disclaimerFallbackLoaded: "Prohlášení o vyloučení odpovědnosti načteno ze záložního kódu",
       selectLanguage: "Vybrat jazyk"
     },
     pl: {
@@ -1039,6 +1087,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Polityka bezpieczeństwa z kodu zapasowego",
       privacyRepoLoaded: "Polityka prywatności załadowana z GitHub",
       privacyFallbackLoaded: "Polityka prywatności z kodu zapasowego",
+      disclaimerPolicy: "Wyłączenie odpowiedzialności",
+      disclaimerRepoLoaded: "Wyłączenie odpowiedzialności załadowane z GitHub",
+      disclaimerFallbackLoaded: "Wyłączenie odpowiedzialności z kodu zapasowego",
       selectLanguage: "Wybierz język"
     },
     hu: {
@@ -1098,6 +1149,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Biztonsági irányelv tartalék kódból betöltve",
       privacyRepoLoaded: "Adatvédelmi irányelv betöltve a GitHubról",
       privacyFallbackLoaded: "Adatvédelmi irányelv tartalék kódból betöltve",
+      disclaimerPolicy: "Felelősség kizárása",
+      disclaimerRepoLoaded: "Felelősség kizárása betöltve a GitHubról",
+      disclaimerFallbackLoaded: "Felelősség kizárása tartalék kódból betöltve",
       selectLanguage: "Nyelv kiválasztása"
     },
     sl: {
@@ -1157,6 +1211,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Varnostna politika naložena iz rezervne kode",
       privacyRepoLoaded: "Politika zasebnosti naložena iz GitHub",
       privacyFallbackLoaded: "Politika zasebnosti naložena iz rezervne kode",
+      disclaimerPolicy: "Izjava o omejitvi odgovornosti",
+      disclaimerRepoLoaded: "Izjava o omejitvi odgovornosti naložena iz GitHub",
+      disclaimerFallbackLoaded: "Izjava o omejitvi odgovornosti naložena iz rezervne kode",
       selectLanguage: "Izberi jezik"
     },
     ja: {
@@ -1216,6 +1273,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "セキュリティポリシーはハードコードされたフォールバックコードから読み込まれました",
       privacyRepoLoaded: "プライバシーポリシーがGitHubから動的に読み込まれました",
       privacyFallbackLoaded: "プライバシーポリシーはハードコードされたフォールバックコードから読み込まれました",
+      disclaimerPolicy: "免責事項",
+      disclaimerRepoLoaded: "免責事項がGitHubから動的に読み込まれました",
+      disclaimerFallbackLoaded: "免責事項はハードコードされたフォールバックコードから読み込まれました",
       selectLanguage: "言語を選択"
     },
     th: {
@@ -1275,6 +1335,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "นโยบายความปลอดภัยจากโค้ดสำรอง",
       privacyRepoLoaded: "นโยบายความเป็นส่วนตัวโหลดจาก GitHub",
       privacyFallbackLoaded: "นโยบายความเป็นส่วนตัวจากโค้ดสำรอง",
+      disclaimerPolicy: "ข้อจำกัดความรับผิดชอบ",
+      disclaimerRepoLoaded: "ข้อจำกัดความรับผิดชอบโหลดจาก GitHub",
+      disclaimerFallbackLoaded: "ข้อจำกัดความรับผิดชอบจากโค้ดสำรอง",
       selectLanguage: "เลือกภาษา"
     },
     id: {
@@ -1334,6 +1397,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Kebijakan Keamanan dari kode cadangan",
       privacyRepoLoaded: "Kebijakan Privasi dimuat dari GitHub",
       privacyFallbackLoaded: "Kebijakan Privasi dari kode cadangan",
+      disclaimerPolicy: "Pernyataan Penyangkalan",
+      disclaimerRepoLoaded: "Pernyataan Penyangkalan dimuat dari GitHub",
+      disclaimerFallbackLoaded: "Pernyataan Penyangkalan dari kode cadangan",
       selectLanguage: "Pilih Bahasa"
     },
     mn: {
@@ -1393,6 +1459,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "Аюулгүй байдлын бодлогыг нөөц кодоос ачааллаа",
       privacyRepoLoaded: "Нууцлалын бодлогыг GitHub-ээс ачааллаа",
       privacyFallbackLoaded: "Нууцлалын бодлогыг нөөц кодоос ачааллаа",
+      disclaimerPolicy: "Хариуцлагаас татгалзах",
+      disclaimerRepoLoaded: "Хариуцлагаас татгалзахыг GitHub-ээс ачааллаа",
+      disclaimerFallbackLoaded: "Хариуцлагаас татгалзахыг нөөц кодоос ачааллаа",
       selectLanguage: "Хэл сонгох"
     },
     ar: {
@@ -1452,6 +1521,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "تم تحميل سياسة الأمان من كود النسخ الاحتياطي",
       privacyRepoLoaded: "تم تحميل سياسة الخصوصية من GitHub",
       privacyFallbackLoaded: "تم تحميل سياسة الخصوصية من كود النسخ الاحتياطي",
+      disclaimerPolicy: "إخلاء المسؤولية",
+      disclaimerRepoLoaded: "تم تحميل إخلاء المسؤولية من GitHub",
+      disclaimerFallbackLoaded: "تم تحميل إخلاء المسؤولية من كود النسخ الاحتياطي",
       selectLanguage: "اختر اللغة"
     },
     he: {
@@ -1511,6 +1583,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "מדיניות האבטחה נטענה מקוד גיבוי",
       privacyRepoLoaded: "מדיניות הפרטיות נטענה מ-GitHub",
       privacyFallbackLoaded: "מדיניות הפרטיות נטענה מקוד גיבוי",
+      disclaimerPolicy: "כתב ויתור",
+      disclaimerRepoLoaded: "כתב הוויתור נטען מ-GitHub",
+      disclaimerFallbackLoaded: "כתב הוויתור נטען מקוד גיבוי",
       selectLanguage: "בחר שפה"
     },
     fa: {
@@ -1570,6 +1645,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       securityFallbackLoaded: "سیاست امنیتی از کد جایگزین بارگذاری شد",
       privacyRepoLoaded: "سیاست حریم خصوصی از GitHub بارگذاری شد",
       privacyFallbackLoaded: "سیاست حریم خصوصی از کد جایگزین بارگذاری شد",
+      disclaimerPolicy: "سلب مسئولیت",
+      disclaimerRepoLoaded: "سلب مسئولیت از GitHub بارگذاری شد",
+      disclaimerFallbackLoaded: "سلب مسئولیت از کد جایگزین بارگذاری شد",
       selectLanguage: "انتخاب زبان"
     }
   };
@@ -1782,6 +1860,41 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         });
     }
   }, [showPrivacy]);
+
+  // Dynamically load the DISCLAIMER.md file FROM THE OFFICIAL GITHUB URL
+  useEffect(() => {
+    if (showDisclaimer) {
+      setDisclaimerText('Loading disclaimer from GitHub...');
+      setDisclaimerSource('repo');
+      fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/refs/heads/main/docs/DISCLAIMER.md')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('DISCLAIMER.md not found in remote repo.');
+          }
+          return res.text();
+        })
+        .then((text) => {
+          setDisclaimerText(text);
+          setDisclaimerSource('repo');
+        })
+        .catch((err) => {
+          console.warn('Unable to load remote DISCLAIMER.md, trying local fallback:', err);
+          fetch('./docs/DISCLAIMER.md')
+            .then((localRes) => {
+              if (!localRes.ok) throw new Error('Local DISCLAIMER.md missing.');
+              return localRes.text();
+            })
+            .then((text) => {
+              setDisclaimerText(text);
+              setDisclaimerSource('repo');
+            })
+            .catch(() => {
+              setDisclaimerText(disclaimerTextFallback);
+              setDisclaimerSource('fallback');
+            });
+        });
+    }
+  }, [showDisclaimer]);
 
   // Global click listener to close dropdowns when clicking outside (Win32 behavior!)
   useEffect(() => {
@@ -2292,7 +2405,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           <button
             onClick={() => toggleDropdown('file')}
             onMouseEnter={() => handleMenuMouseEnter('file')}
-            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[6px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'file' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -2350,11 +2463,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </div>
 
         {/* MODIFICA MENU (Includes Zoom, Reset - completely separated from Chart Style!) */}
-        <div className="relative ml-1">
+        <div className="relative ml-0.5">
           <button
             onClick={() => toggleDropdown('edit')}
             onMouseEnter={() => handleMenuMouseEnter('edit')}
-            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[6px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'edit' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -2401,11 +2514,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </div>
 
         {/* DEDICATED STYLE MENU: Chart Style & Color */}
-        <div className="relative ml-1">
+        <div className="relative ml-0.5">
           <button
             onClick={() => toggleDropdown('styleMenu')}
             onMouseEnter={() => handleMenuMouseEnter('styleMenu')}
-            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[6px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'styleMenu' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -2444,11 +2557,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </div>
 
         {/* TOOLS MENU (Export SVG / PNG / PDF) */}
-        <div className="relative ml-1">
+        <div className="relative ml-0.5">
           <button
             onClick={() => toggleDropdown('tools')}
             onMouseEnter={() => handleMenuMouseEnter('tools')}
-            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[6px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'tools' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -2485,11 +2598,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </div>
 
         {/* PROGRAMMA MENU */}
-        <div className="relative ml-1">
+        <div className="relative ml-0.5">
           <button
             onClick={() => toggleDropdown('program')}
             onMouseEnter={() => handleMenuMouseEnter('program')}
-            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[6px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'program' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -2514,11 +2627,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </div>
 
         {/* DISPOSIZIONE / LAYOUT MENU (All toolbar layout options matched 100% in menu!) */}
-        <div className="relative ml-1">
+        <div className="relative ml-0.5">
           <button
             onClick={() => toggleDropdown('layout')}
             onMouseEnter={() => handleMenuMouseEnter('layout')}
-            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[6px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'layout' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -2541,11 +2654,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </div>
 
         {/* HELP / ? MENU */}
-        <div className="relative ml-1">
+        <div className="relative ml-0.5">
           <button
             onClick={() => toggleDropdown('help')}
             onMouseEnter={() => handleMenuMouseEnter('help')}
-            className={`px-[10px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
+            className={`px-[6px] py-[2px] h-[20px] flex items-center hover:bg-[#C9DEF5] hover:border hover:border-[#5B8DC4] rounded-[2px] ${
               activeDropdown === 'help' ? 'bg-[#C9DEF5] border border-[#5B8DC4]' : 'border border-transparent'
             }`}
           >
@@ -2564,6 +2677,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               </button>
               <button onClick={() => { setShowPrivacy(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span><IconLock size={14} /> {mt.privacyPolicy}</span>
+              </button>
+              <button onClick={() => { setShowDisclaimer(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span><IconScale size={14} /> {mt.disclaimerPolicy}</span>
               </button>
               <button onClick={() => { setShowAbout(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span><IconInfo size={14} /> {mt.about}</span>
@@ -3070,6 +3186,34 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             </div>
             <div className="flex-1 overflow-y-auto select-text p-4 bg-white border border-[#C0C0C0] rounded text-[11px] leading-relaxed font-sans text-slate-800" style={{ minHeight: '400px' }}>
               {parseMarkdown(privacyText)}
+            </div>
+          </div>
+        </WinUIDialog>
+      )}
+
+      {/* ============ WIN32 DISCLAIMER DIALOG MODAL - WinUI ============ */}
+      {showDisclaimer && (
+        <WinUIDialog
+          isOpen={showDisclaimer}
+          onClose={() => setShowDisclaimer(false)}
+          title={mt.disclaimerPolicy}
+          message=""
+          type="info"
+          defaultWidth={750}
+          defaultHeight={550}
+          okLabel={t.modals.ok}
+          onOk={() => setShowDisclaimer(false)}
+        >
+          <div className="flex flex-col gap-2 select-text">
+            <div className="flex items-center gap-2 text-[9px] text-slate-500 select-none">
+              <StatusDot
+                variant={disclaimerSource === 'repo' ? 'live' : 'fallback'}
+                label={disclaimerSource === 'repo' ? mt.disclaimerRepoLoaded : mt.disclaimerFallbackLoaded}
+              />
+              <span className="font-mono ml-auto text-slate-500 uppercase tracking-wide">docs/DISCLAIMER.md</span>
+            </div>
+            <div className="flex-1 overflow-y-auto select-text p-4 bg-white border border-[#C0C0C0] rounded text-[11px] leading-relaxed font-sans text-slate-800" style={{ minHeight: '400px' }}>
+              {parseMarkdown(disclaimerText)}
             </div>
           </div>
         </WinUIDialog>

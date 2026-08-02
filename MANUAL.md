@@ -15,19 +15,19 @@ Choose your language / Scegli la lingua:
 > **⚠️ ATTENTION / NOTICE:**
 > The translations of Flowonline2, MANUAL.md, and all other local project files might not be 100% accurate.
 
-Welcome to **Flowonline2**, a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart interpreter **Flowgorithm** (Windows version 4.5).
+Welcome to **Flowonline2**, a pixel-perfect, 1000% faithful web-based clone of the popular educational flowchart interpreter [**Flowgorithm**](https://flowgorithm.org/) (Windows version 4.5).
 
 Developed by PiBOH under AGPL-3.0.
 
-**📄 Policies:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md) · [Disclaimer](docs/DISCLAIMER.md)
+**📄 Policies:** [Security Policy](https://github.com/PiBOH/flowonline2/blob/main/docs/SECURITY.md) · [Privacy Policy](https://github.com/PiBOH/flowonline2/blob/main/docs/PRIVACY.md) · [Disclaimer](https://github.com/PiBOH/flowonline2/blob/main/docs/DISCLAIMER.md)
 
 ### 1. User Interface & Emulation
-* **Title Bar (Windows Style):** Emulates a classic Windows desktop window, complete with the multi-colored Flowgorithm logo and decorative window controls (Minimize, Maximize, Close). Clicking these controls will open an authentic Win32 dialog box warning stating they are decorative.
+* **Title Bar (Windows Style):** Emulates a classic Windows desktop window, complete with the multi-colored [Flowgorithm](https://flowgorithm.org/) logo and decorative window controls (Minimize, Maximize, Close). Clicking these controls will open an authentic Win32 dialog box warning stating they are decorative.
 * **Menu Bar:** Multi-lingual dropdowns (*File*, *Edit*, *Program*, *Chart Style & Color*, *Disposal*, and *Help*). Hovering over other menus while one is active will slide open the adjacent menus automatically.
 * **Toolbar:** Houses standard `32x32px` flat-button shortcuts, speed slider, and zoom controls.
 
 ### 2. Operators & Syntax Rules
-Flowonline2 evaluates standard Flowgorithm operators. Below is a detailed reference:
+Flowonline2 evaluates standard [Flowgorithm](https://flowgorithm.org/) operators. Below is a detailed reference:
 
 | Operator | Type | Description | Example |
 | :---: | :---: | :--- | :--- |
@@ -49,12 +49,12 @@ Flowonline2 evaluates standard Flowgorithm operators. Below is a detailed refere
 | `not` / `!` | Logical | Logical NOT (case-insensitive) | `not isAdult` |
 
 ### 3. Save & Load Operations (.fprg vs .json)
-* **FPRG Files (.fprg):** This is the native Flowgorithm XML format.
+* **FPRG Files (.fprg):** This is the native [Flowgorithm](https://flowgorithm.org/) XML format.
  * **Loading:** The XML is parsed recursively. Strict child element matching is used for `<if>` tags (preventing nested branching errors).
- * **Saving:** Writes standard XML matching Flowgorithm's strict layout. Regular variables are written with `array="False"` and `size=""` to prevent them from becoming arrays in the desktop application (Issue #1 Fix).
+ * **Saving:** Writes standard XML matching [Flowgorithm](https://flowgorithm.org/)'s strict layout. Regular variables are written with `array="False"` and `size=""` to prevent them from becoming arrays in the desktop application (Issue #1 Fix).
 * **JSON Backup Files (.json):** Saves the exact internal state of Flowonline2 blocks. These can be saved and reloaded directly using *File -> Open* or the toolbar.
 * **ToChar(13) and Newline (\n) Auto-Translation:**
- * **In Flowgorithm (Windows):** Newlines must be entered using the `ToChar(13)` function.
+ * **In [Flowgorithm](https://flowgorithm.org/) (Windows):** Newlines must be entered using the `ToChar(13)` function.
  * **In Flowonline2 (Web):** You can use the unquoted newline constant `\n` directly (e.g., `text & \n & "more text"`).
  * **Auto-Translation:** When opening a `.fprg` file, all occurrences of `ToChar(13)` are converted to `\n`. When saving, all `\n` are converted back to `ToChar(13)` to maintain perfect desktop compatibility.
 
@@ -66,19 +66,19 @@ Flowonline2 evaluates standard Flowgorithm operators. Below is a detailed refere
 > **⚠️ ATTENZIONE / NOTA:**
 > Le traduzioni di Flowonline2, di MANUAL.md e di tutti gli altri file di progetto potrebbero non essere accurate al 100%.
 
-Benvenuto su **Flowonline2**, un clone web straordinariamente fedele al 1000% del celebre interprete educativo di diagrammi di flusso **Flowgorithm** (versione Windows 4.5).
+Benvenuto su **Flowonline2**, un clone web straordinariamente fedele al 1000% del celebre interprete educativo di diagrammi di flusso [**Flowgorithm**](https://flowgorithm.org/) (versione Windows 4.5).
 
 Sviluppato da PiBOH sotto AGPL-3.0.
 
-**📄 Policy:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md) · [Disclaimer](docs/DISCLAIMER.md)
+**📄 Policy:** [Security Policy](https://github.com/PiBOH/flowonline2/blob/main/docs/SECURITY.md) · [Privacy Policy](https://github.com/PiBOH/flowonline2/blob/main/docs/PRIVACY.md) · [Disclaimer](https://github.com/PiBOH/flowonline2/blob/main/docs/DISCLAIMER.md)
 
 ### 1. Interfaccia Utente ed Emulazione
-* **Barra del Titolo (Stile Windows):** Emula una classica finestra desktop, completa del logo di Flowgorithm a 4 colori e tasti di controllo fittizi (Riduci a icona, Ingrandisci, Chiudi). Cliccando su di essi apparirà un avviso di sistema Win32.
+* **Barra del Titolo (Stile Windows):** Emula una classica finestra desktop, completa del logo di [Flowgorithm](https://flowgorithm.org/) a 4 colori e tasti di controllo fittizi (Riduci a icona, Ingrandisci, Chiudi). Cliccando su di essi apparirà un avviso di sistema Win32.
 * **Barra dei Menu:** Menu a tendina multilingua (*File*, *Modifica*, *Programma*, *Stile & Colori*, *Disposizione*, e *?*). Al passaggio del mouse, i menu a discesa adiacenti si aprono automaticamente.
 * **Barra Strumenti:** Contiene scorciatoie con pulsanti `32x32px`, slider della velocità e i controlli dello zoom.
 
 ### 2. Regole di Sintassi e Operatori
-Flowonline2 supporta tutti gli operatori formali di Flowgorithm. Di seguito la tabella di riferimento dettagliata:
+Flowonline2 supporta tutti gli operatori formali di [Flowgorithm](https://flowgorithm.org/). Di seguito la tabella di riferimento dettagliata:
 
 | Operatore | Tipo | Descrizione | Esempio |
 | :---: | :---: | :--- | :--- |
@@ -100,12 +100,12 @@ Flowonline2 supporta tutti gli operatori formali di Flowgorithm. Di seguito la t
 | `not` / `!` | Logico | NOT Logico (case-insensitive) | `not maggiorenne` |
 
 ### 3. Operazioni di Salvataggio e Caricamento (.fprg vs .json)
-* **File FPRG (.fprg):** È il formato XML originale di Flowgorithm.
+* **File FPRG (.fprg):** È il formato XML originale di [Flowgorithm](https://flowgorithm.org/).
  * **Caricamento:** L'XML viene decodificato ricorsivamente. La lettura dei rami `then` ed `else` è rigidamente limitata ai figli diretti del tag `<if>`, evitando conflitti di nidificazione.
  * **Salvataggio:** Genera codice XML standard. Per prevenire il bug di conversione automatica delle variabili in array (risoluzione Issue #1), le variabili scalari vengono salvate rigorosamente con `array="False"` e `size=""`.
 * **File di Backup JSON (.json):** Salva lo stato interno puro di Flowonline2. Può essere esportato e riaperto direttamente dal menu *File -> Apri*.
 * **Traduzione Automatica ToChar(13) e Newline (\n):**
- * **In Flowgorithm (Windows):** I ritorni a capo richiedono l'uso della funzione `ToChar(13)`.
+ * **In [Flowgorithm](https://flowgorithm.org/) (Windows):** I ritorni a capo richiedono l'uso della funzione `ToChar(13)`.
  * **In Flowonline2 (Web):** Puoi inserire direttamente la costante non virgolettata `\n` (es. `testo & \n & "altro"`).
  * **Conversione automatica:** All'apertura del file `.fprg`, l'app converte tutti i `ToChar(13)` in `\n`. Al salvataggio, converte tutti i `\n` in `ToChar(13)` per garantire compatibilità assoluta!
 
@@ -117,9 +117,9 @@ Flowonline2 supporta tutti gli operatori formali di Flowgorithm. Di seguito la t
 > **⚠️ ACHTUNG / HINWEIS:**
 > Die Übersetzungen von Flowonline2, MANUAL.md und allen anderen Projektdateien sind möglicherweise nicht zu 100 % korrekt.
 
-Willkommen bei **Flowonline2**, einem Klon des Flussdiagramm-Interpreters **Flowgorithm** (Windows-Version 4.5).
+Willkommen bei **Flowonline2**, einem Klon des Flussdiagramm-Interpreters [**Flowgorithm**](https://flowgorithm.org/) (Windows-Version 4.5).
 
-**📄 Richtlinien:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md) · [Disclaimer](docs/DISCLAIMER.md)
+**📄 Richtlinien:** [Security Policy](https://github.com/PiBOH/flowonline2/blob/main/docs/SECURITY.md) · [Privacy Policy](https://github.com/PiBOH/flowonline2/blob/main/docs/PRIVACY.md) · [Disclaimer](https://github.com/PiBOH/flowonline2/blob/main/docs/DISCLAIMER.md)
 
 ### 1. Operatoren & Auswertung
 * Unterstützt standardmäßige mathematische Operatoren (`+`, `-`, `*`, `/`, `%`, `^`).
@@ -137,9 +137,9 @@ Willkommen bei **Flowonline2**, einem Klon des Flussdiagramm-Interpreters **Flow
 > **⚠️ ATTENTION / AVIS:**
 > Les traductions de Flowonline2, de MANUAL.md et de tous les autres fichiers du projet peuvent ne pas être exactes à 100 %.
 
-Bienvenue sur **Flowonline2**, un clone web fidèle à 1000 % de l'interpréteur pédagogique de logigrammes **Flowgorithm** (Windows version 4.5).
+Bienvenue sur **Flowonline2**, un clone web fidèle à 1000 % de l'interpréteur pédagogique de logigrammes [**Flowgorithm**](https://flowgorithm.org/) (Windows version 4.5).
 
-**📄 Politiques :** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md) · [Disclaimer](docs/DISCLAIMER.md)
+**📄 Politiques :** [Security Policy](https://github.com/PiBOH/flowonline2/blob/main/docs/SECURITY.md) · [Privacy Policy](https://github.com/PiBOH/flowonline2/blob/main/docs/PRIVACY.md) · [Disclaimer](https://github.com/PiBOH/flowonline2/blob/main/docs/DISCLAIMER.md)
 
 ### 1. Opérateurs et Syntaxe
 * text Prend en charge tous les opérateurs mathématiques standard (`+`, `-`, `*`, `/`, `%`, `^`).
@@ -156,9 +156,9 @@ Bienvenue sur **Flowonline2**, un clone web fidèle à 1000 % de l'interpréteur
 > **⚠️ ATENCIÓN / AVISO:**
 > Las traducciones de Flowonline2, MANUAL.md y todos los demás archivos del proyecto pueden no ser exactas al 100%.
 
-Bienvenido a **Flowonline2**, un clon web extraordinariamente fiel al 1000% del popular intérprete de diagramas de flujo **Flowgorithm** (versión de Windows 4.5).
+Bienvenido a **Flowonline2**, un clon web extraordinariamente fiel al 1000% del popular intérprete de diagramas de flujo [**Flowgorithm**](https://flowgorithm.org/) (versión de Windows 4.5).
 
-**📄 Políticas:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md) · [Disclaimer](docs/DISCLAIMER.md)
+**📄 Políticas:** [Security Policy](https://github.com/PiBOH/flowonline2/blob/main/docs/SECURITY.md) · [Privacy Policy](https://github.com/PiBOH/flowonline2/blob/main/docs/PRIVACY.md) · [Disclaimer](https://github.com/PiBOH/flowonline2/blob/main/docs/DISCLAIMER.md)
 
 ### 1. Operadores y Sintaxis
 * Admite todos los operadores matemáticos estándar (`+`, `-`, `*`, `/`, `%`, `^`).

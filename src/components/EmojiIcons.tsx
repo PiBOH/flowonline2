@@ -512,3 +512,17 @@ export const IconLock: React.FC<IconProps> = (p) => (
     <circle cx="8" cy="10.5" r="1" fill="#FFF3E0"/>
   </SvgIcon>
 );
+
+// ── Disclaimer Scale (⚖️) — Golden balance scale ──
+export const IconScale: React.FC<IconProps> = (p) => (
+  <SvgIcon {...p}>
+    <rect x="1.5" y="13" width="13" height="1.6" rx="0.5" fill="#8D6E63" stroke="#5D4037" strokeWidth="0.4"/>
+    <path d="M8 1.5v11.5" stroke="#B8860B" strokeWidth="0.9"/>
+    <path d="M8 4c-1.2 0-2-0.9-2-1.8L8 1.2l2 1c0 0.9-0.8 1.8-2 1.8z" fill="#FFC107" stroke="#B8860B" strokeWidth="0.5"/>
+    <path d="M3.5 6h4M8.5 6h4" stroke="#B8860B" strokeWidth="0.7" strokeLinecap="round"/>
+    <path d="M3.5 6l-1.2 4.2h6L7.1 6z" fill="#FFD54F" stroke="#B8860B" strokeWidth="0.5"/>
+    <path d="M8.5 6l-1.2 4.2h6L12.5 6z" fill="#FFE082" stroke="#B8860B" strokeWidth="0.5"/>
+    <circle cx="6.4" cy="11" r="0.7" fill="#B8860B"/>
+    <circle cx="11.6" cy="11" r="0.7" fill="#B8860B"/>
+  </SvgIcon>
+);

@@ -709,6 +709,23 @@ v2.3.23: Summary of changes
 
 ---
 
+## Milestone 54: Disclaimer in Help Menu + MANUAL Link Fixes + Tighter Menu Bar (2.6.14-beta)
+
+### Changed
+*   **MANUAL.md:** All `Flowgorithm` mentions now link to https://flowgorithm.org/ ; Security/Privacy/Disclaimer links in all 5 language sections now use full GitHub blob URLs instead of relative `docs/` paths.
+*   **Help menu (desktop):** New `Disclaimer` entry with `IconScale` (golden balance-scale SVG) opening a WinUI dialog that dynamically loads `docs/DISCLAIMER.md` (GitHub remote → local → hardcoded fallback), mirroring Security/Privacy.
+*   **Help (mobile):** `Disclaimer` item in the Tools Help card (`MobileToolsView`) and navigation drawer (`MobileSidebar`), wired in `MobileApp`.
+*   **Translation keys:** `disclaimerPolicy` / `disclaimerRepoLoaded` / `disclaimerFallbackLoaded` for all 23 languages in `Header.tsx`.
+*   **Menu bar spacing:** menu buttons `px-[6px]` (was `px-[10px]`), wrappers `ml-0.5` (was `ml-1`).
+*   Version bumped to `2.6.14-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+### Architecture invariants
+*   All document dialogs share the same fetch pattern and StatusDot source indicators.
+*   Desktop and mobile help surfaces stay in sync.
+
+---
+
 ## Milestone 53: Disclaimer Document Added (2.6.13-beta)
 
 ### Added

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.14-beta] - 2026-08-02
+
+### Changed
+- **MANUAL.md:** All 14 `Flowgorithm` mentions now link to https://flowgorithm.org/ ; the Security/Privacy/Disclaimer links in all 5 language sections now point to the GitHub blob URLs (github.com/PiBOH/flowonline2/blob/main/docs/...) instead of relative paths.
+- **Disclaimer in Help menu (desktop):** New `Disclaimer` entry (with a golden balance-scale SVG icon) added to the Help dropdown, opening a WinUI dialog that dynamically loads `docs/DISCLAIMER.md` from the official GitHub repository (with local + hardcoded fallback), mirroring the Security/Privacy pattern.
+- **Disclaimer in Help (mobile):** `Disclaimer` item added to the Tools Help card and the navigation drawer in `MobileToolsView` / `MobileSidebar` / `MobileApp`.
+- **New SVG icon:** `IconScale` added to `EmojiIcons.tsx`.
+- **Translation keys:** `disclaimerPolicy` / `disclaimerRepoLoaded` / `disclaimerFallbackLoaded` added to the desktop header menu translations for all 23 languages.
+- **Menu bar spacing reduced:** Desktop menu-bar buttons use `px-[6px]` (was `px-[10px]`) and wrappers use `ml-0.5` (was `ml-1`) so the menu bar fits on smaller monitors.
+- Validation: TypeScript, Vitest, production build, and `git diff --check` all pass.
+
 ## [2.6.13-beta] - 2026-08-02
 
 ### Added
