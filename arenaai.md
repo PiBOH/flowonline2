@@ -709,6 +709,21 @@ v2.3.23: Summary of changes
 
 ---
 
+## Milestone 53: Disclaimer Document Added (2.6.13-beta)
+
+### Added
+*   **`docs/DISCLAIMER.md`:** Multilingual disclaimer (no warranty, no liability, educational purpose, third-party content) in the same languages as the README (EN, IT, DE, FR, ES) with an initial language index, mirroring the SECURITY.md/PRIVACY.md structure. Explicitly quotes and implements AGPL-3.0 license sections **15 (Disclaimer of Warranty)** and **16 (Limitation of Liability)**.
+*   **README.md / MANUAL.md:** Policies links extended to include the Disclaimer in all language sections.
+
+### Changed
+*   Version bumped to `2.6.13-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+### Architecture invariants
+*   Documentation-only change — no functional impact.
+
+---
+
 ## Milestone 52: Security Acknowledgment Window Updated to 2 Weeks (2.6.12-beta)
 
 ### Changed

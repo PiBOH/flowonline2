@@ -37,6 +37,7 @@ For detailed information on variables, mathematical expressions, conversion intr
 
 *   🔐 [**Security Policy**](https://github.com/PiBOH/flowonline2/blob/main/docs/SECURITY.md)
 *   🛡️ [**Privacy Policy**](https://github.com/PiBOH/flowonline2/blob/main/docs/PRIVACY.md)
+*   ⚖️ [**Disclaimer**](https://github.com/PiBOH/flowonline2/blob/main/docs/DISCLAIMER.md)
 
 ---
 

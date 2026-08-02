@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.13-beta] - 2026-08-02
+
+### Added
+- **`docs/DISCLAIMER.md`:** New multilingual disclaimer (no warranty, no liability, educational purpose, third-party content) following the same structure and language index as `SECURITY.md` and `PRIVACY.md` (EN, IT, DE, FR, ES). Explicitly quotes and implements license sections **15 (Disclaimer of Warranty)** and **16 (Limitation of Liability)** of the AGPL-3.0 license.
+- **README.md:** `Policies` section now also links to the Disclaimer.
+- **MANUAL.md:** Each language section (EN, IT, DE, FR, ES) now also links to `docs/DISCLAIMER.md`.
+- Validation: TypeScript, Vitest, production build, and `git diff --check` all pass.
+
 ## [2.6.12-beta] - 2026-08-02
 
 ### Changed

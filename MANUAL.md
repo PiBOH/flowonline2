@@ -19,7 +19,7 @@ Welcome to **Flowonline2**, a pixel-perfect, 1000% faithful web-based clone of t
 
 Developed by PiBOH under AGPL-3.0.
 
-**📄 Policies:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md)
+**📄 Policies:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md) · [Disclaimer](docs/DISCLAIMER.md)
 
 ### 1. User Interface & Emulation
 * **Title Bar (Windows Style):** Emulates a classic Windows desktop window, complete with the multi-colored Flowgorithm logo and decorative window controls (Minimize, Maximize, Close). Clicking these controls will open an authentic Win32 dialog box warning stating they are decorative.
@@ -70,7 +70,7 @@ Benvenuto su **Flowonline2**, un clone web straordinariamente fedele al 1000% de
 
 Sviluppato da PiBOH sotto AGPL-3.0.
 
-**📄 Policy:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md)
+**📄 Policy:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md) · [Disclaimer](docs/DISCLAIMER.md)
 
 ### 1. Interfaccia Utente ed Emulazione
 * **Barra del Titolo (Stile Windows):** Emula una classica finestra desktop, completa del logo di Flowgorithm a 4 colori e tasti di controllo fittizi (Riduci a icona, Ingrandisci, Chiudi). Cliccando su di essi apparirà un avviso di sistema Win32.
@@ -119,7 +119,7 @@ Flowonline2 supporta tutti gli operatori formali di Flowgorithm. Di seguito la t
 
 Willkommen bei **Flowonline2**, einem Klon des Flussdiagramm-Interpreters **Flowgorithm** (Windows-Version 4.5).
 
-**📄 Richtlinien:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md)
+**📄 Richtlinien:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md) · [Disclaimer](docs/DISCLAIMER.md)
 
 ### 1. Operatoren & Auswertung
 * Unterstützt standardmäßige mathematische Operatoren (`+`, `-`, `*`, `/`, `%`, `^`).
@@ -139,7 +139,7 @@ Willkommen bei **Flowonline2**, einem Klon des Flussdiagramm-Interpreters **Flow
 
 Bienvenue sur **Flowonline2**, un clone web fidèle à 1000 % de l'interpréteur pédagogique de logigrammes **Flowgorithm** (Windows version 4.5).
 
-**📄 Politiques :** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md)
+**📄 Politiques :** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md) · [Disclaimer](docs/DISCLAIMER.md)
 
 ### 1. Opérateurs et Syntaxe
 * text Prend en charge tous les opérateurs mathématiques standard (`+`, `-`, `*`, `/`, `%`, `^`).
@@ -158,7 +158,7 @@ Bienvenue sur **Flowonline2**, un clone web fidèle à 1000 % de l'interpréteur
 
 Bienvenido a **Flowonline2**, un clon web extraordinariamente fiel al 1000% del popular intérprete de diagramas de flujo **Flowgorithm** (versión de Windows 4.5).
 
-**📄 Políticas:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md)
+**📄 Políticas:** [Security Policy](docs/SECURITY.md) · [Privacy Policy](docs/PRIVACY.md) · [Disclaimer](docs/DISCLAIMER.md)
 
 ### 1. Operadores y Sintaxis
 * Admite todos los operadores matemáticos estándar (`+`, `-`, `*`, `/`, `%`, `^`).
