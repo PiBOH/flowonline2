@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.18-beta] - 2026-08-02
+
+### Added
+- **Custom 404 page (`404.html`):** A branded, theme-aware (light/dark via `prefers-color-scheme`) "Page Not Found" page for GitHub Pages, replacing the default GitHub 404 with a Flowonline2-styled experience that matches the application's colors and design.
+- Validation: TypeScript, Vitest, production build, and `git diff --check` all pass.
+
 ## [2.6.17-beta] - 2026-08-02
 
 ### Changed

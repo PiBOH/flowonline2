@@ -82,9 +82,18 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (2.6.15-beta)
+## 5. Architectural Milestone Logs & Change History (2.6.18-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
+
+---
+
+### Milestone 58: Custom 404 Page Added (2.6.18-beta)
+
+### Added
+*   **`404.html`:** Branded, theme-aware (light/dark) "Page Not Found" page for GitHub Pages, styled to match the Flowonline2 design and colors.
+*   Version bumped to `2.6.18-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
 
 ---
 

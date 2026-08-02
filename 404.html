@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowonline2 - 404 Page Not Found</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Theme detector: applies the browser's light/dark preference before render -->
+    <script>
+        (function () {
+            function applyTheme() {
+                var dark = window.matchMedia &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches;
+                document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+            }
+            applyTheme();
+            try {
+                var mq = window.matchMedia("(prefers-color-scheme: dark)");
+                mq.addEventListener("change", applyTheme);
+            } catch (e) {
+                // Fallback for older browsers without addEventListener on MediaQueryList
+                if (window.matchMedia) {
+                    window.matchMedia("(prefers-color-scheme: dark)").addListener(applyTheme);
+                }
+            }
+        })();
+    </script>
+    <style>
+        :root {
+            color-scheme: light;
+            --flow-blue: #0066cc;
+            --flow-blue-dark: #004a99;
+            --flow-green: #009933;
+            --flow-orange: #ff8800;
+            --flow-red: #cc0000;
+            /* Light theme */
+            --flow-bg: #f0f0f0;
+            --flow-ink: #1f2937;
+            --flow-ink-strong: #020617;
+            --flow-muted: #667085;
+            --flow-subtle: #6b7280;
+            --flow-surface: rgba(255, 255, 255, 0.62);
+            --flow-surface-solid: #ffffff;
+            --flow-border: #b5bdc9;
+            --flow-shadow: 0 24px 50px rgba(0, 102, 204, 0.18);
+            --flow-glow-404: rgba(0, 102, 204, 0);
+            --flow-grid: rgba(0, 102, 204, 0.04);
+        }
+
+        /* Native dark theme via browser preference (works in every browser) */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                color-scheme: dark;
+                --flow-bg: #0b1220;
+                --flow-ink: #e2e8f0;
+                --flow-ink-strong: #f8fafc;
+                --flow-muted: #94a3b8;
+                --flow-subtle: #94a3b8;
+                --flow-surface: rgba(30, 41, 59, 0.7);
+                --flow-surface-solid: #1e293b;
+                --flow-border: #334155;
+                --flow-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+                --flow-glow-404: rgba(0, 102, 204, 0.35);
+                --flow-grid: rgba(148, 163, 184, 0.06);
+            }
+        }
+
+        /* Explicit dark override (set by the JS theme detector below) */
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --flow-bg: #0b1220;
+            --flow-ink: #e2e8f0;
+            --flow-ink-strong: #f8fafc;
+            --flow-muted: #94a3b8;
+            --flow-subtle: #94a3b8;
+            --flow-surface: rgba(30, 41, 59, 0.7);
+            --flow-surface-solid: #1e293b;
+            --flow-border: #334155;
+            --flow-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+            --flow-glow-404: rgba(0, 102, 204, 0.35);
+            --flow-grid: rgba(148, 163, 184, 0.06);
+        }
+
+        .text-ink-strong { color: var(--flow-ink-strong); }
+        .text-ink { color: var(--flow-ink); }
+        .text-subtle { color: var(--flow-subtle); }
+        .text-muted { color: var(--flow-muted); }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            color: var(--flow-ink);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--flow-bg);
+            background-image:
+                radial-gradient(circle at 18% 18%, rgba(0, 102, 204, 0.15), transparent 28%),
+                radial-gradient(circle at 82% 76%, rgba(255, 136, 0, 0.12), transparent 30%),
+                linear-gradient(var(--flow-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--flow-grid) 1px, transparent 1px);
+            background-size: auto, auto, 42px 42px, 42px 42px, auto;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .flow-mark {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            width: 34px;
+            height: 34px;
+            gap: 3px;
+        }
+
+        .flow-mark span:nth-child(1) { background: var(--flow-red); border-radius: 5px 0 0 0; }
+        .flow-mark span:nth-child(2) { background: var(--flow-green); border-radius: 0 5px 0 0; }
+        .flow-mark span:nth-child(3) { background: var(--flow-orange); border-radius: 0 0 0 5px; }
+        .flow-mark span:nth-child(4) { background: var(--flow-blue); border-radius: 0 0 5px 0; }
+
+        .big-404 {
+            font-size: clamp(7rem, 23vw, 18rem);
+            line-height: 0.78;
+            letter-spacing: -0.09em;
+            color: var(--flow-blue);
+            text-shadow: 0 24px 50px var(--flow-glow-404);
+        }
+
+        .zero {
+            display: inline-block;
+            color: var(--flow-red);
+            animation: zeroDrift 4s ease-in-out infinite;
+        }
+
+        .headline-o {
+            display: inline-block;
+            width: 0.72em;
+            height: 0.72em;
+            vertical-align: -0.06em;
+            margin: 0 -0.03em;
+            animation: softPulse 3.5s ease-in-out infinite;
+        }
+
+        .headline-o svg {
+            display: block;
+        }
+
+        .digit {
+            display: inline-block;
+            animation: softPulse 3.5s ease-in-out infinite;
+        }
+
+        .status-line {
+            border-left: 4px solid var(--flow-red);
+            background: var(--flow-surface);
+            backdrop-filter: blur(10px);
+            color: var(--flow-ink);
+        }
+
+        .primary-action {
+            background: linear-gradient(180deg, #1476d4 0%, var(--flow-blue) 100%);
+            border: 1px solid var(--flow-blue-dark);
+            color: #fff;
+            box-shadow: 0 14px 28px rgba(0, 102, 204, 0.24);
+        }
+
+        .primary-action:hover {
+            background: linear-gradient(180deg, #2289ee 0%, var(--flow-blue-dark) 100%);
+        }
+
+        .secondary-action {
+            border: 1px solid var(--flow-border);
+            background: var(--flow-surface-solid);
+            color: var(--flow-ink);
+        }
+
+        .secondary-action:hover {
+            border-color: var(--flow-blue);
+            color: var(--flow-blue-dark);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .secondary-action:hover {
+                color: #7ab8ff;
+            }
+        }
+
+        :root[data-theme="dark"] .secondary-action:hover {
+            color: #7ab8ff;
+        }
+
+        .floating-block {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            opacity: 0.2;
+            animation: floatBlock 7s ease-in-out infinite;
+        }
+
+        .floating-block:nth-child(1) { top: 18%; left: 12%; background: var(--flow-red); }
+        .floating-block:nth-child(2) { top: 24%; right: 14%; background: var(--flow-green); animation-delay: -2s; }
+        .floating-block:nth-child(3) { bottom: 24%; left: 18%; background: var(--flow-orange); animation-delay: -4s; }
+        .floating-block:nth-child(4) { bottom: 18%; right: 18%; background: var(--flow-blue); animation-delay: -1s; }
+
+        .enter {
+            animation: enter 0.7s cubic-bezier(.2, .8, .2, 1) both;
+        }
+
+        .enter-delay-1 { animation-delay: 0.1s; }
+        .enter-delay-2 { animation-delay: 0.22s; }
+        .enter-delay-3 { animation-delay: 0.34s; }
+
+        @keyframes zeroDrift {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            45% { transform: translateY(14px) rotate(-3deg); }
+            65% { transform: translateY(7px) rotate(2deg); }
+        }
+
+        @keyframes softPulse {
+            0%, 100% { filter: drop-shadow(0 0 0 rgba(0, 102, 204, 0)); }
+            50% { filter: drop-shadow(0 0 16px rgba(0, 102, 204, 0.35)); }
+        }
+
+        @keyframes floatBlock {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(8deg); }
+        }
+
+        @keyframes enter {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
+        <span class="floating-block"></span>
+        <span class="floating-block"></span>
+        <span class="floating-block"></span>
+        <span class="floating-block"></span>
+    </div>
+
+    <main class="relative flex min-h-screen items-center justify-center px-5 py-10">
+        <section class="mx-auto w-full max-w-5xl text-center">
+
+            <h1 class="big-404 enter enter-delay-1 mb-8 font-black" aria-label="404">
+                <span class="digit">4</span><span class="zero">0</span><span class="digit">4</span>
+            </h1>
+
+            <div class="enter enter-delay-2 mx-auto max-w-2xl">
+                <h2 class="text-ink-strong text-3xl font-bold tracking-tight sm:text-5xl">Page n<span class="headline-o" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad-yellow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff568"/>
+      <stop offset="20%" stop-color="#ffdd00"/>
+      <stop offset="100%" stop-color="#cca100"/>
+    </linearGradient>
+    <linearGradient id="grad-red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b8b"/>
+      <stop offset="30%" stop-color="#ff1a40"/>
+      <stop offset="100%" stop-color="#b30022"/>
+    </linearGradient>
+    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6bebff"/>
+      <stop offset="30%" stop-color="#00aaff"/>
+      <stop offset="100%" stop-color="#0066cc"/>
+    </linearGradient>
+    <linearGradient id="grad-green" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8eff70"/>
+      <stop offset="20%" stop-color="#26e600"/>
+      <stop offset="100%" stop-color="#178a00"/>
+    </linearGradient>
+
+    <linearGradient id="grad-ring-top" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4ae034"/>
+      <stop offset="50%" stop-color="#e6dc38"/>
+      <stop offset="100%" stop-color="#e63838"/>
+    </linearGradient>
+    <linearGradient id="grad-ring-bottom" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#e63838"/>
+      <stop offset="50%" stop-color="#2660e6"/>
+      <stop offset="100%" stop-color="#4ae034"/>
+    </linearGradient>
+
+    <linearGradient id="gloss-white" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <g stroke="#777" stroke-width="3" fill="none" opacity="0.5" stroke-linecap="round">
+    <path d="M 330 90 A 185 185 0 0 1 405 155" />
+    <path d="M 405 345 A 185 185 0 0 1 350 395" />
+    <path d="M 160 405 A 185 185 0 0 1 105 365" />
+    <path d="M 90 170 A 185 185 0 0 1 145 105" />
+    <path d="M 210 160 A 90 90 0 0 1 290 160" />
+    <path d="M 285 330 A 90 90 0 0 1 240 345" />
+  </g>
+
+  <path d="M 90 250 A 160 160 0 0 1 410 250" fill="none" stroke="url(#grad-ring-top)" stroke-width="36" opacity="0.9"/>
+  <path d="M 410 250 A 160 160 0 0 1 90 250" fill="none" stroke="url(#grad-ring-bottom)" stroke-width="36" opacity="0.9"/>
+
+  <g transform="translate(40, 210)" filter="url(#glow)">
+    <rect x="0" y="0" width="120" height="80" rx="5" fill="none" stroke="#63ff42" stroke-width="4.5" opacity="0.7"/>
+    <rect x="1" y="1" width="118" height="78" rx="4" fill="url(#grad-green)"/>
+    <path d="M 1 1 L 119 1 L 119 45 L 1 15 Z" fill="url(#gloss-white)"/>
+  </g>
+
+  <g transform="translate(190, 45)" filter="url(#glow)">
+    <rect x="0" y="0" width="120" height="80" rx="5" fill="none" stroke="#fff152" stroke-width="4.5" opacity="0.7"/>
+    <rect x="1" y="1" width="118" height="78" rx="4" fill="url(#grad-yellow)"/>
+    <path d="M 1 1 L 119 1 L 119 35 L 1 50 Z" fill="url(#gloss-white)"/>
+  </g>
+
+  <g transform="translate(315, 215)" filter="url(#glow)">
+    <path d="M 35 0 L 145 0 L 110 75 L 0 75 Z" fill="none" stroke="#ff4d6a" stroke-width="4.5" opacity="0.7"/>
+    <path d="M 35 1 L 144 1 L 109 74 L 1 74 Z" fill="url(#grad-red)"/>
+    <path d="M 35 1 L 144 1 L 126 38 L 18 38 Z" fill="url(#gloss-white)"/>
+  </g>
+
+  <g transform="translate(180, 360)" filter="url(#glow)">
+    <path d="M 30 0 L 140 0 L 110 75 L 0 75 Z" fill="none" stroke="#46cfff" stroke-width="4.5" opacity="0.7"/>
+    <path d="M 30 1 L 139 1 L 109 74 L 1 74 Z" fill="url(#grad-blue)"/>
+    <path d="M 30 1 L 139 1 L 124 35 L 15 35 Z" fill="url(#gloss-white)"/>
+  </g>
+</svg></span>t found.</h2>
+                <p class="text-muted mx-auto mt-5 max-w-xl text-base leading-7 sm:text-lg">
+                    The page you requested does not exist, may have been moved, or the link is no longer valid.
+                </p>
+            </div>
+
+            <div class="status-line enter enter-delay-2 mx-auto mt-7 max-w-2xl px-5 py-4 text-left font-mono text-sm text-ink">
+                <div>Requested URL: <span class="font-bold text-[var(--flow-red)]" id="requested-url">/</span></div>
+                <div>Status: <span class="font-bold text-[var(--flow-red)]">404 Not Found</span></div>
+            </div>
+
+            <div class="enter enter-delay-3 mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <a class="primary-action inline-flex min-w-44 items-center justify-center px-6 py-3 text-sm font-semibold transition" href="https://piboh.github.io/flowonline2/">
+                    Open Flowonline2
+                </a>
+                <button class="secondary-action inline-flex min-w-44 items-center justify-center px-6 py-3 text-sm font-semibold transition" type="button" id="back-button">
+                    Go Back
+                </button>
+                <a class="secondary-action inline-flex min-w-44 items-center justify-center px-6 py-3 text-sm font-semibold transition" href="https://github.com/PiBOH/flowonline2/blob/main/MANUAL.md">
+                    View Manual
+                </a>
+            </div>
+
+            <p class="text-subtle enter enter-delay-3 mt-10 text-xs">
+                Flowonline2 is an independent open-source educational project.
+            </p>
+        </section>
+    </main>
+
+    <script>
+        const currentPath = window.location.pathname || "/";
+        document.getElementById("requested-url").textContent = currentPath;
+
+        document.getElementById("back-button").addEventListener("click", () => {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = "https://piboh.github.io/flowonline2/";
+            }
+        });
+    </script>
+</body>
+</html>
