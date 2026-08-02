@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.16-beta] - 2026-08-02
+
+### Changed
+- **arenaai.md milestones reordered:** All 60 milestone entries are now listed chronologically (oldest → newest) by semantic version, all under a unified `### Milestone` heading level inside section 5, replacing the mixed `##`/`###` levels and the reversed ordering of recent milestones. No milestone content was removed or renamed; the section-5 heading version annotation was updated to 2.6.15-beta.
+- Validation: TypeScript, Vitest, production build, and `git diff --check` all pass.
+
 ## [2.6.15-beta] - 2026-08-02
 
 ### Changed

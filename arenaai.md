@@ -82,9 +82,22 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (2.6.10-beta)
+## 5. Architectural Milestone Logs & Change History (2.6.15-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
+
+---
+
+### Milestone 56: Milestone Log Reordering & Heading Unification (2.6.16-beta)
+
+### Changed
+*   **Milestone ordering:** All 60 milestone entries in this section are now ordered chronologically (oldest → newest) by semantic version, instead of the previous mixed layout where milestones 1–39 used `###` headings (with 33/34 swapped and a descending 39–45 tail) and milestones 40–55 sat outside the section as `##` headings in reverse order.
+*   **Heading unification:** Every milestone now uses a `### Milestone` heading (inner `### Added/Changed/Fixed` demoted to `####`) so the section hierarchy is consistent.
+*   **No content removed or renamed:** every milestone entry was preserved verbatim; only ordering and heading levels changed. The section-5 annotation was updated from 2.6.10-beta to 2.6.15-beta.
+*   Version bumped to `2.6.16-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+---
 
 ### Milestone 1: Windows MDI (Multiple Document Interface) Desktop Frame (2.0.3-beta)
 *   **Aero Glass Gradient Header:** Redesigned the main app header with a dual gradient (`#5B8DC4` -> `#2F5A8C`), standard Windows system controls (`─`, `▢`, `✕`), and the Flowgorithm 4-box colored vector logo.
@@ -92,9 +105,13 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Workspace Splitting:** Introduced an MDI layout context parameter (`AppLayout`) with five switchable layouts (`flowchart_only`, `flow_variables`, `flow_console`, `triple_split`, `flow_code`), allowing the canvas, variable watch, and console windows to be docked or closed in real-time.
 *   **Triple Split Layout:** Simulated Flowgorithm's default configuration: flowchart canvas on the left, and a vertical stack containing the variable watch on top and the console on the bottom on the right.
 
+---
+
 ### Milestone 2: Variable Case-Insensitivity (2.0.3 Fix)
 *   **Challenge:** Flowgorithm is case-insensitive for variable lookups and assignments. The web prototype was case-sensitive, making loaded `.fprg` files fail to resolve symbols (e.g. declaring `MyVar` but assigning to `myvar`).
 *   **Resolution:** Modified both `ExpressionParser` (`src/utils/parser.ts`) and the VM executor step routines (`src/context/FlowContext.tsx`) to resolve variables using case-insensitive comparisons.
+
+---
 
 ### Milestone 3: Support for Character and Type Conversions (2.0.4 Fix)
 *   **Challenge:** Flowgorithm represents characters as strings of length 1 and manipulates them using a specific set of intrinsic helper functions. Imported `.fprg` files processing arrays of characters failed to compile or execute.
@@ -103,24 +120,34 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
     *   **Conversioni:** `ToInteger(s)`, `ToReal(s)`, `ToString(n)`.
     *   **Matematiche/Trigonometriche:** `Int(n)` (whole value trunc), `Sgn(n)` (sign function), `Arcsin`, `Arccos`, `Arctan`.
 
+---
+
 ### Milestone 4: Graphic Sfumature & Shape Outlines (2.0.5-beta)
 *   **Declare Tab:** Created an authentic SVG outline path for `DeclareBlock` rendering a folder tab on top, matching the visual cues of Flowgorithm.
 *   **Terminal & Shape Colors:** Mapped all blocks to the exact color scheme in PiBOH's `flowonline` stylesheet (`--cs-terminal`, `--cs-process`, `--cs-io`, `--cs-decision`, `--cs-loop`, `--cs-call`).
 *   **Blue Dot Inserters:** Styled connector hover states to draw the classic glowing 3D blue inserter circles that expand and show a golden drop-shadow when hovered.
+
+---
 
 ### Milestone 5: Critical FPRG XML Parsing Fix (2.0.6 Fix)
 *   **Challenge:** Opened `.fprg` files from Flowgorithm loaded without evaluating assignments. Variables remained at their default values (`0`, `""`, or `false`) throughout execution.
 *   **Discovery:** Flowgorithm's XML schema represents assignments using the `expression` attribute, e.g., `<assign variable="x" expression="10"/>`, while our early XML parser incorrectly attempted to read the `value` attribute (`el.getAttribute('value')`). This caused every imported assignment expression to load as empty (`""`).
 *   **Resolution:** Patched `FprgParser.elementToStatement` to retrieve `expression` as the primary attribute (with `value` as a fallback), and updated the XML serializer (`FprgParser.serializeStatements`) to output standard `expression="..."` XML tags for assignments. This successfully restored fully functional variable assignments on all imported `.fprg` files.
 
+---
+
 ### Milestone 6: If Nesting and Operator Compatibility (2.0.7 Fix)
 *   **Equality Operator (=):** Flowgorithm allows a single `=` to represent comparison (equality) in conditions (e.g. `If x = 5`). Added tokenization mapping to convert a single `=` to the relational equality operator `==` inside `src/utils/parser.ts`.
 *   **Direct Child Node Selection:** Fixed a major bug in nested `If` branches where `getElementsByTagName` recursively traversed descendants, causing outer `If` blocks to "steal" inner `If` blocks' `<else>` or `<then>` nodes. Replaced with strict direct-child lookups using `Array.from(el.children).find(...)`.
+
+---
 
 ### Milestone 7: Alphabetical Ordering, Newlines and UI Emulation (2.0.8 Fix)
 *   **Lexicographical String Comparison:** Fixed a bug where string comparative relational operations (like checking `x < z` alphabetically) failed because the evaluator forced numeric conversions (`Number(val) < Number(right)`). Removed the numeric forcing wrappers, allowing JavaScript's native comparative operators to lexicographically compare strings and numerically compare numbers with 100% precision.
 *   **ToChar(13) Carriage Return Parsing:** Pre-wrap rendering collapses `\r` (carriage return, ASCII 13) into simple whitespaces on Webkit/Blink browsers. Resolved by adding a global regex replace in the console message renderer (`src/components/Console.tsx`) converting `\r` into Line Feeds `\n`. This successfully restored beautiful, multiline output layouts in standard dialogue balloons.
 *   **Toolbar "Open" (📂) Button Activation:** Fixed a React DOM reference bug where `<input type="file">` was nested inside the conditional drop-down. Moved it outside the dropdown, enabling the toolbar "Open" button to trigger file selections at all times.
+
+---
 
 ### Milestone 8: Hover Slide-To-Active Menus & Global Click Closures (2.0.9-beta)
 *   **Win32 Hover Dropdown Sliding:** Added `onMouseEnter` handlers across all dropdown menu headers, allowing dropdowns to activate automatically on hover when a dropdown is already open.
@@ -128,9 +155,13 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **DPI-Aware 600% Zoom Toolbar:** Added Zoom In (`🔍+`), Zoom Out (`🔍-`), zoom percentage, and Reset Zoom (`🔄`) controls on the upper-right side of the toolbar.
 *   **Win32 About Dialog Sizing:** Resized the Win32 About dialog to exactly `700px` width by `525px` height.
 
+---
+
 ### Milestone 9: Unquoted Newlines and XML Auto-Translation (2.0.10-beta)
 *   **Unquoted Newline Constant (\\n):** Modified the string tokenizer (`src/utils/parser.ts`) to intercept unquoted `\n` characters (e.g., `text & \n & min`) and parse them directly as first-class Line Feed (`\n`) string tokens.
 *   **FPRG Import/Export Normalization:** Extended `FprgParser.ts` to automatically translate all `ToChar(13)` expressions inside files loaded from the PC to unquoted `\n` constants inside the web application, and translate them back to standard `ToChar(13)` when saving/exporting.
+
+---
 
 ### Milestone 10: Auto-Scrolling, JSON Backup Upload, and Twilight Dark Themes (2.0.12 Completed)
 *   **Auto-scrolling Active Executing Block:** Added a React `ref` with `useEffect` on `isHighlighted` in `BlockNode.tsx` to automatically scroll and center the active executing block within the user's viewport.
@@ -141,6 +172,8 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Auto-Open Console:** Configured the VM runner to automatically open the Console/Triple-split layout upon executing code if it was closed.
 *   **Dynamic Version Badge:** Added an automatic fetch to load the live version from the remote GitHub `version.txt` file and display the loaded source as a decorative notification badge.
 
+---
+
 ### Milestone 11: Keyboard Block Selection, Copy & Paste Clipboard, and Right-Click Context Menus (2.0.13 Completed)
 *   **Keyboard Deletion and Block Selection:** Integrated single-click selection on any block shape (glowing blue dotted border) with support for pressing `Delete` or `Backspace` to instantly remove blocks.
 *   **Win32 Context Menu (Tasto Destro):** Developed a complete custom desktop-style right-click context menu:
@@ -149,9 +182,13 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Clipboard Copy-Paste Buffering:** Created copy, cut, and paste context handlers that recursively clone blocks, regenerate all nested block IDs to prevent UUID collisions, and support Ctrl+C, Ctrl+X, and Ctrl+V keyboard shortcuts.
 *   **Spacious 800x600 px User Manual Viewer:** Enlarged the MANUAL.md Win32 dialog box to exactly `800x600px` and implemented a fully-functional, custom Markdown-to-JSX compiler to render titles, blockquotes, code-snippets, lists, and tables inline with rich styles!
 
+---
+
 ### Milestone 12: Direct Branch Target Propagations and True/False Visual Correction (2.0.13 Fix)
 *   **Nested Branch Inserter Contexts:** Fixed the missing `parentContext` parameter inside recursive `renderLinesAndArrows` calls, allowing nested inserters to correctly propagate their target IDs (`branch_end:parentId:branchType`) instead of defaulting to `'main_end'`.
 *   **True/False Visual Alignment:** Corrected the inverted visual labeling of condition branches: the `thenBranch` on the left is now correctly labeled **VERO (True)** in vibrant green, and the `elseBranch` on the right is labeled **FALSO (False)** in standard contrast color, matching the standard desktop layout of Flowgorithm perfectly.
+
+---
 
 ### Milestone 13: Polish Release — Tutorial, Galleria Esempi, Export PNG & Bug Fixes (2.1.0-beta)
 
@@ -182,6 +219,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Interval Leak in `submitInput`:** Added cleanup of existing interval before creating a new one.
 *   **SVG Export Cleanliness:** Removed inserter buttons, delete buttons, and interactive CSS classes from exported SVG/PNG images.
 
+---
 
 ### Milestone 14: Tools Menu, Export Engines, and Author Auto-Detection (2.2.0-beta)
 
@@ -197,6 +235,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Fixed
 *   **Issue Templates Validation:** Fixed `validations` YAML key being incorrectly nested inside `attributes` in all 4 GitHub issue form templates (`bug_report-en.yml`, `bug_report-it.yml`, `feature_request-en.yml`, `feature_request-it.yml`). Moved `validations.required` to top-level form schema.
 
+---
 
 ### Milestone 15: 22-Language Full Localization and WinUI Export Dialogs (2.3.0-beta)
 
@@ -211,6 +250,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **exportUtils.ts:** `exportToPNG` and `exportToPDF` now return `Promise<ExportResult>` objects so callers can display WinUI dialogs with success/error details.
 *   **Header.tsx:** Export handlers updated to `await` export results and show WinUI dialogs with appropriate messages.
 
+---
 
 ### Milestone 16: WinUI Language Picker, Help Menu Links, and Selectable Text (2.3.1-beta)
 
@@ -226,6 +266,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Language Selector UI:** Now a styled button in the header bar opening a WinUI dialog, replacing the unstyled `<select>` element.
 *   **Translations:** Added `bugReport`, `featureRequest`, `forkContribute`, and `selectLanguage` keys to all 22 supported languages.
 
+---
 
 ### Milestone 17: WinUI About/Manual/Changelog Dialogs (2.3.2-beta)
 
@@ -240,6 +281,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Fixed
 *   **Language Picker Centering:** Increased default dimensions to 480×400 px so the 22-language grid is properly centered on screen instead of appearing too low.
 
+---
 
 ### Milestone 18: Language Flags, Resize Behavior, and Logo Polish (2.3.3-beta)
 
@@ -255,6 +297,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Fixed
 *   **Manual Resize Only:** WinUIDialog now uses `height` instead of `minHeight` CSS property, preventing automatic content-driven expansion. Windows stay at user-set size with scrollbars and can only be resized by dragging the bottom-right corner handle.
 
+---
 
 ### Milestone 19: Freeze Prevention, Memory Safeguards, and Logo Hardcoding (2.3.5-beta)
 
@@ -270,6 +313,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Changed
 *   **Hardcoded Logo SVG:** Replaced `logo_crop.png` references in title bar and About modal with the full inline SVG from `logo.svg` (Flowgorithm 4-box colored logo with gradients and glow effects), ensuring consistent rendering across all browsers.
 
+---
 
 ### Milestone 20: Dynamic Tab Title, Favicon, and Menu Polish (2.3.6-beta)
 
@@ -282,6 +326,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Changed
 *   **Menu Clarity:** Removed the `(MANUAL.md)` suffix from all 22 language translations of the User Manual menu entry (e.g., "User Manual..." instead of "User Manual (MANUAL.md)...") for cleaner appearance.
 
+---
 
 ### Milestone 21: CPU/RAM Real-Time Tab Title (2.3.7–2.3.8)
 
@@ -301,6 +346,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Cross-Browser Favicon:** Added `icon.png` fallback and `apple-touch-icon` for universal browser support (Firefox, Safari, Chrome). Kept SVG favicon for modern Chromium browsers.
 *   RAM hidden on non-Chrome browsers (Firefox/Safari lack `performance.memory` API).
 
+---
 
 ### Milestone 22: IDLE Freeze Fix and localStorage Optimization (2.3.9-beta)
 
@@ -311,6 +357,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Stale Closure on Unmount:** Page-close save now uses `latestSaveRef` (a `useRef` tracking the latest state) to prevent data loss — previously captured initial values via empty dependency array `[]`.
 *   **Save Race Condition:** `saveTimeoutRef` now properly cleared on dependency changes to prevent stale saves overwriting newer state.
 
+---
 
 ### Milestone 23: Favicon PNG and DRY Refactor (2.3.10–2.3.11)
 
@@ -324,6 +371,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **DRY Refactor — persistToStorage:** Extracted duplicate localStorage save logic (previously copy-pasted in debounce effect and unmount effect) into a single `persistToStorage(s, t, a)` helper function.
 *   **Unmount Error Logging:** localStorage errors during unmount save now logged via `console.warn` (previously silently ignored with empty `.catch()`).
 
+---
 
 ### Milestone 24: Assets in public/ and Multi-Resolution favicon.ico (2.3.12–2.3.13)
 
@@ -339,6 +387,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Removed (2.3.13-beta)
 *   One-time `generate_ico.cjs` script and duplicate root `logo.svg` cleaned up after generation.
 
+---
 
 ### Milestone 25: Dependency Cleanup (2.3.14-beta)
 
@@ -349,6 +398,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 *   **Temporary Files:** Cleaned up `/tmp/icon_*.png`, `/tmp/generate_ico.js`, `/tmp/refactor_persist.py`.
 *   **package-lock.json:** Reduced by 655 lines after removing all transitive sharp dependencies.
 
+---
 
 ### Milestone 26: Dynamic Version Badge and GitHub Release (2.3.15-beta)
 
@@ -364,6 +414,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Added
 *   **GitHub Release 2.3.15-beta:** First automated release created via GitHub API with tag `2.3.15`, title `2.3.15-beta`, description "Code backup", and prerelease flag.
 
+---
 
 ### Milestone 27: Logo Compression and Unused Dependency Removal (2.3.16-beta)
 
@@ -379,6 +430,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Added
 *   **GitHub Release 2.3.16-beta:** Created via API with tag `2.3.16`.
 
+---
 
 ### Milestone 28: Keyboard Listener Memory Leak Fix (2.3.17-beta)
 
@@ -391,6 +443,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Added
 *   **GitHub Release 2.3.17-beta:** Created via API with tag `2.3.17`.
 
+---
 
 ### Milestone 29: Critical Bugfixes — Stale Closure, Deep Clone, and IF Labels (2.3.18-beta)
 
@@ -411,6 +464,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
     - AR: صحيح / خاطئ
     - (and 14 more languages)
 
+---
 
 ### Milestone 30: Unit Test Suite — Vitest, 126 Tests, 3 Critical Modules (2.3.19-beta)
 
@@ -426,6 +480,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Changed
 *   **tsconfig.json:** Added `"exclude": ["node_modules", "dist"]` for cleaner compilation.
 
+---
 
 ### Milestone 31: Emoji → SVG Conversion for Cross-Platform Consistency (2.3.20-beta)
 
@@ -442,6 +497,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 #### Fixed
 *   **Cross-Platform Emoji Rendering:** Emoji characters render inconsistently across operating systems and browsers (Windows shows monochrome outlines, macOS shows colorful designs, Linux may show nothing). SVG icons guarantee pixel-identical appearance everywhere.
 
+---
 
 ### Milestone 32: GitHub Actions CI/CD — Auto Review, Test, and Release (2.3.21-beta)
 
@@ -464,21 +520,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
         *   **Body:** Automated template with version, commit hash (linked), date, trigger info, actor, and changelog section.
     *   Uses `GITHUB_TOKEN` for authentication with `contents: write` permission.
 
-
-### Milestone 34: Mobile UI Hamburger + Toolbar Visibility Fix (2.3.23-beta → 2.3.28-beta)
-
-**Problem (persistent across multiple commits):** The header hamburger button and the desktop toolbar were both invisible on mobile (≤767px):
-- The menu bar parent had `h-[24px]` (24px fixed), but the hamburger button is `height: 40px` from the `.hamburger-btn` CSS — button visibly overflowed the parent and was effectively hidden.
-- The toolbar was hidden entirely via `@media (max-width: 767px) { .desktop-toolbar { display: none; } }`.
-
-**Fix:**
-1. `src/components/Header.tsx` (line ~2047) — Menu bar className: `h-[24px]` → `h-[44px] md:h-[24px]`. The 40px hamburger now fits cleanly inside the 44px menu bar on mobile, while desktop stays at the original 24px.
-2. `src/index.css` — Removed the `.desktop-toolbar { display: none; }` rule inside the mobile media query. Replaced with mobile-friendly sizing:
-   - `height: 44px; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;`
-   - Buttons/child divs: `min-width: 44px; min-height: 44px; flex-shrink: 0;`
-   - Custom 3px scrollbar inside the toolbar.
-
-**Result:** Hamburger button AND all toolbar actions (New, Open, Save, Run, Step, Pause, Stop, Undo, Redo, Color scheme, Zoom) are now reachable on mobile. The toolbar stays at 44px tall, scrolls horizontally if too wide for the screen.
+---
 
 ### Milestone 33: Commit Naming Convention for Releases (2.3.22-beta)
 
@@ -499,7 +541,24 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 v2.3.23: Summary of changes
 ```
 
+---
 
+### Milestone 34: Mobile UI Hamburger + Toolbar Visibility Fix (2.3.23-beta → 2.3.28-beta)
+
+**Problem (persistent across multiple commits):** The header hamburger button and the desktop toolbar were both invisible on mobile (≤767px):
+- The menu bar parent had `h-[24px]` (24px fixed), but the hamburger button is `height: 40px` from the `.hamburger-btn` CSS — button visibly overflowed the parent and was effectively hidden.
+- The toolbar was hidden entirely via `@media (max-width: 767px) { .desktop-toolbar { display: none; } }`.
+
+**Fix:**
+1. `src/components/Header.tsx` (line ~2047) — Menu bar className: `h-[24px]` → `h-[44px] md:h-[24px]`. The 40px hamburger now fits cleanly inside the 44px menu bar on mobile, while desktop stays at the original 24px.
+2. `src/index.css` — Removed the `.desktop-toolbar { display: none; }` rule inside the mobile media query. Replaced with mobile-friendly sizing:
+   - `height: 44px; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;`
+   - Buttons/child divs: `min-width: 44px; min-height: 44px; flex-shrink: 0;`
+   - Custom 3px scrollbar inside the toolbar.
+
+**Result:** Hamburger button AND all toolbar actions (New, Open, Save, Run, Step, Pause, Stop, Undo, Redo, Color scheme, Zoom) are now reachable on mobile. The toolbar stays at 44px tall, scrolls horizontally if too wide for the screen.
+
+---
 
 ### Milestone 35: P0 Memory Leak Fixes + Language Selector on Right + err:unknown (2.3.29-beta)
 
@@ -516,6 +575,8 @@ v2.3.23: Summary of changes
 - `Header.tsx` 4 fetch useEffects (version/LICENSE/MANUAL/CHANGELOG) lack `AbortController`. They still leak on unmount. Suggested fix: extract a `useRepoFile(url, fallback?)` custom hook so `controller` is in a single-useEffect closure (avoiding past TS scope errors when controller was inside `if (!showX)` branches).
 - 6+ `console.warn` calls in Header.tsx + 4 in FlowContext.tsx remain un-gated with `import.meta.env?.DEV`. P2 production noise fix.
 - Refactor opportunity: `selectedBlockIdsRef.current = selectedBlockIds;` runs on every render — could be moved into `useEffect(() => { ref.current = state }, [state])` for clarity.
+
+---
 
 ### Milestone 36: Auto-Release Pipeline Polish — Tag Prefix Strip + Stable Channel (2.3.30-beta → 2.3.31-stable)
 
@@ -539,6 +600,8 @@ v2.3.23: Summary of changes
 | `2.3.x-stable`     | **Stable** | `2.3.x-stable_bot`        | `2.3.x-stable [bot]`       |
 | `2.3.x`                 | Pre-release| `2.3.x_bot`               | `2.3.x [bot]`              |
 
+---
+
 ### Milestone 37: BETA-Classic Two-Row Mobile Header (2.3.32-beta)
 
 [//]: # (keepachangelog)
@@ -558,6 +621,8 @@ v2.3.23: Summary of changes
 | 2   | File · Edit · Style · Tools · Program · Help · Globe (horizontally scrollable) |
 | 3   | Run · Step · Pause · Stop · undo · redo · zoom · file ops (existing desktop-toolbar, unchanged) |
 | –   | Hamburger slide-out panel → hidden              |
+
+---
 
 ### Milestone 38: Mobile Bundle Phase 1 — Foundation + Reusable Components (2.3.33-beta)
 
@@ -581,54 +646,54 @@ v2.3.23: Summary of changes
 - `MobileLanguageSheet.tsx` → `MobileBottomSheet.tsx` + `useFlow` + `FlagIcon`
 - Nothing else imports these files yet. **Phase 2** will add `MobileApp.tsx` orchestrator + 5 view components (`MobileCanvasView`, `MobileEditView`, `MobileRunView`, `MobileConsoleView`, `MobileToolsView`) + `MobileTopBar`. **Phase 3** will wire viewport routing into `App.tsx` (additive — MainLayout remains unchanged).
 
-### Milestone 45: Re-release 2.5.3-beta (post-Phase-5 TypeScript cleanup)[//]: # (keepachangelog)#### Changed*   **Version bumped** from `2.5.2-beta` → `2.5.3-beta` to escape the broken `2.5.2-beta_bot` tag the auto-release workflow already published on the broken commit `f516b39`. The next v-prefix release will re-create a clean tag on a working HEAD.*   **User action required:** Manually yank the broken `2.5.2-beta_bot` release via the GH Releases UI.#### Fixed (recap of the 3 follow-up commits ending the broken v2.5.2-beta cycle)*   `src/components/Header.tsx`: reverted `export const menuTranslations` to `const` (TS1184 because it was inside the function body).*   `src/mobile/MobileSidebar.tsx`: corrected the same `}`→`]` useMemo close typo carried over from the full rewrite.*   `src/mobile/MobileApp.tsx`: six fixes — strip dead `<IconCode size={1} />` watermark block + its import; add `message=""` to all 3 WinUIDialog overlays (required prop); refactor `mt` useMemo to cast `catalogs as any` first then index; drop unused `openerRef`; restore `MobileLanguageSheet` to its 2-prop minimal shape. 126/126 vitest passing.#### Architecture invariants preserved*   Desktop bundle byte-for-byte unchanged except for Header.tsx initial-state change.*   Mobile bundle: 12 → 11 files (`MobileTabBar.tsx` removed). All selectors strictly scoped to `.m-root`.---
-### Milestone 44: Mobile UX Rework (Phase 5) — Sidebar Drawer + Slim Execution Topbar + Vite Version Injection (2.5.2-beta)
+---
+
+### Milestone 39: Mobile Bundle Phase 2 + 3 — Views + Orchestrator + App Routing (2.3.35-beta)
 
 [//]: # (keepachangelog)
 
-#### Changed
-*   **Mobile UI:** Bottom 5-tab navigation rail **eliminated**. New layout: a single 52px top bar with a `☰` hamburger button on the **left** + Run/Step/Pause/Stop execution controls on the **right**. A slide-in sidebar drawer hosts every other option.
-*   **Top bar height:** 60px → 52px. Brand chip + subtitle removed; execution controls now have the entire visible top bar to themselves and stay reachable from any view.
+#### Added (Phase 2: views)
+*   **`src/mobile/MobileTopBar.tsx`** — Sticky top bar (56px + safe-top inset). Brand + view title + dynamic status pill (idle/running/paused/done) + Save-as-JSON button. No desktop impact.
+*   **`src/mobile/MobileCanvasView.tsx`** — Wraps the existing `<FlowchartCanvas>` in a touch-friendly container with a small overlay (statement count + zoom controls). Phase 2.5 will add long-press-to-action-menu detection.
+*   **`src/mobile/MobileEditView.tsx`** — Selection status row + Copy / Cut / Paste / Undo / Redo / Clear-canvas rows. Reactive to `useFlow()` for `selectedBlockId`, `copiedBlock`, `canUndo`, `canRedo`.
+*   **`src/mobile/MobileRunView.tsx`** — Big touch-friendly Run / Step / Pause / Stop action grid + speed slider (1–600%) + status pill. All actions disabled-with-tooltip when state doesn't allow.
+*   **`src/mobile/MobileConsoleView.tsx`** — Wraps existing `<Console>` in a mobile-safe container.
+*   **`src/mobile/MobileToolsView.tsx`** — Settings list: program title + author inputs (live), language picker (opens `<MobileLanguageSheet>`), color-scheme select, layout select, export menu (SVG / PNG / PDF via existing engine), About+License / User Manual / Changelog (fetched + opened in `<WinUIDialog>`), Bug-report/Fork links (open in new tab), Clear-localStorage with confirm.
 
-#### Added
-*   **`src/mobile/MobileSidebar.tsx`** (~301 lines): backdrop-dimmed slide-in drawer from the LEFT over `.m-root`. Width `min(320px, 88vw)`. Body-scroll lock while open. Each main row supports `tap-the-row-to-navigate` (also closes drawer) OR `tap-the-chevron-to-expand` (reveals a sub-list). Help section is pinned at the footer with its own `aria-expanded` chevron. RTL-safe via `dir` attribute read from language.
-*   **MobileSidebar a11y (Phase 5.1 patch):** ESC closes drawer (`window.addEventListener('keydown', onKey)` inside a useEffect keyed on `[props.open, props.onClose]`). Focus moves to the close button on open (`closeBtnRef.current?.focus()` inside `requestAnimationFrame`) and restores to the opener (`document.activeElement` snapshot) on close. Body-scroll lock + cleanup. Focus trap is naive but satisfies the standard drawer contract.
-*   **`vite.config.ts` version.txt loader:** synchronous `fs.readFileSync(path.resolve(process.cwd(), 'version.txt'), 'utf-8')` at Vite config-load time; trimmed string inlined into the React bundle as `import.meta.env.VITE_APP_VERSION` via `define`. Falls back to `'0.0.0-UNKNOWN'` if the file is missing/unreadable. Verified at `npm run build` and `npm run dev`.
-*   **`src/mobile/MobileApp.tsx` Path-C sidebar-action wiring:** 270-line orchestrator now owns a hidden file-input ref for `.fprg` load, 3 `<WinUIDialog>` overlays (About / Manual-from-GitHub / Changelog-from-GitHub), and a `<MobileLanguageSheet>` re-use. New / Open / Save .fprg / Backup JSON / Export SVG+PNG+PDF / Clear Local Storage all route to useFlow + `FprgParser` + `exportUtils` directly. Bug / Feature / Fork buttons `window.open` to GitHub.
+#### Added (Phase 3: orchestrator + routing)
+*   **`src/mobile/MobileApp.tsx`** — Orchestrator: localStorage-backed view router (`flowonline2_mobile_view`), top-bar + active-view + tab-bar layout, long-press detection on the canvas container (500ms threshold + 8px movement cancel) opening the pre-existing `<MobileActionMenu>`.
+*   **`src/App.tsx`** — Pure-additive directory upgrade. Imports `Suspense`, the new `useViewport` hook, and lazy-loads `./mobile/MobileApp`. Adds `AppShell` component that asks `useViewport()` and renders `<MobileApp>` on ≤767px or `<MainLayout>` on ≥768px. `MainLayout`'s existing code is byte-for-byte preserved (header imports + lazy import + AppShell added ABOVE the existing code; `<MainLayout />` reference inside `App()` swapped for `<AppShell />`).
 
-#### Removed
-*   **`src/mobile/MobileTabBar.tsx`** (and its CSS block): eliminated; the bottom 72px tab strip is gone. `<main>` view now fills the full viewport below the topbar — zero dead space.
-*   **Debug watermark** in MobileApp (was a `<div data-component="MobileApp" data-version=...>` placeholder). Redundant with the actual topbar.
-
-#### Fixed
-*   **`src/components/Header.tsx` `appVersion` initial state** was hardcoded `'0.0.0-UNKNOWN'` and only ever overwritten by an unreliable GitHub raw fetch. Now sourced from `import.meta.env.VITE_APP_VERSION` at first render. `version.txt` is the **single source-of-truth** for both the in-app About dialog and the `.fprg` filename prefix.
-
-#### Architecture invariants
-*   **Desktop bundle byte-for-byte unchanged** except for one keyword in `Header.tsx` (`const menuTranslations` → `export const menuTranslations` so the mobile sidebar can render the same labels).
-*   Mobile bundle: 12 → 11 files (`MobileTabBar.tsx` removed). Every selector strictly scoped to `.m-root`.
-*   126/126 vitest passing. `tsc --noEmit` clean.
+#### Architecture invariants (still held)
+- **Desktop files byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
+- **State reuse**: every mobile component pulls from `useFlow()` — no duplication of state.
+- **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*`.  - **Bundle isolation**: `MobileApp` is `React.lazy()`-loaded inside `AppShell`. Desktop users never download `mobile.css` or any mobile component.
 
 ---
 
-### Milestone 43: localStorage clear bug fix + "Flag: Also clear current work" toggle (2.5.1-beta)
+---
+
+### Milestone 40: Mobile Bundle Phase 2.5 — About/Manual/Changelog i18n + RTL (2.4.0-beta)
 
 [//]: # (keepachangelog)
 
-#### Fixed
-*   **`src/context/FlowContext.tsx`** — `clearLocalStorage` no longer silently lets the 500ms debounced save resurrect the cleared state. The implementation is restructured into two phases split across the `try/catch` boundary:
-    *   **Phase A (inside try):** `window.localStorage.removeItem(STORAGE_KEY)` always; if `opts.alsoClearCurrentWork === true`, also `clearTimeout(saveTimeoutRef.current)` + overwrite `latestSaveRef.current = { statements: [], programTitle: 'Untitled Program', programAuthor: '' }` + removeItem `AUTHOR_KEY` / `'flowonline2_mobile_view'` / `'flowonline2_autosave'`. On any thrown error: `console.warn` + early `return`.
-    *   **Phase B (outside try):** if `alsoClearCurrentWork`, run `setStatements([])` / `setProgramTitleState('Untitled Program')` / `setProgramAuthorState('')` / `setUndoStack([])` / `setRedoStack([])` / `setSelectedBlockIds([])` / `stopRun()`. Never partial.
-*   A failed localStorage write (private mode / quota) no longer half-clears the user's chart — it leaves the in-memory state intact.
-*   Default no-arg `clearLocalStorage()` behavior is preserved (backward-compatible with the existing desktop call site at `Header.tsx:2123`).
+#### Added (Phase 2.5: i18n)
+*   **`src/utils/translations.ts`** — 6 new top-level keys × 23 language entries: `aboutTitle`, `manualTitle`, `changelogTitle`, `agplLicenseTextFallback`, `manualTextFallback`, `changelogTextFallback`. The 3 `*Fallback` fields render with `white-space: pre-wrap` and provide brief load-failed messaging pointing users to LICENSE / MANUAL.md / CHANGELOG.md in the repository.
+*   **`src/types/flow.ts`** — `TranslationCatalog` interface extended with 6 top-level string fields (placed after `errors`).
+*   **`src/mobile/MobileToolsView.tsx`** — Pulls dialog titles + bodies from `translations[language]` (no more hardcoded English constants). Three `useState` initializers use the active language's fallback; a `useEffect([language])` resets on language switch; the three fetch effects depend on `[open, language]` so a dialog opened mid-switch re-fetches live content in the new locale. RTL direction (`dir="rtl"` for `ar`/`he`/`fa`) applied to dialog body containers.
+*   **RTL support** — `RTL_LANGS = ['ar', 'he', 'fa']` module-level constant + `isRtl` derivation inside the component + per-dialog `dir` attribute. Browser bidi algorithm then renders Latin filenames (`LICENSE`, `MANUAL.md`, `CHANGELOG.md` etc.) inline correctly inside RTL script.
 
-#### Added
-*   **`src/mobile/MobileToolsView.tsx`** — `'Flag: Also clear current work'` toggle inside the WinUI confirmation dialog. Off by default. UI: a red-bordered `FLAG` pill + a 18×18 checkbox with `accent-color: #dc2626`. When activated, the dialog border + body become red-tinted and `clearLocalStorage({ alsoClearCurrentWork: true })` is invoked; toast switches from `"legacy saved program removed ✓ (current work kept)"` to `"localStorage fully cleared ✓ (including current work)"`. Also resets `alsoClearCurrent` to false on both `onClose` and after `onOk` so the next clear starts with the conservative default.
+#### Recovery
+*   During the initial implementation pass, a Python state-machine script accidentally dropped the Persian (`fa`) entry from `src/utils/translations.ts`. The entry was recovered from `git show HEAD:src/utils/translations.ts` and re-inserted with the 6 new keys appended before the closing `  },`. Verifier: per-key grep count is 23, brace balance is 0, `tsc --noEmit` clean, `vitest run` 126/126 passed.
 
 #### Architecture invariants (still held)
-- **`clearLocalStorage` is the single source of truth** for "clear storage" — UI components must not call `localStorage.removeItem` directly. Future persisted keys (layout, colorScheme, etc.) belong in this function, not at any call site.
-- Mobile `MobileToolsView.handleClearLocalStorage` is now a thin wrapper that just translates UI state to the optional flag; no manual `removeItem` calls remain in component code.
-- Desktop (`Header.tsx:2123`) is unchanged for now — it still hits the legacy-only path. Desktop Flag-toggle parity is a candidate for the next iteration.
-- `tsc --noEmit` clean; `npx vitest run` 126/126 passed.
+- **Desktop bundle byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
+- **State reuse**: mobile components pull from `useFlow()` — no duplication.
+- **TranslationCatalog reuse**: mobile components import the shared `translations` map from `src/utils/translations.ts`. Desktop `Header.tsx` keeps its inline `langTranslations` map (a Phase 2.6+ opportunity to unify).
+- **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*` — zero desktop bleed.
+- **Bundle isolation**: changes affect mobile-side consumers; the lazy chunk continues to share its scope.
+
+---
 
 ### Milestone 41: Mobile Bundle Phase 3 — From-Scratch Rewrite + Dot-on-Hover Status Badges + Version Fallback (2.5.0-beta)
 
@@ -666,188 +731,161 @@ v2.3.23: Summary of changes
 - **State reuse**: every mobile component still pulls from `useFlow()` — no duplication of state.
 - **TranslationCatalog reuse**: mobile components import the shared `translations` map from `src/utils/translations.ts`. The per-row `StatusDot` source indicators reuse the per-language i18n labels introduced in Milestone 40 (`mt.versionRepoLoaded`, `mt.licenseRepoLoaded`, `mt.manualRepoLoaded`, `mt.changelogRepoLoaded`, etc.).
 
-### Milestone 40: Mobile Bundle Phase 2.5 — About/Manual/Changelog i18n + RTL (2.4.0-beta)
+---
+
+### Milestone 43: localStorage clear bug fix + "Flag: Also clear current work" toggle (2.5.1-beta)
 
 [//]: # (keepachangelog)
 
-#### Added (Phase 2.5: i18n)
-*   **`src/utils/translations.ts`** — 6 new top-level keys × 23 language entries: `aboutTitle`, `manualTitle`, `changelogTitle`, `agplLicenseTextFallback`, `manualTextFallback`, `changelogTextFallback`. The 3 `*Fallback` fields render with `white-space: pre-wrap` and provide brief load-failed messaging pointing users to LICENSE / MANUAL.md / CHANGELOG.md in the repository.
-*   **`src/types/flow.ts`** — `TranslationCatalog` interface extended with 6 top-level string fields (placed after `errors`).
-*   **`src/mobile/MobileToolsView.tsx`** — Pulls dialog titles + bodies from `translations[language]` (no more hardcoded English constants). Three `useState` initializers use the active language's fallback; a `useEffect([language])` resets on language switch; the three fetch effects depend on `[open, language]` so a dialog opened mid-switch re-fetches live content in the new locale. RTL direction (`dir="rtl"` for `ar`/`he`/`fa`) applied to dialog body containers.
-*   **RTL support** — `RTL_LANGS = ['ar', 'he', 'fa']` module-level constant + `isRtl` derivation inside the component + per-dialog `dir` attribute. Browser bidi algorithm then renders Latin filenames (`LICENSE`, `MANUAL.md`, `CHANGELOG.md` etc.) inline correctly inside RTL script.
+#### Fixed
+*   **`src/context/FlowContext.tsx`** — `clearLocalStorage` no longer silently lets the 500ms debounced save resurrect the cleared state. The implementation is restructured into two phases split across the `try/catch` boundary:
+    *   **Phase A (inside try):** `window.localStorage.removeItem(STORAGE_KEY)` always; if `opts.alsoClearCurrentWork === true`, also `clearTimeout(saveTimeoutRef.current)` + overwrite `latestSaveRef.current = { statements: [], programTitle: 'Untitled Program', programAuthor: '' }` + removeItem `AUTHOR_KEY` / `'flowonline2_mobile_view'` / `'flowonline2_autosave'`. On any thrown error: `console.warn` + early `return`.
+    *   **Phase B (outside try):** if `alsoClearCurrentWork`, run `setStatements([])` / `setProgramTitleState('Untitled Program')` / `setProgramAuthorState('')` / `setUndoStack([])` / `setRedoStack([])` / `setSelectedBlockIds([])` / `stopRun()`. Never partial.
+*   A failed localStorage write (private mode / quota) no longer half-clears the user's chart — it leaves the in-memory state intact.
+*   Default no-arg `clearLocalStorage()` behavior is preserved (backward-compatible with the existing desktop call site at `Header.tsx:2123`).
 
-#### Recovery
-*   During the initial implementation pass, a Python state-machine script accidentally dropped the Persian (`fa`) entry from `src/utils/translations.ts`. The entry was recovered from `git show HEAD:src/utils/translations.ts` and re-inserted with the 6 new keys appended before the closing `  },`. Verifier: per-key grep count is 23, brace balance is 0, `tsc --noEmit` clean, `vitest run` 126/126 passed.
+#### Added
+*   **`src/mobile/MobileToolsView.tsx`** — `'Flag: Also clear current work'` toggle inside the WinUI confirmation dialog. Off by default. UI: a red-bordered `FLAG` pill + a 18×18 checkbox with `accent-color: #dc2626`. When activated, the dialog border + body become red-tinted and `clearLocalStorage({ alsoClearCurrentWork: true })` is invoked; toast switches from `"legacy saved program removed ✓ (current work kept)"` to `"localStorage fully cleared ✓ (including current work)"`. Also resets `alsoClearCurrent` to false on both `onClose` and after `onOk` so the next clear starts with the conservative default.
 
 #### Architecture invariants (still held)
-- **Desktop bundle byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
-- **State reuse**: mobile components pull from `useFlow()` — no duplication.
-- **TranslationCatalog reuse**: mobile components import the shared `translations` map from `src/utils/translations.ts`. Desktop `Header.tsx` keeps its inline `langTranslations` map (a Phase 2.6+ opportunity to unify).
-- **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*` — zero desktop bleed.
-- **Bundle isolation**: changes affect mobile-side consumers; the lazy chunk continues to share its scope.
+- **`clearLocalStorage` is the single source of truth** for "clear storage" — UI components must not call `localStorage.removeItem` directly. Future persisted keys (layout, colorScheme, etc.) belong in this function, not at any call site.
+- Mobile `MobileToolsView.handleClearLocalStorage` is now a thin wrapper that just translates UI state to the optional flag; no manual `removeItem` calls remain in component code.
+- Desktop (`Header.tsx:2123`) is unchanged for now — it still hits the legacy-only path. Desktop Flag-toggle parity is a candidate for the next iteration.
+- `tsc --noEmit` clean; `npx vitest run` 126/126 passed.
 
-### Milestone 39: Mobile Bundle Phase 2 + 3 — Views + Orchestrator + App Routing (2.3.35-beta)
+---
+
+### Milestone 44: Mobile UX Rework (Phase 5) — Sidebar Drawer + Slim Execution Topbar + Vite Version Injection (2.5.2-beta)
 
 [//]: # (keepachangelog)
 
-#### Added (Phase 2: views)
-*   **`src/mobile/MobileTopBar.tsx`** — Sticky top bar (56px + safe-top inset). Brand + view title + dynamic status pill (idle/running/paused/done) + Save-as-JSON button. No desktop impact.
-*   **`src/mobile/MobileCanvasView.tsx`** — Wraps the existing `<FlowchartCanvas>` in a touch-friendly container with a small overlay (statement count + zoom controls). Phase 2.5 will add long-press-to-action-menu detection.
-*   **`src/mobile/MobileEditView.tsx`** — Selection status row + Copy / Cut / Paste / Undo / Redo / Clear-canvas rows. Reactive to `useFlow()` for `selectedBlockId`, `copiedBlock`, `canUndo`, `canRedo`.
-*   **`src/mobile/MobileRunView.tsx`** — Big touch-friendly Run / Step / Pause / Stop action grid + speed slider (1–600%) + status pill. All actions disabled-with-tooltip when state doesn't allow.
-*   **`src/mobile/MobileConsoleView.tsx`** — Wraps existing `<Console>` in a mobile-safe container.
-*   **`src/mobile/MobileToolsView.tsx`** — Settings list: program title + author inputs (live), language picker (opens `<MobileLanguageSheet>`), color-scheme select, layout select, export menu (SVG / PNG / PDF via existing engine), About+License / User Manual / Changelog (fetched + opened in `<WinUIDialog>`), Bug-report/Fork links (open in new tab), Clear-localStorage with confirm.
+#### Changed
+*   **Mobile UI:** Bottom 5-tab navigation rail **eliminated**. New layout: a single 52px top bar with a `☰` hamburger button on the **left** + Run/Step/Pause/Stop execution controls on the **right**. A slide-in sidebar drawer hosts every other option.
+*   **Top bar height:** 60px → 52px. Brand chip + subtitle removed; execution controls now have the entire visible top bar to themselves and stay reachable from any view.
 
-#### Added (Phase 3: orchestrator + routing)
-*   **`src/mobile/MobileApp.tsx`** — Orchestrator: localStorage-backed view router (`flowonline2_mobile_view`), top-bar + active-view + tab-bar layout, long-press detection on the canvas container (500ms threshold + 8px movement cancel) opening the pre-existing `<MobileActionMenu>`.
-*   **`src/App.tsx`** — Pure-additive directory upgrade. Imports `Suspense`, the new `useViewport` hook, and lazy-loads `./mobile/MobileApp`. Adds `AppShell` component that asks `useViewport()` and renders `<MobileApp>` on ≤767px or `<MainLayout>` on ≥768px. `MainLayout`'s existing code is byte-for-byte preserved (header imports + lazy import + AppShell added ABOVE the existing code; `<MainLayout />` reference inside `App()` swapped for `<AppShell />`).
+#### Added
+*   **`src/mobile/MobileSidebar.tsx`** (~301 lines): backdrop-dimmed slide-in drawer from the LEFT over `.m-root`. Width `min(320px, 88vw)`. Body-scroll lock while open. Each main row supports `tap-the-row-to-navigate` (also closes drawer) OR `tap-the-chevron-to-expand` (reveals a sub-list). Help section is pinned at the footer with its own `aria-expanded` chevron. RTL-safe via `dir` attribute read from language.
+*   **MobileSidebar a11y (Phase 5.1 patch):** ESC closes drawer (`window.addEventListener('keydown', onKey)` inside a useEffect keyed on `[props.open, props.onClose]`). Focus moves to the close button on open (`closeBtnRef.current?.focus()` inside `requestAnimationFrame`) and restores to the opener (`document.activeElement` snapshot) on close. Body-scroll lock + cleanup. Focus trap is naive but satisfies the standard drawer contract.
+*   **`vite.config.ts` version.txt loader:** synchronous `fs.readFileSync(path.resolve(process.cwd(), 'version.txt'), 'utf-8')` at Vite config-load time; trimmed string inlined into the React bundle as `import.meta.env.VITE_APP_VERSION` via `define`. Falls back to `'0.0.0-UNKNOWN'` if the file is missing/unreadable. Verified at `npm run build` and `npm run dev`.
+*   **`src/mobile/MobileApp.tsx` Path-C sidebar-action wiring:** 270-line orchestrator now owns a hidden file-input ref for `.fprg` load, 3 `<WinUIDialog>` overlays (About / Manual-from-GitHub / Changelog-from-GitHub), and a `<MobileLanguageSheet>` re-use. New / Open / Save .fprg / Backup JSON / Export SVG+PNG+PDF / Clear Local Storage all route to useFlow + `FprgParser` + `exportUtils` directly. Bug / Feature / Fork buttons `window.open` to GitHub.
 
-#### Architecture invariants (still held)
-- **Desktop files byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
-- **State reuse**: every mobile component pulls from `useFlow()` — no duplication of state.
-- **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*`.  - **Bundle isolation**: `MobileApp` is `React.lazy()`-loaded inside `AppShell`. Desktop users never download `mobile.css` or any mobile component.
+#### Removed
+*   **`src/mobile/MobileTabBar.tsx`** (and its CSS block): eliminated; the bottom 72px tab strip is gone. `<main>` view now fills the full viewport below the topbar — zero dead space.
+*   **Debug watermark** in MobileApp (was a `<div data-component="MobileApp" data-version=...>` placeholder). Redundant with the actual topbar.
 
----
+#### Fixed
+*   **`src/components/Header.tsx` `appVersion` initial state** was hardcoded `'0.0.0-UNKNOWN'` and only ever overwritten by an unreliable GitHub raw fetch. Now sourced from `import.meta.env.VITE_APP_VERSION` at first render. `version.txt` is the **single source-of-truth** for both the in-app About dialog and the `.fprg` filename prefix.
 
-## Milestone 55: Disclaimer Icon Replaced with Bookmark-Tabs SVG (2.6.15-beta)
-
-### Changed
-*   **Disclaimer icon:** The Help-menu Disclaimer entry (desktop `Header.tsx`, mobile `MobileToolsView` / `MobileSidebar`) now uses `IconBookmarkTabs` (stacked pages with colorful bookmark tabs, emoji-style) instead of the balance-scale `IconScale`. The obsolete `IconScale` component was removed.
-*   Version bumped to `2.6.15-beta`.
-*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
-
-### Architecture invariants
-*   All Help-menu policy entries keep emoji-derived SVG icons for cross-platform consistency.
-*   Desktop and mobile help surfaces stay in sync.
+#### Architecture invariants
+*   **Desktop bundle byte-for-byte unchanged** except for one keyword in `Header.tsx` (`const menuTranslations` → `export const menuTranslations` so the mobile sidebar can render the same labels).
+*   Mobile bundle: 12 → 11 files (`MobileTabBar.tsx` removed). Every selector strictly scoped to `.m-root`.
+*   126/126 vitest passing. `tsc --noEmit` clean.
 
 ---
 
-## Milestone 54: Disclaimer in Help Menu + MANUAL Link Fixes + Tighter Menu Bar (2.6.14-beta)
+---
 
-### Changed
-*   **MANUAL.md:** All `Flowgorithm` mentions now link to https://flowgorithm.org/ ; Security/Privacy/Disclaimer links in all 5 language sections now use full GitHub blob URLs instead of relative `docs/` paths.
-*   **Help menu (desktop):** New `Disclaimer` entry with `IconScale` (golden balance-scale SVG) opening a WinUI dialog that dynamically loads `docs/DISCLAIMER.md` (GitHub remote → local → hardcoded fallback), mirroring Security/Privacy.
-*   **Help (mobile):** `Disclaimer` item in the Tools Help card (`MobileToolsView`) and navigation drawer (`MobileSidebar`), wired in `MobileApp`.
-*   **Translation keys:** `disclaimerPolicy` / `disclaimerRepoLoaded` / `disclaimerFallbackLoaded` for all 23 languages in `Header.tsx`.
-*   **Menu bar spacing:** menu buttons `px-[6px]` (was `px-[10px]`), wrappers `ml-0.5` (was `ml-1`).
-*   Version bumped to `2.6.14-beta`.
-*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
-
-### Architecture invariants
-*   All document dialogs share the same fetch pattern and StatusDot source indicators.
-*   Desktop and mobile help surfaces stay in sync.
+### Milestone 45: Re-release 2.5.3-beta (post-Phase-5 TypeScript cleanup)[//]: # (keepachangelog)#### Changed*   **Version bumped** from `2.5.2-beta` → `2.5.3-beta` to escape the broken `2.5.2-beta_bot` tag the auto-release workflow already published on the broken commit `f516b39`. The next v-prefix release will re-create a clean tag on a working HEAD.*   **User action required:** Manually yank the broken `2.5.2-beta_bot` release via the GH Releases UI.#### Fixed (recap of the 3 follow-up commits ending the broken v2.5.2-beta cycle)*   `src/components/Header.tsx`: reverted `export const menuTranslations` to `const` (TS1184 because it was inside the function body).*   `src/mobile/MobileSidebar.tsx`: corrected the same `}`→`]` useMemo close typo carried over from the full rewrite.*   `src/mobile/MobileApp.tsx`: six fixes — strip dead `<IconCode size={1} />` watermark block + its import; add `message=""` to all 3 WinUIDialog overlays (required prop); refactor `mt` useMemo to cast `catalogs as any` first then index; drop unused `openerRef`; restore `MobileLanguageSheet` to its 2-prop minimal shape. 126/126 vitest passing.#### Architecture invariants preserved*   Desktop bundle byte-for-byte unchanged except for Header.tsx initial-state change.*   Mobile bundle: 12 → 11 files (`MobileTabBar.tsx` removed). All selectors strictly scoped to `.m-root`.---
 
 ---
 
-## Milestone 53: Disclaimer Document Added (2.6.13-beta)
+### Milestone 40: Mobile Interface Rebuild (2.6.0-beta)
 
-### Added
-*   **`docs/DISCLAIMER.md`:** Multilingual disclaimer (no warranty, no liability, educational purpose, third-party content) in the same languages as the README (EN, IT, DE, FR, ES) with an initial language index, mirroring the SECURITY.md/PRIVACY.md structure. Explicitly quotes and implements AGPL-3.0 license sections **15 (Disclaimer of Warranty)** and **16 (Limitation of Liability)**.
-*   **README.md / MANUAL.md:** Policies links extended to include the Disclaimer in all language sections.
+#### Added
+*   **Touch-friendly mobile shell:** Rebuilt the mobile interface under `src/mobile/` with a top app bar, navigation drawer, bottom navigation, cards, dialogs, FAB controls, consistent spacing, classic elevation, and touch-sized controls. The desktop interface remains unchanged.
+*   **Dedicated mobile flow renderer:** `MobileCanvasView.tsx` now renders an isolated accessible statement tree with explicit TRUE/FALSE branches and loop bodies. It does not import or mount the desktop `FlowchartCanvas` or `BlockNode` components.
+*   **Optional storage Flag:** Mobile clear-localStorage keeps the active work by default. A user-controlled Flag can explicitly clear the current flowchart as well.
+*   **Mobile editing and export:** The canvas exposes a block-type picker for all supported statements, nested branch/body insertion, deletion, and a typed block editor. A persistent mobile SVG target keeps SVG, PNG, and PDF export working from every mobile view.
 
-### Changed
-*   Version bumped to `2.6.13-beta`.
-*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+#### Fixed
+*   **Drawer accessibility:** A closed mobile drawer is unmounted, so hidden navigation controls cannot receive keyboard focus.
+*   **Mobile action wiring:** Tools keeps file operations, exports, language selection, community links, execution controls, and storage actions connected to existing application state and helpers.
+*   **Version consistency:** The canonical application version is `2.6.0-beta` in `version.txt`, package metadata, changelog, and release documentation. No `BETA` prefix is used in the version value.
 
-### Architecture invariants
-*   Documentation-only change — no functional impact.
-
----
-
-## Milestone 52: Security Acknowledgment Window Updated to 2 Weeks (2.6.12-beta)
-
-### Changed
-*   **`docs/SECURITY.md`:** The vulnerability-report acknowledgment window changed from 72 hours to **2 weeks** in all five language sections (EN, IT, DE, FR, ES).
-*   Version bumped to `2.6.12-beta`.
-*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
-
-### Architecture invariants
-*   Documentation-only change — no functional impact.
+#### Architecture invariants
+*   Desktop components and desktop styles were not modified by this milestone.
+*   Mobile selectors are scoped to the mobile surface and do not alter the desktop layout.
+*   Project source strings and operational documentation for this milestone are written in English.
+*   Validation: `npx tsc --noEmit`, `npx vitest run` (126 tests), and `npm run build` all pass.
 
 ---
 
-## Milestone 51: Security & Privacy Policies Linked in Help Menu (2.6.11-beta)
+### Milestone 41: Mobile Surface Compatibility and Interaction Hardening (2.6.1-beta)
 
-### Added
-*   **Help menu entries (desktop):** `Security Policy` and `Privacy Policy` items added to the `Help` dropdown in `Header.tsx`, opening WinUI dialogs that dynamically load `docs/SECURITY.md` and `docs/PRIVACY.md` from the official GitHub repository (with local `./docs/` fallback), mirroring the existing Manual/Changelog dialog pattern.
-*   **Help entries (mobile):** `Security Policy` and `Privacy Policy` items added to `MobileToolsView` Help card and `MobileSidebar`, loading the docs via `MobileApp.tsx` (docs map refactor: `manual` / `changelog` / `security` / `privacy`).
-*   **New SVG icons:** `IconShield` and `IconLock` in `EmojiIcons.tsx`.
-*   **Translation keys:** `securityPolicy` / `privacyPolicy` / `securityRepoLoaded` / `securityFallbackLoaded` / `privacyRepoLoaded` / `privacyFallbackLoaded` for all 23 languages in `Header.tsx`.
-*   **MANUAL.md:** EN/IT/DE/FR/ES sections now link to the policies.
+#### Changed
+*   **Shared desktop surface on mobile:** Portrait mobile viewports reuse the existing `MainLayout` inside a scoped landscape presentation wrapper. Landscape touch devices are not rotated twice.
+*   **Viewport detection:** `useViewport` now handles touch orientation changes, resize events, and browsers without `matchMedia`.
 
-### Changed
-*   Version bumped to `2.6.11-beta`.
-*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+#### Fixed
+*   **localStorage persistence:** Clearing saved data cancels pending debounced writes in both modes, preventing the removed backup from being recreated immediately. The optional current-work Flag remains disabled by default.
+*   **WinUI dialogs:** Dragging and manual resizing use Pointer Events for mouse, pen, and touch support, including coordinate conversion inside the rotated surface.
+*   **CSS compilation:** Removed the stray closing brace that blocked the production build.
 
-### Architecture invariants
-*   All document dialogs follow the same fetch pattern (GitHub remote first, local fallback, hardcoded fallback last).
-*   Desktop and mobile help surfaces stay in sync.
-
----
-
-## Milestone 50: Security & Privacy Policies (2.6.10-beta)
-
-### Added
-*   **`docs/SECURITY.md`:** Multilingual security policy (supported versions, private vulnerability reporting via GitHub Security Advisories, disclosure policy, scope) in the same languages as the README (EN, IT, DE, FR, ES) with an initial language index.
-*   **`docs/PRIVACY.md`:** Multilingual privacy policy (client-side only, no personal data, local storage, third-party hosting, user choices) in the same languages as the README (EN, IT, DE, FR, ES) with an initial language index.
-
-### Changed
-*   **CHANGELOG grouping:** Releases `2.6.5-beta` through `2.6.10-beta` (the AGPL-3.0 license migration + wording pass series) grouped into a single changelog section.
-*   Version bumped to `2.6.10-beta`.
-
-### Architecture invariants
-*   No functional change — documentation only.
-*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
+#### Architecture invariants
+*   `.fprg` opening, parsing, serialization, and saving behavior is unchanged.
+*   Desktop behavior remains outside the `.desktop-mobile-mode` scope.
+*   Validation completed: TypeScript, 126 Vitest tests, production build, and whitespace checks.
 
 ---
 
-## Milestone 49: License Spelling Unified to AGPL-3.0 (2.6.9-beta)
+---
 
-### Changed
-*   **Spelling unified:** All references previously written as `AGPL 3.0` are now written `AGPL-3.0` (standard SPDX-style spelling) across source, translations (23 languages), docs, and metadata.
+### Milestone 42: AI-Mode Language Index (2.6.2-beta)
 
-### Architecture invariants
-*   No functional change — only spelling/metadata.
-*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
+#### Added
+*   **`docs/aimode.md` language index:** Added a compact three-column Markdown table at the top of the document linking directly to all 24 localized sections.
+*   **Stable language anchors:** Added explicit `lang-*` anchors for every section, including accented, CJK, Cyrillic, RTL, and symbol-based headings, so navigation does not depend on renderer-specific slugification.
+
+#### Changed
+*   **Version synchronization:** Bumped the canonical release metadata to `2.6.2-beta` across `version.txt`, package metadata, `CHANGELOG.md`, `arenaai.md`, and `docs/aimode.md`.
+
+#### Architecture invariants
+*   Documentation-only change; no application runtime or `.fprg` parsing/serialization behavior changed.
+*   All 24 localized GEO and JSON-LD sections remain complete and in the original order.
 
 ---
 
-## Milestone 48: Attribution Phrases End at AGPL-3.0 (2.6.8-beta)
+---
 
-### Changed
-*   **Attribution phrases shortened:** The developer attribution sentences in `README.md` and `MANUAL.md` (English + Italian) now stop at `under/sotto AGPL-3.0.` instead of continuing with a trailing description clause.
+### Milestone 43: Device-Aware Mobile Detection (2.6.3-beta)
 
-### Architecture invariants
-*   No functional change — only documentation wording.
-*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
+#### Fixed
+*   **Desktop resize classification:** `src/mobile/useViewport.ts` no longer treats a desktop browser with a narrow CSS window as mobile. The decision combines User-Agent/platform identity, touch capability, screen dimensions, CSS viewport dimensions, and portrait orientation.
+*   **Touchscreen desktops:** Windows/macOS/Linux desktop browsers with touch support remain on the desktop layout instead of entering the rotated mobile surface.
+*   **iPadOS desktop mode:** Safari reporting `MacIntel` is recognized as a mobile/tablet device only when touch points are available; a coarse pointer alone does not reclassify a Mac desktop.
+*   **Landscape handling:** A mobile device already in landscape is not rotated a second time.
+
+#### Added
+*   **`src/mobile/useViewport.test.ts`:** Regression tests for resized desktop windows, desktop touchscreens, Android, iPhone, iPadOS desktop mode, and mobile landscape.
+
+#### Architecture invariants
+*   Desktop behavior is preserved when resizing a desktop browser window.
+*   `.fprg` opening, parsing, serialization, and saving behavior is unchanged.
+*   Validation completed: TypeScript, 135 Vitest tests, production build, and whitespace checks.
 
 ---
 
-## Milestone 47: Language Label Kept in English (2.6.7-beta)
+---
 
-### Changed
-*   **Language selector label is now always English:** The desktop header toolbar label (`Header.tsx`), the language picker dialog title (`Select Language`), the mobile menu language entry, and the source-code language label in `Sidebar.tsx` no longer localize the word `Language` — it always renders as `Language` / `Select Language`.
+### Milestone 44: WinUI Close Button Pointer Fix (2.6.4-beta)
 
-### Architecture invariants
-*   No functional change — only UI wording.
-*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
+#### Fixed
+*   **Resizable WinUI close buttons:** The title-bar close button now stops its `pointerdown` event before it reaches the draggable title bar. This prevents `setPointerCapture()` and `preventDefault()` from suppressing the button's click event.
+
+#### Added
+*   **`src/components/WinUIDialog.test.ts`:** Regression coverage confirms that pointer interaction on the `X` invokes `onClose`.
+
+#### Architecture invariants
+*   Dialog dragging, manual resizing, default-size reset, and `.fprg` opening/saving remain unchanged.
+*   Validation target: TypeScript, 136 Vitest tests, production build, and whitespace checks.
 
 ---
 
-## Milestone 46: License Wording Simplification to AGPL-3.0 (2.6.6-beta)
-
-### Changed
-*   **License wording simplified:** All long-form license references replaced with the plain text `AGPL-3.0` across source, translations, docs, and metadata. `package.json` / `package-lock.json` `license` field is now `AGPL-3.0`; version bumped to `2.6.6-beta`.
-
-### Architecture invariants
-*   No functional or UI change — this is a pure licensing/metadata wording pass.
-*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
-
 ---
 
-## Milestone 45: License Migration to AGPL-3.0 (2.6.5-beta)
+### Milestone 45: License Migration to AGPL-3.0 (2.6.5-beta)
 
-### Changed
+#### Changed
 *   **Full project license migration:** Every remaining pre-migration license reference was replaced with AGPL-3.0, matching the updated `LICENSE` file.
 *   **`package.json` / `package-lock.json`:** `license` field updated to AGPL-3.0; version bumped to `2.6.5-beta`.
 *   **`src/components/Header.tsx`:** Hardcoded fallback license text and its variable renamed from `gplLicenseTextFallback` to `agplLicenseTextFallback`.
@@ -857,92 +895,160 @@ v2.3.23: Summary of changes
 *   **`src/mobile/MobileApp.tsx`:** About text now reads `Licensed under AGPL-3.0.`
 *   **Docs:** `README.md`, `MANUAL.md` (incl. stale Italian MIT line), `CHANGELOG.md`, `arenaai.md`, and `docs/aimode.md` (24 languages + JSON-LD `agpl-3.0.html` URLs) all updated to AGPL-3.0.
 
-### Architecture invariants
+#### Architecture invariants
 *   No functional or UI change — this is a pure licensing/metadata migration.
 *   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
 
 ---
 
-## Milestone 44: WinUI Close Button Pointer Fix (2.6.4-beta)
+---
 
-### Fixed
-*   **Resizable WinUI close buttons:** The title-bar close button now stops its `pointerdown` event before it reaches the draggable title bar. This prevents `setPointerCapture()` and `preventDefault()` from suppressing the button's click event.
+### Milestone 46: License Wording Simplification to AGPL-3.0 (2.6.6-beta)
 
-### Added
-*   **`src/components/WinUIDialog.test.ts`:** Regression coverage confirms that pointer interaction on the `X` invokes `onClose`.
+#### Changed
+*   **License wording simplified:** All long-form license references replaced with the plain text `AGPL-3.0` across source, translations, docs, and metadata. `package.json` / `package-lock.json` `license` field is now `AGPL-3.0`; version bumped to `2.6.6-beta`.
 
-### Architecture invariants
-*   Dialog dragging, manual resizing, default-size reset, and `.fprg` opening/saving remain unchanged.
-*   Validation target: TypeScript, 136 Vitest tests, production build, and whitespace checks.
+#### Architecture invariants
+*   No functional or UI change — this is a pure licensing/metadata wording pass.
+*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
 
 ---
 
-## Milestone 43: Device-Aware Mobile Detection (2.6.3-beta)
+---
 
-### Fixed
-*   **Desktop resize classification:** `src/mobile/useViewport.ts` no longer treats a desktop browser with a narrow CSS window as mobile. The decision combines User-Agent/platform identity, touch capability, screen dimensions, CSS viewport dimensions, and portrait orientation.
-*   **Touchscreen desktops:** Windows/macOS/Linux desktop browsers with touch support remain on the desktop layout instead of entering the rotated mobile surface.
-*   **iPadOS desktop mode:** Safari reporting `MacIntel` is recognized as a mobile/tablet device only when touch points are available; a coarse pointer alone does not reclassify a Mac desktop.
-*   **Landscape handling:** A mobile device already in landscape is not rotated a second time.
+### Milestone 47: Language Label Kept in English (2.6.7-beta)
 
-### Added
-*   **`src/mobile/useViewport.test.ts`:** Regression tests for resized desktop windows, desktop touchscreens, Android, iPhone, iPadOS desktop mode, and mobile landscape.
+#### Changed
+*   **Language selector label is now always English:** The desktop header toolbar label (`Header.tsx`), the language picker dialog title (`Select Language`), the mobile menu language entry, and the source-code language label in `Sidebar.tsx` no longer localize the word `Language` — it always renders as `Language` / `Select Language`.
 
-### Architecture invariants
-*   Desktop behavior is preserved when resizing a desktop browser window.
-*   `.fprg` opening, parsing, serialization, and saving behavior is unchanged.
-*   Validation completed: TypeScript, 135 Vitest tests, production build, and whitespace checks.
+#### Architecture invariants
+*   No functional change — only UI wording.
+*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
 
 ---
 
-## Milestone 42: AI-Mode Language Index (2.6.2-beta)
+---
 
-### Added
-*   **`docs/aimode.md` language index:** Added a compact three-column Markdown table at the top of the document linking directly to all 24 localized sections.
-*   **Stable language anchors:** Added explicit `lang-*` anchors for every section, including accented, CJK, Cyrillic, RTL, and symbol-based headings, so navigation does not depend on renderer-specific slugification.
+### Milestone 48: Attribution Phrases End at AGPL-3.0 (2.6.8-beta)
 
-### Changed
-*   **Version synchronization:** Bumped the canonical release metadata to `2.6.2-beta` across `version.txt`, package metadata, `CHANGELOG.md`, `arenaai.md`, and `docs/aimode.md`.
+#### Changed
+*   **Attribution phrases shortened:** The developer attribution sentences in `README.md` and `MANUAL.md` (English + Italian) now stop at `under/sotto AGPL-3.0.` instead of continuing with a trailing description clause.
 
-### Architecture invariants
-*   Documentation-only change; no application runtime or `.fprg` parsing/serialization behavior changed.
-*   All 24 localized GEO and JSON-LD sections remain complete and in the original order.
+#### Architecture invariants
+*   No functional change — only documentation wording.
+*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
 
 ---
 
-## Milestone 41: Mobile Surface Compatibility and Interaction Hardening (2.6.1-beta)
+---
 
-### Changed
-*   **Shared desktop surface on mobile:** Portrait mobile viewports reuse the existing `MainLayout` inside a scoped landscape presentation wrapper. Landscape touch devices are not rotated twice.
-*   **Viewport detection:** `useViewport` now handles touch orientation changes, resize events, and browsers without `matchMedia`.
+### Milestone 49: License Spelling Unified to AGPL-3.0 (2.6.9-beta)
 
-### Fixed
-*   **localStorage persistence:** Clearing saved data cancels pending debounced writes in both modes, preventing the removed backup from being recreated immediately. The optional current-work Flag remains disabled by default.
-*   **WinUI dialogs:** Dragging and manual resizing use Pointer Events for mouse, pen, and touch support, including coordinate conversion inside the rotated surface.
-*   **CSS compilation:** Removed the stray closing brace that blocked the production build.
+#### Changed
+*   **Spelling unified:** All references previously written as `AGPL 3.0` are now written `AGPL-3.0` (standard SPDX-style spelling) across source, translations (23 languages), docs, and metadata.
 
-### Architecture invariants
-*   `.fprg` opening, parsing, serialization, and saving behavior is unchanged.
-*   Desktop behavior remains outside the `.desktop-mobile-mode` scope.
-*   Validation completed: TypeScript, 126 Vitest tests, production build, and whitespace checks.
+#### Architecture invariants
+*   No functional change — only spelling/metadata.
+*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
 
 ---
 
-## Milestone 40: Mobile Interface Rebuild (2.6.0-beta)
+---
 
-### Added
-*   **Touch-friendly mobile shell:** Rebuilt the mobile interface under `src/mobile/` with a top app bar, navigation drawer, bottom navigation, cards, dialogs, FAB controls, consistent spacing, classic elevation, and touch-sized controls. The desktop interface remains unchanged.
-*   **Dedicated mobile flow renderer:** `MobileCanvasView.tsx` now renders an isolated accessible statement tree with explicit TRUE/FALSE branches and loop bodies. It does not import or mount the desktop `FlowchartCanvas` or `BlockNode` components.
-*   **Optional storage Flag:** Mobile clear-localStorage keeps the active work by default. A user-controlled Flag can explicitly clear the current flowchart as well.
-*   **Mobile editing and export:** The canvas exposes a block-type picker for all supported statements, nested branch/body insertion, deletion, and a typed block editor. A persistent mobile SVG target keeps SVG, PNG, and PDF export working from every mobile view.
+### Milestone 50: Security & Privacy Policies (2.6.10-beta)
 
-### Fixed
-*   **Drawer accessibility:** A closed mobile drawer is unmounted, so hidden navigation controls cannot receive keyboard focus.
-*   **Mobile action wiring:** Tools keeps file operations, exports, language selection, community links, execution controls, and storage actions connected to existing application state and helpers.
-*   **Version consistency:** The canonical application version is `2.6.0-beta` in `version.txt`, package metadata, changelog, and release documentation. No `BETA` prefix is used in the version value.
+#### Added
+*   **`docs/SECURITY.md`:** Multilingual security policy (supported versions, private vulnerability reporting via GitHub Security Advisories, disclosure policy, scope) in the same languages as the README (EN, IT, DE, FR, ES) with an initial language index.
+*   **`docs/PRIVACY.md`:** Multilingual privacy policy (client-side only, no personal data, local storage, third-party hosting, user choices) in the same languages as the README (EN, IT, DE, FR, ES) with an initial language index.
 
-### Architecture invariants
-*   Desktop components and desktop styles were not modified by this milestone.
-*   Mobile selectors are scoped to the mobile surface and do not alter the desktop layout.
-*   Project source strings and operational documentation for this milestone are written in English.
-*   Validation: `npx tsc --noEmit`, `npx vitest run` (126 tests), and `npm run build` all pass.
+#### Changed
+*   **CHANGELOG grouping:** Releases `2.6.5-beta` through `2.6.10-beta` (the AGPL-3.0 license migration + wording pass series) grouped into a single changelog section.
+*   Version bumped to `2.6.10-beta`.
+
+#### Architecture invariants
+*   No functional change — documentation only.
+*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
+
+---
+
+---
+
+### Milestone 51: Security & Privacy Policies Linked in Help Menu (2.6.11-beta)
+
+#### Added
+*   **Help menu entries (desktop):** `Security Policy` and `Privacy Policy` items added to the `Help` dropdown in `Header.tsx`, opening WinUI dialogs that dynamically load `docs/SECURITY.md` and `docs/PRIVACY.md` from the official GitHub repository (with local `./docs/` fallback), mirroring the existing Manual/Changelog dialog pattern.
+*   **Help entries (mobile):** `Security Policy` and `Privacy Policy` items added to `MobileToolsView` Help card and `MobileSidebar`, loading the docs via `MobileApp.tsx` (docs map refactor: `manual` / `changelog` / `security` / `privacy`).
+*   **New SVG icons:** `IconShield` and `IconLock` in `EmojiIcons.tsx`.
+*   **Translation keys:** `securityPolicy` / `privacyPolicy` / `securityRepoLoaded` / `securityFallbackLoaded` / `privacyRepoLoaded` / `privacyFallbackLoaded` for all 23 languages in `Header.tsx`.
+*   **MANUAL.md:** EN/IT/DE/FR/ES sections now link to the policies.
+
+#### Changed
+*   Version bumped to `2.6.11-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+#### Architecture invariants
+*   All document dialogs follow the same fetch pattern (GitHub remote first, local fallback, hardcoded fallback last).
+*   Desktop and mobile help surfaces stay in sync.
+
+---
+
+### Milestone 52: Security Acknowledgment Window Updated to 2 Weeks (2.6.12-beta)
+
+#### Changed
+*   **`docs/SECURITY.md`:** The vulnerability-report acknowledgment window changed from 72 hours to **2 weeks** in all five language sections (EN, IT, DE, FR, ES).
+*   Version bumped to `2.6.12-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+#### Architecture invariants
+*   Documentation-only change — no functional impact.
+
+---
+
+---
+
+### Milestone 53: Disclaimer Document Added (2.6.13-beta)
+
+#### Added
+*   **`docs/DISCLAIMER.md`:** Multilingual disclaimer (no warranty, no liability, educational purpose, third-party content) in the same languages as the README (EN, IT, DE, FR, ES) with an initial language index, mirroring the SECURITY.md/PRIVACY.md structure. Explicitly quotes and implements AGPL-3.0 license sections **15 (Disclaimer of Warranty)** and **16 (Limitation of Liability)**.
+*   **README.md / MANUAL.md:** Policies links extended to include the Disclaimer in all language sections.
+
+#### Changed
+*   Version bumped to `2.6.13-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+#### Architecture invariants
+*   Documentation-only change — no functional impact.
+
+---
+
+---
+
+### Milestone 54: Disclaimer in Help Menu + MANUAL Link Fixes + Tighter Menu Bar (2.6.14-beta)
+
+#### Changed
+*   **MANUAL.md:** All `Flowgorithm` mentions now link to https://flowgorithm.org/ ; Security/Privacy/Disclaimer links in all 5 language sections now use full GitHub blob URLs instead of relative `docs/` paths.
+*   **Help menu (desktop):** New `Disclaimer` entry with `IconScale` (golden balance-scale SVG) opening a WinUI dialog that dynamically loads `docs/DISCLAIMER.md` (GitHub remote → local → hardcoded fallback), mirroring Security/Privacy.
+*   **Help (mobile):** `Disclaimer` item in the Tools Help card (`MobileToolsView`) and navigation drawer (`MobileSidebar`), wired in `MobileApp`.
+*   **Translation keys:** `disclaimerPolicy` / `disclaimerRepoLoaded` / `disclaimerFallbackLoaded` for all 23 languages in `Header.tsx`.
+*   **Menu bar spacing:** menu buttons `px-[6px]` (was `px-[10px]`), wrappers `ml-0.5` (was `ml-1`).
+*   Version bumped to `2.6.14-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+#### Architecture invariants
+*   All document dialogs share the same fetch pattern and StatusDot source indicators.
+*   Desktop and mobile help surfaces stay in sync.
+
+---
+
+### Milestone 55: Disclaimer Icon Replaced with Bookmark-Tabs SVG (2.6.15-beta)
+
+#### Changed
+*   **Disclaimer icon:** The Help-menu Disclaimer entry (desktop `Header.tsx`, mobile `MobileToolsView` / `MobileSidebar`) now uses `IconBookmarkTabs` (stacked pages with colorful bookmark tabs, emoji-style) instead of the balance-scale `IconScale`. The obsolete `IconScale` component was removed.
+*   Version bumped to `2.6.15-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+#### Architecture invariants
+*   All Help-menu policy entries keep emoji-derived SVG icons for cross-platform consistency.
+*   Desktop and mobile help surfaces stay in sync.
+
+---
