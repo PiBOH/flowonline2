@@ -709,6 +709,18 @@ v2.3.23: Summary of changes
 
 ---
 
+## Milestone 52: Security Acknowledgment Window Updated to 2 Weeks (2.6.12-beta)
+
+### Changed
+*   **`docs/SECURITY.md`:** The vulnerability-report acknowledgment window changed from 72 hours to **2 weeks** in all five language sections (EN, IT, DE, FR, ES).
+*   Version bumped to `2.6.12-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+### Architecture invariants
+*   Documentation-only change — no functional impact.
+
+---
+
 ## Milestone 51: Security & Privacy Policies Linked in Help Menu (2.6.11-beta)
 
 ### Added

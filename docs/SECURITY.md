@@ -32,7 +32,7 @@ Flowonline2 is a static, client-side web application. It stores no user data on 
 
 ### Disclosure Policy
 
-- We will acknowledge your report within **72 hours**.
+- We will acknowledge your report within **2 weeks**.
 - We aim to release a fix and a public advisory as soon as a patch is ready.
 - We ask you to keep the issue private until the fix is published.
 
@@ -66,7 +66,7 @@ Flowonline2 è un'applicazione web statica, lato client. Non memorizza dati uten
 
 ### Politica di Divulgazione
 
-- Confermeremo la ricezione della segnalazione entro **72 ore**.
+- Confermeremo la ricezione della segnalazione entro **2 settimane**.
 - Puntiamo a pubblicare una correzione e un advisory pubblico appena la patch è pronta.
 - Ti chiediamo di mantenere riservato il problema finché la correzione non viene pubblicata.
 
@@ -100,7 +100,7 @@ Flowonline2 ist eine statische, clientseitige Webanwendung. Sie speichert keine 
 
 ### Offenlegungsrichtlinie
 
-- Wir bestätigen den Eingang Ihrer Meldung innerhalb von **72 Stunden**.
+- Wir bestätigen den Eingang Ihrer Meldung innerhalb von **2 Wochen**.
 - Wir veröffentlichen einen Fix und ein öffentliches Advisory, sobald der Patch bereit ist.
 - Wir bitten Sie, das Problem bis zur Veröffentlichung des Fixes vertraulich zu behandeln.
 
@@ -134,7 +134,7 @@ Flowonline2 est une application web statique, côté client. Elle ne stocke aucu
 
 ### Politique de divulgation
 
-- Nous accuserons réception de votre signalement sous **72 heures**.
+- Nous accuserons réception de votre signalement sous **2 semaines**.
 - Nous visons à publier un correctif et un advisory public dès que le patch est prêt.
 - Nous vous demandons de garder le problème confidentiel jusqu'à la publication du correctif.
 
@@ -168,7 +168,7 @@ Flowonline2 es una aplicación web estática, del lado del cliente. No almacena 
 
 ### Política de divulgación
 
-- Confirmaremos la recepción de su informe en un plazo de **72 horas**.
+- Confirmaremos la recepción de su informe en un plazo de **2 semanas**.
 - Nuestro objetivo es publicar una corrección y un advisory público en cuanto el parche esté listo.
 - Le pedimos que mantenga el problema en privado hasta que se publique la corrección.
 

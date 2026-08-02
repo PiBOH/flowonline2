@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.12-beta] - 2026-08-02
+
+### Changed
+- **Security disclosure acknowledgment window:** `docs/SECURITY.md` now states that report acknowledgments are given within **2 weeks** instead of **72 hours**, updated consistently in all five language sections (EN, IT, DE, FR, ES).
+- Validation: TypeScript, Vitest, production build, and `git diff --check` all pass.
+
 ## [2.6.11-beta] - 2026-08-02
 
 ### Added
