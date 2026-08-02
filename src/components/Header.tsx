@@ -119,10 +119,10 @@ export const Header: React.FC = () => {
     setWinUIDialog({ isOpen: true, title, message, type, onOk });
   };
 
-  // Hardcoded fallback license text (AGPL 3.0)
-  const agplLicenseTextFallback = `AGPL 3.0
+  // Hardcoded fallback license text (AGPL-3.0)
+  const agplLicenseTextFallback = `AGPL-3.0
 
-Flowonline2 is licensed under AGPL 3.0.
+Flowonline2 is licensed under AGPL-3.0.
 See the LICENSE file in the repository for the complete license text.
 https://www.gnu.org/licenses/agpl-3.0.html`;
 

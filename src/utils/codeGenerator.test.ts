@@ -30,7 +30,7 @@ describe('CodeGenerator', () => {
       const code = CodeGenerator.generate([
         stmt({ type: 'comment', text: 'test' }),
       ], 'python');
-      expect(code).toContain('AGPL 3.0');
+      expect(code).toContain('AGPL-3.0');
     });
 
     it('generates declare statement', () => {

@@ -14,7 +14,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'About Flowonline2',
     manualTitle: 'Flowonline2 User Manual',
     changelogTitle: 'Flowonline2 Changelog',
-    agplLicenseTextFallback: 'AGPL 3.0\n\nFlowonline2 is licensed under AGPL 3.0.\nSee the LICENSE file in the repository for the complete license text.\nhttps://www.gnu.org/licenses/agpl-3.0.txt',
+    agplLicenseTextFallback: 'AGPL-3.0\n\nFlowonline2 is licensed under AGPL-3.0.\nSee the LICENSE file in the repository for the complete license text.\nhttps://www.gnu.org/licenses/agpl-3.0.txt',
     manualTextFallback: 'User Manual (MANUAL.md) could not be loaded from the repository.\n\nPlease refer to MANUAL.md in the repository for full documentation.',
     changelogTextFallback: 'Changelog (CHANGELOG.md) could not be loaded from the repository.\n\nPlease refer to CHANGELOG.md in the repository for the full history.'
   },
@@ -31,7 +31,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'About Flowonline2',
     manualTitle: 'Flowonline2 User Manual',
     changelogTitle: 'Flowonline2 Changelog',
-    agplLicenseTextFallback: 'AGPL 3.0\n\nFlowonline2 is licensed under AGPL 3.0.\nSee the LICENSE file in the repository for the complete license text.\nhttps://www.gnu.org/licenses/agpl-3.0.txt',
+    agplLicenseTextFallback: 'AGPL-3.0\n\nFlowonline2 is licensed under AGPL-3.0.\nSee the LICENSE file in the repository for the complete license text.\nhttps://www.gnu.org/licenses/agpl-3.0.txt',
     manualTextFallback: 'User Manual (MANUAL.md) could not be loaded from the repository.\n\nPlease refer to MANUAL.md in the repository for full documentation.',
     changelogTextFallback: 'Changelog (CHANGELOG.md) could not be loaded from the repository.\n\nPlease refer to CHANGELOG.md in the repository for the full history.'
   },
@@ -47,7 +47,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'Informazioni su Flowonline2',
     manualTitle: 'Manuale Utente di Flowonline2',
     changelogTitle: 'Changelog di Flowonline2',
-    agplLicenseTextFallback: 'Impossibile caricare il file di licenza (LICENSE).\n\nQuesto progetto è sotto AGPL 3.0.\nConsulta LICENSE nel repository per il testo completo.',
+    agplLicenseTextFallback: 'Impossibile caricare il file di licenza (LICENSE).\n\nQuesto progetto è sotto AGPL-3.0.\nConsulta LICENSE nel repository per il testo completo.',
     manualTextFallback: 'Impossibile caricare il Manuale Utente (MANUAL.md).\n\nConsulta MANUAL.md nel repository per la documentazione completa.',
     changelogTextFallback: 'Impossibile caricare il Changelog (CHANGELOG.md).\n\nConsulta CHANGELOG.md nel repository per la cronologia completa.'
   },
@@ -63,7 +63,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'Über Flowonline2',
     manualTitle: 'Flowonline2 Benutzerhandbuch',
     changelogTitle: 'Flowonline2 Änderungsverlauf',
-    agplLicenseTextFallback: 'Lizenzdatei (LICENSE) konnte nicht geladen werden.\n\nDieses Projekt ist unter AGPL 3.0 lizenziert.\nSiehe LICENSE im Repository für den vollständigen Text.',
+    agplLicenseTextFallback: 'Lizenzdatei (LICENSE) konnte nicht geladen werden.\n\nDieses Projekt ist unter AGPL-3.0 lizenziert.\nSiehe LICENSE im Repository für den vollständigen Text.',
     manualTextFallback: 'Benutzerhandbuch (MANUAL.md) konnte nicht geladen werden.\n\nSiehe MANUAL.md im Repository für die vollständige Dokumentation.',
     changelogTextFallback: 'Änderungsverlauf (CHANGELOG.md) konnte nicht geladen werden.\n\nSiehe CHANGELOG.md im Repository für den vollständigen Verlauf.'
   },
@@ -79,7 +79,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'À propos de Flowonline2',
     manualTitle: 'Manuel Utilisateur Flowonline2',
     changelogTitle: 'Journal des modifications Flowonline2',
-    agplLicenseTextFallback: 'Impossible de charger le fichier de licence (LICENSE).\n\nCe projet est sous licence AGPL 3.0.\nConsultez LICENSE dans le dépôt pour le texte complet.',
+    agplLicenseTextFallback: 'Impossible de charger le fichier de licence (LICENSE).\n\nCe projet est sous licence AGPL-3.0.\nConsultez LICENSE dans le dépôt pour le texte complet.',
     manualTextFallback: 'Manuel Utilisateur (MANUAL.md) impossible à charger.\n\nConsultez MANUAL.md dans le dépôt pour la documentation complète.',
     changelogTextFallback: "Journal des modifications (CHANGELOG.md) impossible à charger.\n\nConsultez CHANGELOG.md dans le dépôt pour l'historique complet."
   },
@@ -95,7 +95,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'Acerca de Flowonline2',
     manualTitle: 'Manual de Usuario Flowonline2',
     changelogTitle: 'Registro de cambios Flowonline2',
-    agplLicenseTextFallback: 'No se pudo cargar el archivo de licencia (LICENSE).\n\nEste proyecto está bajo AGPL 3.0.\nConsulta LICENSE en el repositorio para el texto completo.',
+    agplLicenseTextFallback: 'No se pudo cargar el archivo de licencia (LICENSE).\n\nEste proyecto está bajo AGPL-3.0.\nConsulta LICENSE en el repositorio para el texto completo.',
     manualTextFallback: 'No se pudo cargar el Manual de Usuario (MANUAL.md).\n\nConsulta MANUAL.md en el repositorio para la documentación completa.',
     changelogTextFallback: 'No se pudo cargar el Registro de cambios (CHANGELOG.md).\n\nConsulta CHANGELOG.md en el repositorio para el historial completo.'
   },
@@ -127,7 +127,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'Over Flowonline2',
     manualTitle: 'Flowonline2 Gebruikershandleiding',
     changelogTitle: 'Flowonline2 Wijzigingenlog',
-    agplLicenseTextFallback: 'Licentiebestand (LICENSE) kon niet worden geladen.\n\nDit project valt onder AGPL 3.0.\nZie LICENSE in de repository voor de volledige tekst.',
+    agplLicenseTextFallback: 'Licentiebestand (LICENSE) kon niet worden geladen.\n\nDit project valt onder AGPL-3.0.\nZie LICENSE in de repository voor de volledige tekst.',
     manualTextFallback: 'Gebruikershandleiding (MANUAL.md) kon niet worden geladen.\n\nZie MANUAL.md in de repository voor volledige documentatie.',
     changelogTextFallback: 'Wijzigingenlog (CHANGELOG.md) kon niet worden geladen.\n\nZie CHANGELOG.md in de repository voor de volledige geschiedenis.'
   },
@@ -143,7 +143,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'Sobre o Flowonline2',
     manualTitle: 'Manual do Usuário Flowonline2',
     changelogTitle: 'Registro de Alterações Flowonline2',
-    agplLicenseTextFallback: 'Não foi possível carregar o arquivo de licença (LICENSE).\n\nEste projeto está licenciado sob AGPL 3.0.\nConsulte LICENSE no repositório para o texto completo.',
+    agplLicenseTextFallback: 'Não foi possível carregar o arquivo de licença (LICENSE).\n\nEste projeto está licenciado sob AGPL-3.0.\nConsulte LICENSE no repositório para o texto completo.',
     manualTextFallback: 'Não foi possível carregar o Manual do Usuário (MANUAL.md).\n\nConsulte MANUAL.md no repositório para a documentação completa.',
     changelogTextFallback: 'Não foi possível carregar o Registro de Alterações (CHANGELOG.md).\n\nConsulte CHANGELOG.md no repositório para o histórico completo.'
   },
@@ -159,7 +159,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'Sobre Flowonline2',
     manualTitle: 'Manual do Usuario Flowonline2',
     changelogTitle: 'Rexistro de Cambios Flowonline2',
-    agplLicenseTextFallback: 'Non foi posible cargar o ficheiro de licenza (LICENSE).\n\nEste proxecto está baixo AGPL 3.0.\nConsulta LICENSE no repositorio para o texto completo.',
+    agplLicenseTextFallback: 'Non foi posible cargar o ficheiro de licenza (LICENSE).\n\nEste proxecto está baixo AGPL-3.0.\nConsulta LICENSE no repositorio para o texto completo.',
     manualTextFallback: 'Non foi posible cargar o Manual do Usuario (MANUAL.md).\n\nConsulta MANUAL.md no repositorio para a documentación completa.',
     changelogTextFallback: 'Non foi posible cargar o Rexistro de Cambios (CHANGELOG.md).\n\nConsulta CHANGELOG.md no repositorio para o historial completo.'
   },
@@ -175,7 +175,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'О Flowonline2',
     manualTitle: 'Руководство пользователя Flowonline2',
     changelogTitle: 'История изменений Flowonline2',
-    agplLicenseTextFallback: 'Не удалось загрузить файл лицензии (LICENSE).\n\nЭтот проект лицензирован под AGPL 3.0.\nПолный текст см. в LICENSE в репозитории.',
+    agplLicenseTextFallback: 'Не удалось загрузить файл лицензии (LICENSE).\n\nЭтот проект лицензирован под AGPL-3.0.\nПолный текст см. в LICENSE в репозитории.',
     manualTextFallback: 'Не удалось загрузить Руководство пользователя (MANUAL.md).\n\nПолную документацию см. в MANUAL.md в репозитории.',
     changelogTextFallback: 'Не удалось загрузить Историю изменений (CHANGELOG.md).\n\nПолную историю см. в CHANGELOG.md в репозитории.'
   },
@@ -191,7 +191,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'Про Flowonline2',
     manualTitle: 'Посібник користувача Flowonline2',
     changelogTitle: 'Історія змін Flowonline2',
-    agplLicenseTextFallback: 'Не вдалося завантажити файл ліцензії (LICENSE).\n\nЦей проєкт ліцензовано під AGPL 3.0.\nПовний текст див. у LICENSE в репозиторії.',
+    agplLicenseTextFallback: 'Не вдалося завантажити файл ліцензії (LICENSE).\n\nЦей проєкт ліцензовано під AGPL-3.0.\nПовний текст див. у LICENSE в репозиторії.',
     manualTextFallback: 'Не вдалося завантажити Посібник користувача (MANUAL.md).\n\nПовну документацію див. у MANUAL.md в репозиторії.',
     changelogTextFallback: 'Не вдалося завантажити Історію змін (CHANGELOG.md).\n\nПовну історію див. у CHANGELOG.md в репозиторії.'
   },
@@ -207,7 +207,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'O Flowonline2',
     manualTitle: 'Uživatelská příručka Flowonline2',
     changelogTitle: 'Historie změn Flowonline2',
-    agplLicenseTextFallback: 'Soubor licence (LICENSE) se nepodařilo načíst.\n\nTento projekt je licencován pod AGPL 3.0.\nÚplný text viz LICENSE v repozitáři.',
+    agplLicenseTextFallback: 'Soubor licence (LICENSE) se nepodařilo načíst.\n\nTento projekt je licencován pod AGPL-3.0.\nÚplný text viz LICENSE v repozitáři.',
     manualTextFallback: 'Uživatelskou příručku (MANUAL.md) se nepodařilo načíst.\n\nÚplnou dokumentaci viz MANUAL.md v repozitáři.',
     changelogTextFallback: 'Historii změn (CHANGELOG.md) se nepodařilo načíst.\n\nÚplnou historii viz CHANGELOG.md v repozitáři.'
   },
@@ -223,7 +223,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'O Flowonline2',
     manualTitle: 'Podręcznik użytkownika Flowonline2',
     changelogTitle: 'Historia zmian Flowonline2',
-    agplLicenseTextFallback: 'Nie udało się załadować pliku licencji (LICENSE).\n\nTen projekt jest objęty licencją AGPL 3.0.\nPełny tekst znajduje się w LICENSE w repozytorium.',
+    agplLicenseTextFallback: 'Nie udało się załadować pliku licencji (LICENSE).\n\nTen projekt jest objęty licencją AGPL-3.0.\nPełny tekst znajduje się w LICENSE w repozytorium.',
     manualTextFallback: 'Nie udało się załadować Podręcznika użytkownika (MANUAL.md).\n\nPełna dokumentacja znajduje się w MANUAL.md w repozytorium.',
     changelogTextFallback: 'Nie udało się załadować Historii zmian (CHANGELOG.md).\n\nPełna historia znajduje się w CHANGELOG.md w repozytorium.'
   },
@@ -239,7 +239,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'A Flowonline2-ről',
     manualTitle: 'Flowonline2 Felhasználói kézikönyv',
     changelogTitle: 'Flowonline2 Változásnapló',
-    agplLicenseTextFallback: 'A licencfájl (LICENSE) betöltése sikertelen.\n\nEz a projekt AGPL 3.0 alatt van licencelve.\nA teljes szöveget lásd a LICENSE fájlban a tárolóban.',
+    agplLicenseTextFallback: 'A licencfájl (LICENSE) betöltése sikertelen.\n\nEz a projekt AGPL-3.0 alatt van licencelve.\nA teljes szöveget lásd a LICENSE fájlban a tárolóban.',
     manualTextFallback: 'A Felhasználói kézikönyv (MANUAL.md) betöltése sikertelen.\n\nA teljes dokumentációt lásd a MANUAL.md fájlban a tárolóban.',
     changelogTextFallback: 'A Változásnapló (CHANGELOG.md) betöltése sikertelen.\n\nA teljes előzményt lásd a CHANGELOG.md fájlban a tárolóban.'
   },
@@ -255,7 +255,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'O Flowonline2',
     manualTitle: 'Uporabniški priročnik Flowonline2',
     changelogTitle: 'Dnevnik sprememb Flowonline2',
-    agplLicenseTextFallback: 'Datoteke licence (LICENSE) ni bilo mogoče naložiti.\n\nTa projekt je licenciran pod AGPL 3.0.\nCelotno besedilo glejte LICENSE v repozitoriju.',
+    agplLicenseTextFallback: 'Datoteke licence (LICENSE) ni bilo mogoče naložiti.\n\nTa projekt je licenciran pod AGPL-3.0.\nCelotno besedilo glejte LICENSE v repozitoriju.',
     manualTextFallback: 'Uporabniškega priročnika (MANUAL.md) ni bilo mogoče naložiti.\n\nCelotno dokumentacijo glejte MANUAL.md v repozitoriju.',
     changelogTextFallback: 'Dnevnika sprememb (CHANGELOG.md) ni bilo mogoče naložiti.\n\nCelotno zgodovino glejte CHANGELOG.md v repozitoriju.'
   },
@@ -271,7 +271,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'Flowonline2 について',
     manualTitle: 'Flowonline2 ユーザーマニュアル',
     changelogTitle: 'Flowonline2 更新履歴',
-    agplLicenseTextFallback: 'ライセンスファイル (LICENSE) を読み込めれませんでした。\n\nこのプロジェクトは AGPL 3.0 の下でライセンスされています。\n完全なテキストはリポジトリの LICENSE を参照してください。',
+    agplLicenseTextFallback: 'ライセンスファイル (LICENSE) を読み込めれませんでした。\n\nこのプロジェクトは AGPL-3.0 の下でライセンスされています。\n完全なテキストはリポジトリの LICENSE を参照してください。',
     manualTextFallback: 'ユーザーマニュアル (MANUAL.md) を読み込めれませんでした。\n\n完全なドキュメントはリポジトリの MANUAL.md を参照してください。',
     changelogTextFallback: '更新履歴 (CHANGELOG.md) を読み込めれませんでした。\n\n完全な履歴はリポジトリの CHANGELOG.md を参照してください。'
   },
@@ -287,7 +287,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'เกี่วกับ Flowonline2',
     manualTitle: 'คู่มือผู้ใช้ Flowonline2',
     changelogTitle: 'บันทึกการเปลี่ยนแปลง Flowonline2',
-    agplLicenseTextFallback: 'ไม่สามารถโหลดไฟล์ใบอนุญาต (LICENSE) ได้\n\nโปรเจ็กต์นี้ได้รับอนุญาตภายใต้ AGPL 3.0\nดูข้อความฉบับเต็มได้ที่ LICENSE ในที่เก็บ',
+    agplLicenseTextFallback: 'ไม่สามารถโหลดไฟล์ใบอนุญาต (LICENSE) ได้\n\nโปรเจ็กต์นี้ได้รับอนุญาตภายใต้ AGPL-3.0\nดูข้อความฉบับเต็มได้ที่ LICENSE ในที่เก็บ',
     manualTextFallback: 'ไม่สามารถโหลดคู่มือผู้ใช้ (MANUAL.md) ได้\n\nดูเอกสารฉบับเต็มได้ที่ MANUAL.md ในที่เก็บ',
     changelogTextFallback: 'ไม่สามารถโหลดบันทึกการเปลี่ยนแปลง (CHANGELOG.md) ได้\n\nดูประวัติฉบับเต็มได้ที่ CHANGELOG.md ในที่เก็บ'
   },
@@ -303,7 +303,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'Tentang Flowonline2',
     manualTitle: 'Panduan Pengguna Flowonline2',
     changelogTitle: 'Catatan Perubahan Flowonline2',
-    agplLicenseTextFallback: 'File lisensi (LICENSE) tidak dapat dimuat.\n\nProyek ini dilisensikan di bawah AGPL 3.0.\nLihat LICENSE di repositori untuk teks lengkap.',
+    agplLicenseTextFallback: 'File lisensi (LICENSE) tidak dapat dimuat.\n\nProyek ini dilisensikan di bawah AGPL-3.0.\nLihat LICENSE di repositori untuk teks lengkap.',
     manualTextFallback: 'Panduan Pengguna (MANUAL.md) tidak dapat dimuat.\n\nLihat MANUAL.md di repositori untuk dokumentasi lengkap.',
     changelogTextFallback: 'Catatan Perubahan (CHANGELOG.md) tidak dapat dimuat.\n\nLihat CHANGELOG.md di repositori untuk riwayat lengkap.'
   },
@@ -319,7 +319,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'Flowonline2-ийн тухай',
     manualTitle: 'Flowonline2 Хэрэглэгчийн гарын авлага',
     changelogTitle: 'Flowonline2 Үүрчлөлтийн түүх',
-    agplLicenseTextFallback: 'Лицензийн файл (LICENSE) ачааллаж чадсангүй.\n\nЭнэ төсөл нь AGPL 3.0-ын дагуу лицензтэй.\nБүрэн текстийг репозитор дахь LICENSE-ээс харна уу.',
+    agplLicenseTextFallback: 'Лицензийн файл (LICENSE) ачааллаж чадсангүй.\n\nЭнэ төсөл нь AGPL-3.0-ын дагуу лицензтэй.\nБүрэн текстийг репозитор дахь LICENSE-ээс харна уу.',
     manualTextFallback: 'Хэрэглэгчийн гарын авлага (MANUAL.md) ачааллаж чадсангүй.\n\nБүрэн баримжуулалтыг репозитор дахь MANUAL.md-аас харна уу.',
     changelogTextFallback: 'Үүрчлөлтийн түүх (CHANGELOG.md) ачааллаж чадсангүй.\n\nБүрэн түүхийг репозитор дахь CHANGELOG.md-аас харна уу.'
   },
@@ -335,7 +335,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'حول Flowonline2',
     manualTitle: 'دليل مستخدم Flowonline2',
     changelogTitle: 'سجل تغييرات Flowonline2',
-    agplLicenseTextFallback: 'تعذر تحميل ملف الترخيص (LICENSE).\n\nهذا المشروع مرخص بموجب AGPL 3.0.\nراجع LICENSE في المستودع للحصول على النص الكامل.',
+    agplLicenseTextFallback: 'تعذر تحميل ملف الترخيص (LICENSE).\n\nهذا المشروع مرخص بموجب AGPL-3.0.\nراجع LICENSE في المستودع للحصول على النص الكامل.',
     manualTextFallback: 'تعذر تحميل دليل المستخدم (MANUAL.md).\n\nراجع MANUAL.md في المستودع للحصول على الوثائق الكاملة.',
     changelogTextFallback: 'تعذر تحميل سجل التغييرات (CHANGELOG.md).\n\nراجع CHANGELOG.md في المستودع للحصول على السجل الكامل.'
   },
@@ -351,7 +351,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'אודות Flowonline2',
     manualTitle: 'מדריך למשתמש של Flowonline2',
     changelogTitle: 'יומן שינויים של Flowonline2',
-    agplLicenseTextFallback: 'לא ניתן לטעון את קובץ הרישיון (LICENSE).\n\nפרויקט זה מורשה תחת AGPL 3.0.\nראה LICENSE במאגר עבור הטקסט המלא.',
+    agplLicenseTextFallback: 'לא ניתן לטעון את קובץ הרישיון (LICENSE).\n\nפרויקט זה מורשה תחת AGPL-3.0.\nראה LICENSE במאגר עבור הטקסט המלא.',
     manualTextFallback: 'לא ניתן לטעון את המדריך למשתמש (MANUAL.md).\n\nראה MANUAL.md במאגר עבור תיעוד מלא.',
     changelogTextFallback: 'לא ניתן לטעון את יומן השינויים (CHANGELOG.md).\n\nראה CHANGELOG.md במאגר עבור ההיסטוריה המלאה.'
   },
@@ -367,7 +367,7 @@ export const translations: Record<Language, TranslationCatalog> = {
     aboutTitle: 'درباره Flowonline2',
     manualTitle: 'راهنمای کاربر Flowonline2',
     changelogTitle: 'گزارش تغییرات Flowonline2',
-    agplLicenseTextFallback: 'بارگیری فایل مجوز (LICENSE) ممکن نیست.\n\nاین پروژه تحت مجوز AGPL 3.0 است.\nبرای متن کامل، به LICENSE در مخزن مراجعه کنید.',
+    agplLicenseTextFallback: 'بارگیری فایل مجوز (LICENSE) ممکن نیست.\n\nاین پروژه تحت مجوز AGPL-3.0 است.\nبرای متن کامل، به LICENSE در مخزن مراجعه کنید.',
     manualTextFallback: 'بارگیری راهنمای کاربر (MANUAL.md) ممکن نیست.\n\nبرای مستندات کامل، به MANUAL.md در مخزن مراجعه کنید.',
     changelogTextFallback: 'بارگیری گزارش تغییرات (CHANGELOG.md) ممکن نیست.\n\nبرای سابقه کامل، به CHANGELOG.md در مخزن مراجعه کنید.'
   },
