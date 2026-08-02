@@ -1,8 +1,8 @@
 {
   "name": "flowonline2",
   "private": true,
-  "version": "2.6.5-beta",
-  "license": "AGPL-3.0-only",
+  "version": "2.6.6-beta",
+  "license": "AGPL 3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

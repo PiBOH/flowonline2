@@ -7,13 +7,23 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.6-beta] - 2026-08-02
+
+### Changed
+- **License wording simplified:** All long-form license references replaced with the plain text `AGPL 3.0` across source, translations, docs, and metadata. `package.json` / `package-lock.json` `license` field is now `AGPL 3.0`.
+
+### Architecture invariants
+- Validation: TypeScript, 136 Vitest tests, production build, and `git diff --check` pass.
+
+---
+
 ## [2.6.5-beta] - 2026-08-02
 
 ### Changed
-- **License migration to GNU AGPL v3:** Replaced every remaining pre-migration license reference with the GNU Affero General Public License v3 across the whole project. Updated `package.json`/`package-lock.json` (`AGPL-3.0-only`), `README.md`, `MANUAL.md` (incl. the stale Italian MIT mention), `arenaai.md`, `CHANGELOG.md`, `docs/aimode.md` (all 24 localized sections + JSON-LD license URLs), `Header.tsx` fallback text, `translations.ts` (`gplLicenseTextFallback` → `agplLicenseTextFallback` for all 23 languages), `codeGenerator.ts`, `codeGenerator.test.ts`, `fprgParser.ts` about-attribute, and `MobileApp.tsx`.
+- **License migration to AGPL 3.0:** Replaced every remaining pre-migration license reference with AGPL 3.0 across the whole project. Updated `package.json`/`package-lock.json`, `README.md`, `MANUAL.md` (incl. the stale Italian MIT mention), `arenaai.md`, `CHANGELOG.md`, `docs/aimode.md` (all 24 localized sections + JSON-LD license URLs), `Header.tsx` fallback text, `translations.ts` (`gplLicenseTextFallback` → `agplLicenseTextFallback` for all 23 languages), `codeGenerator.ts`, `codeGenerator.test.ts`, `fprgParser.ts` about-attribute, and `MobileApp.tsx`.
 
 ### Architecture invariants
-- The `LICENSE` file (AGPL-3.0) is now the single source of truth referenced everywhere.
+- The `LICENSE` file (AGPL 3.0) is now the single source of truth referenced everywhere.
 - Validation: TypeScript, 136 Vitest tests, production build, and `git diff --check` pass.
 
 ---
@@ -241,7 +251,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 ### Changed
 - **`src/components/Header.tsx`** — Replaced 4 colored source-status chips (line 2644 version, line 2664 license, line 2741 manual, line 2769 changelog) with `<StatusDot>` calls. The chips used to say things like "loaded from GitHub" or "fallback path" and were invasive; the new dots are silent at rest and surface their label only on hover / focus / tap.
 - **Version fallback** in `Header.tsx` is now `'0.0.0-UNKNOWN'` (both the React `useState` initial value and the final fallback after both GitHub and local fetches fail). No more hardcoded `'2.1.0'` lies — the user is told exactly when the version could not be loaded.
-- **`.ignore/.assetsai/README.md`** — Stale pre-migration license mentions cleaned up (the directory is `.gitignore`'d but keeping the dev's local notes consistent with the current GNU AGPL v3 license reduces confusion).
+- **`.ignore/.assetsai/README.md`** — Stale pre-migration license mentions cleaned up (the directory is `.gitignore`'d but keeping the dev's local notes consistent with the current AGPL 3.0 license reduces confusion).
 
 ### Fixed
 - **`MobileToolsView` useEffect cleanup bug** — The 3 fetch effects (about / manual / changelog) used to return `() => { cancelled = true; }` from inside an async IIFE, which `useEffect` receives as a `Promise` and discards. The cleanup is now hoisted outside the IIFE so the `cancelled` flag flips correctly on unmount or language change. Stale state-update warnings are gone.

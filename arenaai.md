@@ -1,6 +1,6 @@
 # arenaai.md - Flowonline2 Development, Maintenance and Change Log
 
-This file acts as the primary operational instruction manual for AI models maintaining or extending **Flowonline2**, a pixel-perfect, fully-functional web clone of Flowgorithm developed by PiBOH under the GNU Affero General Public License v3.
+This file acts as the primary operational instruction manual for AI models maintaining or extending **Flowonline2**, a pixel-perfect, fully-functional web clone of Flowgorithm developed by PiBOH under AGPL 3.0.
 
 ---
 
@@ -78,11 +78,11 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 2.  **Verify State Contract:** Check `src/types/flow.ts` and `src/context/FlowContext.tsx` to align your logic with the existing tree structure and current execution step-manager.
 3.  **Never Start from Scratch:** Refactor or extend existing modules step-by-step rather than recreating the whole file tree from scratch. Keep changes backwards compatible.
 4.  **Preserve DOM-Based XML Parsing:** Ensure that bidirectional `.fprg` parsing remains purely client-side using the native browser `DOMParser` and `XMLSerializer` to maintain ZERO-dependency portability.
-5.  **Maintain PiBOH License Notice:** Always preserve the PiBOH and GNU AGPL v3 license credits in the header/footer of the main viewport.
+5.  **Maintain PiBOH License Notice:** Always preserve the PiBOH and AGPL 3.0 license credits in the header/footer of the main viewport.
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (2.6.5-beta)
+## 5. Architectural Milestone Logs & Change History (2.6.6-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -261,7 +261,7 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 [//]: # (keepachangelog)
 
 #### Fixed
-*   **License Textarea Size:** Changed from `flex-1` to explicit `h-[300px]` with proper overflow to restore full visibility of AGPL v3 license text in the About dialog.
+*   **License Textarea Size:** Changed from `flex-1` to explicit `h-[300px]` with proper overflow to restore full visibility of AGPL 3.0 license text in the About dialog.
 *   **Execution Speed Cap:** Minimum execution delay at max speed raised from 1ms to 16ms (60 FPS cap) to prevent UI thread lockup during continuous execution.
 *   **Interval Leak:** Added `clearInterval` cleanup before `setInterval` in both `startRun` and `submitInput` to prevent multiple concurrent execution timers.
 *   **Console Memory Cap:** `addConsoleMessage` capped at 1000 items (FIFO removal) to prevent memory exhaustion from infinite output loops.
@@ -652,7 +652,7 @@ v2.3.23: Summary of changes
 #### Changed
 *   **`src/components/Header.tsx`** — Replaced 4 colored source-status chips (version, license, manual, changelog) with `<StatusDot>` calls. The chips used to say things like "loaded from GitHub" or "fallback path" and were invasive (always rendered a pill on the page even when the user wasn't looking at them); the new dots are silent at rest and surface their label only on hover / focus / tap.
 *   **Version fallback string** in `Header.tsx` is now `'0.0.0-UNKNOWN'` (both the React `useState` initial value and the final fallback after both GitHub and local fetches fail). No more hardcoded `'2.1.0'` lies — the user is told exactly when the version could not be loaded.
-*   **`.ignore/.assetsai/README.md`** — Stale MIT-License mentions cleaned up (the directory is `.gitignore`'d but keeping dev's local notes consistent with the current GNU AGPL v3 license reduces confusion).
+*   **`.ignore/.assetsai/README.md`** — Stale MIT-License mentions cleaned up (the directory is `.gitignore`'d but keeping dev's local notes consistent with the current AGPL 3.0 license reduces confusion).
 
 #### Fixed
 *   **`MobileToolsView` useEffect cleanup bug** — The 3 fetch effects (about / manual / changelog) used to return `() => { cancelled = true; }` from inside an async IIFE; `useEffect` receives a Promise and discards. The cleanup is now hoisted outside the IIFE so the `cancelled` flag flips correctly on unmount or language change. Stale state-update warnings are gone.
@@ -709,17 +709,28 @@ v2.3.23: Summary of changes
 
 ---
 
-## Milestone 45: License Migration to GNU AGPL v3 (2.6.5-beta)
+## Milestone 46: License Wording Simplification to AGPL 3.0 (2.6.6-beta)
 
 ### Changed
-*   **Full project license migration:** Every remaining pre-migration license reference was replaced with the GNU Affero General Public License v3, matching the updated `LICENSE` file (AGPL-3.0).
-*   **`package.json` / `package-lock.json`:** `license` field updated from `GPL-3.0-only` to `AGPL-3.0-only`; version bumped to `2.6.5-beta`.
-*   **`src/components/Header.tsx`:** Hardcoded fallback license text and its variable renamed from `gplLicenseTextFallback` to `agplLicenseTextFallback` (AGPL v3 notice).
+*   **License wording simplified:** All long-form license references replaced with the plain text `AGPL 3.0` across source, translations, docs, and metadata. `package.json` / `package-lock.json` `license` field is now `AGPL 3.0`; version bumped to `2.6.6-beta`.
+
+### Architecture invariants
+*   No functional or UI change — this is a pure licensing/metadata wording pass.
+*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
+
+---
+
+## Milestone 45: License Migration to AGPL 3.0 (2.6.5-beta)
+
+### Changed
+*   **Full project license migration:** Every remaining pre-migration license reference was replaced with AGPL 3.0, matching the updated `LICENSE` file.
+*   **`package.json` / `package-lock.json`:** `license` field updated to AGPL 3.0; version bumped to `2.6.5-beta`.
+*   **`src/components/Header.tsx`:** Hardcoded fallback license text and its variable renamed from `gplLicenseTextFallback` to `agplLicenseTextFallback`.
 *   **`src/utils/translations.ts` + `src/types/flow.ts`:** Translation catalog key `gplLicenseTextFallback` renamed to `agplLicenseTextFallback` in all 23 languages with updated AGPL text.
-*   **`src/utils/codeGenerator.ts` / `codeGenerator.test.ts`:** Generated-code headers now cite GNU AGPL v3.
-*   **`src/utils/fprgParser.ts`:** `.fprg` `about` attribute now reads `Created with Flowonline2 - PiBOH under GNU AGPL v3`.
-*   **`src/mobile/MobileApp.tsx`:** About text now reads `Licensed under GNU AGPL v3.`
-*   **Docs:** `README.md`, `MANUAL.md` (incl. stale Italian MIT line), `CHANGELOG.md`, `arenaai.md`, and `docs/aimode.md` (24 languages + JSON-LD `agpl-3.0.html` URLs) all updated to AGPL v3.
+*   **`src/utils/codeGenerator.ts` / `codeGenerator.test.ts`:** Generated-code headers now cite AGPL 3.0.
+*   **`src/utils/fprgParser.ts`:** `.fprg` `about` attribute now reads `Created with Flowonline2 - PiBOH under AGPL 3.0`.
+*   **`src/mobile/MobileApp.tsx`:** About text now reads `Licensed under AGPL 3.0.`
+*   **Docs:** `README.md`, `MANUAL.md` (incl. stale Italian MIT line), `CHANGELOG.md`, `arenaai.md`, and `docs/aimode.md` (24 languages + JSON-LD `agpl-3.0.html` URLs) all updated to AGPL 3.0.
 
 ### Architecture invariants
 *   No functional or UI change — this is a pure licensing/metadata migration.

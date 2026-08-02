@@ -190,7 +190,7 @@ const MobileApp: React.FC = () => {
       <MobileBlockEditor block={flow.editingBlock} open={flow.editingBlock !== null} onClose={flow.closeEditor} />
 
       <M2Dialog open={dialog === 'about'} onClose={() => setDialog(null)} title="About Flowonline2" actions={<M2Button onClick={() => setDialog(null)}>Close</M2Button>}>
-        <div className="m2-about"><IconInfo size={40} /><strong>Flowonline2</strong><span>{import.meta.env.VITE_APP_VERSION || '0.0.0-UNKNOWN'}</span><p>A web-based Flowgorithm-inspired flowchart editor built with React and Vite. Licensed under GNU AGPL v3.</p></div>
+        <div className="m2-about"><IconInfo size={40} /><strong>Flowonline2</strong><span>{import.meta.env.VITE_APP_VERSION || '0.0.0-UNKNOWN'}</span><p>A web-based Flowgorithm-inspired flowchart editor built with React and Vite. Licensed under AGPL 3.0.</p></div>
       </M2Dialog>
       <M2Dialog open={dialog === 'manual'} onClose={() => setDialog(null)} title="User Manual" actions={<M2Button onClick={() => setDialog(null)}>Close</M2Button>}><pre>{manual}</pre></M2Dialog>
       <M2Dialog open={dialog === 'changelog'} onClose={() => setDialog(null)} title="Changelog" actions={<M2Button onClick={() => setDialog(null)}>Close</M2Button>}><pre>{changelog}</pre></M2Dialog>
