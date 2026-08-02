@@ -7,7 +7,7 @@ import { WinUIDialog } from './WinUIDialog';
 import { StatusDot } from './StatusDot';
 import { Language } from '../types/flow';
 
-import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe, IconPlay, IconStep, IconPause, IconStop, IconMonitor, FlagIcon } from './EmojiIcons';
+import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe, IconPlay, IconStep, IconPause, IconStop, IconMonitor, IconShield, IconLock, FlagIcon } from './EmojiIcons';
 const LANGUAGE_NAMES: Record<Language, string> = {
   en: 'English (US)', en_GB: 'English (UK)', it: 'Italiano', de: 'Deutsch',
   fr: 'Français', es: 'Español', zh: '中文', nl: 'Nederlands',
@@ -93,6 +93,18 @@ export const Header: React.FC = () => {
   const [changelogSource, setChangelogSource] = useState<'repo' | 'fallback'>('repo');
   const changelogTextFallback = '# Flowonline2 Changelog\n\n> Fallback changelog not available.';
 
+  // Security Policy Modal state
+  const [showSecurity, setShowSecurity] = useState(false);
+  const [securityText, setSecurityText] = useState('Loading security policy...');
+  const [securitySource, setSecuritySource] = useState<'repo' | 'fallback'>('repo');
+  const securityTextFallback = '# Flowonline2 Security Policy\n\n> Fallback security policy not available.';
+
+  // Privacy Policy Modal state
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [privacyText, setPrivacyText] = useState('Loading privacy policy...');
+  const [privacySource, setPrivacySource] = useState<'repo' | 'fallback'>('repo');
+  const privacyTextFallback = '# Flowonline2 Privacy Policy\n\n> Fallback privacy policy not available.';
+
   // WinUI Dialog state (replace browser alerts/confirms)
   const [winUIDialog, setWinUIDialog] = useState<{ isOpen: boolean; title: string; message: string; type: 'info' | 'warning' | 'error' | 'confirm'; onOk?: () => void }>({ isOpen: false, title: '', message: '', type: 'info' });
   const [clearCurrentWork, setClearCurrentWork] = useState(false);
@@ -162,6 +174,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     bugReport: string;
     featureRequest: string;
     forkContribute: string;
+    securityPolicy: string;
+    privacyPolicy: string;
+    securityRepoLoaded: string;
+    securityFallbackLoaded: string;
+    privacyRepoLoaded: string;
+    privacyFallbackLoaded: string;
     selectLanguage: string;
     undo: string;
     redo: string;
@@ -248,6 +266,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Report a Bug",
       featureRequest: "Request a Feature",
       forkContribute: "Fork & Contribute",
+      securityPolicy: "Security Policy",
+      privacyPolicy: "Privacy Policy",
+      securityRepoLoaded: "Security Policy dynamically loaded from GitHub",
+      securityFallbackLoaded: "Security Policy loaded from hardcoded fallback compilation code",
+      privacyRepoLoaded: "Privacy Policy dynamically loaded from GitHub",
+      privacyFallbackLoaded: "Privacy Policy loaded from hardcoded fallback compilation code",
       selectLanguage: "Select Language"
     },
     en_GB: {
@@ -301,6 +325,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Report a Bug",
       featureRequest: "Request a Feature",
       forkContribute: "Fork & Contribute",
+      securityPolicy: "Security Policy",
+      privacyPolicy: "Privacy Policy",
+      securityRepoLoaded: "Security Policy dynamically loaded from GitHub",
+      securityFallbackLoaded: "Security Policy loaded from hardcoded fallback compilation code",
+      privacyRepoLoaded: "Privacy Policy dynamically loaded from GitHub",
+      privacyFallbackLoaded: "Privacy Policy loaded from hardcoded fallback compilation code",
       selectLanguage: "Select Language"
     },
     it: {
@@ -354,6 +384,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Segnala un Bug",
       featureRequest: "Richiedi una Funzionalità",
       forkContribute: "Fork & Contribuisci",
+      securityPolicy: "Politica di Sicurezza",
+      privacyPolicy: "Informativa sulla Privacy",
+      securityRepoLoaded: "Politica di Sicurezza caricata dinamicamente da GitHub",
+      securityFallbackLoaded: "Politica di Sicurezza caricata dal codice compilato di fallback",
+      privacyRepoLoaded: "Informativa sulla Privacy caricata dinamicamente da GitHub",
+      privacyFallbackLoaded: "Informativa sulla Privacy caricata dal codice compilato di fallback",
       selectLanguage: "Seleziona Lingua"
     },
     de: {
@@ -407,6 +443,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Fehler melden",
       featureRequest: "Funktion vorschlagen",
       forkContribute: "Fork & Mitwirken",
+      securityPolicy: "Sicherheitsrichtlinie",
+      privacyPolicy: "Datenschutzrichtlinie",
+      securityRepoLoaded: "Sicherheitsrichtlinie dynamisch von GitHub geladen",
+      securityFallbackLoaded: "Sicherheitsrichtlinie aus Fallback-Code geladen",
+      privacyRepoLoaded: "Datenschutzrichtlinie dynamisch von GitHub geladen",
+      privacyFallbackLoaded: "Datenschutzrichtlinie aus Fallback-Code geladen",
       selectLanguage: "Sprache auswählen"
     },
     fr: {
@@ -460,6 +502,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Signaler un bug",
       featureRequest: "Demander une fonctionnalité",
       forkContribute: "Fork & Contribuer",
+      securityPolicy: "Politique de sécurité",
+      privacyPolicy: "Politique de confidentialité",
+      securityRepoLoaded: "Politique de sécurité chargée dynamiquement depuis GitHub",
+      securityFallbackLoaded: "Politique de sécurité de secours chargée",
+      privacyRepoLoaded: "Politique de confidentialité chargée dynamiquement depuis GitHub",
+      privacyFallbackLoaded: "Politique de confidentialité de secours chargée",
       selectLanguage: "Sélectionner la langue"
     },
     es: {
@@ -513,6 +561,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Reportar un error",
       featureRequest: "Solicitar una función",
       forkContribute: "Fork & Contribuir",
+      securityPolicy: "Política de seguridad",
+      privacyPolicy: "Política de privacidad",
+      securityRepoLoaded: "Política de seguridad cargada desde GitHub",
+      securityFallbackLoaded: "Política de seguridad de reserva cargada",
+      privacyRepoLoaded: "Política de privacidad cargada desde GitHub",
+      privacyFallbackLoaded: "Política de privacidad de reserva cargada",
       selectLanguage: "Seleccionar idioma"
     },
     zh: {
@@ -566,6 +620,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "报告Bug",
       featureRequest: "请求功能",
       forkContribute: "Fork 并贡献",
+      securityPolicy: "安全政策",
+      privacyPolicy: "隐私政策",
+      securityRepoLoaded: "安全政策已从 GitHub 动态加载",
+      securityFallbackLoaded: "安全政策已从硬编码回退代码加载",
+      privacyRepoLoaded: "隐私政策已从 GitHub 动态加载",
+      privacyFallbackLoaded: "隐私政策已从硬编码回退代码加载",
       selectLanguage: "选择语言"
     },
     nl: {
@@ -619,6 +679,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Bug melden",
       featureRequest: "Functie aanvragen",
       forkContribute: "Fork & Bijdragen",
+      securityPolicy: "Beveiligingsbeleid",
+      privacyPolicy: "Privacybeleid",
+      securityRepoLoaded: "Beveiligingsbeleid dynamisch geladen van GitHub",
+      securityFallbackLoaded: "Beveiligingsbeleid geladen van fallback",
+      privacyRepoLoaded: "Privacybeleid dynamisch geladen van GitHub",
+      privacyFallbackLoaded: "Privacybeleid geladen van fallback",
       selectLanguage: "Taal selecteren"
     },
     pt: {
@@ -672,6 +738,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Reportar um Bug",
       featureRequest: "Solicitar uma Funcionalidade",
       forkContribute: "Fork & Contribuir",
+      securityPolicy: "Política de Segurança",
+      privacyPolicy: "Política de Privacidade",
+      securityRepoLoaded: "Política de Segurança carregada dinamicamente do GitHub",
+      securityFallbackLoaded: "Política de Segurança de fallback carregada",
+      privacyRepoLoaded: "Política de Privacidade carregada dinamicamente do GitHub",
+      privacyFallbackLoaded: "Política de Privacidade de fallback carregada",
       selectLanguage: "Selecionar Idioma"
     },
     gl: {
@@ -725,6 +797,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Informar dun erro",
       featureRequest: "Solicitar unha función",
       forkContribute: "Fork & Contribuír",
+      securityPolicy: "Política de seguridade",
+      privacyPolicy: "Política de privacidade",
+      securityRepoLoaded: "Política de seguridade cargada dinamicamente de GitHub",
+      securityFallbackLoaded: "Política de seguridade de reserva cargada",
+      privacyRepoLoaded: "Política de privacidade cargada dinamicamente de GitHub",
+      privacyFallbackLoaded: "Política de privacidade de reserva cargada",
       selectLanguage: "Seleccionar idioma"
     },
     ru: {
@@ -778,6 +856,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Сообщить об ошибке",
       featureRequest: "Запросить функцию",
       forkContribute: "Форк и участие",
+      securityPolicy: "Политика безопасности",
+      privacyPolicy: "Политика конфиденциальности",
+      securityRepoLoaded: "Политика безопасности загружена с GitHub",
+      securityFallbackLoaded: "Политика безопасности загружена из резервного кода",
+      privacyRepoLoaded: "Политика конфиденциальности загружена с GitHub",
+      privacyFallbackLoaded: "Политика конфиденциальности загружена из резервного кода",
       selectLanguage: "Выбрать язык"
     },
     uk: {
@@ -831,6 +915,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Повідомити про помилку",
       featureRequest: "Запросити функцію",
       forkContribute: "Форк і внесок",
+      securityPolicy: "Політика безпеки",
+      privacyPolicy: "Політика конфіденційності",
+      securityRepoLoaded: "Політику безпеки завантажено з GitHub",
+      securityFallbackLoaded: "Політику безпеки завантажено з резервного коду",
+      privacyRepoLoaded: "Політику конфіденційності завантажено з GitHub",
+      privacyFallbackLoaded: "Політику конфіденційності завантажено з резервного коду",
       selectLanguage: "Вибрати мову"
     },
     cs: {
@@ -884,6 +974,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Nahlásit chybu",
       featureRequest: "Požádat o funkci",
       forkContribute: "Fork & Přispět",
+      securityPolicy: "Bezpečnostní politika",
+      privacyPolicy: "Zásady ochrany osobních údajů",
+      securityRepoLoaded: "Bezpečnostní politika načtena z GitHubu",
+      securityFallbackLoaded: "Bezpečnostní politika načtena ze záložního kódu",
+      privacyRepoLoaded: "Zásady ochrany osobních údajů načteny z GitHubu",
+      privacyFallbackLoaded: "Zásady ochrany osobních údajů načteny ze záložního kódu",
       selectLanguage: "Vybrat jazyk"
     },
     pl: {
@@ -937,6 +1033,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Zgłoś błąd",
       featureRequest: "Zaproponuj funkcję",
       forkContribute: "Fork i współpraca",
+      securityPolicy: "Polityka bezpieczeństwa",
+      privacyPolicy: "Polityka prywatności",
+      securityRepoLoaded: "Polityka bezpieczeństwa załadowana z GitHub",
+      securityFallbackLoaded: "Polityka bezpieczeństwa z kodu zapasowego",
+      privacyRepoLoaded: "Polityka prywatności załadowana z GitHub",
+      privacyFallbackLoaded: "Polityka prywatności z kodu zapasowego",
       selectLanguage: "Wybierz język"
     },
     hu: {
@@ -990,6 +1092,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Hiba bejelentése",
       featureRequest: "Funkció kérése",
       forkContribute: "Fork & Közreműködés",
+      securityPolicy: "Biztonsági irányelv",
+      privacyPolicy: "Adatvédelmi irányelv",
+      securityRepoLoaded: "Biztonsági irányelv betöltve a GitHubról",
+      securityFallbackLoaded: "Biztonsági irányelv tartalék kódból betöltve",
+      privacyRepoLoaded: "Adatvédelmi irányelv betöltve a GitHubról",
+      privacyFallbackLoaded: "Adatvédelmi irányelv tartalék kódból betöltve",
       selectLanguage: "Nyelv kiválasztása"
     },
     sl: {
@@ -1043,6 +1151,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Prijavi napako",
       featureRequest: "Zahtevaj funkcijo",
       forkContribute: "Fork & Prispevaj",
+      securityPolicy: "Varnostna politika",
+      privacyPolicy: "Politika zasebnosti",
+      securityRepoLoaded: "Varnostna politika naložena iz GitHub",
+      securityFallbackLoaded: "Varnostna politika naložena iz rezervne kode",
+      privacyRepoLoaded: "Politika zasebnosti naložena iz GitHub",
+      privacyFallbackLoaded: "Politika zasebnosti naložena iz rezervne kode",
       selectLanguage: "Izberi jezik"
     },
     ja: {
@@ -1096,6 +1210,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "バグを報告",
       featureRequest: "機能をリクエスト",
       forkContribute: "フォークして貢献",
+      securityPolicy: "セキュリティポリシー",
+      privacyPolicy: "プライバシーポリシー",
+      securityRepoLoaded: "セキュリティポリシーがGitHubから動的に読み込まれました",
+      securityFallbackLoaded: "セキュリティポリシーはハードコードされたフォールバックコードから読み込まれました",
+      privacyRepoLoaded: "プライバシーポリシーがGitHubから動的に読み込まれました",
+      privacyFallbackLoaded: "プライバシーポリシーはハードコードされたフォールバックコードから読み込まれました",
       selectLanguage: "言語を選択"
     },
     th: {
@@ -1149,6 +1269,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "รายงานข้อผิดพลาด",
       featureRequest: "ขอคุณสมบัติใหม่",
       forkContribute: "Fork & มีส่วนร่วม",
+      securityPolicy: "นโยบายความปลอดภัย",
+      privacyPolicy: "นโยบายความเป็นส่วนตัว",
+      securityRepoLoaded: "นโยบายความปลอดภัยโหลดจาก GitHub",
+      securityFallbackLoaded: "นโยบายความปลอดภัยจากโค้ดสำรอง",
+      privacyRepoLoaded: "นโยบายความเป็นส่วนตัวโหลดจาก GitHub",
+      privacyFallbackLoaded: "นโยบายความเป็นส่วนตัวจากโค้ดสำรอง",
       selectLanguage: "เลือกภาษา"
     },
     id: {
@@ -1202,6 +1328,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Laporkan Bug",
       featureRequest: "Minta Fitur",
       forkContribute: "Fork & Berkontribusi",
+      securityPolicy: "Kebijakan Keamanan",
+      privacyPolicy: "Kebijakan Privasi",
+      securityRepoLoaded: "Kebijakan Keamanan dimuat dari GitHub",
+      securityFallbackLoaded: "Kebijakan Keamanan dari kode cadangan",
+      privacyRepoLoaded: "Kebijakan Privasi dimuat dari GitHub",
+      privacyFallbackLoaded: "Kebijakan Privasi dari kode cadangan",
       selectLanguage: "Pilih Bahasa"
     },
     mn: {
@@ -1255,6 +1387,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "Алдаа мэдээлэх",
       featureRequest: "Функц хүсэх",
       forkContribute: "Форк & Хувь нэмэр",
+      securityPolicy: "Аюулгүй байдлын бодлого",
+      privacyPolicy: "Нууцлалын бодлого",
+      securityRepoLoaded: "Аюулгүй байдлын бодлогыг GitHub-ээс ачааллаа",
+      securityFallbackLoaded: "Аюулгүй байдлын бодлогыг нөөц кодоос ачааллаа",
+      privacyRepoLoaded: "Нууцлалын бодлогыг GitHub-ээс ачааллаа",
+      privacyFallbackLoaded: "Нууцлалын бодлогыг нөөц кодоос ачааллаа",
       selectLanguage: "Хэл сонгох"
     },
     ar: {
@@ -1308,6 +1446,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "الإبلاغ عن خطأ",
       featureRequest: "طلب ميزة",
       forkContribute: "شوكة ومساهمة",
+      securityPolicy: "سياسة الأمان",
+      privacyPolicy: "سياسة الخصوصية",
+      securityRepoLoaded: "تم تحميل سياسة الأمان من GitHub",
+      securityFallbackLoaded: "تم تحميل سياسة الأمان من كود النسخ الاحتياطي",
+      privacyRepoLoaded: "تم تحميل سياسة الخصوصية من GitHub",
+      privacyFallbackLoaded: "تم تحميل سياسة الخصوصية من كود النسخ الاحتياطي",
       selectLanguage: "اختر اللغة"
     },
     he: {
@@ -1361,6 +1505,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "דווח על באג",
       featureRequest: "בקש תכונה",
       forkContribute: "מזלג ותרומה",
+      securityPolicy: "מדיניות אבטחה",
+      privacyPolicy: "מדיניות פרטיות",
+      securityRepoLoaded: "מדיניות האבטחה נטענה מ-GitHub",
+      securityFallbackLoaded: "מדיניות האבטחה נטענה מקוד גיבוי",
+      privacyRepoLoaded: "מדיניות הפרטיות נטענה מ-GitHub",
+      privacyFallbackLoaded: "מדיניות הפרטיות נטענה מקוד גיבוי",
       selectLanguage: "בחר שפה"
     },
     fa: {
@@ -1414,6 +1564,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       bugReport: "گزارش باگ",
       featureRequest: "درخواست ویژگی",
       forkContribute: "فورک و مشارکت",
+      securityPolicy: "خط‌مشی امنیتی",
+      privacyPolicy: "خط‌مشی حریم خصوصی",
+      securityRepoLoaded: "سیاست امنیتی از GitHub بارگذاری شد",
+      securityFallbackLoaded: "سیاست امنیتی از کد جایگزین بارگذاری شد",
+      privacyRepoLoaded: "سیاست حریم خصوصی از GitHub بارگذاری شد",
+      privacyFallbackLoaded: "سیاست حریم خصوصی از کد جایگزین بارگذاری شد",
       selectLanguage: "انتخاب زبان"
     }
   };
@@ -1556,6 +1712,76 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         });
     }
   }, [showChangelog]);
+
+  // Dynamically load the SECURITY.md file FROM THE OFFICIAL GITHUB URL
+  useEffect(() => {
+    if (showSecurity) {
+      setSecurityText('Loading security policy from GitHub...');
+      setSecuritySource('repo');
+      fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/refs/heads/main/docs/SECURITY.md')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('SECURITY.md not found in remote repo.');
+          }
+          return res.text();
+        })
+        .then((text) => {
+          setSecurityText(text);
+          setSecuritySource('repo');
+        })
+        .catch((err) => {
+          console.warn('Unable to load remote SECURITY.md, trying local fallback:', err);
+          fetch('./docs/SECURITY.md')
+            .then((localRes) => {
+              if (!localRes.ok) throw new Error('Local SECURITY.md missing.');
+              return localRes.text();
+            })
+            .then((text) => {
+              setSecurityText(text);
+              setSecuritySource('repo');
+            })
+            .catch(() => {
+              setSecurityText(securityTextFallback);
+              setSecuritySource('fallback');
+            });
+        });
+    }
+  }, [showSecurity]);
+
+  // Dynamically load the PRIVACY.md file FROM THE OFFICIAL GITHUB URL
+  useEffect(() => {
+    if (showPrivacy) {
+      setPrivacyText('Loading privacy policy from GitHub...');
+      setPrivacySource('repo');
+      fetch('https://raw.githubusercontent.com/PiBOH/flowonline2/refs/heads/main/docs/PRIVACY.md')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('PRIVACY.md not found in remote repo.');
+          }
+          return res.text();
+        })
+        .then((text) => {
+          setPrivacyText(text);
+          setPrivacySource('repo');
+        })
+        .catch((err) => {
+          console.warn('Unable to load remote PRIVACY.md, trying local fallback:', err);
+          fetch('./docs/PRIVACY.md')
+            .then((localRes) => {
+              if (!localRes.ok) throw new Error('Local PRIVACY.md missing.');
+              return localRes.text();
+            })
+            .then((text) => {
+              setPrivacyText(text);
+              setPrivacySource('repo');
+            })
+            .catch(() => {
+              setPrivacyText(privacyTextFallback);
+              setPrivacySource('fallback');
+            });
+        });
+    }
+  }, [showPrivacy]);
 
   // Global click listener to close dropdowns when clicking outside (Win32 behavior!)
   useEffect(() => {
@@ -2333,6 +2559,12 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               <button onClick={() => { setShowManual(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800 font-bold">
                 <span><IconBooks size={14} /> {mt.manualMenuOption}</span>
               </button>
+              <button onClick={() => { setShowSecurity(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span><IconShield size={14} /> {mt.securityPolicy}</span>
+              </button>
+              <button onClick={() => { setShowPrivacy(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span><IconLock size={14} /> {mt.privacyPolicy}</span>
+              </button>
               <button onClick={() => { setShowAbout(true); setActiveDropdown(null); }} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span><IconInfo size={14} /> {mt.about}</span>
               </button>
@@ -2782,6 +3014,62 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             {/* Content Viewer */}
             <div className="flex-1 overflow-y-auto select-text p-4 bg-white border border-[#C0C0C0] rounded text-[11px] leading-relaxed font-sans text-slate-800" style={{ minHeight: '400px' }}>
               {parseMarkdown(changelogText)}
+            </div>
+          </div>
+        </WinUIDialog>
+      )}
+
+      {/* ============ WIN32 SECURITY POLICY DIALOG MODAL - WinUI ============ */}
+      {showSecurity && (
+        <WinUIDialog
+          isOpen={showSecurity}
+          onClose={() => setShowSecurity(false)}
+          title={mt.securityPolicy}
+          message=""
+          type="info"
+          defaultWidth={750}
+          defaultHeight={550}
+          okLabel={t.modals.ok}
+          onOk={() => setShowSecurity(false)}
+        >
+          <div className="flex flex-col gap-2 select-text">
+            <div className="flex items-center gap-2 text-[9px] text-slate-500 select-none">
+              <StatusDot
+                variant={securitySource === 'repo' ? 'live' : 'fallback'}
+                label={securitySource === 'repo' ? mt.securityRepoLoaded : mt.securityFallbackLoaded}
+              />
+              <span className="font-mono ml-auto text-slate-500 uppercase tracking-wide">docs/SECURITY.md</span>
+            </div>
+            <div className="flex-1 overflow-y-auto select-text p-4 bg-white border border-[#C0C0C0] rounded text-[11px] leading-relaxed font-sans text-slate-800" style={{ minHeight: '400px' }}>
+              {parseMarkdown(securityText)}
+            </div>
+          </div>
+        </WinUIDialog>
+      )}
+
+      {/* ============ WIN32 PRIVACY POLICY DIALOG MODAL - WinUI ============ */}
+      {showPrivacy && (
+        <WinUIDialog
+          isOpen={showPrivacy}
+          onClose={() => setShowPrivacy(false)}
+          title={mt.privacyPolicy}
+          message=""
+          type="info"
+          defaultWidth={750}
+          defaultHeight={550}
+          okLabel={t.modals.ok}
+          onOk={() => setShowPrivacy(false)}
+        >
+          <div className="flex flex-col gap-2 select-text">
+            <div className="flex items-center gap-2 text-[9px] text-slate-500 select-none">
+              <StatusDot
+                variant={privacySource === 'repo' ? 'live' : 'fallback'}
+                label={privacySource === 'repo' ? mt.privacyRepoLoaded : mt.privacyFallbackLoaded}
+              />
+              <span className="font-mono ml-auto text-slate-500 uppercase tracking-wide">docs/PRIVACY.md</span>
+            </div>
+            <div className="flex-1 overflow-y-auto select-text p-4 bg-white border border-[#C0C0C0] rounded text-[11px] leading-relaxed font-sans text-slate-800" style={{ minHeight: '400px' }}>
+              {parseMarkdown(privacyText)}
             </div>
           </div>
         </WinUIDialog>

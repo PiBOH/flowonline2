@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.6.11-beta] - 2026-08-02
+
+### Added
+- **Security Policy & Privacy Policy in the Help menu:** New desktop `Help` menu entries (with shield and lock SVG icons) and mobile `Help` sections opening WinUI/M2 dialogs that load `docs/SECURITY.md` and `docs/PRIVACY.md` dynamically from the official GitHub repository (with local fallback), matching the existing Manual/Changelog pattern.
+- **New SVG icons:** `IconShield` and `IconLock` added to `EmojiIcons.tsx`.
+- **Translation keys:** `securityPolicy` / `privacyPolicy` / `securityRepoLoaded` / `securityFallbackLoaded` / `privacyRepoLoaded` / `privacyFallbackLoaded` added to the desktop header menu translations for all 23 languages.
+- **MANUAL.md:** Each language section (EN, IT, DE, FR, ES) now links to `docs/SECURITY.md` and `docs/PRIVACY.md`.
+- Validation: TypeScript, Vitest, production build, and `git diff --check` all pass.
+
 ## [2.6.5-beta – 2.6.10-beta] - 2026-08-02
 
 ### Changed

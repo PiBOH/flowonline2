@@ -495,3 +495,20 @@ export const FlagIcon: React.FC<{ code: string; size?: number; className?: strin
   if (!Flag) return <IconGlobe size={size} className={className}/>;
   return <Flag size={size} className={className}/>;
 };
+
+// ── Security Shield (🛡️) — Blue shield with white checkmark ──
+export const IconShield: React.FC<IconProps> = (p) => (
+  <SvgIcon {...p}>
+    <path d="M8 1.2L13.5 3.4v4.1c0 3.4-2.3 5.9-5.5 7.3-3.2-1.4-5.5-3.9-5.5-7.3V3.4L8 1.2z" fill="#2196F3" stroke="#0D47A1" strokeWidth="0.8"/>
+    <path d="M5.5 8l1.8 1.8 3.4-3.6" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+  </SvgIcon>
+);
+
+// ── Privacy Lock (🔒) — Dark padlock with golden shackle ──
+export const IconLock: React.FC<IconProps> = (p) => (
+  <SvgIcon {...p}>
+    <rect x="2.5" y="7" width="11" height="7" rx="1.2" fill="#F57C00" stroke="#B04A00" strokeWidth="0.8"/>
+    <path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="#FFD54F" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+    <circle cx="8" cy="10.5" r="1" fill="#FFF3E0"/>
+  </SvgIcon>
+);

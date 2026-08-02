@@ -709,6 +709,25 @@ v2.3.23: Summary of changes
 
 ---
 
+## Milestone 51: Security & Privacy Policies Linked in Help Menu (2.6.11-beta)
+
+### Added
+*   **Help menu entries (desktop):** `Security Policy` and `Privacy Policy` items added to the `Help` dropdown in `Header.tsx`, opening WinUI dialogs that dynamically load `docs/SECURITY.md` and `docs/PRIVACY.md` from the official GitHub repository (with local `./docs/` fallback), mirroring the existing Manual/Changelog dialog pattern.
+*   **Help entries (mobile):** `Security Policy` and `Privacy Policy` items added to `MobileToolsView` Help card and `MobileSidebar`, loading the docs via `MobileApp.tsx` (docs map refactor: `manual` / `changelog` / `security` / `privacy`).
+*   **New SVG icons:** `IconShield` and `IconLock` in `EmojiIcons.tsx`.
+*   **Translation keys:** `securityPolicy` / `privacyPolicy` / `securityRepoLoaded` / `securityFallbackLoaded` / `privacyRepoLoaded` / `privacyFallbackLoaded` for all 23 languages in `Header.tsx`.
+*   **MANUAL.md:** EN/IT/DE/FR/ES sections now link to the policies.
+
+### Changed
+*   Version bumped to `2.6.11-beta`.
+*   Validation completed: TypeScript, Vitest, production build, and whitespace checks.
+
+### Architecture invariants
+*   All document dialogs follow the same fetch pattern (GitHub remote first, local fallback, hardcoded fallback last).
+*   Desktop and mobile help surfaces stay in sync.
+
+---
+
 ## Milestone 50: Security & Privacy Policies (2.6.10-beta)
 
 ### Added
