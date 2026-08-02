@@ -7,50 +7,15 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
-## [2.6.9-beta] - 2026-08-02
-
-### Changed
-- **License spelling unified to `AGPL-3.0`:** All references previously written as `AGPL 3.0` are now written `AGPL-3.0` (the standard SPDX-style spelling) across source, translations (23 languages), docs, and metadata.
-
-### Architecture invariants
-- Validation: TypeScript, 136 Vitest tests, production build, and `git diff --check` pass.
-
----
-
-## [2.6.8-beta] - 2026-08-02
-
-### Changed
-- **Attribution phrases end at "AGPL-3.0":** The developer attribution sentences in `README.md` and `MANUAL.md` (English + Italian) now stop at "under/sotto AGPL-3.0." instead of continuing with a trailing description.
-
-### Architecture invariants
-- Validation: TypeScript, 136 Vitest tests, production build, and `git diff --check` pass.
-
----
-
-## [2.6.7-beta] - 2026-08-02
-
-### Changed
-- **Language label kept in English:** The language selector label in the desktop header toolbar (`Header.tsx`), the language picker dialog title, the mobile menu language entry, and the source-code language label in `Sidebar.tsx` now always read `Language` / `Select Language` in English instead of being localized.
-
-### Architecture invariants
-- Validation: TypeScript, 136 Vitest tests, production build, and `git diff --check` pass.
-
----
-
-## [2.6.6-beta] - 2026-08-02
-
-### Changed
-- **License wording simplified:** All long-form license references replaced with the plain text `AGPL-3.0` across source, translations, docs, and metadata. `package.json` / `package-lock.json` `license` field is now `AGPL-3.0`.
-
-### Architecture invariants
-- Validation: TypeScript, 136 Vitest tests, production build, and `git diff --check` pass.
-
----
-
-## [2.6.5-beta] - 2026-08-02
+## [2.6.5-beta – 2.6.10-beta] - 2026-08-02
 
 ### Changed
 - **License migration to AGPL-3.0:** Replaced every remaining pre-migration license reference with AGPL-3.0 across the whole project. Updated `package.json`/`package-lock.json`, `README.md`, `MANUAL.md` (incl. the stale Italian MIT mention), `arenaai.md`, `CHANGELOG.md`, `docs/aimode.md` (all 24 localized sections + JSON-LD license URLs), `Header.tsx` fallback text, `translations.ts` (`gplLicenseTextFallback` → `agplLicenseTextFallback` for all 23 languages), `codeGenerator.ts`, `codeGenerator.test.ts`, `fprgParser.ts` about-attribute, and `MobileApp.tsx`.
+- **License wording simplified:** All long-form license references replaced with the plain text `AGPL-3.0` across source, translations, docs, and metadata. `package.json` / `package-lock.json` `license` field is now `AGPL-3.0`.
+- **Language label kept in English:** The language selector label in the desktop header toolbar (`Header.tsx`), the language picker dialog title, the mobile menu language entry, and the source-code language label in `Sidebar.tsx` now always read `Language` / `Select Language` in English instead of being localized.
+- **Attribution phrases end at "AGPL-3.0":** The developer attribution sentences in `README.md` and `MANUAL.md` (English + Italian) now stop at "under/sotto AGPL-3.0." instead of continuing with a trailing description.
+- **License spelling unified to `AGPL-3.0`:** All references previously written as `AGPL 3.0` are now written `AGPL-3.0` (the standard SPDX-style spelling) across source, translations (23 languages), docs, and metadata.
+- **Security & Privacy policies:** Added `docs/SECURITY.md` and `docs/PRIVACY.md`, both available in the same languages as the README (EN, IT, DE, FR, ES) with an initial index.
 
 ### Architecture invariants
 - The `LICENSE` file (AGPL-3.0) is now the single source of truth referenced everywhere.

@@ -82,7 +82,7 @@ If you must resume work on Flowonline2 in a new session (due to context limit ex
 
 ---
 
-## 5. Architectural Milestone Logs & Change History (2.6.9-beta)
+## 5. Architectural Milestone Logs & Change History (2.6.10-beta)
 
 This log tracks all major fixes and architectural adjustments made to Flowonline2 to guarantee a 1000% faithful replication of the Windows desktop Flowgorithm application:
 
@@ -706,6 +706,22 @@ v2.3.23: Summary of changes
 - **Desktop files byte-for-byte unchanged**: `Header.tsx`, `FlowchartCanvas.tsx`, `Sidebar.tsx`, `Console.tsx`, `Modals.tsx`, `WinUIDialog.tsx`, `BlockNode.tsx` — ZERO edits.
 - **State reuse**: every mobile component pulls from `useFlow()` — no duplication of state.
 - **CSS scoping**: every mobile selector lives under `.mobile-app-root` or `.m-*`.  - **Bundle isolation**: `MobileApp` is `React.lazy()`-loaded inside `AppShell`. Desktop users never download `mobile.css` or any mobile component.
+
+---
+
+## Milestone 50: Security & Privacy Policies (2.6.10-beta)
+
+### Added
+*   **`docs/SECURITY.md`:** Multilingual security policy (supported versions, private vulnerability reporting via GitHub Security Advisories, disclosure policy, scope) in the same languages as the README (EN, IT, DE, FR, ES) with an initial language index.
+*   **`docs/PRIVACY.md`:** Multilingual privacy policy (client-side only, no personal data, local storage, third-party hosting, user choices) in the same languages as the README (EN, IT, DE, FR, ES) with an initial language index.
+
+### Changed
+*   **CHANGELOG grouping:** Releases `2.6.5-beta` through `2.6.10-beta` (the AGPL-3.0 license migration + wording pass series) grouped into a single changelog section.
+*   Version bumped to `2.6.10-beta`.
+
+### Architecture invariants
+*   No functional change — documentation only.
+*   Validation completed: TypeScript, 136 Vitest tests, production build, and whitespace checks.
 
 ---
 

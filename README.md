@@ -33,6 +33,13 @@ For detailed information on variables, mathematical expressions, conversion intr
 
 ---
 
+## 📄 Policies
+
+*   🔐 [**Security Policy**](https://github.com/PiBOH/flowonline2/blob/main/docs/SECURITY.md)
+*   🛡️ [**Privacy Policy**](https://github.com/PiBOH/flowonline2/blob/main/docs/PRIVACY.md)
+
+---
+
 ## 🌟 Key Features & Emulation Highlights
 
 ### 1. Faithful Win32 & MDI Visuals
