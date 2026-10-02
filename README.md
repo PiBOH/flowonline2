@@ -21,6 +21,12 @@
 
 ---
 
+## ⚠️ Mandatory for contributors and AI agents
+
+Every contributor — human or AI — **must** read and follow [**AGENTS.md**](https://github.com/PiBOH/flowonline2/blob/main/AGENTS.md) before creating, editing or deleting any file, and **must** update it (together with `CHANGELOG.md` and `version.txt`) on every release. `AGENTS.md` is the authoritative instruction file of this repository: if any other document contradicts it, `AGENTS.md` wins. Commits carry no `Co-authored-by:` trailer and no "generated with" footer.
+
+---
+
 ## 📚 Multilingual Documentation (MANUAL.md)
 
 For detailed information on variables, mathematical expressions, conversion intrinsics, and file architectures, please read the complete [**MANUAL.md**](https://github.com/PiBOH/flowonline2/blob/main/MANUAL.md) file:

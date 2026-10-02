@@ -1,7 +1,13 @@
 import { Statement } from '../types/flow';
+import { PROFILES, generateWithProfile } from './languageProfiles';
 
 export class CodeGenerator {
-  public static generate(statements: Statement[], language: 'python' | 'cpp' | 'java' | 'javascript' | 'csharp'): string {
+  /**
+   * `language` is either one of the five historically hand-written targets
+   * (kept verbatim for backward compatibility) or any id of PROFILES, i.e. the
+   * full Flowgorithm target list (Ada, Pascal, Bash, MATLAB, Ruby, ...).
+   */
+  public static generate(statements: Statement[], language: string): string {
     switch (language) {
       case 'python':
         return this.toPython(statements);
@@ -13,6 +19,13 @@ export class CodeGenerator {
         return this.toJavaScript(statements);
       case 'csharp':
         return this.toCSharp(statements);
+      default: {
+        const profile = PROFILES[language];
+        if (!profile) {
+          return `// Unsupported target language: ${language}\n`;
+        }
+        return generateWithProfile(statements, profile);
+      }
     }
   }
 

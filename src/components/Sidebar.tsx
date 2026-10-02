@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useFlow } from '../context/FlowContext';
 import { CodeGenerator } from '../utils/codeGenerator';
+import { CODE_LANGUAGES } from '../utils/languageProfiles';
 import { translations } from '../utils/translations';
 import { Copy, Check, Info } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
   const { variables, statements, language, layout, setLayout, colorScheme } = useFlow();
-  const [targetLang, setTargetLang] = useState<'python' | 'cpp' | 'java' | 'javascript' | 'csharp'>('javascript');
+  const [targetLang, setTargetLang] = useState<string>('javascript');
   const [copied, setCopied] = useState(false);
 
   const t = translations[language];
@@ -156,25 +157,25 @@ export const Sidebar: React.FC = () => {
               </label>
               <select
                 value={targetLang}
-                onChange={(e) => setTargetLang(e.target.value as any)}
+                onChange={(e) => setTargetLang(e.target.value)}
                 className={`w-full text-xs font-semibold p-1.5 border rounded focus:outline-none ${
                   isDark 
                     ? 'bg-zinc-900 border-zinc-700 text-white' 
                     : 'bg-white border-[#B0B0B0] text-slate-700'
                 }`}
               >
-                <option value="python">Python 3</option>
-                <option value="javascript">JavaScript (Node/Web)</option>
-                <option value="cpp">C++ (Standard)</option>
-                <option value="java">Java (OOP)</option>
-                <option value="csharp">C# (C-Sharp)</option>
+                {CODE_LANGUAGES.map((lang) => (
+                  <option key={lang.id} value={lang.id}>
+                    {lang.label}
+                  </option>
+                ))}
               </select>
             </div>
 
             <div className={`flex-1 flex flex-col border rounded overflow-hidden relative ${isDark ? 'border-zinc-800 bg-zinc-900' : 'border-[#C8C8C8] bg-slate-900'}`}>
               <div className={`h-7 px-2 flex items-center justify-between select-none border-b ${isDark ? 'bg-zinc-850 border-zinc-800' : 'bg-slate-800 border-slate-700'}`}>
                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider font-mono">
-                  {targetLang}_output.txt
+                  {targetLang.replace(/[^a-z0-9]+/gi, '_')}_output.txt
                 </span>
                 <button
                   onClick={handleCopy}
