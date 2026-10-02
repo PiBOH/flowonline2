@@ -1,4 +1,23 @@
-# arenaai.md - Flowonline2 Development, Maintenance and Change Log
+# AGENTS.md - Flowonline2 Development, Maintenance and Change Log
+
+> ## ⚠️ MANDATORY — READ BEFORE TOUCHING ANY FILE
+>
+> `AGENTS.md` (this file) is the single source of truth of the repository and its
+> reading, compliance and maintenance are **mandatory** for every human or AI
+> contributor:
+>
+> 1. **MUST be read first.** No file may be created, edited or deleted before
+>    this document has been read and understood.
+> 2. **MUST be followed.** The conventions, invariants and protocols below are
+>    binding; deviating from them is a defect, not a preference.
+> 3. **MUST be updated.** Every release or behaviour change updates this file
+>    (its milestone log at the bottom) together with `version.txt` and
+>    `CHANGELOG.md`. A change that skips this file is **incomplete**.
+> 4. **MUST stay authoritative.** If any other document (`README.md`,
+>    `MANUAL.md`, `CONTRIBUTORS.md`, `docs/*`) contradicts `AGENTS.md`, this
+>    file wins and the other document must be corrected.
+>
+> Renamed from `arenaai.md` in `2.7.0-beta`.
 
 This file acts as the primary operational instruction manual for AI models maintaining or extending **Flowonline2**, a pixel-perfect, fully-functional web clone of Flowgorithm developed by PiBOH under AGPL-3.0.
 
@@ -74,7 +93,7 @@ To add a new block type (e.g., `Switch`, `Try/Catch`):
 
 If you must resume work on Flowonline2 in a new session (due to context limit exhaustion, workspace reload, or thread transitions), follow this recovery protocol:
 
-1.  **Read and Ingest:** Load this `arenaai.md` file along with current files under `src/` to fully re-establish the architectural design.
+1.  **Read and Ingest:** Load this `AGENTS.md` file along with current files under `src/` to fully re-establish the architectural design.
 2.  **Verify State Contract:** Check `src/types/flow.ts` and `src/context/FlowContext.tsx` to align your logic with the existing tree structure and current execution step-manager.
 3.  **Never Start from Scratch:** Refactor or extend existing modules step-by-step rather than recreating the whole file tree from scratch. Keep changes backwards compatible.
 4.  **Preserve DOM-Based XML Parsing:** Ensure that bidirectional `.fprg` parsing remains purely client-side using the native browser `DOMParser` and `XMLSerializer` to maintain ZERO-dependency portability.
@@ -564,10 +583,16 @@ This log tracks all major fixes and architectural adjustments made to Flowonline
 | No `v` | `2.3.23: Fix bug` | ❌ Skipped |
 | No `v` | `Fix CI pipeline` | ❌ Skipped |
 
-**Rule for AI agents:** When bumping the version (updating `version.txt` + `CHANGELOG.md` + `arenaai.md`), always use a commit message starting with `v` followed by the version number. Example:
+**Rule for AI agents:** When bumping the version (updating `version.txt` + `CHANGELOG.md` + `AGENTS.md`), always use a commit message starting with `v` followed by the version number. Example:
 ```
 v2.3.23: Summary of changes
 ```
+
+**Rule for AI agents — commit trailers:** Commits MUST NOT contain participation
+or provenance trailers: no `Co-authored-by:`, no `Signed-off-by:` added by
+tooling, no "generated with" footer. The commit message is the version line plus
+a plain summary body — nothing else. Contributors are credited in
+`CONTRIBUTORS.md`, never through commit trailers.
 
 ---
 
@@ -1078,5 +1103,36 @@ v2.3.23: Summary of changes
 #### Architecture invariants
 *   All Help-menu policy entries keep emoji-derived SVG icons for cross-platform consistency.
 *   Desktop and mobile help surfaces stay in sync.
+
+---
+
+### Milestone 56: Full Flowgorithm Language Set + Connector Geometry Rewrite (2.7.0-beta)
+
+#### Added
+*   **`src/utils/languageProfiles.ts`:** Data-driven code-generation engine. Each target language is a profile of templates (`@name`, `@type`, `@expr`, `@cond`, `@start`, `@end`, `@step`, `@args`, `@declarations`) plus operator/type/quote rules; one shared tree walker renders all of them.
+*   **28 new code targets** matching the Flowgorithm language dialog: Ada 95, AppleScript, AutoHotKey, Bash, Caddis Pseudocode, Fortran 2003, Groovy, IBO Pseudocode, Kotlin, Lua, MATLAB, NetRexx, Nim, Pascal, Perl, PHP, PowerShell, QBasic, Ruby, Scala, Smalltalk, Swift, Transact-SQL, TypeScript, VBA, VBA (Excel), Visual Basic .NET, Auto Pseudocode. Together with the five legacy generators (Python, C++, Java, JavaScript, C#) the picker now exposes the full `CODE_LANGUAGES` list (33 entries).
+*   **Engine features:** declaration hoisting for languages that require it (Pascal `var`, Ada declarative part, Fortran), per-language variable sigils (`$` in PHP/Perl/PowerShell, `@` in Transact-SQL) applied to expressions too, per-language string-quote normalisation, `do-while` emulation for languages without one, math-library mapping (`Math.`, `math.`, `SQRT`, `Sqr`, `[Math]::Sqrt`, ...) and per-type input casting.
+*   **`src/utils/flowchartLayout.ts`:** the layout engine of `FlowchartCanvas` extracted into a pure module (`computeListLayout`, `alignCoordinates`, `measureBounds`, `buildDiagram`) so geometry is unit-testable.
+*   **Tests:** `languageProfiles.test.ts` (48 cases: smoke test over every target, no leaked template tokens, hoisting, sigils, quote handling, operator conversion, do-while strategies) and `flowchartLayout.test.ts` (10 cases: merge-line invariants, branch columns, bounds, deeply nested programs).
+
+#### Fixed
+*   **`IF` branch geometry:** the merge line was computed with a different formula than the one used to draw the returning elbows, so branches used to join the spine at the wrong height and the closing wire could be drawn backwards. There is now a single source of truth: `node.bottom === node.mergeY`, asserted by the new tests.
+*   **Wrong diamond metrics:** `IF_W`/`IF_H` were `150x70` while the SVG diamond is `160x64`, so every connector landed slightly inside the shape instead of on its vertex.
+*   **Arrowheads:** the `#arrow` marker used `refX="6"` with an 8-unit tip, pushing the tip past the line end (arrowheads fell inside the blocks). It is now `refX="10"` on a 10-unit tip, so the tip lands exactly on the shape border.
+*   **Disappearing "+" inserters:** connectors and inserters were painted in the same layer, under the blocks, so any inserter close to (or overlapping) a block was hidden by it. Inserters now live on their own SVG layer painted above every block, they keep a constant screen size when the canvas is zoomed out, and they are tagged `data-export-remove` so PNG/PDF exports stay clean.
+*   **Canvas centring:** the viewBox is now derived from the real horizontal bounds of the drawing instead of a guessed `width * 1.5 + 200`.
+
+#### Changed
+*   **`CodeGenerator.generate()`** accepts every target id: the five historical generators are untouched, everything else is dispatched to `generateWithProfile()`; an unknown id returns a comment instead of `undefined`.
+*   **Sidebar language picker** now lists the full `CODE_LANGUAGES` catalogue.
+*   **`arenaai.md` renamed to `AGENTS.md`** and documented as the mandatory instruction file of the repository.
+*   **Commit trailers:** this repository records no `Co-authored-by:` trailer and no "generated with" footer — only the `v<version>` message line plus the summary body.
+*   Version bumped to `2.7.0-beta`.
+*   Validation completed: TypeScript (`tsc --noEmit`), Vitest (**194 tests, 7 files, all green**) and whitespace checks.
+
+#### Architecture invariants
+*   The canvas never recomputes branch geometry while drawing: connectors are derived exclusively from the coordinates stored by `alignCoordinates()`.
+*   A code target never hard-codes a tree walk: it only declares templates.
+*   Every new target must be added to both `PROFILES` and `CODE_LANGUAGES`, and it must pass the per-language smoke test.
 
 ---

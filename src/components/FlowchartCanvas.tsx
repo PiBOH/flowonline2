@@ -1,29 +1,25 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useFlow, findBlockById } from '../context/FlowContext';
-import { Statement, BlockType } from '../types/flow';
+import { BlockType } from '../types/flow';
 import { BlockNode, colorSchemes } from './BlockNode';
 import { translations } from '../utils/translations';
 import { IconPencil, IconScissors, IconClipboard, IconInbox, IconError } from './EmojiIcons';
+import {
+  buildDiagram,
+  isLoopType,
+  IF_W,
+  IF_H,
+  LOOP_W,
+  LOOP_H,
+  MAIN_H,
+  type ListLayout
+} from '../utils/flowchartLayout';
 
-interface LayoutNode {
-  id: string;
-  type: string;
-  statement?: Statement;
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-  
-  // Children
-  thenLayout?: ListLayout;
-  elseLayout?: ListLayout;
-  bodyLayout?: ListLayout;
-}
-
-interface ListLayout {
-  nodes: LayoutNode[];
-  width: number;
-  height: number;
+// Connector lines and inserters are produced together but painted on two
+// different SVG layers (inserters always go on top of the blocks).
+interface ConnectorLayer {
+  lines: JSX.Element[];
+  inserters: JSX.Element[];
 }
 
 export const FlowchartCanvas: React.FC = () => {
@@ -73,243 +69,164 @@ export const FlowchartCanvas: React.FC = () => {
   const t = translations[language];
   const sc = colorSchemes[colorScheme];
 
-  // CONSTANTS FOR VISUALS
-  const NODE_W = 180;
-  const NODE_H = 50;
-  const MAIN_H = 40;
-  const IF_W = 150;
-  const IF_H = 70;
-  const LOOP_W = 160;
-  const LOOP_H = 50;
-  const V_GAP = 40; // distance between statements
-  const H_GAP = 50; // horizontal branch distance
+  // Inserter dots keep a readable size even when the canvas is zoomed out
+  const inserterScale = zoom < 1 ? 1 / zoom : 1;
 
-  // RECURSIVE LAYOUT ENGINE (pure client-side, calculates dimensions in single-pass)
-  const computeListLayout = (list: Statement[]): ListLayout => {
-    const nodes: LayoutNode[] = [];
-    let currentY = 0;
-    let maxWidth = NODE_W;
-
-    for (let i = 0; i < list.length; i++) {
-      const stmt = list[i];
-      let width = NODE_W;
-      let height = NODE_H;
-      let thenLayout: ListLayout | undefined;
-      let elseLayout: ListLayout | undefined;
-      let bodyLayout: ListLayout | undefined;
-
-      if (stmt.type === 'if') {
-        thenLayout = computeListLayout(stmt.thenBranch);
-        elseLayout = computeListLayout(stmt.elseBranch);
-        width = Math.max(IF_W, thenLayout.width + elseLayout.width + H_GAP);
-        height = IF_H + Math.max(thenLayout.height, elseLayout.height) + V_GAP;
-      } else if (stmt.type === 'while' || stmt.type === 'for' || stmt.type === 'do') {
-        bodyLayout = computeListLayout(stmt.body);
-        width = Math.max(LOOP_W, bodyLayout.width + H_GAP * 1.5);
-        height = LOOP_H + bodyLayout.height + V_GAP;
-      }
-
-      nodes.push({
-        id: stmt.id,
-        type: stmt.type,
-        statement: stmt,
-        width,
-        height,
-        x: 0, // patched later
-        y: currentY,
-        thenLayout,
-        elseLayout,
-        bodyLayout
-      });
-
-      maxWidth = Math.max(maxWidth, width);
-      currentY += height + V_GAP;
-    }
-
-    return {
-      nodes,
-      width: maxWidth,
-      height: currentY > 0 ? currentY - V_GAP : 0
-    };
-  };
-
-  // RECURSIVE COORDINATE PATH ALIGNMENT
-  const alignCoordinates = (
-    layout: ListLayout, 
-    centerX: number, 
-    startY: number
-  ): void => {
-    let currentY = startY;
-
-    for (const node of layout.nodes) {
-      node.x = centerX;
-      node.y = currentY + (node.type === 'if' ? IF_H / 2 : node.type === 'while' || node.type === 'for' || node.type === 'do' ? LOOP_H / 2 : NODE_H / 2);
-
-      if (node.type === 'if' && node.thenLayout && node.elseLayout) {
-        // TRUE on right (Flowgorithm layout), FALSE on left
-        const totalW = node.thenLayout.width + node.elseLayout.width + H_GAP;
-        const leftX = centerX - totalW / 2 + node.elseLayout.width / 2;
-        const rightX = centerX + totalW / 2 - node.thenLayout.width / 2;
-        
-        const branchStartY = currentY + IF_H + V_GAP / 2;
-        alignCoordinates(node.elseLayout, leftX, branchStartY);
-        alignCoordinates(node.thenLayout, rightX, branchStartY);
-      } else if ((node.type === 'while' || node.type === 'for' || node.type === 'do') && node.bodyLayout) {
-        const bodyX = centerX + H_GAP / 2;
-        const branchStartY = currentY + LOOP_H + V_GAP / 2;
-        alignCoordinates(node.bodyLayout, bodyX, branchStartY);
-      }
-
-      currentY += node.height + V_GAP;
-    }
-  };
-
-  // GENERATE LAYOUT & DIMENSIONS
-  const diagramLayout = useMemo(() => {
-    const listLayout = computeListLayout(statements);
-    const startY = MAIN_H + V_GAP;
-    alignCoordinates(listLayout, 0, startY);
-    
-    const endY = startY + listLayout.height + (statements.length > 0 ? V_GAP : 0) + MAIN_H / 2;
-    const totalHeight = endY + MAIN_H / 2 + 50;
-    const totalWidth = Math.max(600, listLayout.width * 1.5 + 200);
-
-    return {
-      listLayout,
-      startY,
-      endY,
-      width: totalWidth,
-      height: totalHeight
-    };
-  }, [statements]);
+  // GENERATE LAYOUT & DIMENSIONS (pure geometry engine, see utils/flowchartLayout.ts)
+  const diagramLayout = useMemo(() => buildDiagram(statements), [statements]);
 
   // RENDERING HELPERS FOR CONNECTOR SVG LINES
+  // `startY` is where the incoming flow arrives (start oval, branch line or the
+  // previous statement) while `endY` is where this list must deliver the flow
+  // (top of the next shape, merge line of the parent branch, or the END oval).
   const renderLinesAndArrows = (
-    layout: ListLayout, 
-    centerX: number, 
-    startY: number, 
+    layout: ListLayout,
+    centerX: number,
+    startY: number,
     endY: number,
-    parentContext?: { id: string; branch: 'then' | 'else' | 'body' } // DOCK PARENT CONTEXT PARAMS!
-  ): JSX.Element[] => {
-    const elements: JSX.Element[] = [];
+    parentContext?: { id: string; branch: 'then' | 'else' | 'body' }
+  ): ConnectorLayer => {
+    const lines: JSX.Element[] = [];
+    const inserters: JSX.Element[] = [];
+
+    // Connectors are pushed on the "lines" layer (painted under the blocks) while
+    // every "+" is pushed on its own "inserters" layer (painted ON TOP of the
+    // blocks). This is what makes the inserter dots impossible to hide.
+    const pushInserter = (x: number, y: number, targetId: string, index?: number) => {
+      inserters.push(
+        <React.Fragment key={`ins-${targetId}-${index ?? 'end'}-${Math.round(x)}-${Math.round(y)}`}>
+          {renderInserterButton(x, y, targetId, index)}
+        </React.Fragment>
+      );
+    };
+
+    // Vertical connector carrying an arrowhead at its end, plus its inserter dot
+    const pushConnector = (x: number, from: number, to: number, targetId: string, index?: number) => {
+      lines.push(
+        <line
+          key={`conn-${targetId}-${index ?? 'end'}-${Math.round(from)}`}
+          x1={x}
+          y1={from}
+          x2={x}
+          y2={to}
+          stroke={sc.lineColor}
+          strokeWidth="2"
+          markerEnd="url(#arrow)"
+        />
+      );
+      pushInserter(x, (from + to) / 2, targetId, index);
+    };
+
     let currentY = startY;
 
-    // Draw lines between nodes
     for (let i = 0; i < layout.nodes.length; i++) {
       const node = layout.nodes[i];
 
-      // Draw top arrow/line to this node
-      const nodeTopY = node.y - (node.type === 'if' ? IF_H / 2 : node.type === 'while' || node.type === 'for' || node.type === 'do' ? LOOP_H / 2 : NODE_H / 2);
-      
-      elements.push(
-        <g key={`arrow-to-${node.id}`}>
-          <line
-            x1={centerX}
-            y1={currentY}
-            x2={centerX}
-            y2={nodeTopY}
-            stroke={sc.lineColor}
-            strokeWidth="2"
-            markerEnd="url(#arrow)"
-          />
-          {renderInserterButton(centerX, currentY + (nodeTopY - currentY) / 2, node.id, i)}
-        </g>
-      );
+      // Connector entering this statement (arrowhead touching the shape top)
+      pushConnector(centerX, currentY, node.top, node.id, i);
 
-      // Draw children connectors
       if (node.type === 'if' && node.thenLayout && node.elseLayout) {
-        const diamondCenterY = node.y;
-        const branchEndY = diamondCenterY - IF_H / 2 + node.height;
+        const leftX = node.leftX as number;
+        const rightX = node.rightX as number;
+        const mergeY = node.mergeY as number;
+        const diamondLeft = centerX - IF_W / 2;
+        const diamondRight = centerX + IF_W / 2;
 
-        const leftX = node.elseLayout.nodes.length > 0 ? node.elseLayout.nodes[0].x : centerX - (node.thenLayout.width + node.elseLayout.width + H_GAP) / 2 + node.elseLayout.width / 2;
-        const rightX = node.thenLayout.nodes.length > 0 ? node.thenLayout.nodes[0].x : centerX + (node.thenLayout.width + node.elseLayout.width + H_GAP) / 2 - node.thenLayout.width / 2;
-
-        // FALSE branch on the left (elseBranch) — Flowgorithm layout
-        elements.push(
-          <g key={`if-else-${node.id}`}>
-            <line x1={centerX} y1={diamondCenterY} x2={leftX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
-            <text x={(centerX + leftX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill={sc.textColor} fillOpacity="0.7" className="font-sans text-[10px] font-bold select-none">{t.canvas.falseBranch}</text>
-            
-            {renderLinesAndArrows(node.elseLayout, leftX, diamondCenterY, branchEndY, { id: node.id, branch: 'else' })}
-            
-            <line x1={leftX} y1={branchEndY} x2={leftX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
-            <line x1={leftX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
-          </g>
+        // FALSE branch, going out on the left (elseBranch)
+        lines.push(<line key={`false-edge-${node.id}`} x1={diamondLeft} y1={node.y} x2={leftX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
+        lines.push(
+          <text key={`false-label-${node.id}`} x={diamondLeft - 4} y={node.y - 5} textAnchor="end" fill={sc.textColor} fillOpacity="0.75" className="font-sans text-[10px] font-bold select-none pointer-events-none">
+            {t.canvas.falseBranch}
+          </text>
         );
+        const leftBranch = renderLinesAndArrows(node.elseLayout, leftX, node.y, mergeY, { id: node.id, branch: 'else' });
+        lines.push(...leftBranch.lines);
+        inserters.push(...leftBranch.inserters);
+        // Elbow bringing the FALSE column back onto the main spine
+        lines.push(<line key={`false-merge-${node.id}`} x1={leftX} y1={mergeY} x2={centerX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
 
-        // TRUE branch on the right (thenBranch) — Flowgorithm layout
-        elements.push(
-          <g key={`if-then-${node.id}`}>
-            <line x1={centerX} y1={diamondCenterY} x2={rightX} y2={diamondCenterY} stroke={sc.lineColor} strokeWidth="2" />
-            <text x={(centerX + rightX) / 2} y={diamondCenterY - 6} textAnchor="middle" fill="green" className="font-sans text-[10px] font-bold select-none">{t.canvas.trueBranch}</text>
-            
-            {renderLinesAndArrows(node.thenLayout, rightX, diamondCenterY, branchEndY, { id: node.id, branch: 'then' })}
-            
-            <line x1={rightX} y1={branchEndY} x2={rightX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
-            <line x1={rightX} y1={branchEndY + V_GAP / 2} x2={centerX} y2={branchEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
-          </g>
+        // TRUE branch, going out on the right (thenBranch)
+        lines.push(<line key={`true-edge-${node.id}`} x1={diamondRight} y1={node.y} x2={rightX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
+        lines.push(
+          <text key={`true-label-${node.id}`} x={diamondRight + 4} y={node.y - 5} textAnchor="start" fill="#15803D" className="font-sans text-[10px] font-bold select-none pointer-events-none">
+            {t.canvas.trueBranch}
+          </text>
         );
+        const rightBranch = renderLinesAndArrows(node.thenLayout, rightX, node.y, mergeY, { id: node.id, branch: 'then' });
+        lines.push(...rightBranch.lines);
+        inserters.push(...rightBranch.inserters);
+        // Elbow bringing the TRUE column back onto the main spine
+        lines.push(<line key={`true-merge-${node.id}`} x1={rightX} y1={mergeY} x2={centerX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
 
-      } else if ((node.type === 'while' || node.type === 'for' || node.type === 'do') && node.bodyLayout) {
-        const loopCenterY = node.y;
-        const bodyX = centerX + H_GAP / 2;
-        const bodyEndY = loopCenterY - LOOP_H / 2 + node.height;
+        // The flow also leaves the diamond from its bottom vertex, joining the
+        // two elbows exactly on the merge line.
+        lines.push(<line key={`if-spine-${node.id}`} x1={centerX} y1={node.y + IF_H / 2} x2={centerX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
 
-        // Loop feed-in vertical line
-        elements.push(
-          <g key={`loop-body-${node.id}`}>
-            {/* Horizontal branch out of loop */}
-            <line x1={centerX} y1={loopCenterY} x2={bodyX} y2={loopCenterY} stroke={sc.lineColor} strokeWidth="2" />
-            
-            {/* Recurse body recursively passing the parent context! */}
-            {renderLinesAndArrows(node.bodyLayout, bodyX, loopCenterY, bodyEndY, { id: node.id, branch: 'body' })}
-            
-            {/* Return wire lines representing Flowgorithm's loop back loops */}
-            <line x1={bodyX} y1={bodyEndY} x2={bodyX} y2={bodyEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
-            {/* Left wire returning back up and left to loop header */}
-            <line x1={bodyX} y1={bodyEndY + V_GAP / 2} x2={centerX - H_GAP / 2} y2={bodyEndY + V_GAP / 2} stroke={sc.lineColor} strokeWidth="2" />
-            <line x1={centerX - H_GAP / 2} y1={bodyEndY + V_GAP / 2} x2={centerX - H_GAP / 2} y2={loopCenterY} stroke={sc.lineColor} strokeWidth="2" />
-            <line x1={centerX - H_GAP / 2} y1={loopCenterY} x2={centerX} y2={loopCenterY} stroke={sc.lineColor} strokeWidth="2" markerEnd="url(#arrow)" />
-          </g>
-        );
+      } else if (isLoopType(node.type) && node.bodyLayout) {
+        const bodyX = node.bodyX as number;
+        const returnX = node.returnX as number;
+        const mergeY = node.mergeY as number;
+
+        // Loop body column hangs from the right vertex of the header hexagon
+        lines.push(<line key={`loop-edge-${node.id}`} x1={centerX + LOOP_W / 2} y1={node.y} x2={bodyX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
+        const bodyBranch = renderLinesAndArrows(node.bodyLayout, bodyX, node.y, mergeY, { id: node.id, branch: 'body' });
+        lines.push(...bodyBranch.lines);
+        inserters.push(...bodyBranch.inserters);
+
+        // Loop-back wire: end of the body -> left -> up -> arrow into the header
+        lines.push(<line key={`loop-back-1-${node.id}`} x1={bodyX} y1={mergeY} x2={returnX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
+        lines.push(<line key={`loop-back-2-${node.id}`} x1={returnX} y1={mergeY} x2={returnX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
+        lines.push(<line key={`loop-back-3-${node.id}`} x1={returnX} y1={node.y} x2={centerX - LOOP_W / 2 - 1} y2={node.y} stroke={sc.lineColor} strokeWidth="2" markerEnd="url(#arrow)" />);
+
+        // The loop exit leaves the header from its bottom edge
+        lines.push(<line key={`loop-exit-${node.id}`} x1={centerX} y1={node.y + LOOP_H / 2} x2={centerX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
       }
 
-      currentY = node.y + (node.type === 'if' ? IF_H / 2 + V_GAP : node.type === 'while' || node.type === 'for' || node.type === 'do' ? LOOP_H / 2 + V_GAP : NODE_H / 2 + V_GAP);
-      if (node.type === 'if') currentY -= V_GAP / 2; // IF bottom junction adjustment
+      // The flow leaves this statement from its bottom (its merge line for IF/loops)
+      currentY = node.bottom;
     }
 
-    // Connect last node to end of list
-    const endTargetId = parentContext 
+    // Deliver the flow to the end of this list
+    const tailTarget = parentContext
       ? `branch_end:${parentContext.id}:${parentContext.branch}`
       : 'main_end';
 
-    elements.push(
-      <g key={`arrow-to-list-end`}>
+    if (parentContext) {
+      // Inside a branch/body: plain wire, the caller closes the elbow back to the
+      // spine, so no arrowhead is drawn here.
+      lines.push(
         <line
+          key={`tail-${tailTarget}`}
           x1={centerX}
           y1={currentY}
           x2={centerX}
           y2={endY}
           stroke={sc.lineColor}
           strokeWidth="2"
-          markerEnd="url(#arrow)"
         />
-        {renderInserterButton(centerX, currentY + (endY - currentY) / 2, endTargetId)}
-      </g>
-    );
+      );
+      pushInserter(centerX, (currentY + endY) / 2, tailTarget);
+    } else {
+      // Main flow: arrow into the next statement or into the END oval
+      pushConnector(centerX, currentY, endY, tailTarget);
+    }
 
-    return elements;
+    return { lines, inserters };
   };
 
   // DRAW INTERACTIVE INSERTER CIRCULAR BUTTON (Faithful 18px circle, glowing blue, expanding on hover!)
   const renderInserterButton = (
-    x: number, 
-    y: number, 
+    x: number,
+    y: number,
     parentId: string | 'main_start' | 'main_end',
     index?: number
-  ) => {
+  ): JSX.Element => {
+    // The dot is re-scaled around its own centre, so it keeps a readable size
+    // even when the canvas is zoomed out (e.g. 70%).
     return (
       <g
+        transform={`translate(${x} ${y}) scale(${inserterScale}) translate(${-x} ${-y})`}
+        data-export-remove=""
         className="cursor-pointer group/insert"
         onClick={(e) => {
           e.stopPropagation();
@@ -459,6 +376,13 @@ export const FlowchartCanvas: React.FC = () => {
     }
   };
 
+  // Connectors are built once per statements/theme change: lines go under the
+  // blocks, the "+" inserters go above them.
+  const connectors = useMemo(
+    () => renderLinesAndArrows(diagramLayout.listLayout, 0, diagramLayout.flowStartY, diagramLayout.flowEndY),
+    [diagramLayout, sc, t]
+  );
+
   const isDark = colorScheme === 'twilight';
 
   return (
@@ -476,9 +400,9 @@ export const FlowchartCanvas: React.FC = () => {
       >
         <svg
           id="flowchart-svg-export-target"
-          width={diagramLayout.width * zoom}
+          width={(diagramLayout.maxX - diagramLayout.minX) * zoom}
           height={diagramLayout.height * zoom}
-          viewBox={`${-diagramLayout.width / 2} 0 ${diagramLayout.width} ${diagramLayout.height}`}
+          viewBox={`${diagramLayout.minX} 0 ${diagramLayout.maxX - diagramLayout.minX} ${diagramLayout.height}`}
           className="bg-transparent transition-transform duration-75 origin-top"
           style={{ transform: `scale(${zoom})` }}
           // CLICKING EMPTY SPACE ON CANVAS DESELECTS EVERYTHING!
@@ -489,16 +413,19 @@ export const FlowchartCanvas: React.FC = () => {
         >
           {/* SVG definitions */}
           <defs>
+            {/* Arrowhead: the refX puts the TIP exactly on the end of the line,
+                so the arrow lands on the shape border instead of inside it. */}
             <marker
               id="arrow"
               viewBox="0 0 10 10"
-              refX="6"
+              refX="10"
               refY="5"
-              markerWidth="6"
-              markerHeight="6"
+              markerWidth="4.5"
+              markerHeight="4.5"
+              markerUnits="strokeWidth"
               orient="auto-start-reverse"
             >
-              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill={sc.lineColor} />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill={sc.lineColor} />
             </marker>
 
             {/* Glowing Blue Dot gradient */}
@@ -517,19 +444,17 @@ export const FlowchartCanvas: React.FC = () => {
             />
           </g>
 
-          {/* 2. Draw Connector Lines & Add Arrows */}
-          {renderLinesAndArrows(
-            diagramLayout.listLayout,
-            0,
-            MAIN_H,
-            diagramLayout.endY - MAIN_H / 2
-          )}
+          {/* 2. Connector lines & arrows (painted UNDER the blocks) */}
+          {connectors.lines}
 
           {/* 3. Render Visual Nodes Recursively */}
           {renderNodeBlocks(diagramLayout.listLayout)}
 
-          {/* 4. Draw End Oval */}
-          <g transform={`translate(0, ${diagramLayout.endY})`}>
+          {/* 4. Inserter "+" dots — always painted ON TOP of every block */}
+          {connectors.inserters}
+
+          {/* 5. Draw End Oval */}
+          <g transform={`translate(0, ${diagramLayout.endOvalY})`}>
             <BlockNode
               type="end"
               isHighlighted={currentBlockId === 'main_end'}

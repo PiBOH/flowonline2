@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.0-beta] - 2026-10-02
+
+### Added
+- **Full Flowgorithm language set:** 28 new source-code targets added to the *Source Code* pane — Ada 95, AppleScript, AutoHotKey, Bash, Caddis Pseudocode, Fortran 2003, Groovy, IBO Pseudocode, Kotlin, Lua, MATLAB, NetRexx, Nim, Pascal, Perl, PHP, PowerShell, QBasic, Ruby, Scala, Smalltalk, Swift, Transact-SQL, TypeScript, VBA, VBA (Excel), Visual Basic .NET and Auto Pseudocode. Together with the existing Python, C++, Java, JavaScript and C# generators the picker now mirrors the whole Flowgorithm language dialog (33 entries).
+- **Data-driven code generation (`src/utils/languageProfiles.ts`):** every target is described by a profile of templates plus operator/type/quote rules, rendered by a single shared tree walker. The engine supports declaration hoisting (Pascal `var`, Ada declarative part, Fortran), variable sigils (`$` for PHP/Perl/PowerShell, `@` for Transact-SQL) applied inside expressions too, per-language string-quote normalisation, `do-while` emulation, math-library mapping and per-type input casting.
+- **Pure layout engine (`src/utils/flowchartLayout.ts`):** `computeListLayout`, `alignCoordinates`, `measureBounds` and `buildDiagram` extracted from `FlowchartCanvas` so the diagram geometry is unit-testable.
+- **New test suites:** `languageProfiles.test.ts` (48 tests) and `flowchartLayout.test.ts` (10 tests).
+
+### Fixed
+- **IF branch connectors:** the merge line was computed with a different formula than the one used to draw the returning elbows, so branches joined the spine at the wrong height and the closing wire could be drawn backwards. A single source of truth is now enforced (`node.bottom === node.mergeY`).
+- **IF diamond metrics:** `IF_W`/`IF_H` were `150x70` while the SVG diamond is `160x64`, so connectors landed inside the shape instead of on its vertices.
+- **Arrowheads:** the `#arrow` marker pushed the tip past the end of its line, hiding the tip inside the blocks. The tip now lands exactly on the shape border.
+- **Disappearing "+" inserters:** inserters are painted on their own SVG layer above every block, keep a constant on-screen size when zooming out, and are excluded from PNG/PDF exports.
+- **Canvas centring:** the viewBox is derived from the real horizontal bounds of the drawing.
+
+### Changed
+- **`CodeGenerator.generate()`** now accepts every target id: the five historical generators are untouched, all other ids are dispatched to the profile engine, and an unknown id returns a comment instead of `undefined`.
+- **Sidebar language picker** lists the full `CODE_LANGUAGES` catalogue.
+- **`arenaai.md` renamed to `AGENTS.md`,** documented as the mandatory instruction file of the repository.
+- **Commit policy:** commits carry no `Co-authored-by:` trailer and no "generated with" footer.
+- **Validation:** TypeScript, Vitest (194 tests / 7 files) and whitespace checks all pass.
+
 ## [2.6.19-beta] - 2026-08-02
 
 ### Fixed
