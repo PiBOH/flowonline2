@@ -7,6 +7,8 @@ import { IconPencil, IconScissors, IconClipboard, IconInbox, IconError } from '.
 import {
   buildDiagram,
   computeConnectorPlan,
+  shapeEdgeX,
+  isLoopType,
   ARROW_LEN,
   MAIN_H,
   type ListLayout
@@ -226,6 +228,44 @@ export const FlowchartCanvas: React.FC = () => {
     return list;
   };
 
+  // Branch labels are part of the connector presentation, not the block.
+  // Keep them tied to the exact outline vertices used by ConnectorPlan so they
+  // never disappear when the geometry is recomputed.
+  const renderBranchLabels = (layout: ListLayout): JSX.Element[] => {
+    const labels: JSX.Element[] = [];
+    for (const node of layout.nodes) {
+      if (node.type === 'if') {
+        labels.push(
+          <React.Fragment key={`labels-${node.id}`}>
+            <text x={shapeEdgeX(node, 'left') - 4} y={node.y - 5} textAnchor="end" fill={sc.textColor} fillOpacity="0.8" className="font-sans text-[10px] font-bold select-none pointer-events-none">
+              {t.canvas.falseBranch}
+            </text>
+            <text x={shapeEdgeX(node, 'right') + 4} y={node.y - 5} textAnchor="start" fill="#15803D" fillOpacity="0.9" className="font-sans text-[10px] font-bold select-none pointer-events-none">
+              {t.canvas.trueBranch}
+            </text>
+          </React.Fragment>
+        );
+        if (node.thenLayout && node.elseLayout) {
+          labels.push(...renderBranchLabels(node.thenLayout));
+          labels.push(...renderBranchLabels(node.elseLayout));
+        }
+      } else if (isLoopType(node.type)) {
+        labels.push(
+          <React.Fragment key={`labels-${node.id}`}>
+            <text x={shapeEdgeX(node, 'left') - 4} y={node.y - 5} textAnchor="end" fill={sc.textColor} fillOpacity="0.8" className="font-sans text-[10px] font-bold select-none pointer-events-none">
+              {t.canvas.falseBranch}
+            </text>
+            <text x={shapeEdgeX(node, 'right') + 4} y={node.y - 5} textAnchor="start" fill="#15803D" fillOpacity="0.9" className="font-sans text-[10px] font-bold select-none pointer-events-none">
+              {t.canvas.trueBranch}
+            </text>
+          </React.Fragment>
+        );
+        if (node.bodyLayout) labels.push(...renderBranchLabels(node.bodyLayout));
+      }
+    }
+    return labels;
+  };
+
   // CONTEXT MENUS SELECTING BLOCK TYPE TO INSERT
   const handleInsertBlockType = (type: BlockType) => {
     if (activeInserter) {
@@ -331,6 +371,9 @@ export const FlowchartCanvas: React.FC = () => {
 
           {/* 2. Connector lines & arrows (painted UNDER the blocks) */}
           {connectors.lines}
+
+          {/* Branch labels stay above wires but below inserter hit targets. */}
+          {renderBranchLabels(diagramLayout.listLayout)}
 
           {/* 3. Render Visual Nodes Recursively */}
           {renderNodeBlocks(diagramLayout.listLayout)}
