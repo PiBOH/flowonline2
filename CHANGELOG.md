@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.7-beta] - 2026-10-03
+
+### Fixed
+- **IF convergence routing:** removed the artificial vertical wire from the decision diamond to the branch merge; branches now join directly at their merge point, and the next arrow starts there.
+- **Loop exit routing:** removed the artificial merge below loop headers; the exit path starts at the loop header bottom and continues to the next block, while only the body return arrow enters the loop header.
+
+---
+
 ## [2.7.6-beta] - 2026-10-03
 
 ### Fixed

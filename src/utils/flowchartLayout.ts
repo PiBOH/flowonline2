@@ -379,10 +379,13 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
       if (node.type === 'if' && node.thenLayout && node.elseLayout) {
         planIf(node, centerX);
       } else if (isLoopType(node.type) && node.bodyLayout) {
-        planLoop(node, centerX);
+        planLoop(node);
       }
 
-      cursor = node.bottom;
+      // IF flow resumes at the branch merge. A loop has no merge below its
+      // header: its false/exit path leaves the bottom vertex directly and
+      // continues to the next statement (the body returns into the header).
+      cursor = isLoopType(node.type) ? node.y + LOOP_H / 2 : node.bottom;
     });
 
     const tailTarget = parent ? `branch_end:${parent.id}:${parent.branch}` : 'main_end';
@@ -415,18 +418,13 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     planList(thenLayout, rightX, row, mergeRow, { id: node.id, branch: 'then' });
     push(`true-merge-${node.id}`, rightX, mergeRow, centerX, mergeRow);
 
-    // This is the internal convergence wire from the diamond to the branch
-    // merge. It is intentionally plain: the actual flow arrow starts at the
-    // merge point in the next list connector (or the list tail), never just
-    // below the shape.
-    push(`if-spine-${node.id}`, centerX, node.y + IF_H / 2, centerX, mergeRow);
   };
 
   /**
    * Loop wires. The body hangs on the right; the loop-back wire climbs the left
    * side and its arrowhead stops exactly on the left vertex of the header.
    */
-  const planLoop = (node: LayoutNode, centerX: number) => {
+  const planLoop = (node: LayoutNode) => {
     const bodyLayout = node.bodyLayout as ListLayout;
     const bodyX = node.bodyX as number;
     const returnX = node.returnX as number;
@@ -442,10 +440,6 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     push(`loop-back-2-${node.id}`, returnX, mergeRow, returnX, row);
     push(`loop-back-3-${node.id}`, returnX, row, shapeEdgeX(node, 'left'), row, true);
 
-    // Exit: the header drops to the merge row where the main flow continues.
-    // This internal stretch is plain; its arrival arrow is emitted by the
-    // next-list connector starting exactly at node.bottom / mergeRow.
-    push(`loop-exit-${node.id}`, centerX, row + LOOP_H / 2, centerX, mergeRow);
   };
 
   planList(diagram.listLayout, 0, diagram.flowStartY, diagram.flowEndY);
