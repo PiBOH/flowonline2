@@ -146,7 +146,10 @@ export const WinUIDialog: React.FC<WinUIDialogProps> = ({
   const tc = typeColors[type];
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/30 flex items-start justify-start pointer-events-none">
+    <div
+      className="fixed inset-0 z-[100] bg-black/30 flex items-start justify-start pointer-events-auto"
+      onPointerDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
       <div
         ref={dialogRef}
         className="pointer-events-auto absolute bg-white rounded-t-lg shadow-2xl border border-[#999] flex flex-col overflow-hidden"

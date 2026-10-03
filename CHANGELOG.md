@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.9-beta] - 2026-10-03
+
+### Fixed
+- **Win32 dialogs:** clicking the dimmed area outside a window now closes it; clicks inside the window remain isolated.
+
+### Changed
+- **Examples menu:** added a searchable, grouped catalogue with a larger scrollable submenu so the live `.fprg-files` examples are easier to find and open.
+
+---
+
 ## [2.7.8-beta] - 2026-10-03
 
 ### Fixed
