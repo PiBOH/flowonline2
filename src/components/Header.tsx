@@ -63,6 +63,7 @@ export const Header: React.FC = () => {
   // Dropdown states for Menus
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [exampleGroup, setExampleGroup] = useState<string | null>(null);
+  const [exampleQuery, setExampleQuery] = useState('');
 
   // Dynamic App Version state. The initial value is injected at build time
   // by `vite.config.ts` (it reads `version.txt` and exposes it as
@@ -2427,34 +2428,48 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               </button>
               <div className="relative">
                 <button
-                  onClick={() => setExampleGroup(exampleGroup ? null : (EXAMPLE_PROGRAMS[0]?.group ?? null))}
+                  onClick={() => { setExampleGroup(exampleGroup ? null : (EXAMPLE_PROGRAMS[0]?.group ?? null)); setExampleQuery(''); }}
                   className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800"
                 >
                   <span>📂 {language === 'it' ? 'Esempi' : 'Examples'}</span>
                   <span className="text-[10px] text-slate-500">{EXAMPLE_PROGRAMS.length}</span>
                 </button>
                 {exampleGroup && (
-                  <div className="absolute left-full top-0 ml-1 w-[360px] max-h-[420px] overflow-y-auto bg-[#F5F5F5] border border-[#999] shadow-lg py-1 z-50">
-                    {Array.from(new Set(EXAMPLE_PROGRAMS.map((example) => example.group))).map((group) => (
-                      <div key={group}>
-                        <button
-                          onClick={() => setExampleGroup(exampleGroup === group ? null : group)}
-                          className="w-full text-left px-3 py-1 font-bold text-[11px] text-slate-600 hover:bg-[#E6EEF8]"
-                        >
-                          {group}
-                        </button>
-                        {exampleGroup === group && EXAMPLE_PROGRAMS.filter((example) => example.group === group).map((example) => (
+                  <div className="absolute left-full top-0 ml-1 w-[380px] max-h-[460px] overflow-y-auto bg-[#F5F5F5] border border-[#999] shadow-lg py-1 z-50">
+                    <div className="sticky top-0 bg-[#F5F5F5] px-2 pb-1 z-10">
+                      <input
+                        autoFocus
+                        value={exampleQuery}
+                        onChange={(e) => setExampleQuery(e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                        placeholder={language === 'it' ? 'Cerca esempio...' : 'Search examples...'}
+                        className="w-full px-2 py-1 text-[11px] border border-slate-300 rounded bg-white outline-none focus:border-[#5B8DC4]"
+                      />
+                    </div>
+                    {Array.from(new Set(EXAMPLE_PROGRAMS.map((example) => example.group))).map((group) => {
+                      const groupExamples = EXAMPLE_PROGRAMS.filter((example) => example.group === group && example.name.toLowerCase().includes(exampleQuery.toLowerCase()));
+                      if (groupExamples.length === 0) return null;
+                      return (
+                        <div key={group}>
                           <button
-                            key={example.path}
-                            title={example.path}
-                            onClick={() => handleExampleOpen(example)}
-                            className="w-full text-left px-4 py-1 hover:bg-[#C9DEF5] text-[11px] text-slate-800 truncate"
+                            onClick={() => setExampleGroup(exampleGroup === group ? null : group)}
+                            className="w-full text-left px-3 py-1 font-bold text-[11px] text-slate-600 hover:bg-[#E6EEF8]"
                           >
-                            {example.name}
+                            {group}
                           </button>
-                        ))}
-                      </div>
-                    ))}
+                          {exampleGroup === group && groupExamples.map((example) => (
+                            <button
+                              key={example.path}
+                              title={example.path}
+                              onClick={() => handleExampleOpen(example)}
+                              className="w-full text-left px-4 py-1 hover:bg-[#C9DEF5] text-[11px] text-slate-800 truncate"
+                            >
+                              {example.name}
+                            </button>
+                          ))}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>

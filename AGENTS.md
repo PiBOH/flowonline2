@@ -1106,6 +1106,14 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 65: Dialog Outside-Click and Examples Menu (2.7.9-beta)
+
+#### Fixed
+* Win32-style dialogs close when the user clicks outside their window.
+
+#### Changed
+* The live examples menu now supports search, grouping, scrolling, and direct opening.
+
 ### Milestone 64: Fixed Variable Watch Edge and Loop Lanes (2.7.8-beta)
 
 #### Fixed

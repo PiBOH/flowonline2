@@ -159,8 +159,8 @@ export const Modals: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 select-none animate-in fade-in duration-150">
-      <div className="bg-white rounded-lg shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 select-none animate-in fade-in duration-150" onClick={(e) => { if (e.target === e.currentTarget) closeEditor(); }}>
+      <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-lg shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden flex flex-col">
         {/* Modal Header */}
         <div className="bg-slate-50 px-5 py-4 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
