@@ -404,15 +404,17 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     // FALSE branch: out of the left vertex, down its own column, back to the spine
     push(`false-edge-${node.id}`, shapeEdgeX(node, 'left'), row, leftX, row);
     planList(elseLayout, leftX, row, mergeRow, { id: node.id, branch: 'else' });
-    push(`false-merge-${node.id}`, leftX, mergeRow, centerX, mergeRow, true);
+    push(`false-merge-${node.id}`, leftX, mergeRow, centerX, mergeRow);
 
     // TRUE branch: out of the right vertex, down its own column, back to the spine
     push(`true-edge-${node.id}`, shapeEdgeX(node, 'right'), row, rightX, row);
     planList(thenLayout, rightX, row, mergeRow, { id: node.id, branch: 'then' });
-    push(`true-merge-${node.id}`, rightX, mergeRow, centerX, mergeRow, true);
+    push(`true-merge-${node.id}`, rightX, mergeRow, centerX, mergeRow);
 
-    // The diamond also drops straight down to the merge point; no arrowhead,
-    // because that stretch is a continuation and not an arrival.
+    // Both branch elbows meet at one merge point. The only arrival arrow is
+    // on the single vertical continuation below the diamond; putting arrows on
+    // both horizontal elbows made them fan across the merge and overlap other
+    // branch content in deeply nested diagrams.
     push(`if-spine-${node.id}`, centerX, node.y + IF_H / 2, centerX, mergeRow, true);
   };
 

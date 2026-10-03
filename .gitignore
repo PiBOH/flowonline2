@@ -31,3 +31,6 @@ Thumbs.db
 # Local assets & AI-generated content
 .ignore/
 /node_modules
+
+# Local FreeCAD/FreeBuff workspace
+.freebuff/

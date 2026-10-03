@@ -244,8 +244,9 @@ describe('connector plan / geometry oracle', () => {
     expect(incoming.arrow).toBe(true);
     expect(incoming.x2).toBe(ifNode.x);
     expect(incoming.y2).toBe(ifNode.top);
-    expect(plan.segments.find((wire) => wire.id === `false-merge-${ifNode.id}`)?.arrow).toBe(true);
-    expect(plan.segments.find((wire) => wire.id === `true-merge-${ifNode.id}`)?.arrow).toBe(true);
+    expect(plan.segments.find((wire) => wire.id === `false-merge-${ifNode.id}`)?.arrow).toBeFalsy();
+    expect(plan.segments.find((wire) => wire.id === `true-merge-${ifNode.id}`)?.arrow).toBeFalsy();
+    expect(plan.segments.find((wire) => wire.id === `if-spine-${ifNode.id}`)?.arrow).toBe(true);
   });
 
   it('uses the real FOR and WHILE outline edges for loop arrows', () => {

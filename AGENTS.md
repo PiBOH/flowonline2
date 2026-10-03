@@ -1106,6 +1106,11 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 59: IF Merge Arrow Routing (2.7.3-beta)
+
+#### Fixed
+* IF branch elbows are plain wires; the single vertical merge continuation owns the arrival arrow, avoiding overlapping/fanned arrowheads in nested layouts.
+
 ### Milestone 58: SEMAFORO Geometry Oracle and Live Examples (2.7.2-beta)
 
 #### Fixed
