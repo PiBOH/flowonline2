@@ -60,7 +60,7 @@ export const Sidebar: React.FC = () => {
   const subText = isDark ? "text-zinc-500" : "text-slate-400";
 
   return (
-    <div className={`w-[300px] h-full flex flex-col p-1 shrink-0 z-15 ${panelBg}`}>
+    <div className={`w-full h-full box-border flex flex-col p-1 shrink-0 z-15 ${panelBg}`}>
       
       {/* ============ WIN32 PANEL HEADER ============ */}
       <div 
