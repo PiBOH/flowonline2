@@ -1106,6 +1106,12 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 63: Direct IF/Loop Convergence Routing (2.7.7-beta)
+
+#### Fixed
+* IF branches now meet directly at the merge point without a diamond-to-merge internal wire.
+* Loop exit flow starts at the header bottom; the loop body return remains the only back-edge.
+
 ### Milestone 62: Merge-Point Arrow Ownership (2.7.6-beta)
 
 #### Fixed
