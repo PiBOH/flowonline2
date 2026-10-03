@@ -161,6 +161,41 @@ export const FlowchartCanvas: React.FC = () => {
     );
   };
 
+  const collectLayoutIds = (layout: ListLayout): string[] => {
+    const ids: string[] = [];
+    for (const node of layout.nodes) {
+      ids.push(node.id);
+      if (node.type === 'if') {
+        if (node.thenLayout) ids.push(...collectLayoutIds(node.thenLayout));
+        if (node.elseLayout) ids.push(...collectLayoutIds(node.elseLayout));
+      } else if (isLoopType(node.type) && node.bodyLayout) {
+        ids.push(...collectLayoutIds(node.bodyLayout));
+      }
+    }
+    return ids;
+  };
+
+  const selectionVeil = (node: ListLayout['nodes'][number], order: number): JSX.Element => {
+    const halfW = shapeHalfW(node.type);
+    const halfH = shapeHalfH(node.type);
+    const shape = node.type === 'if'
+      ? <polygon points={`0,${-halfH} ${halfW},0 0,${halfH} ${-halfW},0`} />
+      : isLoopType(node.type)
+      ? <polygon points={`${-halfW + 15},${-halfH} ${halfW - 15},${-halfH} ${halfW},0 ${halfW - 15},${halfH} ${-halfW + 15},${halfH} ${-halfW},0`} />
+      : node.type === 'input' || node.type === 'output'
+      ? <polygon points={`-80,${-halfH} 100,${-halfH} 80,${halfH} -100,${halfH}`} />
+      : node.type === 'declare'
+      ? <g><path d="M -75 -25 L -75 -32 L -35 -32 L -30 -25 Z" /><line x1="-74" y1="-25" x2="-31" y2="-25" /><rect x="-90" y="-25" width="180" height="50" /></g>
+      : <rect x={-halfW} y={-halfH} width={halfW * 2} height={halfH * 2} rx="2" />;
+    return (
+      <g pointerEvents="none">
+        {React.cloneElement(shape, { fill: '#60A5FA', fillOpacity: 0.38, stroke: '#2563EB', strokeOpacity: 0.8, strokeWidth: 2 })}
+        <circle cx="0" cy="0" r="11" fill="#1D4ED8" fillOpacity="0.95" stroke="white" strokeWidth="2" />
+        <text x="0" y="3.5" textAnchor="middle" fill="white" fontSize="11" fontWeight="700">{order}</text>
+      </g>
+    );
+  };
+
   // RECURSIVE SVG RENDER NODES
   const renderNodeBlocks = (layout: ListLayout): JSX.Element[] => {
     const list: JSX.Element[] = [];
@@ -176,16 +211,15 @@ export const FlowchartCanvas: React.FC = () => {
           // MULTI-BLOCK CLICK TO SELECT STATE (Flowgorithm Original Style!)
           onClick={(e) => {
             e.stopPropagation(); // Avoid deselecting by clicking empty SVG space
+            const subtreeIds = collectLayoutIds({ nodes: [node], width: node.width, height: node.height });
             if (e.ctrlKey || e.metaKey || e.shiftKey) {
-              // Toggle selection on held modifier keys!
-              if (selectedBlockIds.includes(node.id)) {
-                setSelectedBlockIds(selectedBlockIds.filter(id => id !== node.id));
-              } else {
-                setSelectedBlockIds([...selectedBlockIds, node.id]);
-              }
+              const allSelected = subtreeIds.every((id) => selectedBlockIds.includes(id));
+              setSelectedBlockIds(allSelected
+                ? selectedBlockIds.filter((id) => !subtreeIds.includes(id))
+                : [...selectedBlockIds, ...subtreeIds.filter((id) => !selectedBlockIds.includes(id))]);
             } else {
-              // Click strictly selects only one block
-              setSelectedBlockIds([node.id]);
+              // Selecting a container selects its whole subtree in paste order.
+              setSelectedBlockIds(subtreeIds);
             }
           }}
           // RIGHT-CLICK / LONG-PRESS TO OPEN CONTEXT MENU (SUPPORT MULTI-SELECTIONS!)
@@ -215,29 +249,7 @@ export const FlowchartCanvas: React.FC = () => {
             onDoubleClick={() => node.statement && openEditor(node.statement)}
             onDeleteClick={() => deleteBlock(node.id)}
           />
-          {isSelected && (() => {
-            const order = selectedBlockIds.indexOf(node.id) + 1;
-            const halfW = shapeHalfW(node.type);
-            const halfH = shapeHalfH(node.type);
-            return (
-              <g pointerEvents="none">
-                <rect
-                  x={-halfW}
-                  y={-halfH}
-                  width={halfW * 2}
-                  height={halfH * 2}
-                  rx="4"
-                  fill="#2563EB"
-                  fillOpacity="0.22"
-                  stroke="#1D4ED8"
-                  strokeWidth="2"
-                  strokeDasharray="5 3"
-                />
-                <circle cx={0} cy={-halfH - 12} r="10" fill="#1D4ED8" stroke="white" strokeWidth="2" />
-                <text x={0} y={-halfH - 8.5} textAnchor="middle" fill="white" fontSize="10" fontWeight="700">{order}</text>
-              </g>
-            );
-          })()}
+          {isSelected && selectionVeil(node, selectedBlockIds.indexOf(node.id) + 1)}
         </g>
       );
 

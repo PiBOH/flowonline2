@@ -1111,6 +1111,11 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 71: Hierarchical Selection Veil (2.7.15-stable)
+
+#### Fixed
+* Selecting an IF or loop selects all descendants in deterministic paste order; overlays match the block shape and numbers are centered.
+
 ### Milestone 70: Recursive Loop TRUE Clearance (2.7.14-beta)
 
 #### Fixed

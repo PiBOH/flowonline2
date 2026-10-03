@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.15-stable] - 2026-10-03
+
+### Fixed
+- **Hierarchical selection veil:** selecting an IF or loop selects its complete subtree in paste order. The veil now matches diamonds/loop headers, is less opaque, and places its order number at the centre of each selected block.
+
+---
+
 ## [2.7.14-beta] - 2026-10-03
 
 ### Fixed
