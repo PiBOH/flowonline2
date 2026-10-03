@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.4-beta] - 2026-10-03
+
+### Fixed
+- **Compact empty IF branches:** empty `then`/`else` lists no longer reserve a phantom node-width column. Their horizontal elbows stay next to the decision diamond instead of stretching across neighbouring blocks; the same correction tightens empty loop-body routing.
+
+---
+
 ## [2.7.3-beta] - 2026-10-03
 
 ### Fixed

@@ -1106,6 +1106,11 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 60: Compact Empty Branch Routing (2.7.4-beta)
+
+#### Fixed
+* Empty IF branches and loop bodies now have zero content width during layout, preventing phantom 180px columns and oversized horizontal connectors.
+
 ### Milestone 59: IF Merge Arrow Routing (2.7.3-beta)
 
 #### Fixed
