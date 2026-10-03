@@ -150,6 +150,12 @@ describe('flowchartLayout / buildDiagram', () => {
 
     expect(node.elseLayout!.nodes).toHaveLength(0);
     expect(node.thenLayout!.nodes).toHaveLength(0);
+    // Empty branches do not reserve a phantom node-width column: their
+    // elbows stay close to the diamond, like Flowgorithm's layout.
+    expect(node.elseLayout!.width).toBe(0);
+    expect(node.thenLayout!.width).toBe(0);
+    expect(node.leftX).toBe(-(IF_W / 2 + BRANCH_STUB));
+    expect(node.rightX).toBe(IF_W / 2 + BRANCH_STUB);
     // Both elbows still land on the merge line, which is where the flow resumes
     expect(node.mergeY).toBe(node.y + V_GAP);
     expect(node.bottom).toBe(node.mergeY);

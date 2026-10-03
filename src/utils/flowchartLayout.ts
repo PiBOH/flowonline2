@@ -160,7 +160,11 @@ export const shapeEdgeX = (node: LayoutNode, side: 'left' | 'right'): number => 
 export function computeListLayout(list: Statement[]): ListLayout {
   const nodes: LayoutNode[] = [];
   let currentY = 0;
-  let maxWidth = NODE_W;
+  // Empty branch/body lists need no content column. Giving them NODE_W
+  // reserved a phantom 180px column, which made IF elbows stretch across
+  // neighbouring blocks and made loop return wires look misplaced. The main
+  // canvas still gets NODE_W from buildDiagram's initial bounds.
+  let maxWidth = list.length === 0 ? 0 : NODE_W;
 
   for (const stmt of list) {
     let width = shapeHalfW(stmt.type) * 2;
