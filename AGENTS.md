@@ -1106,6 +1106,12 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 66: Restore Branch Labels (2.7.10-beta)
+
+#### Fixed
+* True/False labels are rendered recursively for every IF and loop from the shared layout coordinates.
+* Patch beta versions may continue sequentially beyond `2.7.9-beta` (for example `2.7.10-beta`); do not jump to `2.8.0-beta` for a backward-compatible fix.
+
 ### Milestone 65: Dialog Outside-Click and Examples Menu (2.7.9-beta)
 
 #### Fixed

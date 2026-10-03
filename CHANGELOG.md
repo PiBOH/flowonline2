@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.10-beta] - 2026-10-03
+
+### Fixed
+- **Branch labels restored:** IF and loop headers now always render visible `True`/`False` labels at the exact left/right vertices used by the connector plan.
+- **Branch/cycle overlap:** labels and connector layers are rendered from the same aligned layout, avoiding the missing-label fallback that made nested IF/cycle routes appear to overlap.
+
+---
+
 ## [2.7.9-beta] - 2026-10-03
 
 ### Fixed
