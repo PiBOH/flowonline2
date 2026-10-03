@@ -1106,6 +1106,11 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 62: Merge-Point Arrow Ownership (2.7.6-beta)
+
+#### Fixed
+* IF and loop internal convergence wires no longer carry arrowheads; the next-list connector owns the single arrow beginning at the exact merge row.
+
 ### Milestone 61: Variable Watch Edge Alignment (2.7.5-beta)
 
 #### Fixed

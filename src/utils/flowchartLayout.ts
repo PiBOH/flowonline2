@@ -415,11 +415,11 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     planList(thenLayout, rightX, row, mergeRow, { id: node.id, branch: 'then' });
     push(`true-merge-${node.id}`, rightX, mergeRow, centerX, mergeRow);
 
-    // Both branch elbows meet at one merge point. The only arrival arrow is
-    // on the single vertical continuation below the diamond; putting arrows on
-    // both horizontal elbows made them fan across the merge and overlap other
-    // branch content in deeply nested diagrams.
-    push(`if-spine-${node.id}`, centerX, node.y + IF_H / 2, centerX, mergeRow, true);
+    // This is the internal convergence wire from the diamond to the branch
+    // merge. It is intentionally plain: the actual flow arrow starts at the
+    // merge point in the next list connector (or the list tail), never just
+    // below the shape.
+    push(`if-spine-${node.id}`, centerX, node.y + IF_H / 2, centerX, mergeRow);
   };
 
   /**
@@ -442,8 +442,10 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     push(`loop-back-2-${node.id}`, returnX, mergeRow, returnX, row);
     push(`loop-back-3-${node.id}`, returnX, row, shapeEdgeX(node, 'left'), row, true);
 
-    // Exit: the header drops to the merge row where the main flow continues
-    push(`loop-exit-${node.id}`, centerX, row + LOOP_H / 2, centerX, mergeRow, true);
+    // Exit: the header drops to the merge row where the main flow continues.
+    // This internal stretch is plain; its arrival arrow is emitted by the
+    // next-list connector starting exactly at node.bottom / mergeRow.
+    push(`loop-exit-${node.id}`, centerX, row + LOOP_H / 2, centerX, mergeRow);
   };
 
   planList(diagram.listLayout, 0, diagram.flowStartY, diagram.flowEndY);

@@ -252,7 +252,22 @@ describe('connector plan / geometry oracle', () => {
     expect(incoming.y2).toBe(ifNode.top);
     expect(plan.segments.find((wire) => wire.id === `false-merge-${ifNode.id}`)?.arrow).toBeFalsy();
     expect(plan.segments.find((wire) => wire.id === `true-merge-${ifNode.id}`)?.arrow).toBeFalsy();
-    expect(plan.segments.find((wire) => wire.id === `if-spine-${ifNode.id}`)?.arrow).toBe(true);
+    expect(plan.segments.find((wire) => wire.id === `if-spine-${ifNode.id}`)?.arrow).toBeFalsy();
+  });
+
+  it('starts the post-merge arrow at the merge row, not below the shape', () => {
+    const d = buildDiagram([ifStmt([output()], []), output(), whileStmt([output()]), output()]);
+    const plan = computeConnectorPlan(d);
+    const first = d.listLayout.nodes[0];
+    const second = d.listLayout.nodes[1];
+    const afterIf = plan.segments.find((wire) => wire.id === `in-${second.id}`)!;
+    expect(afterIf.arrow).toBe(true);
+    expect(afterIf.y1).toBe(first.bottom);
+    expect(plan.segments.find((wire) => wire.id === `if-spine-${first.id}`)?.arrow).toBeFalsy();
+
+    const loop = d.listLayout.nodes[2];
+    expect(plan.segments.find((wire) => wire.id === `loop-exit-${loop.id}`)?.arrow).toBeFalsy();
+    expect(plan.segments.find((wire) => wire.id === `in-${d.listLayout.nodes[3].id}`)?.y1).toBe(loop.bottom);
   });
 
   it('uses the real FOR and WHILE outline edges for loop arrows', () => {
