@@ -6,12 +6,8 @@ import { translations } from '../utils/translations';
 import { IconPencil, IconScissors, IconClipboard, IconInbox, IconError } from './EmojiIcons';
 import {
   buildDiagram,
-  isLoopType,
-  shapeEdgeX,
-  shapeTopYAt,
+  computeConnectorPlan,
   ARROW_LEN,
-  IF_H,
-  LOOP_H,
   MAIN_H,
   type ListLayout
 } from '../utils/flowchartLayout';
@@ -75,152 +71,6 @@ export const FlowchartCanvas: React.FC = () => {
 
   // GENERATE LAYOUT & DIMENSIONS (pure geometry engine, see utils/flowchartLayout.ts)
   const diagramLayout = useMemo(() => buildDiagram(statements), [statements]);
-
-  // RENDERING HELPERS FOR CONNECTOR SVG LINES
-  // `startY` is where the incoming flow arrives (start oval, branch line or the
-  // previous statement) while `endY` is where this list must deliver the flow
-  // (top of the next shape, merge line of the parent branch, or the END oval).
-  const renderLinesAndArrows = (
-    layout: ListLayout,
-    centerX: number,
-    startY: number,
-    endY: number,
-    parentContext?: { id: string; branch: 'then' | 'else' | 'body' }
-  ): ConnectorLayer => {
-    const lines: JSX.Element[] = [];
-    const inserters: JSX.Element[] = [];
-
-    // Connectors are pushed on the "lines" layer (painted under the blocks) while
-    // every "+" is pushed on its own "inserters" layer (painted ON TOP of the
-    // blocks). This is what makes the inserter dots impossible to hide.
-    const pushInserter = (x: number, y: number, targetId: string, index?: number) => {
-      inserters.push(
-        <React.Fragment key={`ins-${targetId}-${index ?? 'end'}-${Math.round(x)}-${Math.round(y)}`}>
-          {renderInserterButton(x, y, targetId, index)}
-        </React.Fragment>
-      );
-    };
-
-    // Vertical connector carrying an arrowhead at its end, plus its inserter dot
-    const pushConnector = (x: number, from: number, to: number, targetId: string, index?: number) => {
-      lines.push(
-        <line
-          key={`conn-${targetId}-${index ?? 'end'}-${Math.round(from)}`}
-          x1={x}
-          y1={from}
-          x2={x}
-          y2={to}
-          stroke={sc.lineColor}
-          strokeWidth="2"
-          markerEnd="url(#arrow)"
-        />
-      );
-      pushInserter(x, (from + to) / 2, targetId, index);
-    };
-
-    let currentY = startY;
-
-    for (let i = 0; i < layout.nodes.length; i++) {
-      const node = layout.nodes[i];
-
-      // Connector entering this statement. The tip lands on the REAL outline
-      // of the shape (for a diamond that is the slanted edge, not the corner of
-      // its bounding box), so it never floats inside the block.
-      pushConnector(centerX, currentY, shapeTopYAt(node, centerX), node.id, i);
-
-      if (node.type === 'if' && node.thenLayout && node.elseLayout) {
-        const leftX = node.leftX as number;
-        const rightX = node.rightX as number;
-        const mergeY = node.mergeY as number;
-        const diamondLeft = shapeEdgeX(node, 'left');
-        const diamondRight = shapeEdgeX(node, 'right');
-
-        // FALSE branch, going out on the left (elseBranch)
-        lines.push(<line key={`false-edge-${node.id}`} x1={diamondLeft} y1={node.y} x2={leftX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
-        lines.push(
-          <text key={`false-label-${node.id}`} x={diamondLeft - 4} y={node.y - 5} textAnchor="end" fill={sc.textColor} fillOpacity="0.75" className="font-sans text-[10px] font-bold select-none pointer-events-none">
-            {t.canvas.falseBranch}
-          </text>
-        );
-        const leftBranch = renderLinesAndArrows(node.elseLayout, leftX, node.y, mergeY, { id: node.id, branch: 'else' });
-        lines.push(...leftBranch.lines);
-        inserters.push(...leftBranch.inserters);
-        // Elbow bringing the FALSE column back onto the main spine
-        lines.push(<line key={`false-merge-${node.id}`} x1={leftX} y1={mergeY} x2={centerX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
-
-        // TRUE branch, going out on the right (thenBranch)
-        lines.push(<line key={`true-edge-${node.id}`} x1={diamondRight} y1={node.y} x2={rightX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
-        lines.push(
-          <text key={`true-label-${node.id}`} x={diamondRight + 4} y={node.y - 5} textAnchor="start" fill="#15803D" className="font-sans text-[10px] font-bold select-none pointer-events-none">
-            {t.canvas.trueBranch}
-          </text>
-        );
-        const rightBranch = renderLinesAndArrows(node.thenLayout, rightX, node.y, mergeY, { id: node.id, branch: 'then' });
-        lines.push(...rightBranch.lines);
-        inserters.push(...rightBranch.inserters);
-        // Elbow bringing the TRUE column back onto the main spine
-        lines.push(<line key={`true-merge-${node.id}`} x1={rightX} y1={mergeY} x2={centerX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
-
-        // The flow also leaves the diamond from its bottom vertex, joining the
-        // two elbows exactly on the merge line.
-        lines.push(<line key={`if-spine-${node.id}`} x1={centerX} y1={node.y + IF_H / 2} x2={centerX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
-
-      } else if (isLoopType(node.type) && node.bodyLayout) {
-        const bodyX = node.bodyX as number;
-        const returnX = node.returnX as number;
-        const mergeY = node.mergeY as number;
-
-        // Loop body column hangs from the right vertex of the header hexagon.
-        // `shapeEdgeX` matters here: the `for` hexagon is 190px wide while the
-        // while/do one is only 160px, so a hard-coded half width would start the
-        // loop-back arrow INSIDE the shape for every `for` loop.
-        lines.push(<line key={`loop-edge-${node.id}`} x1={shapeEdgeX(node, 'right')} y1={node.y} x2={bodyX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
-        const bodyBranch = renderLinesAndArrows(node.bodyLayout, bodyX, node.y, mergeY, { id: node.id, branch: 'body' });
-        lines.push(...bodyBranch.lines);
-        inserters.push(...bodyBranch.inserters);
-
-        // Loop-back wire: end of the body -> left -> up -> arrow into the header
-        lines.push(<line key={`loop-back-1-${node.id}`} x1={bodyX} y1={mergeY} x2={returnX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
-        lines.push(<line key={`loop-back-2-${node.id}`} x1={returnX} y1={mergeY} x2={returnX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
-        // The arrowhead stops exactly on the left vertex of the header, so its
-        // tip touches the outline instead of overlapping the hexagon.
-        lines.push(<line key={`loop-back-3-${node.id}`} x1={returnX} y1={node.y} x2={shapeEdgeX(node, 'left')} y2={node.y} stroke={sc.lineColor} strokeWidth="2" markerEnd="url(#arrow)" />);
-
-        // The loop exit leaves the header from its bottom edge
-        lines.push(<line key={`loop-exit-${node.id}`} x1={centerX} y1={node.y + LOOP_H / 2} x2={centerX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
-      }
-
-      // The flow leaves this statement from its bottom (its merge line for IF/loops)
-      currentY = node.bottom;
-    }
-
-    // Deliver the flow to the end of this list
-    const tailTarget = parentContext
-      ? `branch_end:${parentContext.id}:${parentContext.branch}`
-      : 'main_end';
-
-    if (parentContext) {
-      // Inside a branch/body: plain wire, the caller closes the elbow back to the
-      // spine, so no arrowhead is drawn here.
-      lines.push(
-        <line
-          key={`tail-${tailTarget}`}
-          x1={centerX}
-          y1={currentY}
-          x2={centerX}
-          y2={endY}
-          stroke={sc.lineColor}
-          strokeWidth="2"
-        />
-      );
-      pushInserter(centerX, (currentY + endY) / 2, tailTarget);
-    } else {
-      // Main flow: arrow into the next statement or into the END oval
-      pushConnector(centerX, currentY, endY, tailTarget);
-    }
-
-    return { lines, inserters };
-  };
 
   // DRAW INTERACTIVE INSERTER CIRCULAR BUTTON (Faithful 18px circle, glowing blue, expanding on hover!)
   const renderInserterButton = (
@@ -384,12 +234,28 @@ export const FlowchartCanvas: React.FC = () => {
     }
   };
 
-  // Connectors are built once per statements/theme change: lines go under the
-  // blocks, the "+" inserters go above them.
-  const connectors = useMemo(
-    () => renderLinesAndArrows(diagramLayout.listLayout, 0, diagramLayout.flowStartY, diagramLayout.flowEndY),
-    [diagramLayout, sc, t]
-  );
+  // The layout module owns connector geometry. The canvas is deliberately a
+  // dumb painter: this prevents SVG and the geometry oracle from drifting apart.
+  const connectorPlan = useMemo(() => computeConnectorPlan(diagramLayout), [diagramLayout]);
+  const connectors = useMemo<ConnectorLayer>(() => ({
+    lines: connectorPlan.segments.map((segment) => (
+      <line
+        key={segment.id}
+        x1={segment.x1}
+        y1={segment.y1}
+        x2={segment.x2}
+        y2={segment.y2}
+        stroke={sc.lineColor}
+        strokeWidth="2"
+        markerEnd={segment.arrow ? 'url(#arrow)' : undefined}
+      />
+    )),
+    inserters: connectorPlan.inserters.map((spot) => (
+      <React.Fragment key={spot.id}>
+        {renderInserterButton(spot.x, spot.y, spot.parentId, spot.index)}
+      </React.Fragment>
+    ))
+  }), [connectorPlan, sc, zoom]);
 
   const isDark = colorScheme === 'twilight';
 

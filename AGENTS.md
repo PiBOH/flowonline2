@@ -1106,6 +1106,18 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 57: Connector Plan and Profile Engine Consolidation (2.7.1-beta)
+
+#### Fixed
+* `FlowchartCanvas` now renders `computeConnectorPlan()` directly; the SVG renderer no longer has a second geometry implementation.
+* Python, C++, Java, JavaScript, and C# are profile entries, so every target uses the same generator engine.
+
+#### Added
+* Numeric connector-plan regression assertions covering IF branches, loops, arrow endpoints, and nested layouts.
+
+#### Validation
+* TypeScript, Vitest (194 tests, 7 files), production build, and `git diff --check` pass.
+
 ### Milestone 56: Full Flowgorithm Language Set + Connector Geometry Rewrite (2.7.0-beta)
 
 #### Added
@@ -1123,7 +1135,7 @@ a plain summary body — nothing else. Contributors are credited in
 *   **Canvas centring:** the viewBox is now derived from the real horizontal bounds of the drawing instead of a guessed `width * 1.5 + 200`.
 
 #### Changed
-*   **`CodeGenerator.generate()`** accepts every target id: the five historical generators are untouched, everything else is dispatched to `generateWithProfile()`; an unknown id returns a comment instead of `undefined`.
+*   **`CodeGenerator.generate()`** accepts every target id: all five historical targets are profile-backed and every target is dispatched to `generateWithProfile()`; an unknown id returns a comment instead of `undefined`.
 *   **Sidebar language picker** now lists the full `CODE_LANGUAGES` catalogue.
 *   **`arenaai.md` renamed to `AGENTS.md`** and documented as the mandatory instruction file of the repository.
 *   **Commit trailers:** this repository records no `Co-authored-by:` trailer and no "generated with" footer — only the `v<version>` message line plus the summary body.
