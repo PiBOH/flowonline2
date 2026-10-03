@@ -86,6 +86,35 @@ export interface DiagramLayout {
 export const isLoopType = (t: string): t is 'while' | 'for' | 'do' =>
   t === 'while' || t === 'for' || t === 'do';
 
+/** Counts every nested decision/loop inside a loop body. */
+export function countControlStatements(list: Statement[]): number {
+  return list.reduce((count, statement) => {
+    if (statement.type === 'if') {
+      return count + 1 + countControlStatements(statement.thenBranch) + countControlStatements(statement.elseBranch);
+    }
+    if (statement.type === 'while' || statement.type === 'for' || statement.type === 'do') {
+      return count + 1 + countControlStatements(statement.body);
+    }
+    return count;
+  }, 0);
+}
+
+/** TRUE lane clearance: base gap plus 100px per nested control construct. */
+export const loopTrueClearance = (body: ListLayout): number =>
+  LOOP_TRUE_CLEARANCE + countLayoutControls(body) * 100;
+
+function countLayoutControls(layout: ListLayout): number {
+  return layout.nodes.reduce((count, node) => {
+    if (node.type === 'if') {
+      return count + 1 + (node.thenLayout ? countLayoutControls(node.thenLayout) : 0) + (node.elseLayout ? countLayoutControls(node.elseLayout) : 0);
+    }
+    if (isLoopType(node.type)) {
+      return count + 1 + (node.bodyLayout ? countLayoutControls(node.bodyLayout) : 0);
+    }
+    return count;
+  }, 0);
+}
+
 /**
  * Real half width of a shape ON ITS CENTRE ROW — i.e. where the horizontal
  * branch wires and the loop-back arrow must stop to touch the outline.
@@ -187,7 +216,7 @@ export function computeListLayout(list: Statement[]): ListLayout {
     } else if (stmt.type === 'while' || stmt.type === 'for' || stmt.type === 'do') {
       bodyLayout = computeListLayout(stmt.body);
       // body column on the right + the loop-back wire on the left
-      width = shapeHalfW(stmt.type) * 2 + 2 * BRANCH_STUB + LOOP_TRUE_CLEARANCE + bodyLayout.width;
+      width = shapeHalfW(stmt.type) * 2 + 2 * BRANCH_STUB + loopTrueClearance(bodyLayout) + bodyLayout.width;
       height = LOOP_H / 2 + V_GAP / 2 + bodyLayout.height + V_GAP / 2;
     }
 
@@ -246,7 +275,7 @@ export function alignCoordinates(layout: ListLayout, centerX: number, startY: nu
     } else if (isLoopType(node.type) && node.bodyLayout) {
       // the loop body hangs from the right vertex of the loop header; the
       // loop-back wire runs up the left side of the shape.
-      node.bodyX = centerX + shapeHalfW(node.type) + BRANCH_STUB + LOOP_TRUE_CLEARANCE + node.bodyLayout.width / 2;
+      node.bodyX = centerX + shapeHalfW(node.type) + BRANCH_STUB + loopTrueClearance(node.bodyLayout) + node.bodyLayout.width / 2;
       node.returnX = centerX - (shapeHalfW(node.type) + BRANCH_STUB);
       node.childTop = node.y + V_GAP / 2;
       node.mergeY = node.childTop + node.bodyLayout.height + V_GAP / 2;

@@ -12,7 +12,9 @@ import {
   LOOP_H,
   LOOP_W,
   BRANCH_STUB,
-  computeConnectorPlan
+  computeConnectorPlan,
+  countControlStatements,
+  loopTrueClearance
 } from './flowchartLayout';
 
 let counter = 0;
@@ -226,6 +228,16 @@ describe('flowchartLayout / buildDiagram', () => {
   });
 });
 
+
+describe('loop TRUE clearance', () => {
+  it('adds 100px for every nested IF or loop recursively', () => {
+    const nested = ifStmt([whileStmt([ifStmt([output()], [])])], [output()]);
+    expect(countControlStatements([nested])).toBe(3);
+    const d = buildDiagram([whileStmt([nested])]);
+    const body = d.listLayout.nodes[0].bodyLayout!;
+    expect(loopTrueClearance(body)).toBe(140 + 3 * 100);
+  });
+});
 
 describe('connector plan / geometry oracle', () => {
   it('contains only forward incoming arrows and exact shape endpoints', () => {

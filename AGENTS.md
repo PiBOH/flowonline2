@@ -1111,6 +1111,11 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 70: Recursive Loop TRUE Clearance (2.7.14-beta)
+
+#### Fixed
+* Each nested IF or loop contributes 100px recursively to its enclosing loop TRUE lane, on top of the 140px base clearance.
+
 ### Milestone 69: Loop Clearance, Safe Menus, and Selection Order (2.7.13-beta)
 
 #### Fixed

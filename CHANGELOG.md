@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.14-beta] - 2026-10-03
+
+### Fixed
+- **Recursive TRUE-lane clearance:** every nested IF or loop inside a loop body adds 100px to that loop's TRUE route clearance, recursively, while the existing 140px base remains.
+
+---
+
 ## [2.7.13-beta] - 2026-10-03
 
 ### Fixed
