@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.3-beta] - 2026-10-03
+
+### Fixed
+- **IF merge arrows:** branch elbows no longer draw two competing arrowheads into the same merge point. The shared plan now emits one arrow on the vertical continuation, matching Flowgorithm and preventing arrowheads from spreading across neighbouring branches.
+
+---
+
 ## [2.7.2-beta] - 2026-10-03
 
 ### Fixed
