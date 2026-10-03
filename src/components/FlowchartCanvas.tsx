@@ -7,9 +7,10 @@ import { IconPencil, IconScissors, IconClipboard, IconInbox, IconError } from '.
 import {
   buildDiagram,
   isLoopType,
-  IF_W,
+  shapeEdgeX,
+  shapeTopYAt,
+  ARROW_LEN,
   IF_H,
-  LOOP_W,
   LOOP_H,
   MAIN_H,
   type ListLayout
@@ -122,15 +123,17 @@ export const FlowchartCanvas: React.FC = () => {
     for (let i = 0; i < layout.nodes.length; i++) {
       const node = layout.nodes[i];
 
-      // Connector entering this statement (arrowhead touching the shape top)
-      pushConnector(centerX, currentY, node.top, node.id, i);
+      // Connector entering this statement. The tip lands on the REAL outline
+      // of the shape (for a diamond that is the slanted edge, not the corner of
+      // its bounding box), so it never floats inside the block.
+      pushConnector(centerX, currentY, shapeTopYAt(node, centerX), node.id, i);
 
       if (node.type === 'if' && node.thenLayout && node.elseLayout) {
         const leftX = node.leftX as number;
         const rightX = node.rightX as number;
         const mergeY = node.mergeY as number;
-        const diamondLeft = centerX - IF_W / 2;
-        const diamondRight = centerX + IF_W / 2;
+        const diamondLeft = shapeEdgeX(node, 'left');
+        const diamondRight = shapeEdgeX(node, 'right');
 
         // FALSE branch, going out on the left (elseBranch)
         lines.push(<line key={`false-edge-${node.id}`} x1={diamondLeft} y1={node.y} x2={leftX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
@@ -167,8 +170,11 @@ export const FlowchartCanvas: React.FC = () => {
         const returnX = node.returnX as number;
         const mergeY = node.mergeY as number;
 
-        // Loop body column hangs from the right vertex of the header hexagon
-        lines.push(<line key={`loop-edge-${node.id}`} x1={centerX + LOOP_W / 2} y1={node.y} x2={bodyX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
+        // Loop body column hangs from the right vertex of the header hexagon.
+        // `shapeEdgeX` matters here: the `for` hexagon is 190px wide while the
+        // while/do one is only 160px, so a hard-coded half width would start the
+        // loop-back arrow INSIDE the shape for every `for` loop.
+        lines.push(<line key={`loop-edge-${node.id}`} x1={shapeEdgeX(node, 'right')} y1={node.y} x2={bodyX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
         const bodyBranch = renderLinesAndArrows(node.bodyLayout, bodyX, node.y, mergeY, { id: node.id, branch: 'body' });
         lines.push(...bodyBranch.lines);
         inserters.push(...bodyBranch.inserters);
@@ -176,7 +182,9 @@ export const FlowchartCanvas: React.FC = () => {
         // Loop-back wire: end of the body -> left -> up -> arrow into the header
         lines.push(<line key={`loop-back-1-${node.id}`} x1={bodyX} y1={mergeY} x2={returnX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
         lines.push(<line key={`loop-back-2-${node.id}`} x1={returnX} y1={mergeY} x2={returnX} y2={node.y} stroke={sc.lineColor} strokeWidth="2" />);
-        lines.push(<line key={`loop-back-3-${node.id}`} x1={returnX} y1={node.y} x2={centerX - LOOP_W / 2 - 1} y2={node.y} stroke={sc.lineColor} strokeWidth="2" markerEnd="url(#arrow)" />);
+        // The arrowhead stops exactly on the left vertex of the header, so its
+        // tip touches the outline instead of overlapping the hexagon.
+        lines.push(<line key={`loop-back-3-${node.id}`} x1={returnX} y1={node.y} x2={shapeEdgeX(node, 'left')} y2={node.y} stroke={sc.lineColor} strokeWidth="2" markerEnd="url(#arrow)" />);
 
         // The loop exit leaves the header from its bottom edge
         lines.push(<line key={`loop-exit-${node.id}`} x1={centerX} y1={node.y + LOOP_H / 2} x2={centerX} y2={mergeY} stroke={sc.lineColor} strokeWidth="2" />);
@@ -413,19 +421,30 @@ export const FlowchartCanvas: React.FC = () => {
         >
           {/* SVG definitions */}
           <defs>
-            {/* Arrowhead: the refX puts the TIP exactly on the end of the line,
-                so the arrow lands on the shape border instead of inside it. */}
+            {/* Arrowhead.
+
+                Two details used to make the arrows look crooked:
+                  - `markerUnits="strokeWidth"` scaled the head by the 2px stroke,
+                    so its size depended on the pen rather than on the drawing;
+                  - the old viewBox pushed the tip past the end of the segment.
+
+                The head is now drawn in USER SPACE, `refX` is the very tip, and
+                the engine ends every arrow segment exactly on a block outline.
+                The result is a tip that touches the shape and never hides in it. */}
             <marker
               id="arrow"
-              viewBox="0 0 10 10"
-              refX="10"
-              refY="5"
-              markerWidth="4.5"
-              markerHeight="4.5"
-              markerUnits="strokeWidth"
+              viewBox={`0 0 ${ARROW_LEN} ${ARROW_LEN}`}
+              refX={ARROW_LEN}
+              refY={ARROW_LEN / 2}
+              markerWidth={ARROW_LEN}
+              markerHeight={ARROW_LEN}
+              markerUnits="userSpaceOnUse"
               orient="auto-start-reverse"
             >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill={sc.lineColor} />
+              <path
+                d={`M 0 0 L ${ARROW_LEN} ${ARROW_LEN / 2} L 0 ${ARROW_LEN} z`}
+                fill={sc.lineColor}
+              />
             </marker>
 
             {/* Glowing Blue Dot gradient */}
