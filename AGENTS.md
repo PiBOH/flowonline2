@@ -1111,6 +1111,16 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 69: Loop Clearance, Safe Menus, and Selection Order (2.7.13-beta)
+
+#### Fixed
+* Inserter menus are clamped to the viewport.
+* Loop TRUE routing receives extra right-side clearance only for loop layouts.
+* Landscape viewports default to Flowchart Only.
+
+#### Added
+* Selected blocks display a translucent order veil and paste-order number.
+
 ### Milestone 68: Terminal Loop Exit Lane (2.7.12-beta)
 
 #### Fixed

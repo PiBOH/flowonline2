@@ -270,7 +270,11 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [programAuthor, setProgramAuthorState] = useState(() => savedData?.programAuthor || detectAuthor());
 
   // Win32 MDI Layout split state
-  const [layout, setLayout] = useState<AppLayout>('triple_split');
+  const [layout, setLayout] = useState<AppLayout>(() =>
+    typeof window !== 'undefined' && window.innerHeight < window.innerWidth
+      ? 'flowchart_only'
+      : 'triple_split'
+  );
 
   // Color Scheme (Flowchart Styles)
   const [colorScheme, setColorScheme] = useState<ColorSchemeType>('classic');

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.13-beta] - 2026-10-03
+
+### Fixed
+- **Inserter menu bounds:** the block picker is clamped to the viewport and scrolls internally instead of leaving the screen.
+- **Loop TRUE clearance:** only loop bodies receive an additional 140px right-side routing clearance to keep return wires away from neighbouring branches.
+- **Landscape default:** browsers whose viewport is wider than tall now start in Flowchart Only mode.
+
+### Added
+- **Selection order veil:** selected blocks show a translucent overlay and their paste order number.
+
+---
+
 ## [2.7.12-beta] - 2026-10-03
 
 ### Fixed

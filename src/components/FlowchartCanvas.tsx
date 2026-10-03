@@ -8,6 +8,8 @@ import {
   buildDiagram,
   computeConnectorPlan,
   shapeEdgeX,
+  shapeHalfW,
+  shapeHalfH,
   isLoopType,
   ARROW_LEN,
   MAIN_H,
@@ -213,6 +215,29 @@ export const FlowchartCanvas: React.FC = () => {
             onDoubleClick={() => node.statement && openEditor(node.statement)}
             onDeleteClick={() => deleteBlock(node.id)}
           />
+          {isSelected && (() => {
+            const order = selectedBlockIds.indexOf(node.id) + 1;
+            const halfW = shapeHalfW(node.type);
+            const halfH = shapeHalfH(node.type);
+            return (
+              <g pointerEvents="none">
+                <rect
+                  x={-halfW}
+                  y={-halfH}
+                  width={halfW * 2}
+                  height={halfH * 2}
+                  rx="4"
+                  fill="#2563EB"
+                  fillOpacity="0.22"
+                  stroke="#1D4ED8"
+                  strokeWidth="2"
+                  strokeDasharray="5 3"
+                />
+                <circle cx={0} cy={-halfH - 12} r="10" fill="#1D4ED8" stroke="white" strokeWidth="2" />
+                <text x={0} y={-halfH - 8.5} textAnchor="middle" fill="white" fontSize="10" fontWeight="700">{order}</text>
+              </g>
+            );
+          })()}
         </g>
       );
 
@@ -396,8 +421,10 @@ export const FlowchartCanvas: React.FC = () => {
           <div
             className="fixed bg-white rounded-lg shadow-xl border border-slate-200 p-2 grid grid-cols-2 gap-1 w-64 z-50 animate-in fade-in zoom-in-95 duration-100"
             style={{
-              left: `${activeInserter.x - 128}px`,
-              top: `${activeInserter.y + 10}px`
+              left: `${Math.max(8, Math.min(activeInserter.x - 128, (typeof window !== 'undefined' ? window.innerWidth : 1024) - 272))}px`,
+              top: `${Math.max(8, Math.min(activeInserter.y + 10, (typeof window !== 'undefined' ? window.innerHeight : 768) - 440))}px`,
+              maxHeight: 'calc(100dvh - 16px)',
+              overflowY: 'auto'
             }}
             onClick={(e) => e.stopPropagation()}
           >

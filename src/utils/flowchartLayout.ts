@@ -28,7 +28,9 @@ export const ARROW_LEN = 10;
 // ── Spacing ──────────────────────────────────────────────────────────────────
 export const V_GAP = 40; // vertical distance between two stacked statements
 export const H_GAP = 50; // horizontal distance between a shape and its branch column
-export const BRANCH_STUB = H_GAP / 2; // run from the shape edge to the branch column
+export const BRANCH_STUB = H_GAP / 2;
+/** Extra clearance reserved only for loop TRUE body routing. */
+export const LOOP_TRUE_CLEARANCE = 140; // run from the shape edge to the branch column
 export const CANVAS_PAD = 100; // empty margin kept around the diagram
 
 export interface LayoutNode {
@@ -185,7 +187,7 @@ export function computeListLayout(list: Statement[]): ListLayout {
     } else if (stmt.type === 'while' || stmt.type === 'for' || stmt.type === 'do') {
       bodyLayout = computeListLayout(stmt.body);
       // body column on the right + the loop-back wire on the left
-      width = shapeHalfW(stmt.type) * 2 + 2 * BRANCH_STUB + bodyLayout.width;
+      width = shapeHalfW(stmt.type) * 2 + 2 * BRANCH_STUB + LOOP_TRUE_CLEARANCE + bodyLayout.width;
       height = LOOP_H / 2 + V_GAP / 2 + bodyLayout.height + V_GAP / 2;
     }
 
@@ -244,7 +246,7 @@ export function alignCoordinates(layout: ListLayout, centerX: number, startY: nu
     } else if (isLoopType(node.type) && node.bodyLayout) {
       // the loop body hangs from the right vertex of the loop header; the
       // loop-back wire runs up the left side of the shape.
-      node.bodyX = centerX + shapeHalfW(node.type) + BRANCH_STUB + node.bodyLayout.width / 2;
+      node.bodyX = centerX + shapeHalfW(node.type) + BRANCH_STUB + LOOP_TRUE_CLEARANCE + node.bodyLayout.width / 2;
       node.returnX = centerX - (shapeHalfW(node.type) + BRANCH_STUB);
       node.childTop = node.y + V_GAP / 2;
       node.mergeY = node.childTop + node.bodyLayout.height + V_GAP / 2;
