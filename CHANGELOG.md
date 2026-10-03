@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.11-beta] - 2026-10-03
+
+### Fixed
+- **Loop TRUE/FALSE routing:** loop headers now label and route TRUE to the right/body return lane and FALSE to a separate left exit lane that continues at the loop merge row. The loop return and project continuation no longer share an arrow or lane.
+
+---
+
 ## [2.7.10-beta] - 2026-10-03
 
 ### Fixed

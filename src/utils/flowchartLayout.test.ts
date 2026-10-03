@@ -266,17 +266,19 @@ describe('connector plan / geometry oracle', () => {
     expect(plan.segments.find((wire) => wire.id === `if-spine-${first.id}`)).toBeUndefined();
 
     const loop = d.listLayout.nodes[2];
-    expect(plan.segments.find((wire) => wire.id === `loop-exit-${loop.id}`)).toBeUndefined();
-    expect(plan.segments.find((wire) => wire.id === `in-${d.listLayout.nodes[3].id}`)?.y1).toBe(loop.y + 25);
+    expect(plan.segments.find((wire) => wire.id === `loop-true-return-${loop.id}`)?.arrow).toBe(true);
+    expect(plan.segments.find((wire) => wire.id === `loop-false-merge-${loop.id}`)?.arrow).toBeFalsy();
+    expect(plan.segments.find((wire) => wire.id === `in-${d.listLayout.nodes[3].id}`)?.y1).toBe(loop.bottom);
   });
 
   it('uses the real FOR and WHILE outline edges for loop arrows', () => {
     const d = buildDiagram([{ id: id(), type: 'for', variableName: 'i', startValue: '1', endValue: '3', direction: 'inc', stepValue: '1', body: [output()] }]);
     const node = d.listLayout.nodes[0];
     const plan = computeConnectorPlan(d);
-    const back = plan.segments.find((wire) => wire.id === `loop-back-3-${node.id}`)!;
+    const back = plan.segments.find((wire) => wire.id === `loop-true-return-${node.id}`)!;
     expect(back.arrow).toBe(true);
-    expect(back.x2).toBe(node.x - 95); // FOR_W / 2
-    expect(back.y2).toBe(node.y);
+    expect(back.x1).toBe(node.x);
+    expect(back.x2).toBe(node.x);
+    expect(back.y2).toBe(node.y + 25);
   });
 });

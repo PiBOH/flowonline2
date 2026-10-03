@@ -385,7 +385,7 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
       // IF flow resumes at the branch merge. A loop has no merge below its
       // header: its false/exit path leaves the bottom vertex directly and
       // continues to the next statement (the body returns into the header).
-      cursor = isLoopType(node.type) ? node.y + LOOP_H / 2 : node.bottom;
+      cursor = node.bottom;
     });
 
     const tailTarget = parent ? `branch_end:${parent.id}:${parent.branch}` : 'main_end';
@@ -427,19 +427,21 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
   const planLoop = (node: LayoutNode) => {
     const bodyLayout = node.bodyLayout as ListLayout;
     const bodyX = node.bodyX as number;
-    const returnX = node.returnX as number;
+    const falseX = node.returnX as number;
     const row = node.y;
     const mergeRow = node.mergeY as number;
+    const headerBottom = row + LOOP_H / 2;
 
-    // Out of the right vertex into the body column
-    push(`loop-edge-${node.id}`, shapeEdgeX(node, 'right'), row, bodyX, row);
+    // TRUE: leave right, run the body, then return into the bottom vertex.
+    push(`loop-true-edge-${node.id}`, shapeEdgeX(node, 'right'), row, bodyX, row);
     planList(bodyLayout, bodyX, row, mergeRow, { id: node.id, branch: 'body' });
+    push(`loop-true-return-horizontal-${node.id}`, bodyX, mergeRow, node.x, mergeRow);
+    push(`loop-true-return-${node.id}`, node.x, mergeRow, node.x, headerBottom, true);
 
-    // Loop-back wire: body -> left -> up -> arrow onto the left vertex
-    push(`loop-back-1-${node.id}`, bodyX, mergeRow, returnX, mergeRow);
-    push(`loop-back-2-${node.id}`, returnX, mergeRow, returnX, row);
-    push(`loop-back-3-${node.id}`, returnX, row, shapeEdgeX(node, 'left'), row, true);
-
+    // FALSE: leave left and continue below the loop on a dedicated lane.
+    push(`loop-false-edge-${node.id}`, shapeEdgeX(node, 'left'), row, falseX, row);
+    push(`loop-false-down-${node.id}`, falseX, row, falseX, mergeRow);
+    push(`loop-false-merge-${node.id}`, falseX, mergeRow, node.x, mergeRow);
   };
 
   planList(diagram.listLayout, 0, diagram.flowStartY, diagram.flowEndY);

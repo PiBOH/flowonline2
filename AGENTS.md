@@ -1106,6 +1106,11 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 67: Explicit Loop Branch Lanes (2.7.11-beta)
+
+#### Fixed
+* Loop TRUE exits right and returns through the bottom vertex; FALSE exits left and continues from the merge row on a separate lane.
+
 ### Milestone 66: Restore Branch Labels (2.7.10-beta)
 
 #### Fixed

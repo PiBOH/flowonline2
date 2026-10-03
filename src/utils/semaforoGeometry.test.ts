@@ -14,8 +14,8 @@ describe('SEMAFORO real geometry oracle', () => {
     expect(Math.max(...xs)).toBeLessThanOrEqual(diagram.maxX);
     expect(Math.min(...ys)).toBeGreaterThanOrEqual(0);
     expect(Math.max(...ys)).toBeLessThanOrEqual(diagram.height);
-    expect(plan.segments.some((wire) => wire.id.startsWith('loop-back-3-'))).toBe(true);
-    expect(plan.segments.some((wire) => wire.id.startsWith('loop-exit-'))).toBe(false);
+    expect(plan.segments.some((wire) => wire.id.startsWith('loop-true-return-'))).toBe(true);
+    expect(plan.segments.some((wire) => wire.id.startsWith('loop-false-edge-'))).toBe(true);
     expect(plan.segments.some((wire) => wire.id.startsWith('if-spine-'))).toBe(false);
   });
 });
