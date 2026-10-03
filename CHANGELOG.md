@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.1-beta] - 2026-10-03
+
+### Fixed
+- **ConnectorPlan is now the single source of truth:** FlowchartCanvas paints the plan produced by the numeric layout oracle instead of maintaining a duplicate recursive connector renderer. IF and loop elbows, arrow tips, and inserter hit targets therefore share exactly the same coordinates.
+- **Legacy code generation:** Python, C++, Java, JavaScript, and C# now use the same profile-driven tree walker as every other target; regression coverage exercises every language target.
+
+### Added
+- Numeric connector-plan assertions for nested IF/loop geometry and arrow endpoints.
+
+### Validation
+- TypeScript, Vitest (194 tests), production build, and `git diff --check` pass.
+
+---
+
 ## [2.7.0-beta] - 2026-10-02
 
 ### Added
@@ -23,7 +37,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 - **Canvas centring:** the viewBox is derived from the real horizontal bounds of the drawing.
 
 ### Changed
-- **`CodeGenerator.generate()`** now accepts every target id: the five historical generators are untouched, all other ids are dispatched to the profile engine, and an unknown id returns a comment instead of `undefined`.
+- **`CodeGenerator.generate()`** now accepts every target id: all five historical targets are now profile entries and every id is dispatched through the profile engine, and an unknown id returns a comment instead of `undefined`.
 - **Sidebar language picker** lists the full `CODE_LANGUAGES` catalogue.
 - **`arenaai.md` renamed to `AGENTS.md`,** documented as the mandatory instruction file of the repository.
 - **Commit policy:** commits carry no `Co-authored-by:` trailer and no "generated with" footer.

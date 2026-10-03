@@ -11,7 +11,8 @@ import {
   IF_W,
   LOOP_H,
   LOOP_W,
-  BRANCH_STUB
+  BRANCH_STUB,
+  computeConnectorPlan
 } from './flowchartLayout';
 
 let counter = 0;
@@ -216,5 +217,44 @@ describe('flowchartLayout / buildDiagram', () => {
     const d = buildDiagram(program);
     checkInvariants(d.listLayout, d.flowStartY, d.flowEndY);
     expect(d.listLayout.height).toBeGreaterThan(0);
+  });
+});
+
+
+describe('connector plan / geometry oracle', () => {
+  it('contains only forward incoming arrows and exact shape endpoints', () => {
+    const d = buildDiagram([ifStmt([output()], [whileStmt([output()])]), output()]);
+    const plan = computeConnectorPlan(d);
+    expect(plan.segments.length).toBeGreaterThan(10);
+
+    for (const wire of plan.segments) {
+      // Vertical flow must never run backwards. Horizontal elbows are allowed
+      // to point either way, but their endpoints must remain finite numbers.
+      expect(Number.isFinite(wire.x1)).toBe(true);
+      expect(Number.isFinite(wire.y1)).toBe(true);
+      expect(Number.isFinite(wire.x2)).toBe(true);
+      expect(Number.isFinite(wire.y2)).toBe(true);
+      if (wire.x1 === wire.x2 && wire.id.startsWith('in-')) {
+        expect(wire.y2).toBeGreaterThanOrEqual(wire.y1);
+      }
+    }
+
+    const ifNode = d.listLayout.nodes[0];
+    const incoming = plan.segments.find((wire) => wire.id === `in-${ifNode.id}`)!;
+    expect(incoming.arrow).toBe(true);
+    expect(incoming.x2).toBe(ifNode.x);
+    expect(incoming.y2).toBe(ifNode.top);
+    expect(plan.segments.find((wire) => wire.id === `false-merge-${ifNode.id}`)?.arrow).toBe(true);
+    expect(plan.segments.find((wire) => wire.id === `true-merge-${ifNode.id}`)?.arrow).toBe(true);
+  });
+
+  it('uses the real FOR and WHILE outline edges for loop arrows', () => {
+    const d = buildDiagram([{ id: id(), type: 'for', variableName: 'i', startValue: '1', endValue: '3', direction: 'inc', stepValue: '1', body: [output()] }]);
+    const node = d.listLayout.nodes[0];
+    const plan = computeConnectorPlan(d);
+    const back = plan.segments.find((wire) => wire.id === `loop-back-3-${node.id}`)!;
+    expect(back.arrow).toBe(true);
+    expect(back.x2).toBe(node.x - 95); // FOR_W / 2
+    expect(back.y2).toBe(node.y);
   });
 });

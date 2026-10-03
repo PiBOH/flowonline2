@@ -59,9 +59,7 @@ describe('multi-language code generator', () => {
       expect(ids).toContain(legacy);
     }
     for (const id of ids) {
-      if (!['python', 'cpp', 'java', 'javascript', 'csharp'].includes(id)) {
-        expect(PROFILES[id]).toBeDefined();
-      }
+      expect(PROFILES[id]).toBeDefined();
     }
     expect(ids.length).toBeGreaterThanOrEqual(33);
     // ids must be unique
