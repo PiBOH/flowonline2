@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.8-beta] - 2026-10-03
+
+### Fixed
+- **Variable Watch edge:** the side panel is now a fixed, border-box flex item and the watch itself fills it, eliminating the residual strip at the right edge.
+- **Loop lanes:** the loop return lane remains separate from the exit/continuation lane; the return arrow enters the loop header from the left and never shares the downward exit line.
+
+---
+
 ## [2.7.7-beta] - 2026-10-03
 
 ### Fixed

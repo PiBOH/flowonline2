@@ -1106,6 +1106,12 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 64: Fixed Variable Watch Edge and Loop Lanes (2.7.8-beta)
+
+#### Fixed
+* Variable Watch now uses a border-box fixed side panel with no residual right gap.
+* Loop return and exit routes remain separate lanes, preventing the back-edge arrow from landing beside or over the exit path.
+
 ### Milestone 63: Direct IF/Loop Convergence Routing (2.7.7-beta)
 
 #### Fixed
