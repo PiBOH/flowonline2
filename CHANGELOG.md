@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.5-beta] - 2026-10-03
+
+### Fixed
+- **Variable Watch edge spacing:** removed the extra workspace padding, layout gap, and canvas margin so the Variable Watch panel reaches the right edge without the visible blank strip.
+
+---
+
 ## [2.7.4-beta] - 2026-10-03
 
 ### Fixed

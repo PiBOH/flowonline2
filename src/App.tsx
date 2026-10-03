@@ -52,7 +52,7 @@ const MainLayout: React.FC = () => {
   return (
     <div className="desktop-layout-root flex flex-col h-screen w-screen overflow-hidden bg-[#F0F0F0] font-sans antialiased text-slate-800">
       <Header />
-      <div className="desktop-workspace flex-1 flex flex-col md:flex-row overflow-hidden p-0.5 md:p-1 bg-[#D4D0C8] gap-0.5 md:gap-1 relative safe-bottom">
+      <div className="desktop-workspace flex-1 flex flex-col md:flex-row overflow-hidden p-0 bg-[#D4D0C8] gap-0 relative safe-bottom">
         {layout === 'flowchart_only' && (
           <div className="flex-1 flex h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 md:m-0.5 shadow">
             <FlowchartCanvas />
@@ -60,8 +60,8 @@ const MainLayout: React.FC = () => {
         )}
 
         {layout === 'flow_console' && (
-          <div className="desktop-layout-row flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0.5 md:gap-1">
-            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 md:m-0.5 shadow min-h-0">
+          <div className="desktop-layout-row flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0">
+            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 shadow min-h-0">
               <FlowchartCanvas />
             </div>
             <div className="desktop-side-panel desktop-side-panel--console md:w-[360px] h-[40%] md:h-full flex flex-col min-h-0">
@@ -71,8 +71,8 @@ const MainLayout: React.FC = () => {
         )}
 
         {layout === 'flow_variables' && (
-          <div className="desktop-layout-row flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0.5 md:gap-1">
-            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 md:m-0.5 shadow min-h-0">
+          <div className="desktop-layout-row flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0">
+            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 shadow min-h-0">
               <FlowchartCanvas />
             </div>
             <div className="desktop-side-panel desktop-side-panel--variables md:w-[300px] h-[35%] md:h-full flex flex-col min-h-0">
@@ -82,8 +82,8 @@ const MainLayout: React.FC = () => {
         )}
 
         {layout === 'flow_code' && (
-          <div className="desktop-layout-row flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0.5 md:gap-1">
-            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 md:m-0.5 shadow min-h-0">
+          <div className="desktop-layout-row flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0">
+            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 shadow min-h-0">
               <FlowchartCanvas />
             </div>
             <div className="desktop-side-panel desktop-side-panel--code md:w-[320px] h-[40%] md:h-full flex flex-col min-h-0">
@@ -93,11 +93,11 @@ const MainLayout: React.FC = () => {
         )}
 
         {layout === 'triple_split' && (
-          <div className="desktop-layout-row flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0.5 md:gap-1">
-            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 md:m-0.5 shadow min-h-0">
+          <div className="desktop-layout-row flex-1 flex flex-col md:flex-row h-full overflow-hidden gap-0">
+            <div className="flex-[3] md:flex-1 h-full overflow-hidden border border-slate-300 md:border-2 rounded bg-white m-0 shadow min-h-0">
               <FlowchartCanvas />
             </div>
-            <div className="desktop-side-panel desktop-side-panel--triple md:w-[320px] h-[45%] md:h-full flex flex-col gap-0.5 md:gap-1.5 p-0 md:p-0.5 min-h-0">
+            <div className="desktop-side-panel desktop-side-panel--triple md:w-[320px] h-[45%] md:h-full flex flex-col gap-0 p-0 min-h-0">
               <div className="flex-1 min-h-[45%] flex flex-col">
                 <Sidebar />
               </div>

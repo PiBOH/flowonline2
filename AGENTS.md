@@ -1106,6 +1106,11 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 61: Variable Watch Edge Alignment (2.7.5-beta)
+
+#### Fixed
+* Desktop workspace padding and split-layout gaps are zeroed so the Variable Watch panel aligns flush with the application edge.
+
 ### Milestone 60: Compact Empty Branch Routing (2.7.4-beta)
 
 #### Fixed
