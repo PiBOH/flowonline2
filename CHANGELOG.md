@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.6-beta] - 2026-10-03
+
+### Fixed
+- **Merge/continuation arrows:** internal IF and loop convergence segments are now plain wires. The only continuation arrow starts at the exact merge coordinate (`node.bottom`), preventing arrows from beginning under a block or overlapping arrows from another structure.
+
+---
+
 ## [2.7.5-beta] - 2026-10-03
 
 ### Fixed
