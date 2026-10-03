@@ -77,6 +77,8 @@ export interface DiagramLayout {
   minX: number;
   maxX: number;
   height: number;
+  /** x coordinate of the END oval / terminal continuation */
+  endX: number;
 }
 
 export const isLoopType = (t: string): t is 'while' | 'for' | 'do' =>
@@ -276,6 +278,8 @@ export function buildDiagram(statements: Statement[]): DiagramLayout {
 
   const contentBottom = contentTop + listLayout.height;
   const endOvalY = contentBottom + V_GAP + MAIN_H / 2;
+  const lastNode = listLayout.nodes[listLayout.nodes.length - 1];
+  const endX = lastNode && isLoopType(lastNode.type) ? (lastNode.returnX as number) : 0;
 
   const bounds = { minX: -NODE_W / 2, maxX: NODE_W / 2 };
   measureBounds(listLayout, bounds);
@@ -287,7 +291,8 @@ export function buildDiagram(statements: Statement[]): DiagramLayout {
     endOvalY,
     minX: bounds.minX - CANVAS_PAD,
     maxX: bounds.maxX + CANVAS_PAD,
-    height: endOvalY + MAIN_H / 2 + 60
+    height: endOvalY + MAIN_H / 2 + 60,
+    endX
   };
 }
 
@@ -379,7 +384,7 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
       if (node.type === 'if' && node.thenLayout && node.elseLayout) {
         planIf(node, centerX);
       } else if (isLoopType(node.type) && node.bodyLayout) {
-        planLoop(node);
+        planLoop(node, !parent && index === layout.nodes.length - 1);
       }
 
       // IF flow resumes at the branch merge. A loop has no merge below its
@@ -389,10 +394,11 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     });
 
     const tailTarget = parent ? `branch_end:${parent.id}:${parent.branch}` : 'main_end';
-    // Inside a branch this wire is a plain stub: the caller closes the elbow
-    // back onto the merge line, so only the main flow carries an arrowhead.
-    push(`tail-${tailTarget}`, centerX, cursor, centerX, endY, !parent);
-    pushInserter(`ins-tail-${tailTarget}`, centerX, (cursor + endY) / 2, tailTarget);
+    const terminalLoop = !parent && layout.nodes.length > 0 && isLoopType(layout.nodes[layout.nodes.length - 1].type);
+    const tailX = terminalLoop ? (layout.nodes[layout.nodes.length - 1].returnX as number) : centerX;
+    // A terminal loop exits on its FALSE lane; END belongs directly below it.
+    push(`tail-${tailTarget}`, tailX, cursor, tailX, endY, !parent);
+    pushInserter(`ins-tail-${tailTarget}`, tailX, (cursor + endY) / 2, tailTarget);
   };
 
   /**
@@ -424,7 +430,7 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
    * Loop wires. The body hangs on the right; the loop-back wire climbs the left
    * side and its arrowhead stops exactly on the left vertex of the header.
    */
-  const planLoop = (node: LayoutNode) => {
+  const planLoop = (node: LayoutNode, terminal: boolean) => {
     const bodyLayout = node.bodyLayout as ListLayout;
     const bodyX = node.bodyX as number;
     const falseX = node.returnX as number;
@@ -441,7 +447,9 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     // FALSE: leave left and continue below the loop on a dedicated lane.
     push(`loop-false-edge-${node.id}`, shapeEdgeX(node, 'left'), row, falseX, row);
     push(`loop-false-down-${node.id}`, falseX, row, falseX, mergeRow);
-    push(`loop-false-merge-${node.id}`, falseX, mergeRow, node.x, mergeRow);
+    if (!terminal) {
+      push(`loop-false-merge-${node.id}`, falseX, mergeRow, node.x, mergeRow);
+    }
   };
 
   planList(diagram.listLayout, 0, diagram.flowStartY, diagram.flowEndY);

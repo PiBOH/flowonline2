@@ -382,7 +382,7 @@ export const FlowchartCanvas: React.FC = () => {
           {connectors.inserters}
 
           {/* 5. Draw End Oval */}
-          <g transform={`translate(0, ${diagramLayout.endOvalY})`}>
+          <g transform={`translate(${diagramLayout.endX}, ${diagramLayout.endOvalY})`}>
             <BlockNode
               type="end"
               isHighlighted={currentBlockId === 'main_end'}

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.12-beta] - 2026-10-03
+
+### Fixed
+- **Terminal loop exit lane:** a terminal loop now keeps its FALSE exit column through to END; the renderer no longer draws the spurious bottom horizontal line back to the main spine.
+- **Loop body return:** TRUE returns through its own bottom-entry lane, separate from the FALSE exit lane.
+
+---
+
 ## [2.7.11-beta] - 2026-10-03
 
 ### Fixed

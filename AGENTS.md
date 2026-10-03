@@ -77,6 +77,11 @@ The codebase must remain organized under `src/`:
 
 ---
 
+## 3.1 Protected `.fprg` fixtures and author attribution
+
+* **Never modify, rewrite, rename, or delete any `.fprg` file.** The checked-in Flowgorithm programs are authoritative user fixtures and must remain byte-for-byte unchanged. Geometry, rendering, parsing, and tests must adapt to the fixture; the fixture must never be changed to make a test pass.
+* The project author and commit identity is **PiBOH**. The official author profile is https://github.com/PiBOH . Local commits must use the PiBOH author identity configured for this repository.
+
 ## 3. Extending the Flowchart Interpreter and Blocks
 
 To add a new block type (e.g., `Switch`, `Try/Catch`):
@@ -1105,6 +1110,11 @@ a plain summary body — nothing else. Contributors are credited in
 *   Desktop and mobile help surfaces stay in sync.
 
 ---
+
+### Milestone 68: Terminal Loop Exit Lane (2.7.12-beta)
+
+#### Fixed
+* Terminal loops keep FALSE on a dedicated left exit lane to END and TRUE on a separate body-return lane; no artificial bottom horizontal connector is emitted.
 
 ### Milestone 67: Explicit Loop Branch Lanes (2.7.11-beta)
 
