@@ -6,6 +6,7 @@ import { exportToPNG, exportToPDF } from '../utils/exportUtils';
 import { WinUIDialog } from './WinUIDialog';
 import { StatusDot } from './StatusDot';
 import { Language } from '../types/flow';
+import { EXAMPLE_PROGRAMS, type ExampleProgram } from '../utils/examplePrograms';
 
 import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe, IconPlay, IconStep, IconPause, IconStop, IconMonitor, IconShield, IconLock, IconBookmarkTabs, FlagIcon } from './EmojiIcons';
 const LANGUAGE_NAMES: Record<Language, string> = {
@@ -61,6 +62,7 @@ export const Header: React.FC = () => {
 
   // Dropdown states for Menus
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [exampleGroup, setExampleGroup] = useState<string | null>(null);
 
   // Dynamic App Version state. The initial value is injected at build time
   // by `vite.config.ts` (it reads `version.txt` and exposes it as
@@ -1906,6 +1908,17 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     setActiveDropdown(null);
   };
 
+  const handleExampleOpen = (example: ExampleProgram) => {
+    try {
+      const parsed = FprgParser.parse(example.content);
+      loadProgram(parsed.statements, parsed.title || example.name, parsed.author);
+      setActiveDropdown(null);
+      setExampleGroup(null);
+    } catch (err: unknown) {
+      showDialog('Example Error', `Error opening example ${example.name}: ${err instanceof Error ? err.message : String(err)}`, 'error');
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -2412,6 +2425,39 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                 <span><IconFolderOpen size={14} /> {mt.open}</span>
                 <span className="text-[10px] text-slate-400">Ctrl+O</span>
               </button>
+              <div className="relative">
+                <button
+                  onClick={() => setExampleGroup(exampleGroup ? null : (EXAMPLE_PROGRAMS[0]?.group ?? null))}
+                  className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800"
+                >
+                  <span>📂 {language === 'it' ? 'Esempi' : 'Examples'}</span>
+                  <span className="text-[10px] text-slate-500">{EXAMPLE_PROGRAMS.length}</span>
+                </button>
+                {exampleGroup && (
+                  <div className="absolute left-full top-0 ml-1 w-[360px] max-h-[420px] overflow-y-auto bg-[#F5F5F5] border border-[#999] shadow-lg py-1 z-50">
+                    {Array.from(new Set(EXAMPLE_PROGRAMS.map((example) => example.group))).map((group) => (
+                      <div key={group}>
+                        <button
+                          onClick={() => setExampleGroup(exampleGroup === group ? null : group)}
+                          className="w-full text-left px-3 py-1 font-bold text-[11px] text-slate-600 hover:bg-[#E6EEF8]"
+                        >
+                          {group}
+                        </button>
+                        {exampleGroup === group && EXAMPLE_PROGRAMS.filter((example) => example.group === group).map((example) => (
+                          <button
+                            key={example.path}
+                            title={example.path}
+                            onClick={() => handleExampleOpen(example)}
+                            className="w-full text-left px-4 py-1 hover:bg-[#C9DEF5] text-[11px] text-slate-800 truncate"
+                          >
+                            {example.name}
+                          </button>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <div className="h-[1px] bg-slate-300 my-1"></div>
               <button onClick={handleExportFprg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800">
                 <span><IconSave size={14} /> {mt.save}</span>

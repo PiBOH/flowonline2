@@ -413,7 +413,7 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
 
     // The diamond also drops straight down to the merge point; no arrowhead,
     // because that stretch is a continuation and not an arrival.
-    push(`if-spine-${node.id}`, centerX, node.y + IF_H / 2, centerX, mergeRow);
+    push(`if-spine-${node.id}`, centerX, node.y + IF_H / 2, centerX, mergeRow, true);
   };
 
   /**
@@ -437,7 +437,7 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     push(`loop-back-3-${node.id}`, returnX, row, shapeEdgeX(node, 'left'), row, true);
 
     // Exit: the header drops to the merge row where the main flow continues
-    push(`loop-exit-${node.id}`, centerX, row + LOOP_H / 2, centerX, mergeRow);
+    push(`loop-exit-${node.id}`, centerX, row + LOOP_H / 2, centerX, mergeRow, true);
   };
 
   planList(diagram.listLayout, 0, diagram.flowStartY, diagram.flowEndY);

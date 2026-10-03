@@ -1106,6 +1106,18 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 58: SEMAFORO Geometry Oracle and Live Examples (2.7.2-beta)
+
+#### Fixed
+* Loop exit and IF continuation segments in `ConnectorPlan` now terminate with explicit arrival arrows.
+* The real SEMAFORO `.fprg` fixture is covered by a numeric geometry harness.
+
+#### Added
+* `.fprg-files/**` is loaded into File > Examples through a live Vite glob.
+
+#### Validation
+* TypeScript, Vitest, production build, and `git diff --check` pass.
+
 ### Milestone 57: Connector Plan and Profile Engine Consolidation (2.7.1-beta)
 
 #### Fixed
@@ -1114,6 +1126,7 @@ a plain summary body — nothing else. Contributors are credited in
 
 #### Added
 * Numeric connector-plan regression assertions covering IF branches, loops, arrow endpoints, and nested layouts.
+* The File menu loads the checked-in `.fprg-files/**` catalogue through a Vite glob, so examples are not hard-coded in the UI.
 
 #### Validation
 * TypeScript, Vitest (194 tests, 7 files), production build, and `git diff --check` pass.

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.2-beta] - 2026-10-03
+
+### Fixed
+- **SEMAFORO connector routing:** loop exits and IF continuation spines now carry an explicit arrival arrow in the shared connector plan, matching the Flowgorithm reference at merge points.
+- **Live examples:** the complete checked-in `.fprg-files` catalogue, including the real SEMAFORO fixture, is available from File > Examples.
+
+### Validation
+- The real `SEMAFORO LOOP_V1.1a.fprg` is parsed by the geometry harness; connector endpoints remain inside the canvas bounds and loop/IF continuation arrows are asserted.
+
+---
+
 ## [2.7.1-beta] - 2026-10-03
 
 ### Fixed
@@ -15,6 +26,7 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ### Added
 - Numeric connector-plan assertions for nested IF/loop geometry and arrow endpoints.
+- **Live examples catalogue:** the File menu now reads every `.fprg` example from `.fprg-files/**` at build time, grouped by language/folder; adding a file automatically adds it to the menu.
 
 ### Validation
 - TypeScript, Vitest (194 tests), production build, and `git diff --check` pass.
