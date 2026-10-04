@@ -252,3 +252,8 @@ input[type="range"]::-webkit-slider-thumb {
     width: 320px;
     flex-direction: column;
   }
+
+/* The mobile surface uses its own compact 2-column inserter even when the rotated logical viewport is wide enough to cross the md breakpoint. */
+.desktop-mobile-mode .desktop-palette { display: none !important; }
+.desktop-mobile-mode .mobile-palette { display: grid !important; }
+.desktop-mobile-mode .desktop-paste-row { display: none !important; }

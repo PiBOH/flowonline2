@@ -510,7 +510,7 @@ export const FlowchartCanvas: React.FC = () => {
               }}
               disabled={copiedBlocks.length === 0}
               title={language === 'it' ? 'Incolla i blocchi copiati' : 'Paste copied blocks here'}
-              className="col-span-4 flex items-center justify-between w-full p-1.5 mb-1 rounded border border-transparent hover:border-indigo-300 hover:bg-indigo-50 disabled:opacity-30 disabled:pointer-events-none disabled:cursor-not-allowed transition"
+              className="desktop-paste-row col-span-4 flex items-center justify-between w-full p-1.5 mb-1 rounded border border-transparent hover:border-indigo-300 hover:bg-indigo-50 disabled:opacity-30 disabled:pointer-events-none disabled:cursor-not-allowed transition"
             >
               <span className="flex items-center space-x-2">
                 <IconClipboard size={14} className="text-indigo-600" />
