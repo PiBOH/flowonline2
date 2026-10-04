@@ -1111,7 +1111,7 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
-### Milestone 79: Example sorting and URL cleanup (2.7.23-stable)
+### Milestone 80: Flowgorithm inserter styling and reset behavior (2.7.24-stable)
 
 #### Fixed
 * Selecting an IF or loop selects all descendants in deterministic paste order; overlays match the block shape and numbers are centered.

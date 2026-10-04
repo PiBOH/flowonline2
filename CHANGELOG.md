@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.24-stable] - 2026-10-04
+
+### Added
+- Styled the block inserter with Flowgorithm-like category headers.
+
+### Fixed
+- Reset title and author when creating a new empty flowchart.
+- Corrected the Do-loop TRUE return lane.
+
 ## [2.7.23-stable] - 2026-10-04
 
 ### Added

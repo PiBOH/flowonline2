@@ -453,18 +453,18 @@ export const FlowchartCanvas: React.FC = () => {
         {/* Floating Context Block Selector Popup Menu (USING FIXED POSITIONING EXACTLY AT CLICK COORDINATES!) */}
         {activeInserter && (
           <div
-            className="fixed bg-white rounded-lg shadow-xl border border-slate-200 p-2 grid grid-cols-2 gap-1 z-50 animate-in fade-in zoom-in-95 duration-100 overflow-y-auto overscroll-contain"
+            className="fixed bg-white rounded-lg shadow-xl border border-slate-200 p-2 grid grid-cols-4 gap-1 w-[420px] z-50 animate-in fade-in zoom-in-95 duration-100 overflow-y-auto overscroll-contain"
             style={{
               left: `${Math.max(8, Math.min(activeInserter.x - 128, (typeof window !== 'undefined' ? window.innerWidth : 1024) - 272))}px`,
               top: `${Math.max(8, Math.min(activeInserter.y + 10, (typeof window !== 'undefined' ? window.innerHeight : 768) - 600))}px`,
-              width: 'min(256px, calc(100vw - 16px))',
+              width: 'min(420px, calc(100vw - 16px))',
               maxWidth: 'calc(100vw - 16px)',
               height: 'min(600px, calc(100dvh - 16px))',
               maxHeight: 'calc(100dvh - 16px)'
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="col-span-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1 flex items-center justify-between">
+            <div className="col-span-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1 flex items-center justify-between">
               <span>{t.canvas.selectBlock}</span>
               <button
                 className="text-slate-400 hover:text-slate-600 font-bold"
@@ -485,7 +485,7 @@ export const FlowchartCanvas: React.FC = () => {
               }}
               disabled={copiedBlocks.length === 0}
               title={language === 'it' ? 'Incolla i blocchi copiati' : 'Paste copied blocks here'}
-              className="col-span-2 flex items-center justify-between w-full p-1.5 mb-1 rounded border border-transparent hover:border-indigo-300 hover:bg-indigo-50 disabled:opacity-30 disabled:pointer-events-none disabled:cursor-not-allowed transition"
+              className="col-span-4 flex items-center justify-between w-full p-1.5 mb-1 rounded border border-transparent hover:border-indigo-300 hover:bg-indigo-50 disabled:opacity-30 disabled:pointer-events-none disabled:cursor-not-allowed transition"
             >
               <span className="flex items-center space-x-2">
                 <IconClipboard size={14} className="text-indigo-600" />
@@ -497,14 +497,15 @@ export const FlowchartCanvas: React.FC = () => {
             </button>
 
             {/* Visual separator between Paste row and the new-block grid. */}
-            <div className="col-span-2 h-[1px] bg-slate-200 my-1 mx-1" />
+            <div className="col-span-4 h-[1px] bg-slate-200 my-1 mx-1" />
 
             {/* "New block" subheader so the user knows the following grid is */}
             {/* exclusively for creating new blocks (vs. pasting copies).      */}
-            <div className="col-span-2 px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            <div className="col-span-4 px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
               {language === 'it' ? 'Nuovo blocco' : 'New block'}
             </div>
 
+            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] font-semibold text-slate-700">{language === 'it' ? 'Variabili' : 'Variables'}</div>
             <button
               onClick={() => handleInsertBlockType('declare')}
               className="flex items-center space-x-2 p-1.5 rounded hover:bg-yellow-50 text-left border border-transparent hover:border-yellow-200 transition"
@@ -537,6 +538,7 @@ export const FlowchartCanvas: React.FC = () => {
               <span className="text-xs font-semibold text-slate-700">{t.blocks.output}</span>
             </button>
             
+            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] font-semibold text-slate-700">{language === 'it' ? 'Controllo' : 'Control'}</div>
             <button
               onClick={() => handleInsertBlockType('if')}
               className="flex items-center space-x-2 p-1.5 rounded hover:bg-orange-50 text-left border border-transparent hover:border-orange-200 transition"
@@ -545,6 +547,7 @@ export const FlowchartCanvas: React.FC = () => {
               <span className="text-xs font-semibold text-slate-700">{t.blocks.if}</span>
             </button>
             
+            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] font-semibold text-slate-700">{language === 'it' ? 'Cicli' : 'Looping'}</div>
             <button
               onClick={() => handleInsertBlockType('while')}
               className="flex items-center space-x-2 p-1.5 rounded hover:bg-rose-50 text-left border border-transparent hover:border-rose-200 transition"
@@ -569,6 +572,7 @@ export const FlowchartCanvas: React.FC = () => {
               <span className="text-xs font-semibold text-slate-700">{t.blocks.do}</span>
             </button>
             
+            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] font-semibold text-slate-700">{language === 'it' ? 'Varie' : 'Miscellaneous'}</div>
             <button
               onClick={() => handleInsertBlockType('call')}
               className="flex items-center space-x-2 p-1.5 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 transition"

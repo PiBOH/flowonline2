@@ -407,7 +407,9 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // CLEAR ALL
   const clearAll = () => {
-    pushHistory([]);
+    pushHistory([], 'Untitled Program', '');
+    setProgramTitleState('Untitled Program');
+    setProgramAuthorState('');
     setSelectedBlockIds([]);
     stopRun();
   };

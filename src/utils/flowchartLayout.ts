@@ -283,7 +283,7 @@ export function alignCoordinates(layout: ListLayout, centerX: number, startY: nu
       // FALSE exits below the loop. TRUE returns through a separate lane
       // into the lower flat edge of the header, avoiding the FALSE lane.
       node.returnX = centerX;
-      node.trueReturnX = centerX + Math.min(30, shapeHalfW(node.type) - 10);
+      node.trueReturnX = node.type === 'do' ? centerX : centerX + Math.min(30, shapeHalfW(node.type) - 10);
       node.childTop = node.y + V_GAP / 2;
       node.mergeY = node.childTop + node.bodyLayout.height + V_GAP / 2;
       alignCoordinates(node.bodyLayout, node.bodyX, node.childTop);
