@@ -1111,7 +1111,7 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
-### Milestone 82: Flowgorithm palette fidelity and Do-loop route (2.7.26-beta)
+### Milestone 83: Horizontal block selector (2.7.27-beta)
 
 #### Fixed
 * Selecting an IF or loop selects all descendants in deterministic paste order; overlays match the block shape and numbers are centered.

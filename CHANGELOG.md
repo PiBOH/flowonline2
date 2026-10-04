@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.27-beta] - 2026-10-04
+
+### Changed
+- Made the block-selection palette develop horizontally on desktop while remaining viewport-safe on mobile.
+
 ## [2.7.26-beta] - 2026-10-04
 
 ### Added
