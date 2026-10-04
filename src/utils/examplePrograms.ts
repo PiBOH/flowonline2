@@ -9,6 +9,7 @@ export interface ExampleProgram {
   format: ExampleFormat;
   author: string;
   duplicate?: boolean;
+  lastModified?: string;
 }
 
 const fprgFiles = import.meta.glob('/.fprg-files/**/*.fprg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
@@ -45,5 +46,5 @@ for (const example of rawExamples) {
 }
 
 export const EXAMPLE_PROGRAMS: ExampleProgram[] = rawExamples
-  .map((example) => ({ ...example, duplicate: duplicateNames.has(`${example.group}/${example.name.toLowerCase()}`) }))
+  .map((example) => ({ ...example, lastModified: '—', duplicate: duplicateNames.has(`${example.group}/${example.name.toLowerCase()}`) }))
   .sort((a, b) => a.group.localeCompare(b.group) || a.name.localeCompare(b.name) || a.format.localeCompare(b.format));

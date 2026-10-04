@@ -64,6 +64,7 @@ export const Header: React.FC = () => {
   // Dropdown states for Menus
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [exampleGroup, setExampleGroup] = useState<string | null>(null);
+  const [showExamplesExplorer, setShowExamplesExplorer] = useState(false);
   const [exampleQuery, setExampleQuery] = useState('');
   const [favoriteExamples, setFavoriteExamples] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('flowonline2_example_favorites') || '[]'); } catch { return []; } });
   const [recentExamples, setRecentExamples] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('flowonline2_example_recent') || '[]'); } catch { return []; } });
@@ -1936,6 +1937,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         window.location.hash = `example=${encodeURIComponent(example.path)}`;
         setActiveDropdown(null);
         setExampleGroup(null);
+        setShowExamplesExplorer(false);
       } catch (err: unknown) {
         showDialog(example.format === 'json' ? 'JSON Example Error' : 'FPRG Example Error', `Error opening ${example.format.toUpperCase()} example ${example.name}: ${err instanceof Error ? err.message : String(err)}`, 'error');
       }
@@ -2467,7 +2469,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               </button>
               <div className="relative">
                 <button
-                  onClick={() => { setExampleGroup(exampleGroup ? null : (EXAMPLE_PROGRAMS[0]?.group ?? null)); setExampleQuery(''); }}
+                  onClick={() => { setShowExamplesExplorer(true); setExampleGroup(null); setExampleQuery(''); }}
                   className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center justify-between text-slate-800"
                 >
                   <span>📂 {language === 'it' ? 'Esempi' : 'Examples'}</span>
@@ -3123,6 +3125,37 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
             </div>
           </div>
         </WinUIDialog>
+      )}
+
+      {showExamplesExplorer && (
+        <div className="fixed inset-0 z-[60] bg-slate-900/40 flex items-center justify-center p-4" onClick={() => setShowExamplesExplorer(false)}>
+          <div className="w-full max-w-4xl max-h-[80vh] bg-[#F0F0F0] border-2 border-slate-500 shadow-2xl flex flex-col" onClick={(event) => event.stopPropagation()}>
+            <div className="h-7 px-2 flex items-center justify-between text-white font-bold text-[11px]" style={{ background: 'linear-gradient(to right, #3E6FA8, #7AAFE0)' }}>
+              <span>{language === 'it' ? 'Esplora esempi' : language === 'de' ? 'Beispiele durchsuchen' : language === 'fr' ? 'Explorateur d’exemples' : language === 'es' ? 'Explorador de ejemplos' : 'Examples Explorer'}</span>
+              <button aria-label="Close" title={language === 'it' ? 'Chiudi' : 'Close'} className="border-0 bg-transparent text-white" onClick={() => setShowExamplesExplorer(false)}>×</button>
+            </div>
+            <div className="p-2 border-b border-slate-300 flex items-center gap-2">
+              <input autoFocus value={exampleQuery} onChange={(event) => setExampleQuery(event.target.value)} placeholder={language === 'it' ? 'Cerca per nome, contenuto o autore...' : 'Search by name, content, or author...'} className="flex-1 px-2 py-1 text-[11px] border border-slate-400 bg-white" />
+              <span className="text-[10px] text-slate-500">{EXAMPLE_PROGRAMS.length}</span>
+            </div>
+            <div className="overflow-auto bg-white">
+              <table className="w-full border-collapse text-[11px]">
+                <thead className="sticky top-0 bg-[#E5E5E5] text-slate-700">
+                  <tr><th className="w-8 p-1 border-b border-slate-300">★</th><th className="text-left p-1 border-b border-slate-300">{language === 'it' ? 'Nome file' : 'File name'}</th><th className="text-left p-1 border-b border-slate-300">{language === 'it' ? 'Autore' : 'Author'}</th><th className="text-left p-1 border-b border-slate-300">{language === 'it' ? 'Tipo' : 'Type'}</th><th className="text-left p-1 border-b border-slate-300">{language === 'it' ? 'Ultima modifica' : 'Last modified'}</th></tr>
+                </thead>
+                <tbody>{EXAMPLE_PROGRAMS.filter((example) => [example.name, example.author, example.content].join(' ').toLowerCase().includes(exampleQuery.toLowerCase())).map((example) => (
+                  <tr key={example.path} className="hover:bg-[#C9DEF5] cursor-pointer" onDoubleClick={() => handleExampleOpen(example)} title={example.path}>
+                    <td className="p-1 text-center" onClick={() => toggleFavoriteExample(example.path)}>{favoriteExamples.includes(example.path) ? '★' : '☆'}</td>
+                    <td className="p-1 font-semibold">{example.name}{example.duplicate ? <span className="ml-1 text-amber-700">(duplicate)</span> : null}</td>
+                    <td className="p-1">{example.author || '—'}</td><td className="p-1 uppercase">.{example.format}</td><td className="p-1">{example.lastModified || '—'}</td>
+                  </tr>
+                ))}</tbody>
+              </table>
+              {EXAMPLE_PROGRAMS.length === 0 && <div className="p-4 text-center text-slate-500">{language === 'it' ? 'Nessun esempio trovato.' : 'No examples found.'}</div>}
+            </div>
+            <div className="p-2 border-t border-slate-300 flex justify-end gap-2"><button className="px-3 py-1 border border-slate-400 bg-white text-[11px]" onClick={() => setShowExamplesExplorer(false)}>{language === 'it' ? 'Annulla' : 'Cancel'}</button></div>
+          </div>
+        </div>
       )}
 
       {/* ============ WIN32 SYSTEM DIALOG MODAL FOR WINDOW CONTROLS (DECORATIVE NOTIFICATION) ============ */}

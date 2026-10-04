@@ -483,7 +483,9 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     push(`loop-true-edge-${node.id}`, shapeEdgeX(node, 'right'), row, bodyX, row);
     planList(bodyLayout, bodyX, row, mergeRow, { id: node.id, branch: 'body' });
     push(`loop-true-return-horizontal-${node.id}`, bodyX, mergeRow, trueReturnX, mergeRow);
-    push(`loop-true-return-${node.id}`, trueReturnX, mergeRow, trueReturnX, headerBottom, true);
+    // Do-while tests happen after the body: TRUE returns to the TOP of the
+    // condition node, while FALSE continues from its bottom edge.
+    push(`loop-true-return-${node.id}`, trueReturnX, mergeRow, trueReturnX, node.type === 'do' ? node.top : headerBottom, true);
 
     // FALSE: leave from below the header and continue down the main exit lane.
     push(`loop-false-edge-${node.id}`, node.x, headerBottom, falseX, headerBottom);

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.20-beta] - 2026-10-04
+
+- Added a Windows-style Examples Explorer with favorites, name/author/content search, file type and modification columns.
+- Corrected Do-loop TRUE return trajectory.
+
 ## [2.7.19-stable] - 2026-10-04
 
 - Corrected loop branch labels and compacted empty-loop routing.
