@@ -68,6 +68,20 @@ export const FlowchartCanvas: React.FC = () => {
     };
   }, []);
 
+  // Close the block picker when clicking anywhere outside it, on desktop and
+  // mobile. The menu itself stops propagation, so buttons remain usable.
+  useEffect(() => {
+    if (!activeInserter) return;
+    const handlePickerOutsideClick = (event: PointerEvent) => {
+      const target = event.target as Element | null;
+      if (!target?.closest('.block-inserter-menu')) {
+        setActiveInserter(null);
+      }
+    };
+    document.addEventListener('pointerdown', handlePickerOutsideClick);
+    return () => document.removeEventListener('pointerdown', handlePickerOutsideClick);
+  }, [activeInserter]);
+
   const t = translations[language];
   const sc = colorSchemes[colorScheme];
 
@@ -464,7 +478,7 @@ export const FlowchartCanvas: React.FC = () => {
         {/* Floating Context Block Selector Popup Menu (USING FIXED POSITIONING EXACTLY AT CLICK COORDINATES!) */}
         {activeInserter && (
           <div
-            className="fixed bg-white rounded-lg shadow-xl border border-slate-200 p-2 grid grid-cols-4 gap-1 w-[720px] z-50 animate-in fade-in zoom-in-95 duration-100 overflow-y-auto overscroll-contain"
+            className="block-inserter-menu fixed bg-white rounded-lg shadow-xl border border-slate-200 p-2 grid grid-cols-4 gap-1 w-[720px] z-50 animate-in fade-in zoom-in-95 duration-100 overflow-y-auto overscroll-contain"
             style={{
               left: `${Math.max(8, Math.min(activeInserter.x - 360, (typeof window !== 'undefined' ? window.innerWidth : 1024) - 728))}px`,
               top: `${Math.max(8, Math.min(activeInserter.y + 10, (typeof window !== 'undefined' ? window.innerHeight : 768) - 600))}px`,
