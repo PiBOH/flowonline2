@@ -1990,17 +1990,6 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     setActiveDropdown(null);
   };
 
-  const handleExportExamplesJson = () => {
-    const payload = EXAMPLE_PROGRAMS.map(({ path, group, name, format, author, duplicate }) => ({ path, group, name, format, author, duplicate: Boolean(duplicate) }));
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'flowonline2-examples.json';
-    link.click();
-    URL.revokeObjectURL(url);
-  };
-
   const handleExportFprg = () => {
     try {
       const xml = FprgParser.serialize(statements, programTitle, programAuthor);
@@ -2537,9 +2526,6 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               <button onClick={handleExportJson} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span>📦 {mt.backup}</span>
               </button>
-              <button onClick={handleExportExamplesJson} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span title={tooltip(language, 'exportExamples')}>🗂️ {language === 'it' ? 'Esporta elenco esempi JSON' : 'Export examples list JSON'}</span>
-              </button>
               <div className="h-[1px] bg-slate-300 my-1"></div>
               <button onClick={handleExportSvg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span>🖼️ {mt.exportSvg}</span>
@@ -2932,8 +2918,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               max="100"
               value={speed}
               onChange={(e) => setSpeed(parseInt(e.target.value, 10))}
+              title={`${t.toolbar.speed}: ${speed}%`}
+              aria-label={`${t.toolbar.speed}: ${speed}%`}
               className="w-[80px] h-[4px] bg-slate-300 rounded appearance-none cursor-pointer accent-[#2F5A8C]"
             />
+            <span className="min-w-[34px] text-right font-mono text-slate-700" aria-live="polite">{speed}%</span>
           </div>
 
           <div className="w-[1px] h-[24px] bg-[#B0B0B0] mx-[6px] shadow-[1px_0_0_#FAFAFA]"></div>
