@@ -1094,6 +1094,20 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return true;
   }
 
+  // Full speed intentionally skips animation/highlight updates and executes the
+  // VM in one turn, stopping only for user input or program termination.
+  const runAtFullSpeed = () => {
+    let steps = 0;
+    const maxSteps = 1_000_000;
+    while (steps < maxSteps && executeStep()) {
+      steps += 1;
+    }
+    if (steps >= maxSteps) {
+      setExecutionStatus('error');
+      addConsoleMessage('error', 'Execution stopped: maximum step count exceeded.');
+    }
+  };
+
   // CONTROLS
   const startRun = () => {
     // CRITICAL REQUIREMENT: Automatically open the Console pane if it's currently hidden when we start running the flowchart!
@@ -1114,9 +1128,13 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     if (intervalIdRef.current) window.clearInterval(intervalIdRef.current);
 
-    // Speed=100 is maximum speed. We use delay=16ms to prevent UI freeze at light-speed.
-    const delay = speed === 100 ? 16 : Math.max(16, (101 - speed) * 10);
     if (intervalIdRef.current) { window.clearInterval(intervalIdRef.current); intervalIdRef.current = null; }
+    if (speed === 100) {
+      runAtFullSpeed();
+      return;
+    }
+
+    const delay = Math.max(16, (101 - speed) * 10);
     intervalIdRef.current = window.setInterval(() => {
       const activeStep = executeStep();
       if (!activeStep && intervalIdRef.current) {
@@ -1240,8 +1258,13 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setVariables({ ...variablesRef.current });
 
       setExecutionStatus('running');
-      const delay = speed === 100 ? 16 : Math.max(16, (101 - speed) * 10);
       if (intervalIdRef.current) { window.clearInterval(intervalIdRef.current); intervalIdRef.current = null; }
+      if (speed === 100) {
+        runAtFullSpeed();
+        return;
+      }
+
+      const delay = Math.max(16, (101 - speed) * 10);
       intervalIdRef.current = window.setInterval(() => {
         const activeStep = executeStep();
         if (!activeStep && intervalIdRef.current) {
