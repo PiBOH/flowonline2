@@ -1111,7 +1111,7 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
-### Milestone 81: Flowgorithm block palette and loop arrows (2.7.25-beta)
+### Milestone 82: Flowgorithm palette fidelity and Do-loop route (2.7.26-beta)
 
 #### Fixed
 * Selecting an IF or loop selects all descendants in deterministic paste order; overlays match the block shape and numbers are centered.

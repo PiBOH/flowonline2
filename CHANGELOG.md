@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.26-beta] - 2026-10-04
+
+### Added
+- Rebuilt the block picker as a Flowgorithm-style palette with supported categories and columns.
+
+### Fixed
+- Simplified the Do-loop FALSE exit to remove the incorrect overlapping route.
+
 ## [2.7.25-beta] - 2026-10-04
 
 ### Added

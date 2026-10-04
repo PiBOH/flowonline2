@@ -488,7 +488,9 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     push(`loop-true-return-${node.id}`, trueReturnX, mergeRow, trueReturnX, node.type === 'do' ? node.top : headerBottom, true);
 
     // FALSE: leave from below the header and continue down the main exit lane.
-    push(`loop-false-edge-${node.id}`, node.x, headerBottom, falseX, headerBottom);
+    if (node.type !== 'do') {
+      push(`loop-false-edge-${node.id}`, node.x, headerBottom, falseX, headerBottom);
+    }
     push(`loop-false-down-${node.id}`, falseX, headerBottom, falseX, mergeRow);
     if (!terminal) {
       push(`loop-false-merge-${node.id}`, falseX, mergeRow, node.x, mergeRow);
