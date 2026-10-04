@@ -67,6 +67,7 @@ export const Header: React.FC = () => {
   const [showExamplesExplorer, setShowExamplesExplorer] = useState(false);
   const [exampleFolder, setExampleFolder] = useState<string | null>(null);
   const [exampleSort, setExampleSort] = useState<'favorite' | 'name' | 'author' | 'format' | 'modified'>('name');
+  const [exampleSortDirection, setExampleSortDirection] = useState<'asc' | 'desc'>('asc');
   const [exampleQuery, setExampleQuery] = useState('');
   const [favoriteExamples, setFavoriteExamples] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('flowonline2_example_favorites') || '[]'); } catch { return []; } });
   const [recentExamples, setRecentExamples] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('flowonline2_example_recent') || '[]'); } catch { return []; } });
@@ -1936,7 +1937,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         const nextRecent = [example.path, ...recentExamples.filter((path) => path !== example.path)].slice(0, 10);
         setRecentExamples(nextRecent);
         localStorage.setItem('flowonline2_example_recent', JSON.stringify(nextRecent));
-        window.location.hash = `example=${encodeURIComponent(example.path)}`;
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
         setActiveDropdown(null);
         setExampleGroup(null);
         setShowExamplesExplorer(false);
@@ -3151,13 +3152,13 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               <table className="w-full border-collapse text-[11px]">
                 <thead className="sticky top-0 bg-[#E5E5E5] text-slate-700"><tr>
                   <th className="w-8 p-1 border-b border-slate-300">★</th>
-                  {([['name', language === 'it' ? 'Nome file' : 'File name'], ['author', language === 'it' ? 'Autore' : 'Author'], ['format', language === 'it' ? 'Tipo' : 'Type'], ['modified', language === 'it' ? 'Ultima modifica' : 'Last modified']] as const).map(([key, label]) => <th key={key} className="text-left p-1 border-b border-slate-300 cursor-pointer hover:bg-[#D5E5F5]" onClick={() => setExampleSort(key)}>{label} {exampleSort === key ? '▲' : '↕'}</th>)}
+                  {([['name', language === 'it' ? 'Nome file' : 'File name'], ['author', language === 'it' ? 'Autore' : 'Author'], ['format', language === 'it' ? 'Tipo' : 'Type'], ['modified', language === 'it' ? 'Ultima modifica' : 'Last modified']] as const).map(([key, label]) => <th key={key} className="text-left p-1 border-b border-slate-300 cursor-pointer hover:bg-[#D5E5F5]" onClick={() => { if (exampleSort === key) setExampleSortDirection((direction) => direction === 'asc' ? 'desc' : 'asc'); else { setExampleSort(key); setExampleSortDirection('asc'); } }}>{label} {exampleSort === key ? (exampleSortDirection === 'asc' ? '▲' : '▼') : '↕'}</th>)}
                 </tr></thead>
                 <tbody>{EXAMPLE_PROGRAMS.filter((example) => (exampleFolder === null || example.group === exampleFolder) && [example.name, example.author, example.content].join(' ').toLowerCase().includes(exampleQuery.toLowerCase())).sort((a, b) => {
-                  if (exampleSort === 'favorite') return Number(favoriteExamples.includes(b.path)) - Number(favoriteExamples.includes(a.path));
+                  if (exampleSort === 'favorite') return (Number(favoriteExamples.includes(b.path)) - Number(favoriteExamples.includes(a.path))) * (exampleSortDirection === 'asc' ? 1 : -1);
                   const av = exampleSort === 'author' ? a.author : exampleSort === 'format' ? a.format : exampleSort === 'modified' ? (a.lastModified || '') : a.name;
                   const bv = exampleSort === 'author' ? b.author : exampleSort === 'format' ? b.format : exampleSort === 'modified' ? (b.lastModified || '') : b.name;
-                  return av.localeCompare(bv);
+                  return av.localeCompare(bv) * (exampleSortDirection === 'asc' ? 1 : -1);
                 }).map((example) => (
                   <tr key={example.path} className="hover:bg-[#C9DEF5] cursor-pointer" onDoubleClick={() => handleExampleOpen(example)} title={example.path}>
                     <td className="p-1 text-center" onClick={() => toggleFavoriteExample(example.path)}>{favoriteExamples.includes(example.path) ? '★' : '☆'}</td>

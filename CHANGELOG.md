@@ -7,39 +7,55 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.23-stable] - 2026-10-04
+
+### Added
+- Added ascending and descending sorting controls to the Examples Explorer.
+
+### Fixed
+- Removed the example URL hash after an example is loaded.
+- Kept the changelog entries organized with Keep a Changelog categories.
+
 ## [2.7.22-beta] - 2026-10-04
 
+### Fixed
 - Made the mobile block inserter fully viewport-safe and scrollable.
 - Preserved recursive deletion of control-block subtrees.
 
 ## [2.7.21-beta] - 2026-10-04
 
+### Added
 - Reworked Examples Explorer with draggable/resizable WinUI behavior, folder navigation, and sortable columns.
 - Close button now uses the standard red hover behavior.
 
 ## [2.7.20-beta] - 2026-10-04
 
+### Added
 - Added a Windows-style Examples Explorer with favorites, name/author/content search, file type and modification columns.
 - Corrected Do-loop TRUE return trajectory.
 
 ## [2.7.19-stable] - 2026-10-04
 
+### Fixed
 - Corrected loop branch labels and compacted empty-loop routing.
 - Improved loop trajectory alignment for While, For and Do blocks.
 
 ## [2.7.18-stable] - 2026-10-04
 
+### Removed
 - Removed the examples-list JSON export action.
 - Added a live percentage indicator and tooltip to the speed slider.
 
 ## [2.7.17-beta] - 2026-10-04
 
+### Added
 - Improved bundled example catalogue: recursive FPRG/JSON discovery, search by name/content/author, format tags, duplicates, favorites, recents, direct example URLs, and JSON metadata export.
 - Added safe replacement confirmation and empty/error states for examples.
 - GitHub Pages already redeploys automatically on every push to `main`.
 
 ## [2.7.16-beta] - 2026-10-04
 
+### Fixed
 - Fix loop FALSE/TRUE routing lanes.
 - Hide selection veil and order numbers for ordinary single-block selection.
 - Preserve compound conditions containing `or`, `and`, `&&`, `||`, and XML `&amp;`.
