@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.28-beta] - 2026-10-04
+
+### Changed
+- Restored the compact two-column block selector on mobile, matching the 2.6.19 behavior, while keeping the horizontal palette on desktop.
+
 ## [2.7.27-beta] - 2026-10-04
 
 ### Changed

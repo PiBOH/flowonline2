@@ -507,7 +507,7 @@ export const FlowchartCanvas: React.FC = () => {
               <span className="text-[9px] text-slate-400 font-mono font-bold">Ctrl+V</span>
             </button>
 
-            <div className="col-span-4 grid grid-cols-4 gap-2 text-[11px]">
+            <div className="desktop-palette col-span-4 hidden md:grid grid-cols-4 gap-2 text-[11px]">
               <div className="col-span-1 flex flex-col gap-1">
                 <div className="bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-slate-700">Clipboard</div>
                 <button
@@ -550,6 +550,15 @@ export const FlowchartCanvas: React.FC = () => {
                 <button onClick={() => handleInsertBlockType('for')} className="p-2 text-left bg-[#FFE0AD] hover:bg-orange-100">{paletteIcon('for')}{t.blocks.for}</button>
                 <button onClick={() => handleInsertBlockType('do')} className="p-2 text-left bg-[#FFE0AD] hover:bg-orange-100">{paletteIcon('do')}{t.blocks.do}</button>
               </div>
+            </div>
+            <div className="mobile-palette col-span-4 grid md:hidden grid-cols-2 gap-1 text-[11px]">
+              <div className="col-span-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1 flex items-center justify-between">
+                <span>{t.canvas.selectBlock}</span><button className="text-slate-400 font-bold" onClick={() => setActiveInserter(null)}>×</button>
+              </div>
+              <button onClick={() => { pasteBlocks(activeInserter.parentId); setActiveInserter(null); }} disabled={copiedBlocks.length === 0} className="col-span-2 flex items-center justify-between p-1.5 border border-transparent hover:bg-indigo-50 disabled:opacity-30"><span className="flex items-center gap-2"><IconClipboard size={14} />{language === 'it' ? 'Incolla' : 'Paste'}</span><span className="text-[9px]">Ctrl+V</span></button>
+              <div className="col-span-2 h-px bg-slate-200 my-1" />
+              <div className="col-span-2 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">{language === 'it' ? 'Nuovo blocco' : 'New block'}</div>
+              {(['declare','assign','input','output','if','while','for','do','call','comment'] as BlockType[]).map((type) => <button key={type} onClick={() => handleInsertBlockType(type)} className="flex items-center gap-2 p-1.5 rounded hover:bg-slate-50 text-left border border-transparent"><span className="w-2.5 h-2.5 rounded-sm bg-slate-400" />{t.blocks[type]}</button>)}
             </div>
           </div>
         )}
