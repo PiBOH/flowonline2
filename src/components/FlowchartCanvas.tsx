@@ -44,6 +44,7 @@ export const FlowchartCanvas: React.FC = () => {
   } = useFlow();
 
   // Robust contextual menu coordinate state
+  const [showSelectionVeil, setShowSelectionVeil] = useState(false);
   const [activeInserter, setActiveInserter] = useState<{ parentId: string | 'main_start' | 'main_end'; index?: number; x: number; y: number } | null>(null);
 
   // Custom Right-Click Context Menu State
@@ -211,8 +212,10 @@ export const FlowchartCanvas: React.FC = () => {
           // MULTI-BLOCK CLICK TO SELECT STATE (Flowgorithm Original Style!)
           onClick={(e) => {
             e.stopPropagation(); // Avoid deselecting by clicking empty SVG space
+            const additiveSelection = e.ctrlKey || e.metaKey || e.shiftKey;
+            setShowSelectionVeil(additiveSelection);
             const subtreeIds = collectLayoutIds({ nodes: [node], width: node.width, height: node.height });
-            if (e.ctrlKey || e.metaKey || e.shiftKey) {
+            if (additiveSelection) {
               const allSelected = subtreeIds.every((id) => selectedBlockIds.includes(id));
               setSelectedBlockIds(allSelected
                 ? selectedBlockIds.filter((id) => !subtreeIds.includes(id))
@@ -230,7 +233,8 @@ export const FlowchartCanvas: React.FC = () => {
             
             const isAlreadySelected = selectedBlockIds.includes(node.id);
             if (!isAlreadySelected) {
-              setSelectedBlockIds([node.id]); // Click right select on unselected
+              setSelectedBlockIds([node.id]); // Long-press/right-click selects without overlay
+              setShowSelectionVeil(false);
             }
 
             setContextMenu({
@@ -249,7 +253,7 @@ export const FlowchartCanvas: React.FC = () => {
             onDoubleClick={() => node.statement && openEditor(node.statement)}
             onDeleteClick={() => deleteBlock(node.id)}
           />
-          {isSelected && selectionVeil(node, selectedBlockIds.indexOf(node.id) + 1)}
+          {isSelected && showSelectionVeil && selectionVeil(node, selectedBlockIds.indexOf(node.id) + 1)}
         </g>
       );
 
@@ -359,6 +363,7 @@ export const FlowchartCanvas: React.FC = () => {
           // CLICKING EMPTY SPACE ON CANVAS DESELECTS EVERYTHING!
           onClick={() => {
             setSelectedBlockIds([]);
+            setShowSelectionVeil(false);
             setActiveInserter(null);
           }}
         >

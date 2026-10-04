@@ -10,7 +10,6 @@ import {
   IF_H,
   IF_W,
   LOOP_H,
-  LOOP_W,
   BRANCH_STUB,
   computeConnectorPlan,
   countControlStatements,
@@ -72,7 +71,8 @@ function checkInvariants(layout: ListLayout, startY: number, endY: number): void
       checkInvariants(node.thenLayout!, node.y, node.bottom);
     } else if (node.type === 'while' || node.type === 'for' || node.type === 'do') {
       expect(node.mergeY).toBe(node.bottom);
-      expect(node.returnX!).toBeLessThan(node.x);
+      expect(node.returnX!).toBe(node.x);
+      expect(node.trueReturnX!).toBeGreaterThan(node.x);
       expect(node.bodyX!).toBeGreaterThan(node.x);
       expect(node.childTop).toBe(node.y + V_GAP / 2);
       checkInvariants(node.bodyLayout!, node.y, node.bottom);
@@ -189,13 +189,14 @@ describe('flowchartLayout / buildDiagram', () => {
     checkInvariants(d.listLayout, d.flowStartY, d.flowEndY);
   });
 
-  it('places the loop body on the right and the return wire on the left', () => {
+  it('places the loop body on the right with separate FALSE and TRUE return lanes', () => {
     const d = buildDiagram([whileStmt([output(), output()])]);
     const node = d.listLayout.nodes[0];
 
     expect(node.bodyLayout!.nodes[0].top).toBe(node.y + V_GAP / 2);
     expect(node.bodyLayout!.nodes[0].x).toBeGreaterThan(node.x);
-    expect(node.returnX).toBe(-(LOOP_W / 2 + BRANCH_STUB));
+    expect(node.returnX).toBe(node.x);
+    expect(node.trueReturnX).toBe(node.x + 30);
     // The flow resumes from the merge line, below everything
     expect(node.mergeY).toBe(node.bodyLayout!.nodes[1].bottom + V_GAP / 2);
     expect(node.bottom).toBe(node.mergeY);
@@ -289,8 +290,8 @@ describe('connector plan / geometry oracle', () => {
     const plan = computeConnectorPlan(d);
     const back = plan.segments.find((wire) => wire.id === `loop-true-return-${node.id}`)!;
     expect(back.arrow).toBe(true);
-    expect(back.x1).toBe(node.x);
-    expect(back.x2).toBe(node.x);
+    expect(back.x1).toBe(node.trueReturnX);
+    expect(back.x2).toBe(node.trueReturnX);
     expect(back.y2).toBe(node.y + 25);
   });
 });

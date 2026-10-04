@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.16-beta] - 2026-10-04
+
+- Fix loop FALSE/TRUE routing lanes.
+- Hide selection veil and order numbers for ordinary single-block selection.
+- Preserve compound conditions containing `or`, `and`, `&&`, `||`, and XML `&amp;`.
+
 ## [2.7.15-stable] - 2026-10-03
 
 ### Fixed

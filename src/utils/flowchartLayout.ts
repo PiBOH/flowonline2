@@ -54,6 +54,8 @@ export interface LayoutNode {
   rightX?: number;
   bodyX?: number;
   returnX?: number;
+  /** x lane where the TRUE body returns into the loop bottom edge */
+  trueReturnX?: number;
   childTop?: number;
   mergeY?: number;
 
@@ -276,7 +278,10 @@ export function alignCoordinates(layout: ListLayout, centerX: number, startY: nu
       // the loop body hangs from the right vertex of the loop header; the
       // loop-back wire runs up the left side of the shape.
       node.bodyX = centerX + shapeHalfW(node.type) + BRANCH_STUB + loopTrueClearance(node.bodyLayout) + node.bodyLayout.width / 2;
-      node.returnX = centerX - (shapeHalfW(node.type) + BRANCH_STUB);
+      // FALSE exits below the loop. TRUE returns through a separate lane
+      // into the lower flat edge of the header, avoiding the FALSE lane.
+      node.returnX = centerX;
+      node.trueReturnX = centerX + Math.min(30, shapeHalfW(node.type) - 10);
       node.childTop = node.y + V_GAP / 2;
       node.mergeY = node.childTop + node.bodyLayout.height + V_GAP / 2;
       alignCoordinates(node.bodyLayout, node.bodyX, node.childTop);
@@ -310,7 +315,7 @@ export function buildDiagram(statements: Statement[]): DiagramLayout {
   const contentBottom = contentTop + listLayout.height;
   const endOvalY = contentBottom + V_GAP + MAIN_H / 2;
   const lastNode = listLayout.nodes[listLayout.nodes.length - 1];
-  const endX = lastNode && isLoopType(lastNode.type) ? (lastNode.returnX as number) : 0;
+  const endX = lastNode && isLoopType(lastNode.type) ? lastNode.x : 0;
 
   const bounds = { minX: -NODE_W / 2, maxX: NODE_W / 2 };
   measureBounds(listLayout, bounds);
@@ -364,7 +369,8 @@ export interface ConnectorPlan {
  *   - a wire entering a block from above ends with an arrowhead on its TOP edge;
  *   - the wire of a branch leaves the shape from its horizontal vertex and comes
  *     back to the merge point with an arrowhead pointing at the spine;
- *   - the loop-back wire climbs the left side and points at the left vertex.
+ *   - FALSE exits below the loop header; TRUE returns through a separate lane
+ *     into the lower edge of the header.
  */
 export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
   const segments: WireSegment[] = [];
@@ -465,19 +471,21 @@ export function computeConnectorPlan(diagram: DiagramLayout): ConnectorPlan {
     const bodyLayout = node.bodyLayout as ListLayout;
     const bodyX = node.bodyX as number;
     const falseX = node.returnX as number;
+    const trueReturnX = node.trueReturnX as number;
     const row = node.y;
     const mergeRow = node.mergeY as number;
     const headerBottom = row + LOOP_H / 2;
 
-    // TRUE: leave right, run the body, then return into the bottom vertex.
+    // TRUE: leave right, run the body, then return through its own lane into
+    // the lower edge of the loop header.
     push(`loop-true-edge-${node.id}`, shapeEdgeX(node, 'right'), row, bodyX, row);
     planList(bodyLayout, bodyX, row, mergeRow, { id: node.id, branch: 'body' });
-    push(`loop-true-return-horizontal-${node.id}`, bodyX, mergeRow, node.x, mergeRow);
-    push(`loop-true-return-${node.id}`, node.x, mergeRow, node.x, headerBottom, true);
+    push(`loop-true-return-horizontal-${node.id}`, bodyX, mergeRow, trueReturnX, mergeRow);
+    push(`loop-true-return-${node.id}`, trueReturnX, mergeRow, trueReturnX, headerBottom, true);
 
-    // FALSE: leave left and continue below the loop on a dedicated lane.
-    push(`loop-false-edge-${node.id}`, shapeEdgeX(node, 'left'), row, falseX, row);
-    push(`loop-false-down-${node.id}`, falseX, row, falseX, mergeRow);
+    // FALSE: leave from below the header and continue down the main exit lane.
+    push(`loop-false-edge-${node.id}`, node.x, headerBottom, falseX, headerBottom);
+    push(`loop-false-down-${node.id}`, falseX, headerBottom, falseX, mergeRow);
     if (!terminal) {
       push(`loop-false-merge-${node.id}`, falseX, mergeRow, node.x, mergeRow);
     }
