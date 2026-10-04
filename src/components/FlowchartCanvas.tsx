@@ -332,6 +332,17 @@ export const FlowchartCanvas: React.FC = () => {
     }
   };
 
+  // Small palette glyphs deliberately mirror the real BlockNode geometry.
+  const paletteIcon = (type: BlockType): JSX.Element => {
+    const fill = type === 'input' ? '#BFE3FA' : type === 'output' ? '#CDEFC9' : type === 'if' ? '#F6B6C9' : type === 'call' ? '#E2C4F5' : type === 'declare' || type === 'assign' ? '#FFF8B8' : '#FFD89C';
+    if (type === 'input' || type === 'output') return <svg width="54" height="25" viewBox="0 0 54 25" aria-hidden="true"><polygon points="8,2 52,2 46,23 2,23" fill={fill} stroke="#7A8A96" /></svg>;
+    if (type === 'if') return <svg width="54" height="25" viewBox="0 0 54 25" aria-hidden="true"><polygon points="27,2 52,12.5 27,23 2,12.5" fill={fill} stroke="#9D7182" /></svg>;
+    if (type === 'while' || type === 'for' || type === 'do') return <svg width="54" height="25" viewBox="0 0 54 25" aria-hidden="true"><polygon points="8,2 46,2 53,12.5 46,23 8,23 1,12.5" fill={fill} stroke="#A47A42" /></svg>;
+    if (type === 'declare') return <svg width="54" height="27" viewBox="0 0 54 27" aria-hidden="true"><path d="M7 8V3H20L24 8" fill={fill} stroke="#9D9255"/><rect x="3" y="8" width="48" height="16" fill={fill} stroke="#9D9255"/></svg>;
+    if (type === 'call') return <svg width="54" height="25" viewBox="0 0 54 25" aria-hidden="true"><rect x="3" y="2" width="48" height="21" fill={fill} stroke="#8D62A7"/><line x1="10" y1="2" x2="10" y2="23" stroke="#8D62A7"/><line x1="44" y1="2" x2="44" y2="23" stroke="#8D62A7"/></svg>;
+    return <svg width="54" height="25" viewBox="0 0 54 25" aria-hidden="true"><rect x="2" y="2" width="50" height="21" fill={fill} stroke="#9D9255"/></svg>;
+  };
+
   // The layout module owns connector geometry. The canvas is deliberately a
   // dumb painter: this prevents SVG and the geometry oracle from drifting apart.
   const connectorPlan = useMemo(() => computeConnectorPlan(diagramLayout), [diagramLayout]);
@@ -520,24 +531,24 @@ export const FlowchartCanvas: React.FC = () => {
 
               <div className="flex flex-col gap-1">
                 <div className="text-center text-[10px] text-slate-600">Input / Output</div>
-                <button onClick={() => handleInsertBlockType('input')} className="p-2 text-left bg-[#D8EEFC] hover:bg-cyan-100"><span className="inline-block w-2.5 h-2.5 bg-cyan-300 mr-2" />{t.blocks.input}</button>
-                <button onClick={() => handleInsertBlockType('output')} className="p-2 text-left bg-[#DDF5DD] hover:bg-green-100"><span className="inline-block w-2.5 h-2.5 bg-green-400 mr-2" />{t.blocks.output}</button>
+                <button onClick={() => handleInsertBlockType('input')} className="p-2 text-left bg-[#D8EEFC] hover:bg-cyan-100">{paletteIcon('input')}{t.blocks.input}</button>
+                <button onClick={() => handleInsertBlockType('output')} className="p-2 text-left bg-[#DDF5DD] hover:bg-green-100">{paletteIcon('output')}{t.blocks.output}</button>
               </div>
               <div className="flex flex-col gap-1">
                 <div className="text-center text-[10px] text-slate-600">{language === 'it' ? 'Variabili' : 'Variables'}</div>
-                <button onClick={() => handleInsertBlockType('declare')} className="p-2 text-left bg-[#FFFBD5] hover:bg-yellow-100"><span className="inline-block w-2.5 h-2.5 bg-yellow-300 mr-2" />{t.blocks.declare}</button>
-                <button onClick={() => handleInsertBlockType('assign')} className="p-2 text-left bg-[#FFFBD5] hover:bg-yellow-100"><span className="inline-block w-2.5 h-2.5 bg-yellow-400 mr-2" />{t.blocks.assign}</button>
+                <button onClick={() => handleInsertBlockType('declare')} className="p-2 text-left bg-[#FFFBD5] hover:bg-yellow-100">{paletteIcon('declare')}{t.blocks.declare}</button>
+                <button onClick={() => handleInsertBlockType('assign')} className="p-2 text-left bg-[#FFFBD5] hover:bg-yellow-100">{paletteIcon('assign')}{t.blocks.assign}</button>
               </div>
               <div className="flex flex-col gap-1">
                 <div className="text-center text-[10px] text-slate-600">{language === 'it' ? 'Controllo' : 'Control'}</div>
-                <button onClick={() => handleInsertBlockType('if')} className="p-2 text-left bg-[#FDE2EA] hover:bg-rose-100"><span className="inline-block w-2.5 h-2.5 bg-rose-400 mr-2" />{t.blocks.if}</button>
-                <button onClick={() => handleInsertBlockType('call')} className="p-2 text-left bg-[#EAD9F8] hover:bg-purple-100"><span className="inline-block w-2.5 h-2.5 bg-purple-400 mr-2" />{t.blocks.call}</button>
+                <button onClick={() => handleInsertBlockType('if')} className="p-2 text-left bg-[#FDE2EA] hover:bg-rose-100">{paletteIcon('if')}{t.blocks.if}</button>
+                <button onClick={() => handleInsertBlockType('call')} className="p-2 text-left bg-[#EAD9F8] hover:bg-purple-100">{paletteIcon('call')}{t.blocks.call}</button>
               </div>
               <div className="flex flex-col gap-1">
                 <div className="text-center text-[10px] text-slate-600">{language === 'it' ? 'Cicli' : 'Looping'}</div>
-                <button onClick={() => handleInsertBlockType('while')} className="p-2 text-left bg-[#FFE0AD] hover:bg-orange-100"><span className="inline-block w-2.5 h-2.5 bg-orange-300 mr-2" />{t.blocks.while}</button>
-                <button onClick={() => handleInsertBlockType('for')} className="p-2 text-left bg-[#FFE0AD] hover:bg-orange-100"><span className="inline-block w-2.5 h-2.5 bg-orange-400 mr-2" />{t.blocks.for}</button>
-                <button onClick={() => handleInsertBlockType('do')} className="p-2 text-left bg-[#FFE0AD] hover:bg-orange-100"><span className="inline-block w-2.5 h-2.5 bg-orange-500 mr-2" />{t.blocks.do}</button>
+                <button onClick={() => handleInsertBlockType('while')} className="p-2 text-left bg-[#FFE0AD] hover:bg-orange-100">{paletteIcon('while')}{t.blocks.while}</button>
+                <button onClick={() => handleInsertBlockType('for')} className="p-2 text-left bg-[#FFE0AD] hover:bg-orange-100">{paletteIcon('for')}{t.blocks.for}</button>
+                <button onClick={() => handleInsertBlockType('do')} className="p-2 text-left bg-[#FFE0AD] hover:bg-orange-100">{paletteIcon('do')}{t.blocks.do}</button>
               </div>
             </div>
           </div>
