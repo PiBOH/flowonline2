@@ -2495,8 +2495,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                         className="w-full px-2 py-1 text-[11px] border border-slate-300 rounded bg-white outline-none focus:border-[#5B8DC4]"
                       />
                     </div>
-                    {recentExamples.length > 0 && <div className="px-3 py-1 text-[10px] text-slate-500">Recenti: {recentExamples.map((path) => EXAMPLE_PROGRAMS.find((example) => example.path === path)?.name).filter(Boolean).join(', ')}</div>}
-                    {favoriteExamples.length > 0 && <div className="px-3 py-1 text-[10px] text-amber-700">Preferiti: {favoriteExamples.length}</div>}
+                    {recentExamples.length > 0 && <div className="border-b border-slate-200 pb-1 mb-1"><div className="px-3 py-1 text-[10px] font-bold text-slate-500">Recenti</div>{recentExamples.map((path) => { const recent = EXAMPLE_PROGRAMS.find((example) => example.path === path); return recent ? <button key={path} onClick={() => handleExampleOpen(recent)} className="w-full text-left px-3 py-1 text-[10px] hover:bg-[#C9DEF5] truncate">↻ {recent.name} <span className="text-slate-400">.{recent.format}</span></button> : null; })}</div>}
+                    {favoriteExamples.length > 0 && <div className="px-3 py-1 text-[10px] text-amber-700">★ Preferiti: {favoriteExamples.length}</div>}
                     {EXAMPLE_PROGRAMS.length === 0 && <div className="px-3 py-3 text-[11px] text-slate-500">{language === 'it' ? 'Nessun esempio trovato.' : 'No examples found.'}</div>}
                     {Array.from(new Set(EXAMPLE_PROGRAMS.map((example) => example.group))).map((group) => {
                       const groupExamples = EXAMPLE_PROGRAMS.filter((example) => example.group === group && [example.name, example.author, example.content].join(' ').toLowerCase().includes(exampleQuery.toLowerCase()));
