@@ -307,8 +307,8 @@ export const FlowchartCanvas: React.FC = () => {
           <React.Fragment key={`labels-${node.id}`}>
             {isDo ? (
               <>
-                <text x={shapeEdgeX(node, 'left') - 4} y={node.y - 25} textAnchor="end" fill={sc.textColor} fillOpacity="0.8" className="font-sans text-[10px] font-bold select-none pointer-events-none">{loopText('true')}</text>
-                <text x={shapeEdgeX(node, 'left') - 4} y={node.y + 35} textAnchor="end" fill={sc.textColor} fillOpacity="0.8" className="font-sans text-[10px] font-bold select-none pointer-events-none">{loopText('false')}</text>
+                <text x={shapeEdgeX(node, 'right') + 4} y={node.y - 5} textAnchor="start" fill="#15803D" fillOpacity="0.9" className="font-sans text-[10px] font-bold select-none pointer-events-none">{loopText('true')}</text>
+                <text x={node.x - 4} y={node.y + 40} textAnchor="end" fill={sc.textColor} fillOpacity="0.8" className="font-sans text-[10px] font-bold select-none pointer-events-none">{loopText('false')}</text>
               </>
             ) : (
               <>
