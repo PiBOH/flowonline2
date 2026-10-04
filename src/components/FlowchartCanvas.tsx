@@ -496,97 +496,25 @@ export const FlowchartCanvas: React.FC = () => {
               <span className="text-[9px] text-slate-400 font-mono font-bold">Ctrl+V</span>
             </button>
 
-            {/* Visual separator between Paste row and the new-block grid. */}
-            <div className="col-span-4 h-[1px] bg-slate-200 my-1 mx-1" />
-
-            {/* "New block" subheader so the user knows the following grid is */}
-            {/* exclusively for creating new blocks (vs. pasting copies).      */}
-            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[11px] font-semibold text-slate-700">{language === 'it' ? 'Statement' : 'Statement'}</div>
-            <div className="col-span-4 grid grid-cols-4 gap-1 text-[10px] text-slate-600 font-semibold text-center"><span>Input / Output</span><span>{language === 'it' ? 'Variabili' : 'Variables'}</span><span>{language === 'it' ? 'Controllo' : 'Control'}</span><span>{language === 'it' ? 'Cicli' : 'Looping'}</span></div>
-
-            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] font-semibold text-slate-700">{language === 'it' ? 'Variabili' : 'Variables'}</div>
-            <button
-              onClick={() => handleInsertBlockType('declare')}
-              className="flex items-center space-x-2 p-1.5 rounded hover:bg-yellow-50 text-left border border-transparent hover:border-yellow-200 transition"
-            >
-              <span className="w-2.5 h-2.5 bg-yellow-300 rounded-sm"></span>
-              <span className="text-xs font-semibold text-slate-700">{t.blocks.declare}</span>
-            </button>
-            
-            <button
-              onClick={() => handleInsertBlockType('assign')}
-              className="flex items-center space-x-2 p-1.5 rounded hover:bg-yellow-50 text-left border border-transparent hover:border-yellow-200 transition"
-            >
-              <span className="w-2.5 h-2.5 bg-yellow-400 rounded-sm"></span>
-              <span className="text-xs font-semibold text-slate-700">{t.blocks.assign}</span>
-            </button>
-            
-            <button
-              onClick={() => handleInsertBlockType('input')}
-              className="flex items-center space-x-2 p-1.5 rounded hover:bg-cyan-50 text-left border border-transparent hover:border-cyan-200 transition"
-            >
-              <span className="w-2.5 h-2.5 bg-cyan-300 rounded-sm"></span>
-              <span className="text-xs font-semibold text-slate-700">{t.blocks.input}</span>
-            </button>
-            
-            <button
-              onClick={() => handleInsertBlockType('output')}
-              className="flex items-center space-x-2 p-1.5 rounded hover:bg-green-50 text-left border border-transparent hover:border-green-200 transition"
-            >
-              <span className="w-2.5 h-2.5 bg-green-400 rounded-sm"></span>
-              <span className="text-xs font-semibold text-slate-700">{t.blocks.output}</span>
-            </button>
-            
-            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] font-semibold text-slate-700">{language === 'it' ? 'Controllo' : 'Control'}</div>
-            <button
-              onClick={() => handleInsertBlockType('if')}
-              className="flex items-center space-x-2 p-1.5 rounded hover:bg-orange-50 text-left border border-transparent hover:border-orange-200 transition"
-            >
-              <span className="w-2.5 h-2.5 bg-rose-400 rounded-sm"></span>
-              <span className="text-xs font-semibold text-slate-700">{t.blocks.if}</span>
-            </button>
-            
-            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] font-semibold text-slate-700">{language === 'it' ? 'Cicli' : 'Looping'}</div>
-            <button
-              onClick={() => handleInsertBlockType('while')}
-              className="flex items-center space-x-2 p-1.5 rounded hover:bg-rose-50 text-left border border-transparent hover:border-rose-200 transition"
-            >
-              <span className="w-2.5 h-2.5 bg-orange-300 rounded-sm"></span>
-              <span className="text-xs font-semibold text-slate-700">{t.blocks.while}</span>
-            </button>
-            
-            <button
-              onClick={() => handleInsertBlockType('for')}
-              className="flex items-center space-x-2 p-1.5 rounded hover:bg-rose-50 text-left border border-transparent hover:border-rose-200 transition"
-            >
-              <span className="w-2.5 h-2.5 bg-orange-400 rounded-sm"></span>
-              <span className="text-xs font-semibold text-slate-700">{t.blocks.for}</span>
-            </button>
-            
-            <button
-              onClick={() => handleInsertBlockType('do')}
-              className="flex items-center space-x-2 p-1.5 rounded hover:bg-rose-50 text-left border border-transparent hover:border-rose-200 transition"
-            >
-              <span className="w-2.5 h-2.5 bg-orange-500 rounded-sm"></span>
-              <span className="text-xs font-semibold text-slate-700">{t.blocks.do}</span>
-            </button>
-            
-            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] font-semibold text-slate-700">{language === 'it' ? 'Varie' : 'Miscellaneous'}</div>
-            <button
-              onClick={() => handleInsertBlockType('call')}
-              className="flex items-center space-x-2 p-1.5 rounded hover:bg-blue-50 text-left border border-transparent hover:border-blue-200 transition"
-            >
-              <span className="w-2.5 h-2.5 bg-purple-400 rounded-sm"></span>
-              <span className="text-xs font-semibold text-slate-700">{t.blocks.call}</span>
-            </button>
-            
-            <button
-              onClick={() => handleInsertBlockType('comment')}
-              className="flex items-center space-x-2 p-1.5 rounded hover:bg-slate-50 text-left border border-transparent hover:border-slate-200 transition"
-            >
-              <span className="w-2.5 h-2.5 bg-slate-400 rounded-sm"></span>
-              <span className="text-xs font-semibold text-slate-700">{t.blocks.comment}</span>
-            </button>
+            <div className="col-span-4 grid grid-cols-4 gap-1">
+              <div className="col-span-1 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] text-slate-700">Clipboard</div>
+              <div className="col-span-1 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] text-slate-700">Miscellaneous</div>
+              <div className="col-span-2 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] text-slate-700">Turtle Graphics</div>
+              <div className="col-span-1 h-12 flex items-center justify-center text-[10px] text-slate-500">📋</div>
+              <button onClick={() => handleInsertBlockType('comment')} className="col-span-1 p-1 border border-dashed border-slate-500 text-[10px] text-slate-700 hover:bg-slate-100">{t.blocks.comment}</button>
+              <div className="col-span-2" />
+              <div className="col-span-4 bg-[#A9D3F0] border border-[#75A9C8] px-2 py-1 text-[11px] font-semibold text-slate-700">Statement</div>
+              <div className="col-span-4 grid grid-cols-4 text-[10px] text-slate-600 font-semibold text-center py-1"><span>Input / Output</span><span>{language === 'it' ? 'Variabili' : 'Variables'}</span><span>{language === 'it' ? 'Controllo' : 'Control'}</span><span>{language === 'it' ? 'Cicli' : 'Looping'}</span></div>
+              <button onClick={() => handleInsertBlockType('input')} className="col-start-1 flex items-center gap-2 p-2 text-left hover:bg-cyan-50"><span className="w-2.5 h-2.5 bg-cyan-300" />{t.blocks.input}</button>
+              <button onClick={() => handleInsertBlockType('output')} className="col-start-1 flex items-center gap-2 p-2 text-left hover:bg-green-50"><span className="w-2.5 h-2.5 bg-green-400" />{t.blocks.output}</button>
+              <button onClick={() => handleInsertBlockType('declare')} className="col-start-2 flex items-center gap-2 p-2 text-left hover:bg-yellow-50"><span className="w-2.5 h-2.5 bg-yellow-300" />{t.blocks.declare}</button>
+              <button onClick={() => handleInsertBlockType('assign')} className="col-start-2 flex items-center gap-2 p-2 text-left hover:bg-yellow-50"><span className="w-2.5 h-2.5 bg-yellow-400" />{t.blocks.assign}</button>
+              <button onClick={() => handleInsertBlockType('if')} className="col-start-3 flex items-center gap-2 p-2 text-left hover:bg-rose-50"><span className="w-2.5 h-2.5 bg-rose-400" />{t.blocks.if}</button>
+              <button onClick={() => handleInsertBlockType('call')} className="col-start-3 flex items-center gap-2 p-2 text-left hover:bg-purple-50"><span className="w-2.5 h-2.5 bg-purple-400" />{t.blocks.call}</button>
+              <button onClick={() => handleInsertBlockType('while')} className="col-start-4 flex items-center gap-2 p-2 text-left hover:bg-orange-50"><span className="w-2.5 h-2.5 bg-orange-300" />{t.blocks.while}</button>
+              <button onClick={() => handleInsertBlockType('for')} className="col-start-4 flex items-center gap-2 p-2 text-left hover:bg-orange-50"><span className="w-2.5 h-2.5 bg-orange-400" />{t.blocks.for}</button>
+              <button onClick={() => handleInsertBlockType('do')} className="col-start-4 flex items-center gap-2 p-2 text-left hover:bg-orange-50"><span className="w-2.5 h-2.5 bg-orange-500" />{t.blocks.do}</button>
+            </div>
           </div>
         )}
 
