@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.21-beta] - 2026-10-04
+
+- Reworked Examples Explorer with draggable/resizable WinUI behavior, folder navigation, and sortable columns.
+- Close button now uses the standard red hover behavior.
+
 ## [2.7.20-beta] - 2026-10-04
 
 - Added a Windows-style Examples Explorer with favorites, name/author/content search, file type and modification columns.

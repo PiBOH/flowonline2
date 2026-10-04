@@ -65,6 +65,8 @@ export const Header: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [exampleGroup, setExampleGroup] = useState<string | null>(null);
   const [showExamplesExplorer, setShowExamplesExplorer] = useState(false);
+  const [exampleFolder, setExampleFolder] = useState<string | null>(null);
+  const [exampleSort, setExampleSort] = useState<'favorite' | 'name' | 'author' | 'format' | 'modified'>('name');
   const [exampleQuery, setExampleQuery] = useState('');
   const [favoriteExamples, setFavoriteExamples] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('flowonline2_example_favorites') || '[]'); } catch { return []; } });
   const [recentExamples, setRecentExamples] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('flowonline2_example_recent') || '[]'); } catch { return []; } });
@@ -3127,36 +3129,46 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </WinUIDialog>
       )}
 
-      {showExamplesExplorer && (
-        <div className="fixed inset-0 z-[60] bg-slate-900/40 flex items-center justify-center p-4" onClick={() => setShowExamplesExplorer(false)}>
-          <div className="w-full max-w-4xl max-h-[80vh] bg-[#F0F0F0] border-2 border-slate-500 shadow-2xl flex flex-col" onClick={(event) => event.stopPropagation()}>
-            <div className="h-7 px-2 flex items-center justify-between text-white font-bold text-[11px]" style={{ background: 'linear-gradient(to right, #3E6FA8, #7AAFE0)' }}>
-              <span>{language === 'it' ? 'Esplora esempi' : language === 'de' ? 'Beispiele durchsuchen' : language === 'fr' ? 'Explorateur d’exemples' : language === 'es' ? 'Explorador de ejemplos' : 'Examples Explorer'}</span>
-              <button aria-label="Close" title={language === 'it' ? 'Chiudi' : 'Close'} className="border-0 bg-transparent text-white" onClick={() => setShowExamplesExplorer(false)}>×</button>
-            </div>
-            <div className="p-2 border-b border-slate-300 flex items-center gap-2">
-              <input autoFocus value={exampleQuery} onChange={(event) => setExampleQuery(event.target.value)} placeholder={language === 'it' ? 'Cerca per nome, contenuto o autore...' : 'Search by name, content, or author...'} className="flex-1 px-2 py-1 text-[11px] border border-slate-400 bg-white" />
-              <span className="text-[10px] text-slate-500">{EXAMPLE_PROGRAMS.length}</span>
-            </div>
-            <div className="overflow-auto bg-white">
+      <WinUIDialog
+        isOpen={showExamplesExplorer}
+        onClose={() => setShowExamplesExplorer(false)}
+        title={language === 'it' ? 'Esplora esempi' : language === 'de' ? 'Beispiele durchsuchen' : language === 'fr' ? 'Explorateur d’exemples' : language === 'es' ? 'Explorador de ejemplos' : 'Examples Explorer'}
+        message=""
+        defaultWidth={900}
+        defaultHeight={600}
+        okLabel={language === 'it' ? 'Chiudi' : 'Close'}
+        onOk={() => setShowExamplesExplorer(false)}
+      >
+        <div className="flex h-full min-h-0 gap-2">
+          <div className="w-[180px] shrink-0 border border-slate-300 bg-white overflow-y-auto">
+            <div className="px-2 py-1 font-bold text-[11px] border-b bg-[#E5E5E5]">{language === 'it' ? 'Cartelle' : 'Folders'}</div>
+            <button className={`w-full text-left px-2 py-1 text-[11px] hover:bg-[#C9DEF5] ${exampleFolder === null ? 'bg-[#C9DEF5] font-bold' : ''}`} onClick={() => setExampleFolder(null)}>📁 {language === 'it' ? 'Tutti gli esempi' : 'All examples'}</button>
+            {Array.from(new Set(EXAMPLE_PROGRAMS.map((example) => example.group))).sort().map((folder) => <button key={folder} className={`w-full text-left px-2 py-1 text-[11px] hover:bg-[#C9DEF5] truncate ${exampleFolder === folder ? 'bg-[#C9DEF5] font-bold' : ''}`} onClick={() => setExampleFolder(folder)} title={folder}>📂 {folder}</button>)}
+          </div>
+          <div className="flex-1 min-w-0 flex flex-col">
+            <input autoFocus value={exampleQuery} onChange={(event) => setExampleQuery(event.target.value)} placeholder={language === 'it' ? 'Cerca per nome, contenuto o autore...' : 'Search by name, content, or author...'} className="w-full px-2 py-1 mb-2 text-[11px] border border-slate-400 bg-white" />
+            <div className="flex-1 overflow-auto border border-slate-300 bg-white">
               <table className="w-full border-collapse text-[11px]">
-                <thead className="sticky top-0 bg-[#E5E5E5] text-slate-700">
-                  <tr><th className="w-8 p-1 border-b border-slate-300">★</th><th className="text-left p-1 border-b border-slate-300">{language === 'it' ? 'Nome file' : 'File name'}</th><th className="text-left p-1 border-b border-slate-300">{language === 'it' ? 'Autore' : 'Author'}</th><th className="text-left p-1 border-b border-slate-300">{language === 'it' ? 'Tipo' : 'Type'}</th><th className="text-left p-1 border-b border-slate-300">{language === 'it' ? 'Ultima modifica' : 'Last modified'}</th></tr>
-                </thead>
-                <tbody>{EXAMPLE_PROGRAMS.filter((example) => [example.name, example.author, example.content].join(' ').toLowerCase().includes(exampleQuery.toLowerCase())).map((example) => (
+                <thead className="sticky top-0 bg-[#E5E5E5] text-slate-700"><tr>
+                  <th className="w-8 p-1 border-b border-slate-300">★</th>
+                  {([['name', language === 'it' ? 'Nome file' : 'File name'], ['author', language === 'it' ? 'Autore' : 'Author'], ['format', language === 'it' ? 'Tipo' : 'Type'], ['modified', language === 'it' ? 'Ultima modifica' : 'Last modified']] as const).map(([key, label]) => <th key={key} className="text-left p-1 border-b border-slate-300 cursor-pointer hover:bg-[#D5E5F5]" onClick={() => setExampleSort(key)}>{label} {exampleSort === key ? '▲' : '↕'}</th>)}
+                </tr></thead>
+                <tbody>{EXAMPLE_PROGRAMS.filter((example) => (exampleFolder === null || example.group === exampleFolder) && [example.name, example.author, example.content].join(' ').toLowerCase().includes(exampleQuery.toLowerCase())).sort((a, b) => {
+                  if (exampleSort === 'favorite') return Number(favoriteExamples.includes(b.path)) - Number(favoriteExamples.includes(a.path));
+                  const av = exampleSort === 'author' ? a.author : exampleSort === 'format' ? a.format : exampleSort === 'modified' ? (a.lastModified || '') : a.name;
+                  const bv = exampleSort === 'author' ? b.author : exampleSort === 'format' ? b.format : exampleSort === 'modified' ? (b.lastModified || '') : b.name;
+                  return av.localeCompare(bv);
+                }).map((example) => (
                   <tr key={example.path} className="hover:bg-[#C9DEF5] cursor-pointer" onDoubleClick={() => handleExampleOpen(example)} title={example.path}>
                     <td className="p-1 text-center" onClick={() => toggleFavoriteExample(example.path)}>{favoriteExamples.includes(example.path) ? '★' : '☆'}</td>
-                    <td className="p-1 font-semibold">{example.name}{example.duplicate ? <span className="ml-1 text-amber-700">(duplicate)</span> : null}</td>
-                    <td className="p-1">{example.author || '—'}</td><td className="p-1 uppercase">.{example.format}</td><td className="p-1">{example.lastModified || '—'}</td>
+                    <td className="p-1 font-semibold">{example.name}{example.duplicate ? <span className="ml-1 text-amber-700">(duplicate)</span> : null}</td><td className="p-1">{example.author || '—'}</td><td className="p-1 uppercase">.{example.format}</td><td className="p-1">{example.lastModified || '—'}</td>
                   </tr>
                 ))}</tbody>
               </table>
-              {EXAMPLE_PROGRAMS.length === 0 && <div className="p-4 text-center text-slate-500">{language === 'it' ? 'Nessun esempio trovato.' : 'No examples found.'}</div>}
             </div>
-            <div className="p-2 border-t border-slate-300 flex justify-end gap-2"><button className="px-3 py-1 border border-slate-400 bg-white text-[11px]" onClick={() => setShowExamplesExplorer(false)}>{language === 'it' ? 'Annulla' : 'Cancel'}</button></div>
           </div>
         </div>
-      )}
+      </WinUIDialog>
 
       {/* ============ WIN32 SYSTEM DIALOG MODAL FOR WINDOW CONTROLS (DECORATIVE NOTIFICATION) ============ */}
       {showWarningModal && (

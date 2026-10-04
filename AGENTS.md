@@ -1111,7 +1111,7 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
-### Milestone 76: Examples Explorer and Do-loop routing (2.7.20-beta)
+### Milestone 77: Windowed Examples Explorer (2.7.21-beta)
 
 #### Fixed
 * Selecting an IF or loop selects all descendants in deterministic paste order; overlays match the block shape and numbers are centered.
