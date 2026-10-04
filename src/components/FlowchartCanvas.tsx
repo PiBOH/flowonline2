@@ -489,38 +489,6 @@ export const FlowchartCanvas: React.FC = () => {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] text-[11px] font-semibold text-slate-700 px-2 py-1 flex items-center justify-between">
-              <span>{language === 'it' ? 'Clipboard' : 'Clipboard'}</span>
-              <button
-                className="text-slate-400 hover:text-slate-600 font-bold"
-                onClick={() => setActiveInserter(null)}
-              >
-                ×
-              </button>
-            </div>
-
-            {/* === PHASE 5.2: SINGLE-STEP PASTE ROW =========================== */}
-            {/* Click the inserter arrow → ONE menu shows BOTH Paste AND      */}
-            {/* new block types. The previous 2-step flow (paste? or new?) is */}
-            {/* gone. Disabled when clipboard is empty.                        */}
-            <button
-              onClick={() => {
-                pasteBlocks(activeInserter.parentId);
-                setActiveInserter(null);
-              }}
-              disabled={copiedBlocks.length === 0}
-              title={language === 'it' ? 'Incolla i blocchi copiati' : 'Paste copied blocks here'}
-              className="desktop-paste-row col-span-4 flex items-center justify-between w-full p-1.5 mb-1 rounded border border-transparent hover:border-indigo-300 hover:bg-indigo-50 disabled:opacity-30 disabled:pointer-events-none disabled:cursor-not-allowed transition"
-            >
-              <span className="flex items-center space-x-2">
-                <IconClipboard size={14} className="text-indigo-600" />
-                <span className="text-xs font-bold text-slate-700">
-                  {language === 'it' ? 'Incolla' : 'Paste'} {copiedBlocks.length > 0 ? `(${copiedBlocks.length})` : ''}
-                </span>
-              </span>
-              <span className="text-[9px] text-slate-400 font-mono font-bold">Ctrl+V</span>
-            </button>
-
             <div className="desktop-palette col-span-4 hidden md:grid grid-cols-4 gap-2 text-[11px]">
               <div className="col-span-1 flex flex-col gap-1">
                 <div className="bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-slate-700">Clipboard</div>
