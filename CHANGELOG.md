@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.29-stable] - 2026-10-04
+
+### Fixed
+- Finalized the stable mobile block-selector restoration and viewport behavior.
+
 ## [2.7.28-beta] - 2026-10-04
 
 ### Changed

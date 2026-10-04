@@ -1111,7 +1111,7 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
-### Milestone 84: Restore mobile block selector (2.7.28-beta)
+### Milestone 85: Stable mobile block selector (2.7.29-stable)
 
 #### Fixed
 * Selecting an IF or loop selects all descendants in deterministic paste order; overlays match the block shape and numbers are centered.
