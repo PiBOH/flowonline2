@@ -34,3 +34,4 @@ Thumbs.db
 
 # Local FreeCAD/FreeBuff workspace
 .freebuff/
+src/utils/__diag.test.ts
