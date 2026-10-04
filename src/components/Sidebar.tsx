@@ -180,7 +180,7 @@ export const Sidebar: React.FC = () => {
                 <button
                   onClick={handleCopy}
                   className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-700 transition"
-                  title="Copy"
+                  title={language === 'it' ? 'Copia' : 'Copy'}
                 >
                   {copied ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
                 </button>

@@ -7,6 +7,7 @@ import { WinUIDialog } from './WinUIDialog';
 import { StatusDot } from './StatusDot';
 import { Language } from '../types/flow';
 import { EXAMPLE_PROGRAMS, type ExampleProgram } from '../utils/examplePrograms';
+import { tooltip } from '../utils/tooltipTranslations';
 
 import { IconChart, IconChatBubble, IconCode, IconMinimize, IconMaximize, IconClose, IconDocument, IconFolderOpen, IconSave, IconTrash, IconScissors, IconClipboard, IconInbox, IconMagnifier, IconRefresh, IconPalette, IconBooks, IconInfo, IconWarning, IdeaLightbulb, IconGlobe, IconPlay, IconStep, IconPause, IconStop, IconMonitor, IconShield, IconLock, IconBookmarkTabs, FlagIcon } from './EmojiIcons';
 const LANGUAGE_NAMES: Record<Language, string> = {
@@ -2492,6 +2493,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                         onChange={(e) => setExampleQuery(e.target.value)}
                         onClick={(e) => e.stopPropagation()}
                         placeholder={language === 'it' ? 'Cerca esempio...' : 'Search examples...'}
+                        title={tooltip(language, 'searchExamples')}
                         className="w-full px-2 py-1 text-[11px] border border-slate-300 rounded bg-white outline-none focus:border-[#5B8DC4]"
                       />
                     </div>
@@ -2512,7 +2514,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                           {exampleGroup === group && groupExamples.map((example) => (
                             <button
                               key={example.path}
-                              title={example.path}
+                              title={`${tooltip(language, 'examplePath')}: ${example.path}`}
                               onClick={() => handleExampleOpen(example)}
                               className="w-full text-left px-4 py-1 hover:bg-[#C9DEF5] text-[11px] text-slate-800 truncate"
                             >
@@ -2536,7 +2538,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                 <span>📦 {mt.backup}</span>
               </button>
               <button onClick={handleExportExamplesJson} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
-                <span>🗂️ {language === 'it' ? 'Esporta elenco esempi JSON' : 'Export examples list JSON'}</span>
+                <span title={tooltip(language, 'exportExamples')}>🗂️ {language === 'it' ? 'Esporta elenco esempi JSON' : 'Export examples list JSON'}</span>
               </button>
               <div className="h-[1px] bg-slate-300 my-1"></div>
               <button onClick={handleExportSvg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
@@ -2831,7 +2833,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           <button
             onClick={handleNew}
             className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
-            title="Nuovo (Ctrl+N)"
+            title={tooltip(language, 'new')}
           >
               <IconDocument size={16} />
           </button>
@@ -2844,7 +2846,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               }
             }}
             className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
-            title="Apri (Ctrl+O)"
+            title={tooltip(language, 'open')}
           >
               <IconFolderOpen size={16} />
           </button>
@@ -2853,7 +2855,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
           <button
             onClick={handleExportFprg}
             className="w-[32px] h-[32px] hover:bg-slate-200/50 hover:border hover:border-[#5B8DC4] hover:shadow-sm rounded-[3px] flex items-center justify-center text-slate-700 text-sm active:scale-95 transition-all"
-            title="Salva (Ctrl+S)"
+            title={tooltip(language, 'save')}
           >
               <IconSave size={16} />
           </button>
@@ -3373,7 +3375,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         <WinUIDialog
           isOpen={showLanguagePicker}
           onClose={() => setShowLanguagePicker(false)}
-          title="Select Language"
+          title={tooltip(language, 'language')}
           message=""
           type="info"
           defaultWidth={480}
