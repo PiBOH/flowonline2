@@ -453,12 +453,14 @@ export const FlowchartCanvas: React.FC = () => {
         {/* Floating Context Block Selector Popup Menu (USING FIXED POSITIONING EXACTLY AT CLICK COORDINATES!) */}
         {activeInserter && (
           <div
-            className="fixed bg-white rounded-lg shadow-xl border border-slate-200 p-2 grid grid-cols-2 gap-1 w-64 z-50 animate-in fade-in zoom-in-95 duration-100"
+            className="fixed bg-white rounded-lg shadow-xl border border-slate-200 p-2 grid grid-cols-2 gap-1 z-50 animate-in fade-in zoom-in-95 duration-100 overflow-y-auto overscroll-contain"
             style={{
               left: `${Math.max(8, Math.min(activeInserter.x - 128, (typeof window !== 'undefined' ? window.innerWidth : 1024) - 272))}px`,
-              top: `${Math.max(8, Math.min(activeInserter.y + 10, (typeof window !== 'undefined' ? window.innerHeight : 768) - 440))}px`,
-              maxHeight: 'calc(100dvh - 16px)',
-              overflowY: 'auto'
+              top: `${Math.max(8, Math.min(activeInserter.y + 10, (typeof window !== 'undefined' ? window.innerHeight : 768) - 600))}px`,
+              width: 'min(256px, calc(100vw - 16px))',
+              maxWidth: 'calc(100vw - 16px)',
+              height: 'min(600px, calc(100dvh - 16px))',
+              maxHeight: 'calc(100dvh - 16px)'
             }}
             onClick={(e) => e.stopPropagation()}
           >

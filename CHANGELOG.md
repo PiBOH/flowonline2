@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.22-beta] - 2026-10-04
+
+- Made the mobile block inserter fully viewport-safe and scrollable.
+- Preserved recursive deletion of control-block subtrees.
+
 ## [2.7.21-beta] - 2026-10-04
 
 - Reworked Examples Explorer with draggable/resizable WinUI behavior, folder navigation, and sortable columns.
