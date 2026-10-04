@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.17-beta] - 2026-10-04
+
+- Improved bundled example catalogue: recursive FPRG/JSON discovery, search by name/content/author, format tags, duplicates, favorites, recents, direct example URLs, and JSON metadata export.
+- Added safe replacement confirmation and empty/error states for examples.
+- GitHub Pages already redeploys automatically on every push to `main`.
+
 ## [2.7.16-beta] - 2026-10-04
 
 - Fix loop FALSE/TRUE routing lanes.

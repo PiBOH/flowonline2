@@ -64,6 +64,8 @@ export const Header: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [exampleGroup, setExampleGroup] = useState<string | null>(null);
   const [exampleQuery, setExampleQuery] = useState('');
+  const [favoriteExamples, setFavoriteExamples] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('flowonline2_example_favorites') || '[]'); } catch { return []; } });
+  const [recentExamples, setRecentExamples] = useState<string[]>(() => { try { return JSON.parse(localStorage.getItem('flowonline2_example_recent') || '[]'); } catch { return []; } });
 
   // Dynamic App Version state. The initial value is injected at build time
   // by `vite.config.ts` (it reads `version.txt` and exposes it as
@@ -1910,15 +1912,51 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
   };
 
   const handleExampleOpen = (example: ExampleProgram) => {
-    try {
-      const parsed = FprgParser.parse(example.content);
-      loadProgram(parsed.statements, parsed.title || example.name, parsed.author);
-      setActiveDropdown(null);
-      setExampleGroup(null);
-    } catch (err: unknown) {
-      showDialog('Example Error', `Error opening example ${example.name}: ${err instanceof Error ? err.message : String(err)}`, 'error');
-    }
+    const open = () => {
+      try {
+        let title = example.name;
+        let author = example.author;
+        let statements;
+        if (example.format === 'json') {
+          const parsed = JSON.parse(example.content);
+          statements = parsed.statements || [];
+          title = parsed.title || parsed.programTitle || title;
+          author = parsed.author || parsed.programAuthor || author;
+        } else {
+          const parsed = FprgParser.parse(example.content);
+          statements = parsed.statements;
+          title = parsed.title || title;
+          author = parsed.author || author;
+        }
+        loadProgram(statements, title, author);
+        const nextRecent = [example.path, ...recentExamples.filter((path) => path !== example.path)].slice(0, 10);
+        setRecentExamples(nextRecent);
+        localStorage.setItem('flowonline2_example_recent', JSON.stringify(nextRecent));
+        window.location.hash = `example=${encodeURIComponent(example.path)}`;
+        setActiveDropdown(null);
+        setExampleGroup(null);
+      } catch (err: unknown) {
+        showDialog(example.format === 'json' ? 'JSON Example Error' : 'FPRG Example Error', `Error opening ${example.format.toUpperCase()} example ${example.name}: ${err instanceof Error ? err.message : String(err)}`, 'error');
+      }
+    };
+    if (statements.length > 0 || programTitle !== 'Untitled Program') {
+      showDialog('Replace current program?', 'The current flowchart may contain work. Do you want to replace it with this example?', 'confirm', open);
+    } else open();
   };
+
+  const toggleFavoriteExample = (path: string) => {
+    const next = favoriteExamples.includes(path) ? favoriteExamples.filter((item) => item !== path) : [...favoriteExamples, path];
+    setFavoriteExamples(next);
+    localStorage.setItem('flowonline2_example_favorites', JSON.stringify(next));
+  };
+
+  useEffect(() => {
+    const raw = window.location.hash.match(/^#example=(.+)$/)?.[1];
+    if (!raw) return;
+    const example = EXAMPLE_PROGRAMS.find((item) => item.path === decodeURIComponent(raw));
+    if (example) handleExampleOpen(example);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1949,6 +1987,17 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
     reader.readAsText(file);
     if (fileInputRef.current) fileInputRef.current.value = '';
     setActiveDropdown(null);
+  };
+
+  const handleExportExamplesJson = () => {
+    const payload = EXAMPLE_PROGRAMS.map(({ path, group, name, format, author, duplicate }) => ({ path, group, name, format, author, duplicate: Boolean(duplicate) }));
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'flowonline2-examples.json';
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleExportFprg = () => {
@@ -2446,8 +2495,11 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                         className="w-full px-2 py-1 text-[11px] border border-slate-300 rounded bg-white outline-none focus:border-[#5B8DC4]"
                       />
                     </div>
+                    {recentExamples.length > 0 && <div className="px-3 py-1 text-[10px] text-slate-500">Recenti: {recentExamples.map((path) => EXAMPLE_PROGRAMS.find((example) => example.path === path)?.name).filter(Boolean).join(', ')}</div>}
+                    {favoriteExamples.length > 0 && <div className="px-3 py-1 text-[10px] text-amber-700">Preferiti: {favoriteExamples.length}</div>}
+                    {EXAMPLE_PROGRAMS.length === 0 && <div className="px-3 py-3 text-[11px] text-slate-500">{language === 'it' ? 'Nessun esempio trovato.' : 'No examples found.'}</div>}
                     {Array.from(new Set(EXAMPLE_PROGRAMS.map((example) => example.group))).map((group) => {
-                      const groupExamples = EXAMPLE_PROGRAMS.filter((example) => example.group === group && example.name.toLowerCase().includes(exampleQuery.toLowerCase()));
+                      const groupExamples = EXAMPLE_PROGRAMS.filter((example) => example.group === group && [example.name, example.author, example.content].join(' ').toLowerCase().includes(exampleQuery.toLowerCase()));
                       if (groupExamples.length === 0) return null;
                       return (
                         <div key={group}>
@@ -2464,7 +2516,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                               onClick={() => handleExampleOpen(example)}
                               className="w-full text-left px-4 py-1 hover:bg-[#C9DEF5] text-[11px] text-slate-800 truncate"
                             >
-                              {example.name}
+                              <span className="truncate">{example.name}</span>
+                              <span className="ml-2 shrink-0 text-[9px] text-slate-500">.{example.format}{example.author ? ` · ${example.author}` : ''}{example.duplicate ? ' · duplicate' : ''}</span>
+                              <button aria-label="favorite" className="ml-1" onClick={(event) => { event.stopPropagation(); toggleFavoriteExample(example.path); }}>{favoriteExamples.includes(example.path) ? '★' : '☆'}</button>
                             </button>
                           ))}
                         </div>
@@ -2480,6 +2534,9 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
               </button>
               <button onClick={handleExportJson} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
                 <span>📦 {mt.backup}</span>
+              </button>
+              <button onClick={handleExportExamplesJson} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
+                <span>🗂️ {language === 'it' ? 'Esporta elenco esempi JSON' : 'Export examples list JSON'}</span>
               </button>
               <div className="h-[1px] bg-slate-300 my-1"></div>
               <button onClick={handleExportSvg} className="w-full text-left px-3 py-1.5 hover:bg-[#C9DEF5] flex items-center text-slate-800">
