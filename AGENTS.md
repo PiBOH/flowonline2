@@ -1111,7 +1111,7 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
-### Milestone 74: Speed indicator and examples export cleanup (2.7.18-stable)
+### Milestone 75: Loop labels and routing alignment (2.7.19-stable)
 
 #### Fixed
 * Selecting an IF or loop selects all descendants in deterministic paste order; overlays match the block shape and numbers are centered.

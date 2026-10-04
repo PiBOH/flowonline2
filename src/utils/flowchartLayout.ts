@@ -103,7 +103,9 @@ export function countControlStatements(list: Statement[]): number {
 
 /** TRUE lane clearance: base gap plus 100px per nested control construct. */
 export const loopTrueClearance = (body: ListLayout): number =>
-  LOOP_TRUE_CLEARANCE + countLayoutControls(body) * 100;
+  // Empty loop bodies need only a compact elbow; reserving the full TRUE lane
+  // for them created the long horizontal lines visible in the empty-loop view.
+  body.height === 0 ? BRANCH_STUB : LOOP_TRUE_CLEARANCE + countLayoutControls(body) * 100;
 
 function countLayoutControls(layout: ListLayout): number {
   return layout.nodes.reduce((count, node) => {

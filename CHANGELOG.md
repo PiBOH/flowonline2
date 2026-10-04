@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.19-stable] - 2026-10-04
+
+- Corrected loop branch labels and compacted empty-loop routing.
+- Improved loop trajectory alignment for While, For and Do blocks.
+
 ## [2.7.18-stable] - 2026-10-04
 
 - Removed the examples-list JSON export action.

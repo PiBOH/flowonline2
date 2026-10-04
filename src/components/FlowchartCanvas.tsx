@@ -291,14 +291,31 @@ export const FlowchartCanvas: React.FC = () => {
           labels.push(...renderBranchLabels(node.elseLayout));
         }
       } else if (isLoopType(node.type)) {
+        const loopText = (key: 'true' | 'false' | 'next' | 'done') => {
+          const labels: Record<string, Record<string, string>> = {
+            it: { true: 'VERO', false: 'FALSO', next: 'SUCCESSIVO', done: 'FATTO' },
+            en: { true: 'TRUE', false: 'FALSE', next: 'NEXT', done: 'DONE' },
+            de: { true: 'WAHR', false: 'FALSCH', next: 'WEITER', done: 'FERTIG' },
+            fr: { true: 'VRAI', false: 'FAUX', next: 'SUIVANT', done: 'TERMINÉ' },
+            es: { true: 'VERDADERO', false: 'FALSO', next: 'SIGUIENTE', done: 'HECHO' }
+          };
+          return labels[language]?.[key] ?? labels.en[key];
+        };
+        const isFor = node.type === 'for';
+        const isDo = node.type === 'do';
         labels.push(
           <React.Fragment key={`labels-${node.id}`}>
-            <text x={shapeEdgeX(node, 'left') - 4} y={node.y - 5} textAnchor="end" fill={sc.textColor} fillOpacity="0.8" className="font-sans text-[10px] font-bold select-none pointer-events-none">
-              {t.canvas.falseBranch}
-            </text>
-            <text x={shapeEdgeX(node, 'right') + 4} y={node.y - 5} textAnchor="start" fill="#15803D" fillOpacity="0.9" className="font-sans text-[10px] font-bold select-none pointer-events-none">
-              {t.canvas.trueBranch}
-            </text>
+            {isDo ? (
+              <>
+                <text x={shapeEdgeX(node, 'left') - 4} y={node.y - 25} textAnchor="end" fill={sc.textColor} fillOpacity="0.8" className="font-sans text-[10px] font-bold select-none pointer-events-none">{loopText('true')}</text>
+                <text x={shapeEdgeX(node, 'left') - 4} y={node.y + 35} textAnchor="end" fill={sc.textColor} fillOpacity="0.8" className="font-sans text-[10px] font-bold select-none pointer-events-none">{loopText('false')}</text>
+              </>
+            ) : (
+              <>
+                <text x={shapeEdgeX(node, 'left') - 4} y={node.y - 5} textAnchor="end" fill={sc.textColor} fillOpacity="0.8" className="font-sans text-[10px] font-bold select-none pointer-events-none">{isFor ? loopText('done') : loopText('false')}</text>
+                <text x={shapeEdgeX(node, 'right') + 4} y={node.y - 5} textAnchor="start" fill="#15803D" fillOpacity="0.9" className="font-sans text-[10px] font-bold select-none pointer-events-none">{isFor ? loopText('next') : loopText('true')}</text>
+              </>
+            )}
           </React.Fragment>
         );
         if (node.bodyLayout) labels.push(...renderBranchLabels(node.bodyLayout));
