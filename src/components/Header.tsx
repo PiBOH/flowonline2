@@ -2402,7 +2402,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         </div>
 
         {/* Windows Frame Minimize / Maximize / Close simulation with custom Win32 warning dialog modal! */}
-        <div className="flex h-full">
+        <div className="flex h-full -mr-[6px] overflow-hidden">
           <button 
             onClick={handleDecorativeButtonClick}
             className="w-[44px] h-[28px] m-0 p-0 border-0 outline-none appearance-none hover:bg-white/20 text-white font-sans text-[11px] transition"
