@@ -1111,7 +1111,7 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
-### Milestone 80: Flowgorithm inserter styling and reset behavior (2.7.24-stable)
+### Milestone 81: Flowgorithm block palette and loop arrows (2.7.25-beta)
 
 #### Fixed
 * Selecting an IF or loop selects all descendants in deterministic paste order; overlays match the block shape and numbers are centered.

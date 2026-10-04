@@ -1,7 +1,7 @@
 {
   "name": "flowonline2",
   "private": true,
-  "version": "2.7.24-stable",
+  "version": "2.7.25-beta",
   "license": "AGPL-3.0",
   "type": "module",
   "scripts": {

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.25-beta] - 2026-10-04
+
+### Added
+- Restyled the block inserter to resemble the Flowgorithm palette layout.
+
+### Fixed
+- Separated Do-loop TRUE return and FALSE exit lanes.
+
 ## [2.7.24-stable] - 2026-10-04
 
 ### Added

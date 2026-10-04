@@ -464,8 +464,8 @@ export const FlowchartCanvas: React.FC = () => {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="col-span-4 text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1 flex items-center justify-between">
-              <span>{t.canvas.selectBlock}</span>
+            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] text-[11px] font-semibold text-slate-700 px-2 py-1 flex items-center justify-between">
+              <span>{language === 'it' ? 'Clipboard' : 'Clipboard'}</span>
               <button
                 className="text-slate-400 hover:text-slate-600 font-bold"
                 onClick={() => setActiveInserter(null)}
@@ -501,9 +501,8 @@ export const FlowchartCanvas: React.FC = () => {
 
             {/* "New block" subheader so the user knows the following grid is */}
             {/* exclusively for creating new blocks (vs. pasting copies).      */}
-            <div className="col-span-4 px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              {language === 'it' ? 'Nuovo blocco' : 'New block'}
-            </div>
+            <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[11px] font-semibold text-slate-700">{language === 'it' ? 'Statement' : 'Statement'}</div>
+            <div className="col-span-4 grid grid-cols-4 gap-1 text-[10px] text-slate-600 font-semibold text-center"><span>Input / Output</span><span>{language === 'it' ? 'Variabili' : 'Variables'}</span><span>{language === 'it' ? 'Controllo' : 'Control'}</span><span>{language === 'it' ? 'Cicli' : 'Looping'}</span></div>
 
             <div className="col-span-4 bg-[#B9DDF5] border border-[#75A9C8] px-2 py-1 text-[10px] font-semibold text-slate-700">{language === 'it' ? 'Variabili' : 'Variables'}</div>
             <button
