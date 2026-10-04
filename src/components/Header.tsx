@@ -2308,7 +2308,7 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
       
       {/* ============ TITLE BAR (Faithful Windows Desktop Style - VERSION DYNAMICALLY LOADED!) ============ */}
       <div 
-        className="desktop-title-bar h-[28px] text-white flex items-center justify-between px-[6px] border-b border-[#1F3354]"
+        className="desktop-title-bar h-[28px] text-white flex items-center justify-between px-[6px] border-0"
         style={{
           background: 'linear-gradient(to bottom, #5B8DC4 0%, #3E6FA8 50%, #2F5A8C 100%)'
         }}
@@ -2405,19 +2405,19 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
         <div className="flex h-full">
           <button 
             onClick={handleDecorativeButtonClick}
-            className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition"
+            className="w-[44px] h-[28px] m-0 p-0 border-0 outline-none appearance-none hover:bg-white/20 text-white font-sans text-[11px] transition"
           >
             <IconMinimize size={10} />
           </button>
           <button 
             onClick={handleDecorativeButtonClick}
-            className="w-[44px] h-[28px] hover:bg-white/20 text-white font-sans text-[11px] transition"
+            className="w-[44px] h-[28px] m-0 p-0 border-0 outline-none appearance-none hover:bg-white/20 text-white font-sans text-[11px] transition"
           >
             <IconMaximize size={10} />
           </button>
           <button 
             onClick={handleDecorativeButtonClick}
-            className="w-[44px] h-[28px] hover:bg-red-600 text-white font-sans text-[11px] transition"
+            className="w-[44px] h-[28px] m-0 p-0 border-0 outline-none appearance-none hover:bg-red-600 text-white font-sans text-[11px] transition"
           >
             <IconClose size={10} />
           </button>
