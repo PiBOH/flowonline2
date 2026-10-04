@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.30-stable] - 2026-10-04
+
+### Changed
+- Reduced the desktop block-selection menu size while preserving the mobile layout.
+
 ## [2.7.29-stable] - 2026-10-04
 
 ### Fixed
