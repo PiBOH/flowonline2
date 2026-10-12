@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.32-stable] - 2026-10-12
+
+### Changed
+- `package.json` and `package-lock.json` now take their version from `version.txt` (2.7.32-stable).
+
 ## [2.7.31-stable] - 2026-10-12
 
 ### Fixed

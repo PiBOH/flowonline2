@@ -1111,6 +1111,13 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 88: Version Taken From version.txt (2.7.32-stable)
+
+#### Changed
+* `version.txt` is the single source of truth for the release version; `package.json` and `package-lock.json` are synced from it (2.7.32-stable).
+
+---
+
 ### Milestone 87: Single-Click Example Opening (2.7.31-stable)
 
 #### Fixed
