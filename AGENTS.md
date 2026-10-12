@@ -1111,6 +1111,14 @@ a plain summary body — nothing else. Contributors are credited in
 
 ---
 
+### Milestone 87: Single-Click Example Opening (2.7.31-stable)
+
+#### Fixed
+* Examples Explorer rows open the selected example with a single click instead of a double click.
+* The favorite star cell stops click propagation, so clicking ★ only toggles the favorite and never loads the example.
+
+---
+
 ### Milestone 86: Compact desktop block selector (2.7.30-stable)
 
 #### Fixed

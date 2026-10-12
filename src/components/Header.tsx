@@ -3160,8 +3160,8 @@ Flowonline2 is a web-based replica of Flowgorithm (Windows version 2.0.3).
                   const bv = exampleSort === 'author' ? b.author : exampleSort === 'format' ? b.format : exampleSort === 'modified' ? (b.lastModified || '') : b.name;
                   return av.localeCompare(bv) * (exampleSortDirection === 'asc' ? 1 : -1);
                 }).map((example) => (
-                  <tr key={example.path} className="hover:bg-[#C9DEF5] cursor-pointer" onDoubleClick={() => handleExampleOpen(example)} title={example.path}>
-                    <td className="p-1 text-center" onClick={() => toggleFavoriteExample(example.path)}>{favoriteExamples.includes(example.path) ? '★' : '☆'}</td>
+                  <tr key={example.path} className="hover:bg-[#C9DEF5] cursor-pointer" onClick={() => handleExampleOpen(example)} title={example.path}>
+                    <td className="p-1 text-center" onClick={(event) => { event.stopPropagation(); toggleFavoriteExample(example.path); }}>{favoriteExamples.includes(example.path) ? '★' : '☆'}</td>
                     <td className="p-1 font-semibold">{example.name}{example.duplicate ? <span className="ml-1 text-amber-700">(duplicate)</span> : null}</td><td className="p-1">{example.author || '—'}</td><td className="p-1 uppercase">.{example.format}</td><td className="p-1">{example.lastModified || '—'}</td>
                   </tr>
                 ))}</tbody>

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning.](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.7.31-stable] - 2026-10-12
+
+### Fixed
+- Examples Explorer: opening an example now needs a single click on its row instead of a double click; clicking the star still only toggles the favorite.
+
 ## [2.7.30-stable] - 2026-10-04
 
 ### Changed
