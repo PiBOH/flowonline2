@@ -10,7 +10,7 @@ Choose your language / Scegli la lingua / Wählen Sie Ihre Sprache / Choisissez 
 
 ---
 
-<a name="english"></a>
+
 ## English (US/UK)
 
 ### 1. Who We Are
@@ -53,7 +53,7 @@ For privacy questions, open an issue or use the repository contact methods at ht
 
 ---
 
-<a name="italiano"></a>
+
 ## Italiano (Informativa sulla Privacy)
 
 ### 1. Chi Siamo
@@ -96,7 +96,7 @@ Per domande sulla privacy, apri un issue o usa i metodi di contatto del reposito
 
 ---
 
-<a name="deutsch"></a>
+
 ## Deutsch (Datenschutzerklärung)
 
 ### 1. Wer wir sind
@@ -139,7 +139,7 @@ Bei Fragen zum Datenschutz eröffnen Sie ein Issue oder nutzen Sie die Kontaktm�
 
 ---
 
-<a name="français"></a>
+
 ## Français (Politique de Confidentialité)
 
 ### 1. Qui nous sommes
@@ -182,7 +182,7 @@ Pour toute question relative à la confidentialité, ouvrez une issue ou utilise
 
 ---
 
-<a name="español"></a>
+
 ## Español (Política de Privacidad)
 
 ### 1. Quiénes somos

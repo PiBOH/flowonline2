@@ -10,7 +10,7 @@ Choose your language / Scegli la lingua / Wählen Sie Ihre Sprache / Choisissez 
 
 ---
 
-<a name="english"></a>
+
 ## English (US/UK)
 
 ### Supported Versions
@@ -44,7 +44,7 @@ Out of scope: third-party services the application links to, browser extensions,
 
 ---
 
-<a name="italiano"></a>
+
 ## Italiano (Italian Security Policy)
 
 ### Versioni Supportate
@@ -78,7 +78,7 @@ Fuori ambito: i servizi di terze parti a cui l'applicazione rimanda, le estensio
 
 ---
 
-<a name="deutsch"></a>
+
 ## Deutsch (German Security Policy)
 
 ### Unterstützte Versionen
@@ -112,7 +112,7 @@ Außerhalb des Umfangs: Dienste von Drittanbietern, auf die die Anwendung verwei
 
 ---
 
-<a name="français"></a>
+
 ## Français (French Security Policy)
 
 ### Versions prises en charge
@@ -146,7 +146,7 @@ Hors périmètre : les services tiers vers lesquels l'application pointe, les ex
 
 ---
 
-<a name="español"></a>
+
 ## Español (Spanish Security Policy)
 
 ### Versiones compatibles

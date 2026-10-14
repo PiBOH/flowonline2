@@ -56,11 +56,11 @@ For detailed information on variables, mathematical expressions, conversion intr
 ### 2. Premium Editing & Interaction (v2.0.13)
 *   **Multiple Block Selection:** Select blocks with a single click, or hold down `Ctrl` / `Shift` / `Cmd` to select multiple blocks together! Selected shapes get a beautiful, glowing blue dotted outline.
 *   **Win32 Context Menu (Tasto Destro):** Right-click on any block or circular blue inserter pin (`+`) to open a classic Windows contextual popup menu. Options include:
-    *   `📝 Modifica... (Edit...)`
-    *   `✂️ Taglia (Cut)`
-    *   `📋 Copia (Copy)`
-    *   `📥 Incolla dopo / Incolla Blocco (Paste After / Paste Block)`
-    *   `❌ Elimina (Delete)`
+    *   `✏️ Edit...`
+    *   `✂️ Cut`
+    *   `📋 Copy`
+    *   `📥 Paste After / Paste Block`
+    *   `🗑️ Delete`
 *   **Keyboard Deletion and Clipboard:** Fully supports keyboard actions: press `Delete` or `Backspace` to delete all selected blocks at once, or use `Ctrl+C`, `Ctrl+X`, and `Ctrl+V` to copy, cut, and paste blocks with anti-collision ID regeneration.
 *   **In-App MANUAL.md Viewer:** Includes a spacious `800x600px` manual window that dynamically fetches and renders this markdown formatted file with beautiful titles, styled operator tables, and clickable language anchors.
 

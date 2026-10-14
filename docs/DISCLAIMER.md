@@ -10,7 +10,7 @@ Choose your language / Scegli la lingua / Wählen Sie Ihre Sprache / Choisissez 
 
 ---
 
-<a name="english"></a>
+
 ## English (US/UK)
 
 ### 1. No Warranty
@@ -44,7 +44,7 @@ We may update this disclaimer from time to time. The latest version is always av
 
 ---
 
-<a name="italiano"></a>
+
 ## Italiano (Disclaimer)
 
 ### 1. Nessuna Garanzia
@@ -78,7 +78,7 @@ Potremmo aggiornare questo disclaimer periodicamente. La versione più recente �
 
 ---
 
-<a name="deutsch"></a>
+
 ## Deutsch (Haftungsausschluss)
 
 ### 1. Keine Garantie
@@ -112,7 +112,7 @@ Wir können diesen Haftungsausschluss von Zeit zu Zeit aktualisieren. Die neuest
 
 ---
 
-<a name="français"></a>
+
 ## Français (Avis de non-responsabilité)
 
 ### 1. Aucune garantie
@@ -146,7 +146,7 @@ Nous pouvons mettre à jour cet avis de temps à autre. La version la plus réce
 
 ---
 
-<a name="español"></a>
+
 ## Español (Aviso de exención de responsabilidad)
 
 ### 1. Sin garantía
